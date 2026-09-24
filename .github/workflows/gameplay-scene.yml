@@ -1,0 +1,89 @@
+name: Build authored UE5 gameplay scene and attempt real rendered verification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gameplay-scene
+  cancel-in-progress: false
+jobs:
+  scene:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Prepare capacity and pinned authored scene with authorized test character
+        env:
+          UE_REGISTRY_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet /usr/local/.ghcup /opt/ghc /opt/hostedtoolcache/CodeQL
+          mkdir -p artifacts/gameplay-scene
+          python3 -c 'import shutil; assert shutil.disk_usage("/var/lib/docker").free > 85*1024**3'
+          python3 tools/scene/prepare_sources.py
+      - name: Pull licensed pinned engine image
+        env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ue-registry-auth
+          UE_REGISTRY_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$DOCKER_CONFIG"
+          trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf "$DOCKER_CONFIG"' EXIT
+          printf '%s' "$UE_REGISTRY_TOKEN" | docker login ghcr.io --username tobirama2904-cell --password-stdin
+          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          timeout --foreground 20m docker pull "$IMAGE"
+      - name: Prepare software-rendering attempt (no hardware GPU claimed)
+        run: |
+          set -euo pipefail
+          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          sudo chown -R 1000:1000 "$GITHUB_WORKSPACE"
+          docker run -d --name scene-editor --user root --cpus=4 --memory=13g --memory-swap=13g --shm-size=1g \
+            --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/project" --entrypoint /bin/bash "$IMAGE" -lc 'sleep infinity'
+          docker exec scene-editor bash -lc 'apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mesa-vulkan-drivers libvulkan1 xvfb xauth vulkan-tools'
+          docker network disconnect bridge scene-editor
+      - name: Compile native classes, test saves, import and save actual UE map
+        run: |
+          set -euo pipefail
+          docker exec -u ue4 scene-editor bash /project/tools/scene/editor_gate.sh
+      - name: Preserve private editable project content (not a playable release)
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/tobirama2904-cell/poco-ue5-engine-cache --jq .private)" = true
+          mkdir -p .cache/private-scene
+          tar -czf .cache/private-scene/game-content.tar.gz Content
+          sha256sum .cache/private-scene/game-content.tar.gz > .cache/private-scene/SHA256SUMS
+          gh release create "scene-${GITHUB_RUN_ID}" .cache/private-scene/* --repo tobirama2904-cell/poco-ue5-engine-cache \
+            --prerelease --title "Private editable development map ${GITHUB_RUN_ID}" \
+            --notes 'Authored map and licensed temporary animation-test character. NOT final game content. NOT an APK.'
+      - name: Attempt actual Unreal game-mode screenshot with software Vulkan
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          docker exec -u ue4 scene-editor bash -lc '
+            cd /project
+            export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+            xvfb-run -a vulkaninfo --summary > artifacts/gameplay-scene/software-vulkan.log 2>&1
+            timeout --foreground 15m xvfb-run -a -s "-screen 0 960x540x24" \
+              /home/ue4/UnrealEngine/Engine/Binaries/Linux/UnrealEditor \
+              /project/PocoSurvival.uproject /Game/Worlds/CanalDistrict -game -vulkan -sm5 \
+              -windowed -ResX=960 -ResY=540 -unattended -nosound -nop4 -nosplash \
+              -SurvivalSmokeScreenshot -stdout -FullStdOutLogOutput \
+              > artifacts/gameplay-scene/rendered-game.log 2>&1
+          '
+          find Saved/Screenshots -type f -name '*.png' -exec cp {} artifacts/gameplay-scene/ \;
+          test -n "$(find artifacts/gameplay-scene -name '*.png' -print -quit)"
+      - name: Upload verification only, never licensed content or binaries
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: gameplay-scene-diagnostics-${{ github.run_id }}
+          path: |
+            artifacts/gameplay-scene/*.json
+            artifacts/gameplay-scene/*.log
+            artifacts/gameplay-scene/*.png
+            artifacts/engine-probe/unreal-integration.json
+          retention-days: 7

@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "file": "asphalt-base.jpg",
+      "role": "base",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_diff_1k.jpg",
+      "sha256": "1aa5ce99f58a625c71d48cfc3e68b65ca85ccb00f39e045c0a928608a0ea25ed",
+      "license": "CC0-1.0",
+      "provider": "Poly Haven"
+    },
+    {
+      "file": "asphalt-normal.jpg",
+      "role": "normal",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_nor_gl_1k.jpg",
+      "sha256": "42a1c381b53204e83a982db2864479a30bc127bbdeebb1006f8ee51bff099df3",
+      "license": "CC0-1.0",
+      "provider": "Poly Haven"
+    },
+    {
+      "file": "asphalt-rough.jpg",
+      "role": "roughness",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_rough_1k.jpg",
+      "sha256": "70ba3edc65525eb4dc366cf010ca7ae0bd34e0251ff0225c2dad627a873d0712",
+      "license": "CC0-1.0",
+      "provider": "Poly Haven"
+    },
+    {
+      "file": "sky.hdr",
+      "role": "sky",
+      "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/kloofendal_48d_partly_cloudy_puresky_1k.hdr",
+      "sha256": "fd94c84997b8a3c353b62c2125a9b44e19509956986a126e472684432a02d798",
+      "license": "CC0-1.0",
+      "provider": "Poly Haven"
+    }
+  ]
+}
