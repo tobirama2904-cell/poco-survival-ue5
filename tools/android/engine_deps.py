@@ -39,13 +39,20 @@ def install_blob(raw,blob,entry,root):
     finally:
         temporary.unlink(missing_ok=True)
 
+def wanted(name):
+    path=PurePosixPath(name.lower())
+    if 'android' in name.lower() or 'arm64-v8a' in name.lower():return True
+    excluded={'win32','win64','windows','mac','ios','tvos','visionos','linuxarm64','hololens','xboxone','ps4','ps5','switch'}
+    source_suffixes={'.h','.hpp','.hxx','.inl','.inc','.c','.cc','.cpp','.cxx','.cs','.s','.ispc'}
+    return name.startswith('Engine/Source/') and path.suffix in source_suffixes and not any(p in excluded for p in path.parts)
+
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--manifest',type=Path,required=True);ap.add_argument('--engine-root',type=Path,required=True);ap.add_argument('--report',type=Path,required=True);a=ap.parse_args()
     x=ET.parse(a.manifest).getroot();base=x.attrib['BaseUrl'].rstrip('/')
     parsed=urlparse(base)
     if parsed.scheme!='https' or parsed.hostname!='cdn.unrealengine.com':raise ValueError('Unapproved engine dependency host')
     blobs={b.attrib['Hash']:b.attrib for b in x.find('Blobs')};packs={p.attrib['Hash']:p.attrib for p in x.find('Packs')}
-    entries=[f.attrib for f in x.find('Files') if 'android' in f.attrib['Name'].lower() or 'arm64-v8a' in f.attrib['Name'].lower()]
+    entries=[f.attrib for f in x.find('Files') if wanted(f.attrib['Name'])]
     if not entries:raise ValueError('No Android dependency entries')
     groups={};existing=0
     for e in entries:

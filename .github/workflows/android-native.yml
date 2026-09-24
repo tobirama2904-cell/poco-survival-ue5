@@ -45,6 +45,21 @@ jobs:
           set -euo pipefail
           SOURCE_SHA=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["source_commit"])')
           gh api -H 'Accept: application/vnd.github.raw+json' "repos/EpicGames/UnrealEngine/contents/Engine/Build/Commit.gitdeps.xml?ref=$SOURCE_SHA" > .cache/engine-dependencies.xml
+          git init .cache/engine-source
+          git -C .cache/engine-source remote add origin https://github.com/EpicGames/UnrealEngine.git
+          git -C .cache/engine-source -c credential.helper= -c 'credential.helper=!gh auth git-credential' fetch --depth=1 --filter=blob:none origin "$SOURCE_SHA"
+          git -C .cache/engine-source sparse-checkout init --no-cone
+          git -C .cache/engine-source sparse-checkout set --no-cone '/Engine/Source/' '/Engine/Config/' '/Engine/Build/' '/Engine/Platforms/' '/Engine/Shaders/' '/Engine/Plugins/**/Source/' '/Engine/Plugins/**/Config/' '/Engine/Plugins/**/Shaders/' '/Engine/Plugins/**/*.uplugin'
+          git -C .cache/engine-source -c credential.helper= -c 'credential.helper=!gh auth git-credential' checkout --detach FETCH_HEAD
+          python3 - <<'PYCODE'
+          import json,subprocess
+          from pathlib import Path
+          root='.cache/engine-source'
+          commit=subprocess.check_output(['git','-C',root,'rev-parse','HEAD'],text=True).strip()
+          epoch=int(subprocess.check_output(['git','-C',root,'show','-s','--format=%ct'],text=True).strip())
+          assert commit==json.loads(Path('content/engine.lock.json').read_text())['source_commit']
+          Path('.cache/engine-source-checkout.json').write_text(json.dumps({'commit':commit,'commit_timestamp':epoch}))
+          PYCODE
           mkdir -p "$DOCKER_CONFIG"
           trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf "$DOCKER_CONFIG"' EXIT
           printf '%s' "$GH_TOKEN" | docker login ghcr.io --username tobirama2904-cell --password-stdin

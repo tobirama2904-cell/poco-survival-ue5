@@ -4,6 +4,7 @@ cd /project
 ENGINE=/home/ue4/UnrealEngine
 mkdir -p artifacts/android-build
 python3 tools/engine_inventory.py
+python3 tools/android/overlay_source.py
 python3 tools/android/engine_deps.py --manifest .cache/engine-dependencies.xml --engine-root "$ENGINE" --report artifacts/android-build/dependency-report.json
 # The official installed image lacks Android prebuilts but includes source.
 # Use real source compilation, not a fake installed-platform declaration.
