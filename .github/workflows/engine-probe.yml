@@ -10,8 +10,6 @@ jobs:
   editor:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
-    env:
-      DOCKER_CONFIG: ${{ runner.temp }}/ue-registry-auth
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -33,6 +31,7 @@ jobs:
           PY
       - name: Pull digest-pinned licensed official engine
         env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ue-registry-auth
           UE_REGISTRY_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
         run: |
           set -euo pipefail
