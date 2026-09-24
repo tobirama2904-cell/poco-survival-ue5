@@ -36,6 +36,8 @@ def install_blob(raw,blob,entry,root):
         if h.hexdigest()!=entry['Hash']:raise ValueError('Blob checksum mismatch')
         temporary.chmod(0o755 if entry.get('IsExecutable','false').lower()=='true' else 0o644)
         os.replace(temporary,target)
+        # Content is pinned and verified; stable inputs allow real cache reuse.
+        os.utime(target,(1600000000,1600000000))
     finally:
         temporary.unlink(missing_ok=True)
 

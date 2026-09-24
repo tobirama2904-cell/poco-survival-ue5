@@ -1,9 +1,10 @@
 {
-  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/scene-layout-002/courtyard-source.zip",
-  "sha256": "32375003d265f0026aed72e61b8d5046412017eba69a4e80e3af26325d1cf533",
-  "bytes": 64934134,
+  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/scene-layout-003/courtyard-source.zip",
+  "sha256": "9990cc0186ad20b0636cb76f333c25e488b73a080555edb3d8d5333bf0986d1a",
+  "bytes": 64937703,
   "stage": "internal-scene-source-not-game",
   "contains_epic_assets": false,
   "authoring_script": "tools/scene/author_courtyard.py",
-  "source_models_archive_sha256": "9390178e349c45a4c3d0690c06066cd5bf9d39ef43292a8e4e862dd620a228a3"
+  "source_models_archive_sha256": "9390178e349c45a4c3d0690c06066cd5bf9d39ef43292a8e4e862dd620a228a3",
+  "authoring_script_sha256": "5c9200bb8ec460b8e4aab0e6e76380f51d45a7e26890d430a307bd18628c9f86"
 }

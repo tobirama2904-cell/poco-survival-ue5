@@ -35,13 +35,13 @@
   "gameplay_source_implemented": true,
   "new_gameplay_cpp_verified": true,
   "authored_scene_source_exists": true,
-  "authored_scene_source_release": "scene-layout-002",
+  "authored_scene_source_release": "scene-layout-003",
   "blender_layout_visually_reviewed": true,
   "unreal_gameplay_render_verified": false,
   "physical_device_tested": false,
   "scene_build_run": 36024498135,
   "scene_build_initial_source_commit": "e237db03a52665281d0c343740f661726e3a709a",
-  "scene_build_last_observed_status": "in_progress",
+  "scene_build_last_observed_status": "completed",
   "scene_first_failure": "36022292082: Content/content directory collision before native compilation; metadata renamed BuildData",
   "character_art": "Licensed Epic mannequin/animations for internal testing only; not final original characters",
   "core_vitals_local_tests": "exhaustion, recovery, melee cost, damage and invalid-input rejection; ASan/UBSan pass",
@@ -56,5 +56,11 @@
   },
   "gameplay_save_generation_native_verified": true,
   "scene_second_attempt": "UHT/UBT and native save tests passed; glTF asset import wrote real UE assets, then AssetTools Content Browser sync crashed without Slate in commandlet",
-  "unreal_scene_assets_imported_before_ui_crash": true
+  "unreal_scene_assets_imported_before_ui_crash": true,
+  "unreal_map_construction_verified": true,
+  "unreal_map_construction_source": "6fab0e9",
+  "playable_map_exists_note": "Actual UE map was constructed and saved on the previous ephemeral runner, but private backup failed. Rebuild/private persistence/render pending; no downloadable playable build.",
+  "scene_build_last_observed_conclusion": "failure after map construction: archive directory ownership",
+  "scene_actor_native_vitals_tests_verified": true,
+  "private_scene_content_preserved": false
 }

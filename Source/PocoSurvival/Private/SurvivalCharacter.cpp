@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/DamageType.h"
+#include "GameFramework/GameModeBase.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -183,4 +184,16 @@ void ASurvivalCharacter::TouchMoved(ETouchIndex::Type Finger,FVector Position)
     if (LookFinger!=static_cast<int32>(Finger)) return;
     const FVector Delta=Position-LastTouch;LastTouch=Position;
     AddControllerYawInput(Delta.X*0.09f);AddControllerPitchInput(Delta.Y*0.09f);
+}
+
+void ASurvivalCharacter::FellOutOfWorld(const UDamageType& DamageType)
+{
+    // A development district edge must not leave the player without a pawn,
+    // input or recovery controls. Non-player actors retain normal cleanup.
+    if (IsPlayerControlled()) if (auto* Mode=GetWorld()->GetAuthGameMode())
+        if (auto* Start=Mode->FindPlayerStart(Controller))
+            if (TeleportTo(Start->GetActorLocation()+FVector(0,0,20),Start->GetActorRotation(),false,false)) {
+                RestoreVitals(100,100);Load();StatusMessage=TEXT("Возврат к безопасной точке.");return;
+            }
+    Super::FellOutOfWorld(DamageType);
 }

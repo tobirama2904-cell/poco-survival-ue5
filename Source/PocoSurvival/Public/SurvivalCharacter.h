@@ -15,6 +15,7 @@ public:
     ASurvivalCharacter();
     virtual void BeginPlay() override;
     virtual void PossessedBy(AController* NewController) override;
+    virtual void FellOutOfWorld(const UDamageType& DamageType) override;
     virtual void Tick(float DeltaSeconds) override;
     virtual void SetupPlayerInputComponent(UInputComponent* Input) override;
     virtual float TakeDamage(float Amount,const FDamageEvent& Event,AController* Instigator,AActor* Causer) override;

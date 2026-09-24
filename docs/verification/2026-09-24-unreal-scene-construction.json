@@ -1,0 +1,36 @@
+{
+  "phase": "native-editor-scene-construction",
+  "source_glb_sha256": "03f502273172a44f868cd0c098b2b988bce3c2707042845587e8a0f27af2f5eb",
+  "visual_render_tested": false,
+  "android_package_tested": false,
+  "physical_device_tested": false,
+  "measured_import_basis_cm": [
+    [
+      100.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      -100.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      100.0
+    ]
+  ],
+  "map": "/Game/Worlds/CanalDistrict",
+  "native_vitals_damage_attack_cost_tested": true,
+  "static_mesh_count": 5,
+  "interactions_placed": 3,
+  "enemy_proxies_placed": 1,
+  "actors_in_saved_scene": 19,
+  "source_triangles": 701789,
+  "complete_campaign": false,
+  "final_character_art": false,
+  "run": 36024498135,
+  "effective_source_commit": "6fab0e9",
+  "workflow_overall_result": "failure after successful scene construction: host permission denied creating private-scene archive"
+}

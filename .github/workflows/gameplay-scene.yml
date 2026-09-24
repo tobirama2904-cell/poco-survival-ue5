@@ -98,16 +98,22 @@ jobs:
         run: |
           set -euo pipefail
           test "$(gh api repos/tobirama2904-cell/poco-ue5-engine-cache --jq .private)" = true
-          mkdir -p .cache/private-scene
-          tar -czf .cache/private-scene/game-content.tar.gz Content
-          sha256sum .cache/private-scene/game-content.tar.gz > .cache/private-scene/SHA256SUMS
+          docker exec -u ue4 scene-editor bash -lc '
+            cd /project
+            mkdir -p .cache/private-scene
+            tar -czf .cache/private-scene/game-content.tar.gz Content
+            sha256sum .cache/private-scene/game-content.tar.gz > .cache/private-scene/SHA256SUMS
+          '
+
           gh release create "scene-${GITHUB_RUN_ID}" .cache/private-scene/* --repo tobirama2904-cell/poco-ue5-engine-cache \
             --prerelease --title "Private editable development map ${GITHUB_RUN_ID}" \
             --notes 'Authored map and licensed temporary animation-test character. NOT final game content. NOT an APK.'
       - name: Attempt actual Unreal game-mode screenshot with software Vulkan
+        if: ${{ !cancelled() }}
         continue-on-error: true
         run: |
           set -euo pipefail
+          test -s artifacts/gameplay-scene/scene-construction.json
           docker exec -u ue4 scene-editor bash -lc '
             cd /project
             export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
@@ -116,10 +122,13 @@ jobs:
               /home/ue4/UnrealEngine/Engine/Binaries/Linux/UnrealEditor \
               /project/PocoSurvival.uproject /Game/Worlds/CanalDistrict -game -vulkan -sm5 \
               -windowed -ResX=960 -ResY=540 -unattended -nosound -nop4 -nosplash \
-              -SurvivalSmokeScreenshot -stdout -FullStdOutLogOutput \
+              -SurvivalSmokeScreenshot -AllowSoftwareRendering -stdout -FullStdOutLogOutput \
               > artifacts/gameplay-scene/rendered-game.log 2>&1
+            RESULT=$?
+            find Saved/Screenshots -type f -name "*.png" -exec cp {} artifacts/gameplay-scene/ \;
+            exit "$RESULT"
           '
-          find Saved/Screenshots -type f -name '*.png' -exec cp {} artifacts/gameplay-scene/ \;
+
           test -n "$(find artifacts/gameplay-scene -name '*.png' -print -quit)"
       - name: Upload verification only, never licensed content or binaries
         if: always()

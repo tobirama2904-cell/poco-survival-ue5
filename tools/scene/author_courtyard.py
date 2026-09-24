@@ -87,10 +87,13 @@ for floor in range(3):
   module('cornice_standard_standard_01',(x,19,z+2.8))
   if floor==0:module('base_standard_01',(x,19,0))
   if floor==2:module('crown_standard_standard_01',(x,19,9))
-# Opaque structural backing prevents empty facade silhouettes; front modules
-# retain their real photographed material and window geometry.
-cube('north_volume',(1.5,24,4.5),(30,9.8,9),kit['wall_standard_standard_01'].data.materials[0])
-cube('north_roof',(1.5,23.5,9.02),(30.5,10.5,.22),stone,.02)
+# Hollow structural shells: solid backing at the window plane wrongly showed
+# plaster through the glass in the checked render. Keep actual room depth.
+interior=material('unlit_interior_plaster',(.065,.068,.060))
+cube('north_back_wall',(0,27.9,4.5),(30.2,.2,9),interior)
+for x in [-15.0,15.0]:cube('north_side_wall',(x,23.5,4.5),(.2,9,9),kit['wall_standard_standard_01'].data.materials[0])
+for z in [3,6,9]:cube('north_floor',(0,23.5,z),(30.2,9.2,.16),interior)
+cube('north_roof',(0,23.5,9.08),(30.4,9.4,.16),stone,.02)
 # Eastern housing wing faces the yard; west workshop is lower and sheltered.
 for side,yaw,anchor_x,floors in [('east',-math.pi/2,20,3),('west',math.pi/2,-18,1)]:
  for floor in range(floors):
@@ -99,12 +102,18 @@ for side,yaw,anchor_x,floors in [('east',-math.pi/2,20,3),('west',math.pi/2,-18,
    module('wall_window_centered_small_01',(anchor_x,anchor_y,3*floor),yaw)
    module('window_centered_small_01',(anchor_x,anchor_y,3*floor),yaw)
    if floor==floors-1:module('crown_standard_standard_01',(anchor_x,anchor_y,3*floors),yaw)
- if side=='east':cube('east_volume',(24.5,6,4.5),(8.8,24,9),kit['wall_standard_standard_01'].data.materials[0])
- else:cube('workshop_volume',(-22.5,6,1.5),(8.8,24,3),stone)
+ if side=='east':
+  cube('east_back_wall',(28.9,6,4.5),(.2,24.2,9),interior)
+  for y in [-6,18]:cube('east_side_wall',(24.5,y,4.5),(9,.2,9),kit['wall_standard_standard_01'].data.materials[0])
+  for z in [3,6,9]:cube('east_floor',(24.5,6,z),(9.2,24.2,.16),interior)
+ else:
+  cube('workshop_back',(-26.9,6,1.5),(.2,24.2,3),interior)
+  for y in [-6,18]:cube('workshop_side',(-22.5,y,1.5),(9,.2,3),stone)
+  cube('workshop_roof',(-22.5,6,3),(9.2,24.2,.18),stone)
 cube('workshop_canopy',(-16.6,5,3.1),(3.8,10,.18),iron,.01)
 for y in [0,10]:pipe('canopy_post',(-14.85,y,0),(-14.85,y,3.1),.055)
-sign('ВОДОЗАБОР  /  СЕКТОР 04',(1.5,18.86,7.7),7)
-sign('ЛАЗАРЕТ',(-6,18.73,3.2),3)
+sign('ВОДОЗАБОР  /  СЕКТОР 04',(0,18.86,7.7),7)
+sign('ЛАЗАРЕТ',(-7.5,18.73,3.2),3)
 sign('МАСТЕРСКАЯ',(-17.87,5,2.6),3,math.pi/2)
 sign('ВОДА НЕ ДЛЯ ПИТЬЯ',(6,-13.1,1.6),4)
 pipe('warning_sign_post',(6,-13.07,0),(6,-13.07,1.6),.04)

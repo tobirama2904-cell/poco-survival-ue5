@@ -1,0 +1,16 @@
+{
+  "phase": "unreal-headless-native-integration",
+  "native_classes_loaded": 3,
+  "same_revision_save_generation_tested": true,
+  "objective_count": 11,
+  "native_inventory_and_choices_tested": true,
+  "save_write_and_load_tested": true,
+  "truncated_newest_slot_recovery_tested": true,
+  "unreal_editor_version": "5.7.4-51494982+UE5",
+  "visual_render_tested": false,
+  "android_package_tested": false,
+  "physical_device_tested": false,
+  "run": 36024498135,
+  "effective_source_commit": "6fab0e9",
+  "workflow_overall_result": "failure after successful scene construction: host permission denied creating private-scene archive"
+}

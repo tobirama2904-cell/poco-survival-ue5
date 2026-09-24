@@ -2,6 +2,7 @@
 #include "SurvivalSaveGame.h"
 #include "SurvivalCharacter.h"
 #include "Engine/World.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 namespace {
@@ -56,7 +57,7 @@ bool USurvivalGameInstance::SaveProgress()
     for (const auto& Id : Runtime.State().journal) Save->ActionJournal.Add(UTF8_TO_TCHAR(Id.c_str()));
     if (GetWorld()) if (auto* Player = Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(),0)))
     {
-        if (!Player->IsAlive()) return false;
+        if (!Player->IsAlive() || !Player->GetCharacterMovement()->IsMovingOnGround()) return false;
         Save->bHasPlayerState=true;Save->MapName=UGameplayStatics::GetCurrentLevelName(GetWorld(),true);
         Save->PlayerLocation=Player->GetActorLocation();Save->PlayerRotation=Player->GetActorRotation();
         Save->Health=Player->GetHealth();Save->Stamina=Player->GetStamina();
