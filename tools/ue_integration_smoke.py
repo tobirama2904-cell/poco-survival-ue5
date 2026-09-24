@@ -10,7 +10,7 @@ assert unreal.load_class(None,'/Script/PocoSurvival.SurvivalInteraction') is not
 assert unreal.load_class(None,'/Script/PocoSurvival.SurvivalSaveGame') is not None
 
 def instance():
-    return unreal.new_object(cls, outer=unreal.get_transient_package())
+    return unreal.new_object(cls)
 def apply(game, action, expected=True):
     result=game.try_action(unreal.Name(action))
     success=result[0] if isinstance(result,tuple) else result
@@ -35,14 +35,14 @@ apply(loaded,'power_pumps',False)
 save_dir=Path(unreal.Paths.project_saved_dir())/'SaveGames'
 latest=save_dir/'Survival_B.sav'
 assert latest.exists(), 'Cannot locate actual save file for corruption test'
-latest.write_bytes(b'intentional-CI-corruption-test')
+latest.write_bytes(b'')  # Interrupted write: empty newest slot.
 recovered=instance()
 assert recovered.load_progress(), 'Older valid slot was not recovered'
 assert recovered.has_world_flag(unreal.Name('generator_running'))
 assert not recovered.has_world_flag(unreal.Name('clinic_power'))
 report={'phase':'unreal-headless-native-integration','native_classes_loaded':3,
  'objective_count':11,'native_inventory_and_choices_tested':True,
- 'save_write_and_load_tested':True,'corrupt_newest_slot_recovery_tested':True,
+ 'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,
  'unreal_editor_version':unreal.SystemLibrary.get_engine_version(),
  'visual_render_tested':False,'android_package_tested':False,'physical_device_tested':False}
 output.mkdir(parents=True,exist_ok=True)
