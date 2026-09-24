@@ -1,0 +1,19 @@
+{
+  "release": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/tag/artpack-001-3",
+  "archives": [
+    {
+      "file": "environment-source-v0.1.0.zip",
+      "downloaded_bytes": 148762599,
+      "sha256_verified": true,
+      "zip_crc_verified": true,
+      "file_count": 93
+    },
+    {
+      "file": "environment-mobile-candidates-v0.1.0.zip",
+      "downloaded_bytes": 82612289,
+      "sha256_verified": true,
+      "zip_crc_verified": true,
+      "file_count": 16
+    }
+  ]
+}

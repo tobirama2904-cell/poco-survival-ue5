@@ -1,0 +1,282 @@
+{
+  "phase": "source-art-validation",
+  "source_asset_count": 14,
+  "models": [
+    {
+      "id": "modular_urban_apartments_facade",
+      "vertices": 206921,
+      "triangles": 270045,
+      "materials": 5,
+      "source_valid": true
+    },
+    {
+      "id": "modular_fire_escape",
+      "vertices": 13982,
+      "triangles": 11322,
+      "materials": 3,
+      "source_valid": true
+    },
+    {
+      "id": "modular_chainlink_fence",
+      "vertices": 82277,
+      "triangles": 89232,
+      "materials": 2,
+      "source_valid": true
+    },
+    {
+      "id": "portable_generator",
+      "vertices": 24408,
+      "triangles": 26419,
+      "materials": 2,
+      "source_valid": true
+    },
+    {
+      "id": "metal_tool_chest",
+      "vertices": 11073,
+      "triangles": 13360,
+      "materials": 1,
+      "source_valid": true
+    },
+    {
+      "id": "rollershutter_door",
+      "vertices": 1340,
+      "triangles": 1104,
+      "materials": 2,
+      "source_valid": true
+    },
+    {
+      "id": "utility_box_01",
+      "vertices": 3629,
+      "triangles": 4404,
+      "materials": 1,
+      "source_valid": true
+    },
+    {
+      "id": "street_lamp_01",
+      "vertices": 17664,
+      "triangles": 30610,
+      "materials": 3,
+      "source_valid": true
+    },
+    {
+      "id": "sofa_02",
+      "vertices": 1828,
+      "triangles": 2728,
+      "materials": 1,
+      "source_valid": true
+    },
+    {
+      "id": "painted_wooden_cabinet",
+      "vertices": 2022,
+      "triangles": 2227,
+      "materials": 1,
+      "source_valid": true
+    },
+    {
+      "id": "barrel_stove",
+      "vertices": 6637,
+      "triangles": 9216,
+      "materials": 1,
+      "source_valid": true
+    },
+    {
+      "id": "industrial_storage_cart",
+      "vertices": 17224,
+      "triangles": 18902,
+      "materials": 1,
+      "source_valid": true
+    },
+    {
+      "id": "large_iron_gate",
+      "vertices": 23219,
+      "triangles": 38140,
+      "materials": 1,
+      "source_valid": true
+    },
+    {
+      "id": "fire_hydrant",
+      "vertices": 52182,
+      "triangles": 86316,
+      "materials": 2,
+      "source_valid": true
+    }
+  ],
+  "all_source_files_verified": true,
+  "source_bytes": 160636092,
+  "runner_ram_bytes": 16766414848,
+  "runner_disk_free_bytes": 91189362688,
+  "unreal_import_tested": false,
+  "android_build_produced": false,
+  "poco_f4_performance_tested": false,
+  "archives": [
+    {
+      "file": "environment-source-v0.1.0.zip",
+      "bytes": 148762599,
+      "sha256": "38dcdbdfa59c7efcc5f0739a02d18e6ed011312ffc0a5b5f54a8d75640561460"
+    },
+    {
+      "file": "environment-mobile-candidates-v0.1.0.zip",
+      "bytes": 82612289,
+      "sha256": "9390178e349c45a4c3d0690c06066cd5bf9d39ef43292a8e4e862dd620a228a3"
+    }
+  ],
+  "conditioning": {
+    "purpose": "Mobile candidates, not final LODs; physical-device and Unreal validation pending",
+    "assets": [
+      {
+        "id": "modular_urban_apartments_facade",
+        "source_triangles": 270045,
+        "candidate_triangles": 270045,
+        "mesh_count": 147,
+        "texture_limit": 2048,
+        "resized_images": 0,
+        "reduced_meshes": 0,
+        "bytes": 46446220,
+        "engine_import_validated": false
+      },
+      {
+        "id": "modular_fire_escape",
+        "source_triangles": 11322,
+        "candidate_triangles": 11322,
+        "mesh_count": 7,
+        "texture_limit": 2048,
+        "resized_images": 0,
+        "reduced_meshes": 0,
+        "bytes": 16779616,
+        "engine_import_validated": false
+      },
+      {
+        "id": "modular_chainlink_fence",
+        "source_triangles": 89232,
+        "candidate_triangles": 89232,
+        "mesh_count": 20,
+        "texture_limit": 2048,
+        "resized_images": 0,
+        "reduced_meshes": 0,
+        "bytes": 17750872,
+        "engine_import_validated": false
+      },
+      {
+        "id": "portable_generator",
+        "source_triangles": 26419,
+        "candidate_triangles": 25120,
+        "mesh_count": 4,
+        "texture_limit": 1024,
+        "resized_images": 4,
+        "reduced_meshes": 1,
+        "bytes": 3116584,
+        "engine_import_validated": false
+      },
+      {
+        "id": "metal_tool_chest",
+        "source_triangles": 13360,
+        "candidate_triangles": 13360,
+        "mesh_count": 7,
+        "texture_limit": 1024,
+        "resized_images": 3,
+        "reduced_meshes": 0,
+        "bytes": 815068,
+        "engine_import_validated": false
+      },
+      {
+        "id": "rollershutter_door",
+        "source_triangles": 1104,
+        "candidate_triangles": 1104,
+        "mesh_count": 2,
+        "texture_limit": 1024,
+        "resized_images": 4,
+        "reduced_meshes": 0,
+        "bytes": 553972,
+        "engine_import_validated": false
+      },
+      {
+        "id": "utility_box_01",
+        "source_triangles": 4404,
+        "candidate_triangles": 4404,
+        "mesh_count": 1,
+        "texture_limit": 1024,
+        "resized_images": 3,
+        "reduced_meshes": 0,
+        "bytes": 460756,
+        "engine_import_validated": false
+      },
+      {
+        "id": "street_lamp_01",
+        "source_triangles": 30610,
+        "candidate_triangles": 24999,
+        "mesh_count": 1,
+        "texture_limit": 1024,
+        "resized_images": 3,
+        "reduced_meshes": 1,
+        "bytes": 1579916,
+        "engine_import_validated": false
+      },
+      {
+        "id": "sofa_02",
+        "source_triangles": 2728,
+        "candidate_triangles": 2728,
+        "mesh_count": 2,
+        "texture_limit": 1024,
+        "resized_images": 3,
+        "reduced_meshes": 0,
+        "bytes": 318100,
+        "engine_import_validated": false
+      },
+      {
+        "id": "painted_wooden_cabinet",
+        "source_triangles": 2227,
+        "candidate_triangles": 2227,
+        "mesh_count": 5,
+        "texture_limit": 1024,
+        "resized_images": 3,
+        "reduced_meshes": 0,
+        "bytes": 429708,
+        "engine_import_validated": false
+      },
+      {
+        "id": "barrel_stove",
+        "source_triangles": 9216,
+        "candidate_triangles": 9216,
+        "mesh_count": 1,
+        "texture_limit": 1024,
+        "resized_images": 3,
+        "reduced_meshes": 0,
+        "bytes": 623964,
+        "engine_import_validated": false
+      },
+      {
+        "id": "industrial_storage_cart",
+        "source_triangles": 18902,
+        "candidate_triangles": 18902,
+        "mesh_count": 1,
+        "texture_limit": 1024,
+        "resized_images": 3,
+        "reduced_meshes": 0,
+        "bytes": 989168,
+        "engine_import_validated": false
+      },
+      {
+        "id": "large_iron_gate",
+        "source_triangles": 38140,
+        "candidate_triangles": 38140,
+        "mesh_count": 4,
+        "texture_limit": 1024,
+        "resized_images": 3,
+        "reduced_meshes": 0,
+        "bytes": 1373124,
+        "engine_import_validated": false
+      },
+      {
+        "id": "fire_hydrant",
+        "source_triangles": 86316,
+        "candidate_triangles": 86316,
+        "mesh_count": 10,
+        "texture_limit": 1024,
+        "resized_images": 6,
+        "reduced_meshes": 0,
+        "bytes": 2609340,
+        "engine_import_validated": false
+      }
+    ]
+  }
+}

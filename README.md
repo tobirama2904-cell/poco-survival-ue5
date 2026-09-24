@@ -5,10 +5,34 @@ Original Android survival-game development for POCO F4. **This repository is not
 ## Verified status
 
 - GitHub connection and repository administration: confirmed.
-- Separate public repository created; existing private repositories were not made public.
+- This repository is public; existing private repositories were not made public.
 - Source engine access: the authenticated EpicGames/UnrealEngine endpoint returned 404. No pending Epic invitation was found. Access must be granted by linking the owner's Epic and GitHub accounts.
 - Engine installation, Unreal import, Android packaging and POCO F4 performance: **not yet verified**.
 - A pinned manifest contains 14 genuine CC0 environment assets, about 153 MiB of source data before packaging. These are not placeholder padding.
+
+## Published and independently downloaded
+
+[Art release artpack-001-3](https://github.com/tobirama2904-cell/poco-survival-ue5/releases/tag/artpack-001-3)
+was produced by [successful run 36002462151](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36002462151).
+
+| Archive | Exact bytes | Verified after downloading from Release |
+| --- | ---: | --- |
+| Source environment collection | 148,762,599 | SHA-256 and all ZIP CRCs |
+| Mobile candidates of the same collection | 82,612,289 | SHA-256 and all ZIP CRCs |
+
+These are two representations of **the same 14-asset collection**, not 231 MB
+of unique game content. Four assets were visually inspected in the studio sheet:
+textures were visible and there was no obvious missing geometry or pink material.
+The other ten received structural checks, not a claimed visual approval.
+Candidates still need engine import, final LODs, collision, draw-call and device tests.
+
+![Blender studio renders, not gameplay](docs/verification/2026-09-24-art-preview.jpg)
+
+The actual art runner reported 16,766,414,848 bytes of physical RAM and
+91,189,362,688 bytes of free disk at packaging time (about 15.6 and 84.9 GiB).
+This demonstrates more capacity than the chat workspace, **not a successful
+UE installation** or a guarantee of identical space on every future runner.
+Machine-readable reports are under `docs/verification/`.
 
 ## Actual first production pipeline
 
