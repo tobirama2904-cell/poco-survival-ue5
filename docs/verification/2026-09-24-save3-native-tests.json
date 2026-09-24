@@ -1,0 +1,16 @@
+{
+  "phase": "unreal-headless-native-integration",
+  "native_classes_loaded": 3,
+  "same_revision_save_generation_tested": true,
+  "damaged_and_dead_encounters_restored": true,
+  "invalid_and_duplicate_encounter_fallback_tested": true,
+  "view_rotation_serialization_tested": true,
+  "objective_count": 11,
+  "native_inventory_and_choices_tested": true,
+  "save_write_and_load_tested": true,
+  "truncated_newest_slot_recovery_tested": true,
+  "unreal_editor_version": "5.7.4-51494982+UE5",
+  "visual_render_tested": false,
+  "android_package_tested": false,
+  "physical_device_tested": false
+}

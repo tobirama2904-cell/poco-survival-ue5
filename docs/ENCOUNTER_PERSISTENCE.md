@@ -1,4 +1,4 @@
-# Persistent encounters — implementation under remote verification
+# Persistent encounters — native editor and rendered gameplay verified
 
 Save format 3 retains each authored infected actor's map-scoped ID, location,
 orientation, health (including death) and stamina. It also retains the player's
@@ -12,7 +12,8 @@ actors and enemies destroyed by leaving the world require a later tombstone
 registry; this implementation does not claim to solve those cases.
 
 The scene author assigns stable IDs. The editor integration checks actual
-serialization, dead/damaged restore and invalid-newest-slot recovery. Its remote
-result is pending until the job completes. This branch is intentionally separate
-from the APK packaging baseline, which must not silently use an older native
-library after public C++ layouts change.
+serialization, dead/damaged restore and invalid-newest-slot recovery. Run 36039317194 / source 5b45850 passed actual native integration, save
+serialization/recovery and real software-Vulkan walking/ground/camera gates. Its
+640×360 frame was inspected; final art remains rejected. These changes are now
+merged into main, but are NOT in APK 36038890496. A new Android native compilation
+and matching content cook are required before packaging save format 3 for Android.

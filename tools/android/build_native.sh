@@ -20,7 +20,7 @@ fi
 set +e
 timeout --foreground 180m "$ENGINE/Engine/Build/BatchFiles/Linux/Build.sh" \
   PocoSurvival Android Development -Project=/project/PocoSurvival.uproject \
-  -architectures=arm64 -MaxParallelActions=2 -NoUBA -NoHotReloadFromIDE -Verbose -SkipDeploy \
+  -architectures=arm64 -MaxParallelActions=2 -NoUBA -NoHotReloadFromIDE -VeryVerbose -SkipDeploy \
   2>&1 | tee artifacts/android-build/native-build.log
 RESULT=${PIPESTATUS[0]}
 set -e
