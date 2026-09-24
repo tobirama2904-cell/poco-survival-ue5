@@ -35,3 +35,17 @@ Public releases may contain the appropriately packaged game and licensed game
 content, not an extracted Unreal Editor or raw Epic engine tree. No paid runner
 or paid service is enabled. A successful headless Linux editor check is not a
 substitute for Android execution, visual review or physical POCO F4 measurements.
+
+## Executed Android bootstrap update
+
+The pinned SDK/NDK/JDK setup now passed on a real runner. The downloader verified
+830 Android dependency files (178 already present; 652 installed, from 219 packs).
+The first native attempt stopped at the missing GoogleGameSDK module definition.
+The next job adds authorized matching source and portable dependency headers.
+This is active implementation, but native compilation and APK production are not
+yet verified. See `docs/STATUS.json` and the live run before restarting anything.
+
+A new private repository holds licensed intermediates when available. Capture is
+attempted after compiler failure as well as success; checksummed restore code has
+synthetic tests, but no real checkpoint roundtrip is claimed yet. Never expose
+these engine archives as public game downloads.

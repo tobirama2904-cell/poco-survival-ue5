@@ -105,3 +105,22 @@ The optional workshop has a 5-minute idle timeout and 60-minute stopped retentio
 its machine can expire, while the definition, code and published art remain on GitHub.
 The website ZIP route requires a separate Epic web login, but the authorized
 official GHCR image route now works and has been used for a real editor build.
+
+## Android source build now running externally
+
+[Android native source build 36013234761](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36013234761)
+was launched after an earlier attempt verified the pinned SDK/NDK/JDK and 830
+Android dependency files, then stopped on the slim image's missing GoogleGameSDK
+module definition. The revised job restores the exact matching authorized source
+and additional portable source/header dependencies. Check the live run: the
+checkpoint records its observed state, not a promised successful result.
+
+Compiled engine intermediates, if produced, go only into the owner's **private**
+engine-cache repository. Public artifacts contain diagnostic JSON/logs only.
+The pipeline is bounded to four hours on a standard public runner; no paid
+service is configured. The new native-build utility suite has eight locally
+passing tests. Real private-cache restore remains unverified until a cache exists.
+
+This job compiles native Android code. **It does not automatically author a game
+world or campaign, cook content, sign an APK, or publish a playable game.** Those
+parts still have to be implemented and tested; there is no APK download yet.

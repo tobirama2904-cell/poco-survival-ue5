@@ -1,0 +1,34 @@
+{
+  "first_run_id": 36011561009,
+  "first_run_conclusion": "failure",
+  "failure": "Missing GoogleGameSDK module definition in the official slim image; native compilation did not succeed.",
+  "verified_host_toolchain": {
+    "disk_free_bytes": 103778856960,
+    "ram_bytes": 16766414848,
+    "sdk_platform": 35,
+    "ndk": "27.2.12479018",
+    "build_tools": "35.0.1",
+    "java_major": 21
+  },
+  "verified_dependency_installation": {
+    "phase": "authorized-android-engine-dependencies",
+    "manifest_sha256": "af1404ab27b7c0c529e33fcd3d0e8a217b857ca97e4334e2f53c71f4670ee332",
+    "selected_files": 830,
+    "previously_verified_files": 178,
+    "installed_and_hash_verified_files": 652,
+    "packs_verified": 219,
+    "android_native_compiled": false,
+    "apk_produced": false
+  },
+  "remediation": "A source overlay from exact authorized Epic commit, plus portable source/header dependencies; private checkpoint store/restore with hash and path checks.",
+  "current_run_id": 36013234761,
+  "current_run_url": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36013234761",
+  "current_source_commit": "409ed95fcfcdb8d50ce40cdaa9354466850f75cf",
+  "current_run_status_at_checkpoint": "in_progress",
+  "current_run_conclusion_at_checkpoint": null,
+  "native_compile_not_yet_verified": true,
+  "apk_produced": false,
+  "playable_world_produced": false,
+  "private_cache_repository_created": true,
+  "private_cache_upload_and_restore_in_real_build_not_yet_verified": true
+}

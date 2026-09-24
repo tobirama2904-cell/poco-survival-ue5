@@ -36,3 +36,15 @@ several-hour/full-campaign ambition, not a short test presented as the final gam
 Use substantial licensed content, never padding. No silent engine switch. No
 physical-device FPS or graphics claims without measurements and inspected builds.
 The current small story-state graph is an internal correctness fixture only.
+
+## Android build recovery
+
+Use `--workflow android` with `android_native_build_source_commit` from STATUS to
+inspect the active Android run. Do not duplicate it while queued or in progress.
+The original slim-image attempt failed at missing GoogleGameSDK source after
+successful SDK and binary-dependency installation. The current recipe overlays
+matching authorized source. Both real private-cache reuse and native compilation
+must be checked from their actual results; a created private repository alone
+is not proof that it contains a usable build cache. Public downloads remain art
+resources, not a game. The assistant is not an autonomous off-session game author;
+the dispatched bounded GitHub build can continue independently of the chat.

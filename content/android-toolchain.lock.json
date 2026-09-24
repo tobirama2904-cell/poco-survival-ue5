@@ -46,7 +46,8 @@
       ]
     }
   ],
-  "installed_on_builder": false,
+  "installed_on_builder": true,
   "android_engine_platform_components_present": false,
-  "note": "Verified Google package metadata only. This does not add missing Unreal Android modules or produce an APK."
+  "note": "Verified Google package metadata only. This does not add missing Unreal Android modules or produce an APK.",
+  "installation_verification_run": 36011561009
 }
