@@ -48,3 +48,35 @@ must be checked from their actual results; a created private repository alone
 is not proof that it contains a usable build cache. Public downloads remain art
 resources, not a game. The assistant is not an autonomous off-session game author;
 the dispatched bounded GitHub build can continue independently of the chat.
+
+## Gameplay scene work (2026-09-24)
+
+- Metadata has moved from lowercase `content/` to **`BuildData/`**. Unreal's
+  case-insensitive directory scan crashed when both that folder and the actual
+  `Content/` directory existed on Linux. Do not reintroduce that collision.
+- Native character, legacy input/touch controller, HUD, movement/vitals, melee,
+  a local-steering enemy, short establishing camera and power-restoration lights
+  are implemented in source. This is an internal gameplay gate, not final art,
+  complete combat, navigation or the requested several-hour campaign.
+- `scene-layout-002` is a pinned **scene source**, not an APK. The scene script
+  assembles eleven CC0 assets and original geometry. Two Blender layout renders
+  were inspected; they are **not Unreal gameplay screenshots**. The yard remains
+  too empty/repetitive for final-art acceptance. Manny is temporary licensed art.
+- `gameplay-scene.yml` constructs a real map, tests native actors and attempts an
+  actual game-mode screenshot using software Vulkan. A headless pass does not
+  prove rendering; review PNG and runtime report separately. Physical POCO
+  testing remains outstanding.
+- Current scene retry: **36024498135**, initial source **e237db0**. It has bounded
+  repair windows after failures, with diagnostic artifacts uploaded while the
+  runner remains alive. Inspect those artifacts; commit a measured correction
+  on main instead of blindly launching another image download. The workflow
+  records an effective source if a correction is accepted. No autonomous code
+  authoring happens outside the chat.
+- First scene attempt **36022292082** downloaded and hash-verified 128 authorized
+  character files (54 packs), then failed at the Content/content case collision
+  **before UHT/C++ compilation**. Do not call it a successful gameplay build.
+- Active Android retry **36021238459**, source **499e2d8**, fixes the observed
+  missing Linux-host ISPC binary and Python 3.10 streaming gzip incompatibility.
+  The previous source build 36013234761 ended with exit 6 after an 838-action graph
+  (last logged index 637); its partial cache was NOT preserved. Wait for actual
+  results, not the workflow step label.

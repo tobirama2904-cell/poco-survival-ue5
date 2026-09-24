@@ -143,7 +143,7 @@ float ASurvivalCharacter::TakeDamage(float Amount,const FDamageEvent& Event,ACon
 {
     const float Applied=Stats.Damage(Amount);
     if (Applied>0) Super::TakeDamage(Applied,Event,Instigator,Causer);
-    if (!Stats.Alive()) { GetCharacterMovement()->DisableMovement();
+    if (Applied>0 && !Stats.Alive()) { GetCharacterMovement()->DisableMovement();
         if (auto* Death=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01.MM_Death_Front_01"))) GetMesh()->PlayAnimation(Death,false);
         StatusMessage=TEXT("Вы погибли. F9 / Загрузить — вернуться к сохранению."); }
     return Applied;

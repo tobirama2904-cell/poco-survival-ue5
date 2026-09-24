@@ -2,6 +2,21 @@
 
 Original Android survival-game development for POCO F4. **This repository is not a finished game and currently has no playable APK.**
 
+## Gameplay construction in progress — not a release
+
+Native third-person movement, touch buttons, health/stamina, melee, a test enemy,
+player-state saves, an establishing camera and power-restoration lights now exist
+in source. The authored waterworks courtyard has a pinned CC0 scene source and
+an external UE import/render gate. **The new C++ classes passed UHT/UBT at source e237db0 (16 actions, 66.18 s).
+Map import and UE rendering are not yet confirmed; neither is implied by compilation.**
+The first scene attempt exposed a case-sensitive-filesystem collision in UBT:
+metadata now lives in `BuildData/`, distinct from Unreal's `Content/`.
+
+Active scene retry: [36024498135](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36024498135).
+Active Android retry: [36021238459](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36021238459).
+Two Blender composition checks are not gameplay, device/FPS proof, or final art.
+The scene uses a temporary licensed Manny animation fixture, not finished characters.
+
 ## Verified status
 
 - GitHub connection and repository administration: confirmed.

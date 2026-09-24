@@ -1,0 +1,14 @@
+{
+  "run": 36024498135,
+  "attempt": 1,
+  "source_commit": "e237db03a52665281d0c343740f661726e3a709a",
+  "uht_files_written": 20,
+  "ubt_actions": 16,
+  "ubt_elapsed_seconds": 66.18,
+  "cpp_compilation_succeeded": true,
+  "next_failure": "Python fixture could not access SaveGame-only field format_version; add reflected editor/Blueprint access for verified fixture construction",
+  "map_import_verified": false,
+  "visual_gameplay_verified": false,
+  "android_apk_produced": false,
+  "poco_tested": false
+}

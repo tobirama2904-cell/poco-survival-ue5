@@ -11,4 +11,7 @@ public:
     virtual void StartPlay() override;
 private:
     void Intro();void EndIntro();void CaptureProof();void ExitProof();
+    void BeginMovementProof();void EndMovementProof();
+    FVector MovementProofStart=FVector::ZeroVector;
+    bool bMovementProofStarted=false;
 };
