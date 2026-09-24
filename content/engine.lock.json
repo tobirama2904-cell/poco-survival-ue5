@@ -6,5 +6,8 @@
   "tag_at_selection": "dev-slim-5.7.4",
   "compressed_layer_bytes": 21728342730,
   "purpose": "Authorized official editor build and integration probe; Android platform support must be measured, not assumed",
-  "engine_redistribution": "Never upload this image, engine tree or its layers to this public project."
+  "engine_redistribution": "Never upload this image, engine tree or its layers to this public project.",
+  "source_repository": "EpicGames/UnrealEngine",
+  "source_ref": "5.7.4-release",
+  "source_commit": "260bb2e1c5610b31c63a36206eedd289409c5f11"
 }
