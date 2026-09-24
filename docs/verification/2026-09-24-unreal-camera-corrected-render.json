@@ -1,0 +1,26 @@
+{
+  "renderer": "software Vulkan / llvmpipe; NOT hardware or POCO performance",
+  "renderer_exit_code": 0,
+  "screenshots": [
+    {
+      "name": "HighresScreenshot00000.png",
+      "bytes": 301285,
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "runtime_movement": {
+    "phase": "actual-game-mode-input-and-floor-test",
+    "passed": true,
+    "walk_distance_cm": 387.72,
+    "grounded": true,
+    "camera_pitch_degrees": -10.0,
+    "player_view_target": true,
+    "camera_framed": true,
+    "touch_device_tested": false,
+    "android_tested": false
+  },
+  "gate_passed": true,
+  "visual_quality_review": "requires human/image inspection separately",
+  "physical_device_tested": false
+}

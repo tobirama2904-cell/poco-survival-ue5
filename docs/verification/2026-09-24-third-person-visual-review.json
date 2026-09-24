@@ -1,0 +1,30 @@
+{
+  "run": 36033810711,
+  "source_commit": "767e79cc1b32aa505bd7645a47bc8c0787400a1e",
+  "actual_unreal_game_mode_image": true,
+  "image_visually_inspected": true,
+  "camera_framing_corrected": true,
+  "camera_pitch_degrees": -10,
+  "walking_and_ground_contact_verified": true,
+  "walk_distance_cm": 387.72,
+  "diagnostic_resolution": [
+    640,
+    360
+  ],
+  "diagnostic_quality": "software-only 2x512 shadow cascades/FXAA; not a phone preset",
+  "visible": [
+    "third-person animated temporary mannequin",
+    "courtyard/buildings/trees/canal bridge",
+    "technical HUD and action buttons"
+  ],
+  "final_visual_quality_accepted": false,
+  "remaining_visual_defects": [
+    "sparse repeated environment",
+    "flat/washed lighting",
+    "missing distant backdrop and black horizon gap",
+    "temporary mannequin and technical HUD"
+  ],
+  "full_campaign_complete": false,
+  "apk_produced": false,
+  "physical_device_tested": false
+}

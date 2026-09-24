@@ -14,10 +14,11 @@ produced an actual **960×540 Unreal game-mode PNG** using software Vulkan. Real
 keyboard input moved the character **387.72 cm**, with ground contact confirmed.
 The frame was visually inspected, not merely counted: its initial camera pointed
 at the pavement. Python's Rotator argument order was the cause; explicit named
-rotations and a camera-framing runtime assertion now address it. Visual acceptance
-remains separate from renderer/input success.
+rotations and a camera-framing runtime assertion now address it. The corrected run 36033810711 now also passed actual third-person framing
+(pitch −10°, 387.72 cm movement, grounded) and produced the inspected image below.
+Art/lighting/backdrop quality still fails final acceptance.
 
-- Camera-corrected scene run: [36033810711](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36033810711).
+- Successful camera-corrected scene run: [36033810711](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36033810711).
 - Native ARM64 cache/TLS verification: [36029237301](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36029237301).
 - Actual Android ASTC content cooking: [36034397538](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36034397538).
 
@@ -32,6 +33,8 @@ campaign have **not** been demonstrated.
 The temporary licensed Manny character, technical HUD and courtyard are internal
 gates, not the requested finished characters, open world or several-hour campaign.
 Software-renderer timing is **not POCO FPS**. Blender previews are not gameplay.
+
+![Actual UE game-mode frame; software-only technical scene, NOT a finished game](docs/verification/2026-09-24-unreal-third-person.png)
 
 ## Verified status
 

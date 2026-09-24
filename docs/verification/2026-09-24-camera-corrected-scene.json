@@ -1,0 +1,39 @@
+{
+  "phase": "native-editor-scene-construction",
+  "source_glb_sha256": "0b386d60c1cb48c58699da110dab0eec18f2d23f0d5c388cc67b43cdcc676232",
+  "visual_render_tested": false,
+  "android_package_tested": false,
+  "physical_device_tested": false,
+  "measured_import_basis_cm": [
+    [
+      100.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      -100.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      100.0
+    ]
+  ],
+  "spawn_rotation_degrees": {
+    "pitch": -10.0,
+    "yaw": -89.99999999999999,
+    "roll": -0.0
+  },
+  "map": "/Game/Worlds/CanalDistrict",
+  "native_vitals_damage_attack_cost_tested": true,
+  "static_mesh_count": 5,
+  "nanite_disabled_for_mobile_geometry": true,
+  "interactions_placed": 3,
+  "enemy_proxies_placed": 1,
+  "actors_in_saved_scene": 19,
+  "source_triangles": 701945,
+  "complete_campaign": false,
+  "final_character_art": false
+}
