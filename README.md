@@ -2,27 +2,43 @@
 
 Original Android survival-game development for POCO F4. **This repository is not a finished game and currently has no playable APK.**
 
-## Gameplay construction in progress — not a release
+## Actual gameplay verification — still not a release
 
 Native third-person movement, touch buttons, health/stamina, melee, a test enemy,
-player-state saves, an establishing camera and power-restoration lights now exist
-in source. The authored waterworks courtyard has a pinned CC0 scene source and
-an external UE import/render gate. **The new C++ classes passed UHT/UBT at source e237db0 (16 actions, 66.18 s).
-Map import and UE rendering are not yet confirmed; neither is implied by compilation.**
-The first scene attempt exposed a case-sensitive-filesystem collision in UBT:
-metadata now lives in `BuildData/`, distinct from Unreal's `Content/`.
+player-state saves, an establishing camera and power-restoration lights exist.
+Unreal has actually constructed and saved `/Game/Worlds/CanalDistrict` from the
+pinned scene source. Editable content is retained in the owner's **private** cache.
 
-Active scene retry: [36024498135](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36024498135).
-Active Android retry: [36021238459](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36021238459).
-Two Blender composition checks are not gameplay, device/FPS proof, or final art.
-The scene uses a temporary licensed Manny animation fixture, not finished characters.
+[Run 36030652636](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36030652636)
+produced an actual **960×540 Unreal game-mode PNG** using software Vulkan. Real
+keyboard input moved the character **387.72 cm**, with ground contact confirmed.
+The frame was visually inspected, not merely counted: its initial camera pointed
+at the pavement. Python's Rotator argument order was the cause; explicit named
+rotations and a camera-framing runtime assertion now address it. Visual acceptance
+remains separate from renderer/input success.
+
+- Camera-corrected scene run: [36033810711](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36033810711).
+- Native ARM64 cache/TLS verification: [36029237301](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36029237301).
+- Actual Android ASTC content cooking: [36034397538](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36034397538).
+
+The earlier ARM64 run completed 843 C++/link actions and retained its actual
+unstripped .so and intermediates privately, then failed during post-build Gradle
+TLS. The CA-store correction subsequently passed a real Java HTTPS test. Recursive
+inspection also corrected an earlier bad inventory assumption: Android host cook
+modules already ship under `Binaries/Linux/Android`; no speculative host rebuild
+is required. Cooking, packaged APK, physical-device performance and the full
+campaign have **not** been demonstrated.
+
+The temporary licensed Manny character, technical HUD and courtyard are internal
+gates, not the requested finished characters, open world or several-hour campaign.
+Software-renderer timing is **not POCO FPS**. Blender previews are not gameplay.
 
 ## Verified status
 
 - GitHub connection and repository administration: confirmed.
 - This repository is public; existing private repositories were not made public.
 - Epic invitation accepted; active membership and authenticated engine source / official registry access confirmed (HTTP 200).
-- Official UE **5.7.4** installed on an external runner; project UHT/UBT compilation and editor startup verified. Native quest/inventory/choice integration, save/load and recovery from a truncated newest save slot passed inside UE. Art import, Android packaging and POCO F4 performance are **not yet verified**.
+- Official UE **5.7.4** installed on an external runner; project UHT/UBT compilation and editor startup verified. Native quest/inventory/choice integration, save/load and recovery from a truncated newest save slot passed inside UE. Actual map import and software-rendered gameplay are verified; Android packaging and POCO F4 performance are **not yet verified**.
 - A pinned manifest contains 14 genuine CC0 environment assets, about 153 MiB of source data before packaging. These are not placeholder padding.
 
 ## Published and independently downloaded
