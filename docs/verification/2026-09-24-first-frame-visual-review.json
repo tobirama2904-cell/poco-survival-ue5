@@ -1,0 +1,18 @@
+{
+  "run": 36030652636,
+  "source_commit": "627674f4c119fd61c47c00e4f134195524e2730c",
+  "actual_unreal_gameplay_image": true,
+  "image_visually_inspected": true,
+  "renderer": "llvmpipe software Vulkan",
+  "width": 960,
+  "height": 540,
+  "movement_ground_contact_pass": true,
+  "walk_distance_cm": 387.72,
+  "native_r64_fallback_worked": true,
+  "native_actor_rendered": true,
+  "hud_rendered": true,
+  "visual_quality_accepted": false,
+  "defect": "Camera points at pavement, hiding district. Python Rotator constructor order is roll,pitch,yaw, unlike C++; positional yaw was assigned to pitch. Repaired with explicit keywords and a runtime camera-angle gate. New render verification pending.",
+  "physical_device_tested": false,
+  "complete_game": false
+}

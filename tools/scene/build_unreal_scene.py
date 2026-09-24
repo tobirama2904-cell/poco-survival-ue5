@@ -72,11 +72,14 @@ try:
  for item in recipe['infected']:
   actor=actors.spawn_actor_from_class(native('SurvivalInfected'),point(item['position']));actor.set_actor_label('infected_engineering_proxy');actor.set_editor_property('patrol_points',[point(p) for p in item['patrol']])
  spawn=point(recipe['spawn']);look=point(recipe['look_at']);rotation=unreal.MathLibrary.find_look_at_rotation(spawn,look)
- start=actors.spawn_actor_from_class(unreal.PlayerStart,spawn,unreal.Rotator(0,rotation.yaw,0));start.set_actor_label('safe_player_spawn')
+ start=actors.spawn_actor_from_class(unreal.PlayerStart,spawn,unreal.Rotator(pitch=-10.0,yaw=rotation.yaw,roll=0.0));start.set_actor_label('safe_player_spawn')
+ measured_start=start.get_actor_rotation()
+ assert abs(measured_start.pitch+10)<.1 and abs(measured_start.roll)<.1,('Invalid spawn camera rotation',measured_start)
+ report['spawn_rotation_degrees']={'pitch':measured_start.pitch,'yaw':measured_start.yaw,'roll':measured_start.roll}
  camera=actors.spawn_actor_from_class(unreal.CameraActor,point(recipe['intro_camera']),unreal.MathLibrary.find_look_at_rotation(point(recipe['intro_camera']),point(recipe['intro_look_at'])))
  camera.set_editor_property('tags',[unreal.Name('intro_camera')]);camera.camera_component.set_editor_property('field_of_view',68)
  world.get_world_settings().set_editor_property('default_game_mode',native('SurvivalGameMode'))
- sun=actors.spawn_actor_from_class(unreal.DirectionalLight,unreal.Vector(0,0,1800),unreal.Rotator(-35,-42,0));sun.set_actor_label('late_afternoon_sun')
+ sun=actors.spawn_actor_from_class(unreal.DirectionalLight,unreal.Vector(0,0,1800),unreal.Rotator(pitch=-35.0,yaw=-42.0,roll=0.0));sun.set_actor_label('late_afternoon_sun')
  light=sun.get_component_by_class(unreal.DirectionalLightComponent);light.set_mobility(unreal.ComponentMobility.MOVABLE);light.set_editor_property('intensity',3.0);light.set_editor_property('light_color',unreal.Color(255,221,178,255))
  light.set_editor_property('atmosphere_sun_light',True);light.set_editor_property('dynamic_shadow_distance_movable_light',6000)
  actors.spawn_actor_from_class(unreal.SkyAtmosphere,unreal.Vector())
