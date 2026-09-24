@@ -52,6 +52,17 @@ python3 tools/art_pack.py package --work /tmp/poco-art --output artifacts
 python3 tools/preview_sheet.py /tmp/poco-art/previews artifacts/art-preview.jpg
 ```
 
+## Native game source foundation
+
+The repository now includes `PocoSurvival.uproject`, a native runtime module,
+portable C++ inventory/quest/world-state logic, and Unreal GameInstance,
+interaction and SaveGame adapter source. See [the exact implementation and limits](docs/GAME_FOUNDATION.md).
+
+Run `bash tools/test_core.sh` to compile the portable code with AddressSanitizer
+and UndefinedBehaviorSanitizer. A separate, bounded GitHub Actions workflow runs
+these tests outside the chat on relevant pushes. **Passing it does not mean the
+UE adapter compiles, a level exists, or an Android game has been built.**
+
 ## Intended game, not completed features
 
 A third-person infected-city survival game with a story campaign and revisitable districts. Quality goals include grounded movement, stealth, readable combat, environmental interactions and directed cinematics. Twelve hours is a possible full-production target, **not existing content or a promised completion date**. Mobile rendering and real device measurements take precedence over desktop-only feature marketing.

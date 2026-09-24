@@ -1,0 +1,28 @@
+name: Verify gameplay core (not an Unreal or Android build)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Source/**'
+      - 'Config/**'
+      - '*.uproject'
+      - 'tests/core/**'
+      - 'tools/test_core.sh'
+      - '.github/workflows/core-tests.yml'
+permissions:
+  contents: read
+concurrency:
+  group: core-tests-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  gameplay-core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Compile and exercise the actual portable gameplay code
+        run: |
+          set -o pipefail
+          bash tools/test_core.sh | tee core-test-result.txt
+          cat core-test-result.txt >> "$GITHUB_STEP_SUMMARY"
+          echo 'This tests domain C++ only. UHT, Unreal adapters, map, rendering, Android and physical device are NOT tested.' >> "$GITHUB_STEP_SUMMARY"
