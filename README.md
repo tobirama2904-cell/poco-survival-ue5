@@ -35,3 +35,12 @@ A third-person infected-city survival game with a story campaign and revisitable
 ## Rights and privacy
 
 Listed art is CC0; original authors and sources remain in each pack. Redistribution rights for each future character, animation, sound and music asset must be checked independently. Unreal Engine is governed by Epic's EULA and is not republished here. No account tokens, signing keys or personal browser profiles belong in this repository.
+
+## External development environment
+
+`.devcontainer/devcontainer.json` describes a 4-core / 16 GiB resource workshop.
+Its bootstrap performs the actual Blender import/export/render integration test.
+It does **not** install Unreal Engine or claim to package an Android game.
+Codespaces has a finite included allowance and storage accounting; it is not an
+unlimited free server. Our provisioned workshop must have a short idle timeout,
+be stopped after work, and use a short retention period. No paid upgrade is configured.

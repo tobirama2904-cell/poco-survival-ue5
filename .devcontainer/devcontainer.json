@@ -1,0 +1,7 @@
+{
+  "name": "POCO UE5 resource workshop",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "remoteUser": "vscode",
+  "hostRequirements": {"cpus": 4, "memory": "16gb", "storage": "32gb"},
+  "postCreateCommand": "timeout 900 bash tools/bootstrap_codespace.sh"
+}
