@@ -1,0 +1,58 @@
+name: Install and launch signed ARM64 game on development Android emulator
+on:
+  workflow_dispatch:
+    inputs:
+      apk_run:
+        required: true
+        type: string
+        description: Successful private signed APK release run
+permissions:
+  contents: read
+concurrency:
+  group: android-install-verification
+  cancel-in-progress: false
+jobs:
+  install:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Fetch actual signed installation candidate, not engine source
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+          APK_RUN: ${{ inputs.apk_run }}
+        run: |
+          set -euo pipefail
+          [[ "$APK_RUN" =~ ^[0-9]+$ ]]
+          mkdir -p artifacts/apk artifacts/android-build
+          gh release download "internal-apk-$APK_RUN" --repo tobirama2904-cell/poco-ue5-engine-cache --dir artifacts/apk --pattern NulevayaOtmetka-internal-arm64.apk --pattern SHA256SUMS
+          (cd artifacts/apk && sha256sum --check SHA256SUMS)
+      - name: Prepare free development emulator and record exact installed SDK versions
+        run: |
+          set -euo pipefail
+          test -e /dev/kvm
+          sudo chmod 666 /dev/kvm
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          "$SDKMANAGER" "platform-tools" "emulator" "system-images;android-30;google_apis;x86_64" "build-tools;35.0.1"
+          mkdir -p artifacts/android-emulator
+          "$SDKMANAGER" --list_installed > artifacts/android-emulator/sdk-installed.log
+          printf 'no\n' | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd --force --name GameInstallCheck --package "system-images;android-30;google_apis;x86_64" --device pixel_2
+          python3 tools/android/verify_apk.py
+      - name: Install, launch, capture and relaunch actual game (not a physical POCO test)
+        run: python3 tools/android/emulator_check.py
+      - name: Preserve actual Android diagnostics and screenshots, never emulator system images
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: android-install-diagnostics-${{ github.run_id }}
+          path: |
+            artifacts/android-emulator/*.json
+            artifacts/android-emulator/*.log
+            artifacts/android-emulator/*.png
+            artifacts/android-build/*.json
+            artifacts/android-build/*.log
+          retention-days: 7
