@@ -40,6 +40,7 @@ def install_blob(raw,blob,entry,root):
         temporary.unlink(missing_ok=True)
 
 def wanted(name):
+    if name=="Engine/Source/ThirdParty/Intel/ISPC/bin/Linux/ispc":return True
     path=PurePosixPath(name.lower())
     if 'android' in name.lower() or 'arm64-v8a' in name.lower():return True
     excluded={'win32','win64','windows','mac','ios','tvos','visionos','linuxarm64','hololens','xboxone','ps4','ps5','switch'}
@@ -47,12 +48,15 @@ def wanted(name):
     return name.startswith('Engine/Source/') and path.suffix in source_suffixes and not any(p in excluded for p in path.parts)
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--manifest',type=Path,required=True);ap.add_argument('--engine-root',type=Path,required=True);ap.add_argument('--report',type=Path,required=True);a=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=['android','character'],default='android');ap.add_argument('--manifest',type=Path,required=True);ap.add_argument('--engine-root',type=Path,required=True);ap.add_argument('--report',type=Path,required=True);a=ap.parse_args()
     x=ET.parse(a.manifest).getroot();base=x.attrib['BaseUrl'].rstrip('/')
     parsed=urlparse(base)
     if parsed.scheme!='https' or parsed.hostname!='cdn.unrealengine.com':raise ValueError('Unapproved engine dependency host')
     blobs={b.attrib['Hash']:b.attrib for b in x.find('Blobs')};packs={p.attrib['Hash']:p.attrib for p in x.find('Packs')}
-    entries=[f.attrib for f in x.find('Files') if wanted(f.attrib['Name'])]
+    prefix='Templates/TemplateResources/High/Characters/Content/'
+    def selected(name):
+        return wanted(name) if a.mode=='android' else name.startswith(prefix)
+    entries=[f.attrib for f in x.find('Files') if selected(f.attrib['Name'])]
     if not entries:raise ValueError('No Android dependency entries')
     groups={};existing=0
     for e in entries:
@@ -85,6 +89,6 @@ def main():
     installed=0
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
         for count in pool.map(process,groups):installed+=count
-    report={'phase':'authorized-android-engine-dependencies','manifest_sha256':hashlib.sha256(a.manifest.read_bytes()).hexdigest(),'selected_files':len(entries),'previously_verified_files':existing,'installed_and_hash_verified_files':installed,'packs_verified':len(groups),'android_native_compiled':False,'apk_produced':False}
+    report={'phase':'authorized-'+a.mode+'-dependencies','manifest_sha256':hashlib.sha256(a.manifest.read_bytes()).hexdigest(),'selected_files':len(entries),'previously_verified_files':existing,'installed_and_hash_verified_files':installed,'packs_verified':len(groups),'android_native_compiled':False,'apk_produced':False}
     a.report.parent.mkdir(parents=True,exist_ok=True);a.report.write_text(json.dumps(report,indent=2)+'\n');print('ANDROID_DEPENDENCIES_READY',json.dumps(report),flush=True)
 if __name__=='__main__':main()

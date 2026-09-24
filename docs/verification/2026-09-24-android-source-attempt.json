@@ -1,0 +1,22 @@
+{
+  "run_id": 36013234761,
+  "source_commit": "409ed95fcfcdb8d50ce40cdaa9354466850f75cf",
+  "conclusion": "failure",
+  "source_files_added": 70324,
+  "hash_verified_dependencies_installed": 806,
+  "native_action_graph_size": 838,
+  "last_logged_action_index": 637,
+  "ubt_exit_code": 6,
+  "ubt_elapsed_seconds": 2644.76,
+  "observed_missing_tool": "Engine/Source/ThirdParty/Intel/ISPC/bin/Linux/ispc",
+  "full_root_cause_confirmed": false,
+  "cache_capture_error": "Python 3.10 streaming tar does not support compresslevel argument",
+  "useful_engine_cache_preserved": false,
+  "apk_produced": false,
+  "next_changes": [
+    "install pinned Linux-host ISPC compiler",
+    "explicit gzip streaming wrapper and split-capture roundtrip test",
+    "preserve UBT detailed log and cgroup memory events",
+    "compile new game-layer code"
+  ]
+}

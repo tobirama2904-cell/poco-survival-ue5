@@ -4,6 +4,9 @@
 #include "Core/SurvivalCore.h"
 #include "SurvivalGameInstance.generated.h"
 
+class ASurvivalCharacter;
+class USurvivalSaveGame;
+
 USTRUCT(BlueprintType)
 struct FSurvivalObjectiveView
 {
@@ -32,7 +35,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Survival") TArray<FSurvivalObjectiveView> GetObjectives() const;
     UFUNCTION(BlueprintCallable, Category="Survival|Save") bool SaveProgress();
     UFUNCTION(BlueprintCallable, Category="Survival|Save") bool LoadProgress();
+    UFUNCTION(BlueprintCallable, Category="Survival|Save") bool ApplyLoadedPlayerState(ASurvivalCharacter* Player);
 private:
+    UPROPERTY() TObjectPtr<USurvivalSaveGame> PendingPlayerSave;
+    int64 SaveGeneration = 0;
     survival::Runtime Runtime;
     int32 NextSaveSlot = 0;
 };

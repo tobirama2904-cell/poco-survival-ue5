@@ -15,14 +15,17 @@ if [[ -s .cache/native-restore/android-cache-manifest.json ]]; then
   cat .cache/native-restore/android-cache.tar.gz.part??? | python3 tools/android/restore_cache.py --manifest .cache/native-restore/android-cache-manifest.json
   rm -rf .cache/native-restore
 fi
+"$ENGINE/Engine/Source/ThirdParty/Intel/ISPC/bin/Linux/ispc" --version
 set +e
 timeout --foreground 180m "$ENGINE/Engine/Build/BatchFiles/Linux/Build.sh" \
   PocoSurvival Android Development -Project=/project/PocoSurvival.uproject \
-  -architectures=arm64 -MaxParallelActions=2 -NoUBA -NoHotReloadFromIDE \
+  -architectures=arm64 -MaxParallelActions=2 -NoUBA -NoHotReloadFromIDE -Verbose \
   2>&1 | tee artifacts/android-build/native-build.log
 RESULT=${PIPESTATUS[0]}
 set -e
 export NATIVE_BUILD_EXIT="$RESULT"
+cp "$ENGINE/Engine/Programs/UnrealBuildTool/Log.txt" artifacts/android-build/ubt-detailed.log || true
+cat /sys/fs/cgroup/memory.events > artifacts/android-build/container-memory.log || true
 python3 - <<'PY'
 import json,os
 from pathlib import Path

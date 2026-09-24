@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Checkpoint licensed intermediates to split files for a PRIVATE release only."""
-import hashlib,io,json,os,tarfile
+import gzip,hashlib,io,json,os,tarfile
 from pathlib import Path
 ENGINE=Path('/home/ue4/UnrealEngine/Engine');PROJECT=Path('/project')
 OUTPUT=PROJECT/'.cache/private-engine-cache';LIMIT=1900*1024*1024
@@ -20,6 +20,13 @@ class Parts(io.RawIOBase):
         return count
     def tell(self):return self.total
 
+def write_archive(output,entries,checked=None):
+    # Python 3.10 tar streaming does not accept compresslevel. An explicit gzip
+    # wrapper supports the actual Ubuntu 22.04 engine-container interpreter.
+    with gzip.GzipFile(fileobj=output,mode='wb',compresslevel=1,mtime=0) as compressed:
+        with tarfile.open(fileobj=compressed,mode='w|') as archive:
+            for path,name in entries:archive.add(path,arcname=name,filter=checked)
+
 def main():
     roots=[ENGINE/'Intermediate/Build/Android',ENGINE/'Binaries/Android',PROJECT/'Intermediate/Build/Android',PROJECT/'Binaries/Android']
     for plugin_root in [ENGINE/'Plugins',PROJECT/'Plugins']:
@@ -34,8 +41,7 @@ def main():
         if not info.name.startswith(('home/ue4/UnrealEngine/Engine/','project/')):raise ValueError('Unexpected cache path')
         return info
     parts=Parts()
-    with tarfile.open(fileobj=parts,mode='w|gz',compresslevel=1) as archive:
-        for p in roots:archive.add(p,arcname=p.relative_to('/').as_posix(),filter=checked)
+    write_archive(parts,[(p,p.relative_to('/').as_posix()) for p in roots],checked)
     parts.finish_part()
     lock=json.loads((PROJECT/'content/engine.lock.json').read_text())
     report={'schema':1,'private_licensed_engine_cache':True,'engine_reference':lock['reference'],'configuration':'Android arm64 Development','source_commit':os.environ.get('GAME_SOURCE_SHA'),'uncompressed_bytes':total,'parts':parts.parts,'build_exit_code':int(os.environ.get('NATIVE_BUILD_EXIT','-1')),'not_an_apk':True}

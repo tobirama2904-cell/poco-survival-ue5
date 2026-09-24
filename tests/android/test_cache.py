@@ -1,7 +1,24 @@
 import importlib.util,io,tarfile,tempfile,unittest
 from pathlib import Path
 spec=importlib.util.spec_from_file_location('restore',Path(__file__).resolve().parents[2]/'tools/android/restore_cache.py');restore=importlib.util.module_from_spec(spec);spec.loader.exec_module(restore)
+capture_spec=importlib.util.spec_from_file_location('capture',Path(__file__).resolve().parents[2]/'tools/android/cache_intermediates.py')
+capture=importlib.util.module_from_spec(capture_spec);capture_spec.loader.exec_module(capture)
 class CacheTests(unittest.TestCase):
+    def test_actual_split_capture_roundtrip(self):
+        import os
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);source=root/'fixture.o';data=os.urandom(8192);source.write_bytes(data)
+            original_output,original_limit=capture.OUTPUT,capture.LIMIT
+            try:
+                capture.OUTPUT=root;capture.LIMIT=1024
+                parts=capture.Parts();capture.write_archive(parts,[(source,'project/Binaries/Android/fixture.o')]);parts.finish_part()
+                self.assertGreater(len(parts.parts),1)
+                joined=io.BytesIO(b''.join((root/p['file']).read_bytes() for p in parts.parts))
+                result=restore.extract(joined,root/'restored',len(data))
+                self.assertEqual(result['restored_bytes'],len(data))
+                self.assertEqual((root/'restored/project/Binaries/Android/fixture.o').read_bytes(),data)
+            finally:capture.OUTPUT=original_output;capture.LIMIT=original_limit
+
     def archive(self,name,kind=None):
         out=io.BytesIO()
         with tarfile.open(fileobj=out,mode='w:gz') as t:

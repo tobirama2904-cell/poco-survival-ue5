@@ -1,6 +1,7 @@
 #include "SurvivalInteraction.h"
 #include "SurvivalGameInstance.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
 
@@ -10,6 +11,12 @@ ASurvivalInteraction::ASurvivalInteraction()
     Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
     SetRootComponent(Mesh);
     Mesh->SetCollisionProfileName(TEXT("BlockAll"));
+    FocusVolume=CreateDefaultSubobject<USphereComponent>(TEXT("FocusVolume"));
+    FocusVolume->SetupAttachment(Mesh);FocusVolume->InitSphereRadius(85);
+    FocusVolume->SetRelativeLocation(FVector(0,0,65));
+    FocusVolume->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    FocusVolume->SetCollisionResponseToAllChannels(ECR_Ignore);
+    FocusVolume->SetCollisionResponseToChannel(ECC_Visibility,ECR_Block);
 }
 bool ASurvivalInteraction::Interact(APawn* User, FString& FailureReason)
 {
