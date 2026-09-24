@@ -10,6 +10,10 @@ python3 tools/android/engine_deps.py --manifest .cache/engine-dependencies.xml -
 if [[ -f "$ENGINE/Engine/Build/InstalledBuild.txt" ]]; then
   mv "$ENGINE/Engine/Build/InstalledBuild.txt" "$ENGINE/Engine/Build/InstalledBuild.disabled-for-android"
 fi
+if [[ -s .cache/native-restore/android-cache-manifest.json ]]; then
+  cat .cache/native-restore/android-cache.tar.gz.part??? | python3 tools/android/restore_cache.py --manifest .cache/native-restore/android-cache-manifest.json
+  rm -rf .cache/native-restore
+fi
 set +e
 timeout --foreground 180m "$ENGINE/Engine/Build/BatchFiles/Linux/Build.sh" \
   PocoSurvival Android Development -Project=/project/PocoSurvival.uproject \

@@ -50,6 +50,10 @@ jobs:
           printf '%s' "$GH_TOKEN" | docker login ghcr.io --username tobirama2904-cell --password-stdin
           IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
           timeout --foreground 20m docker pull "$IMAGE"
+      - name: Restore prior private native compilation checkpoint if available
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: python3 tools/android/fetch_private_cache.py
       - name: Compile actual ARM64 Android game code and checkpoint intermediates
         run: |
           set -euo pipefail
