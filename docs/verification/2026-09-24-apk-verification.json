@@ -1,0 +1,15 @@
+{
+  "phase": "signed internal APK verification",
+  "file": "NulevayaOtmetka-internal-arm64.apk",
+  "bytes": 234309305,
+  "sha256": "d00569b5d4a31c176c6b83cbea8239fd3d3c1d1e251e39e7e93d477f7ace36a5",
+  "signature_verified": true,
+  "certificate_sha256": "7de67cf84375b2c4ee3375163a6efe91328e64bde70ffcc9a83fda38a0dc0e5d",
+  "arm64_library_verified": true,
+  "embedded_game_archives": [
+    "assets/main.obb.png"
+  ],
+  "installation_tested": false,
+  "physical_device_tested": false,
+  "final_game": false
+}

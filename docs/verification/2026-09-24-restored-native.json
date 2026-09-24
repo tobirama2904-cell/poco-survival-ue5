@@ -1,0 +1,16 @@
+{
+  "entries": 4,
+  "bytes": 999867157,
+  "native_source_commit": "1ed2c8add2595cc1dbbb2939aeb9bed3bc9f43ce",
+  "elf_outputs": [
+    {
+      "name": "PocoSurvival-arm64.so",
+      "bytes": 999768008,
+      "elf_class": 64,
+      "machine": "AArch64",
+      "type": "shared-object",
+      "load_segments": 4,
+      "headers_and_segment_extents_verified": true
+    }
+  ]
+}

@@ -98,10 +98,19 @@
   "android_cooked_shader_count": 7421,
   "android_package_run": 36038890496,
   "android_package_url": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36038890496",
-  "android_package_status": "in_progress",
+  "android_package_status": "completed success",
   "private_engine_cache_restore_verified": true,
   "private_engine_cache_restored_bytes": 6756451747,
   "encounter_persistence_branch": "gameplay/persistent-encounters",
   "encounter_persistence_test_run": 36039317194,
-  "encounter_persistence_verified": false
+  "encounter_persistence_verified": false,
+  "android_apk_produced": true,
+  "android_apk_bytes": 234309305,
+  "android_apk_sha256": "d00569b5d4a31c176c6b83cbea8239fd3d3c1d1e251e39e7e93d477f7ace36a5",
+  "android_apk_private_release": "internal-apk-36038890496",
+  "android_apk_native_source_commit": "1ed2c8add2595cc1dbbb2939aeb9bed3bc9f43ce",
+  "android_apk_cooked_source_commit": "5896a9da47971213c48f39e730f44f68f1eeff59",
+  "android_apk_signed_and_verified": true,
+  "android_apk_independently_downloaded_and_checked": true,
+  "android_install_verified": false
 }

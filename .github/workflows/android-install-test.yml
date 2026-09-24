@@ -15,6 +15,9 @@ jobs:
   install:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
+    env:
+      ANDROID_AVD_HOME: ${{ github.workspace }}/.cache/android-avd
+      ANDROID_USER_HOME: ${{ github.workspace }}/.cache/android-user
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -40,7 +43,11 @@ jobs:
           "$SDKMANAGER" "platform-tools" "emulator" "system-images;android-30;google_apis;x86_64" "build-tools;35.0.1"
           mkdir -p artifacts/android-emulator
           "$SDKMANAGER" --list_installed > artifacts/android-emulator/sdk-installed.log
-          printf 'no\n' | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd --force --name GameInstallCheck --package "system-images;android-30;google_apis;x86_64" --device pixel_2
+          mkdir -p "$ANDROID_AVD_HOME" "$ANDROID_USER_HOME"
+          printf 'no\n' | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd --force --name GameInstallCheck --package "system-images;android-30;google_apis;x86_64" --device pixel_2 --path "$ANDROID_AVD_HOME/GameInstallCheck.avd"
+          printf 'avd.ini.encoding=UTF-8\npath=%s\ntarget=android-30\n' "$ANDROID_AVD_HOME/GameInstallCheck.avd" > "$ANDROID_AVD_HOME/GameInstallCheck.ini"
+          "$ANDROID_HOME/emulator/emulator" -list-avds | tee artifacts/android-emulator/avd-list.log
+          grep -qx GameInstallCheck artifacts/android-emulator/avd-list.log
           python3 tools/android/verify_apk.py
       - name: Install, launch, capture and relaunch actual game (not a physical POCO test)
         run: python3 tools/android/emulator_check.py

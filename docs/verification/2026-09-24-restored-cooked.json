@@ -1,0 +1,11 @@
+{
+  "entries": 1452,
+  "bytes": 309367697,
+  "archive_sha256": "baf8d6325ad920f17a03457b10a9edb6d383f61a3bbc7e8cc9326a1c326b3638",
+  "cooked_maps": [
+    {
+      "path": "Saved/Cooked/Android_ASTC/PocoSurvival/Content/Worlds/CanalDistrict.umap",
+      "sha256": "44265fde00b398436f35bc68768c19d78ebdbd3f35de8e2f3746dd2ff4f672f1"
+    }
+  ]
+}

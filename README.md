@@ -1,6 +1,6 @@
 # POCO Survival — Unreal Engine 5
 
-Original Android survival-game development for POCO F4. **This repository is not a finished game and currently has no playable APK.**
+Original Android survival-game development for POCO F4. **This repository is not a finished game. A signed internal ARM64 APK now exists; Android installation/launch verification is in progress.**
 
 ## Actual gameplay verification — still not a release
 
@@ -30,8 +30,11 @@ modules already ship under `Binaries/Linux/Android`; no speculative host rebuild
 is required. Android ASTC cooking now succeeded in run 36034397538: 580 packages, 7421
 shaders, 1319 cooked files / 309,367,697 bytes, zero errors/warnings. Native
 ARM64 build 36029237301 also completed successfully with ELF header validation.
-APK packaging run 36038890496 is pending. A packaged APK, physical-device
-performance and the full campaign have **not** yet been demonstrated.
+APK packaging run 36038890496 succeeded: 234,309,305 bytes, stable signing
+identity, embedded cooked game data and verified ARM64 ELF. The exact private
+release was independently downloaded and its SHA256/ZIP CRCs verified. Android
+installation/launch, physical-device performance and the full campaign have
+**not** yet been demonstrated.
 
 The temporary licensed Manny character, technical HUD and courtyard are internal
 gates, not the requested finished characters, open world or several-hour campaign.
