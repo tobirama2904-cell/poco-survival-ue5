@@ -7,9 +7,14 @@ import subprocess,time,json
 from pathlib import Path
 root=Path(__file__).resolve().parents[2]
 def git(*args):return subprocess.check_output(['git','-c','safe.directory='+str(root),'-C',str(root),*args],text=True).strip()
-before=git('rev-parse','HEAD');deadline=time.monotonic()+480
+before=git('rev-parse','HEAD')
+refs=git('for-each-ref','--format=%(refname:short)','--points-at='+before,'refs/remotes/origin').splitlines()
+refs=[r for r in refs if r!='origin/HEAD']
+if len(refs)!=1:raise RuntimeError('Cannot unambiguously identify the checked-out repair branch')
+branch=refs[0].removeprefix('origin/')
+deadline=time.monotonic()+480
 while time.monotonic()<deadline:
- git('fetch','--quiet','origin','main');after=git('rev-parse','FETCH_HEAD')
+ git('fetch','--quiet','origin',branch);after=git('rev-parse','FETCH_HEAD')
  if before!=after:
   changed=git('diff','--name-only',before,after).splitlines()
   if any(p.startswith(('Source/','tools/scene/','Config/')) for p in changed):
