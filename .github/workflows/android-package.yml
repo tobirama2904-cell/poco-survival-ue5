@@ -1,0 +1,170 @@
+name: Package verified native code and cooked district into signed internal Android APK
+on:
+  workflow_dispatch:
+    inputs:
+      native_run:
+        required: true
+        type: string
+        description: Successful private native checkpoint run
+      cook_run:
+        required: true
+        type: string
+        description: Successful private Android ASTC cooking run
+permissions:
+  contents: read
+concurrency:
+  group: android-apk-packaging
+  cancel-in-progress: false
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 170
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Test dependency integrity and safe extraction
+        run: python3 -m unittest discover -s tests/android -v
+      - name: Prepare disposable runner capacity and pinned Android SDK
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet /usr/local/.ghcup /opt/ghc /opt/hostedtoolcache/CodeQL
+          docker image prune -af
+          mkdir -p .cache artifacts/android-build
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          test -x "$JAVA_HOME/bin/java"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          printf 'y\ny\ny\ny\ny\ny\ny\ny\ny\ny\n' | "$SDKMANAGER" --licenses >/dev/null
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platforms;android-35" "build-tools;35.0.1" "ndk;27.2.12479018"
+          "$JAVA_HOME/bin/java" -version
+          cat "$ANDROID_HOME/ndk/27.2.12479018/source.properties"
+          python3 - <<'PY'
+          import json,os,shutil
+          from pathlib import Path
+          report={'disk_free_bytes':shutil.disk_usage('/var/lib/docker').free,'ram_bytes':os.sysconf('SC_PHYS_PAGES')*os.sysconf('SC_PAGE_SIZE'),'sdk_platform':35,'ndk':'27.2.12479018','build_tools':'35.0.1','java_major':21}
+          Path('artifacts/android-build/host-toolchain.json').write_text(json.dumps(report,indent=2))
+          print(report,flush=True)
+          assert report['disk_free_bytes']>=85*1024**3, 'Insufficient capacity before engine pull'
+          PY
+      - name: Fetch authorized pinned dependency manifest and official engine
+        env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ue-registry-auth
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: |
+          set -euo pipefail
+          SOURCE_SHA=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["source_commit"])')
+          gh api -H 'Accept: application/vnd.github.raw+json' "repos/EpicGames/UnrealEngine/contents/Engine/Build/Commit.gitdeps.xml?ref=$SOURCE_SHA" > .cache/engine-dependencies.xml
+          git init .cache/engine-source
+          git -C .cache/engine-source remote add origin https://github.com/EpicGames/UnrealEngine.git
+          git -C .cache/engine-source -c credential.helper= -c 'credential.helper=!gh auth git-credential' fetch --depth=1 --filter=blob:none origin "$SOURCE_SHA"
+          git -C .cache/engine-source sparse-checkout init --no-cone
+          git -C .cache/engine-source sparse-checkout set --no-cone '/Engine/Source/' '/Engine/Config/' '/Engine/Build/' '/Engine/Platforms/' '/Engine/Shaders/' '/Engine/Plugins/**/Source/' '/Engine/Plugins/**/Config/' '/Engine/Plugins/**/Shaders/' '/Engine/Plugins/**/*.uplugin'
+          git -C .cache/engine-source -c credential.helper= -c 'credential.helper=!gh auth git-credential' checkout --detach FETCH_HEAD
+          python3 - <<'PYCODE'
+          import json,subprocess
+          from pathlib import Path
+          root='.cache/engine-source'
+          commit=subprocess.check_output(['git','-C',root,'rev-parse','HEAD'],text=True).strip()
+          epoch=int(subprocess.check_output(['git','-C',root,'show','-s','--format=%ct'],text=True).strip())
+          assert commit==json.loads(Path('BuildData/engine.lock.json').read_text())['source_commit']
+          Path('.cache/engine-source-checkout.json').write_text(json.dumps({'commit':commit,'commit_timestamp':epoch}))
+          PYCODE
+          mkdir -p "$DOCKER_CONFIG"
+          trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf "$DOCKER_CONFIG"' EXIT
+          printf '%s' "$GH_TOKEN" | docker login ghcr.io --username tobirama2904-cell --password-stdin
+          IMAGE=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["reference"])')
+          timeout --foreground 20m docker pull "$IMAGE"
+      - name: Fetch exact successful native checkpoint
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+          NATIVE_CACHE_TAG: android-5.7.4-dev-${{ inputs.native_run }}
+        run: python3 tools/android/fetch_private_cache.py
+      - name: Await actual cooking result and fetch private cooked assets
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+          COOK_RUN: ${{ inputs.cook_run }}
+        run: |
+          set -euo pipefail
+          [[ "$COOK_RUN" =~ ^[0-9]+$ ]]
+          mkdir -p .cache/private-cook
+          READY=0
+          for ATTEMPT in $(seq 1 70); do
+            STATE=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$COOK_RUN" --jq '[.status, (.conclusion // "pending")] | join(":")')
+            if [[ "$STATE" == "completed:success" ]]; then READY=1; break; fi
+            if [[ "$STATE" == completed:* ]]; then echo "Actual cook failed; packaging is blocked, not faked."; exit 1; fi
+            echo "Waiting for actual cooking: $STATE ($ATTEMPT/70)"
+            sleep 30
+          done
+          test "$READY" = 1
+          gh release download "mobile-cook-$COOK_RUN" --repo tobirama2904-cell/poco-ue5-engine-cache --dir .cache/private-cook --pattern cooked-and-host.tar.gz --pattern SHA256SUMS
+      - name: Start licensed packaging environment
+        run: |
+          set -euo pipefail
+          IMAGE=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["reference"])')
+          CA_STORE=$(readlink -f "$JAVA_HOME_21_X64/lib/security/cacerts")
+          test -s "$CA_STORE"
+          sudo chown -R 1000:1000 "$GITHUB_WORKSPACE"
+          docker run -d --name apk-builder --cpus=4 --memory=13g --memory-swap=13g --shm-size=1g \
+            --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/project" \
+            --mount "type=bind,src=$ANDROID_HOME,dst=/opt/android,readonly" \
+            --mount "type=bind,src=$JAVA_HOME_21_X64,dst=/opt/java21,readonly" \
+            --mount "type=bind,src=$CA_STORE,dst=/opt/java-truststore/cacerts,readonly" \
+            -e JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=/opt/java-truststore/cacerts \
+            -e ANDROID_HOME=/opt/android -e ANDROID_SDK_ROOT=/opt/android \
+            -e NDKROOT=/opt/android/ndk/27.2.12479018 -e JAVA_HOME=/opt/java21 \
+            --entrypoint /bin/bash "$IMAGE" -lc 'sleep infinity'
+      - name: Package actual native code and cooked data — attempt 1
+        id: package1
+        continue-on-error: true
+        run: docker exec -u ue4 apk-builder bash /project/tools/android/package_apk.sh
+      - name: Expose measured package failure before correction
+        if: steps.package1.outcome == 'failure'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: apk-attempt-1-${{ github.run_id }}
+          path: |
+            artifacts/android-build/*.json
+            artifacts/android-build/*.log
+          retention-days: 3
+      - name: Bounded measured packaging repair without another engine download
+        if: steps.package1.outcome == 'failure'
+        run: sudo python3 tools/android/wait_for_packaging_fix.py
+      - name: Retry corrected packaging in the same environment
+        if: steps.package1.outcome == 'failure'
+        run: docker exec -u ue4 apk-builder bash /project/tools/android/package_apk.sh
+      - name: Require an actual package output
+        run: test -s artifacts/apk/unsigned-internal.apk
+      - name: Apply stable private signing identity and verify actual APK
+        env:
+          SIGNING_P12: ${{ secrets.ANDROID_SIGNING_P12_BASE64 }}
+          SIGNING_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
+        run: |
+          set -euo pipefail
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          KEY="$RUNNER_TEMP/game-signing.p12"
+          trap 'rm -f "$KEY"' EXIT
+          printf '%s' "$SIGNING_P12" | base64 --decode > "$KEY"
+          chmod 600 "$KEY"
+          sudo chown -R "$(id -u):$(id -g)" artifacts
+          "$ANDROID_HOME/build-tools/35.0.1/apksigner" sign --ks "$KEY" --ks-key-alias poco-survival --ks-pass env:SIGNING_PASSWORD --key-pass env:SIGNING_PASSWORD --out artifacts/apk/NulevayaOtmetka-internal-arm64.apk artifacts/apk/unsigned-internal.apk
+          python3 tools/android/verify_apk.py
+          rm artifacts/apk/unsigned-internal.apk
+      - name: Preserve internal signed APK privately, not as the promised finished game
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: |
+          test "$(gh api repos/tobirama2904-cell/poco-ue5-engine-cache --jq .private)" = true
+          gh release create "internal-apk-${GITHUB_RUN_ID}" artifacts/apk/* artifacts/android-build/apk-verification.json --repo tobirama2904-cell/poco-ue5-engine-cache --prerelease --title "Internal ARM64 APK ${GITHUB_RUN_ID}" --notes 'Engineering installation candidate. Temporary art/short scene; not the requested finished campaign. Signature/structure checks do not prove device launch or performance.'
+      - name: Upload packaging diagnostics only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: apk-package-diagnostics-${{ github.run_id }}
+          path: |
+            artifacts/android-build/*.json
+            artifacts/android-build/*.log
+          retention-days: 7
+      - name: Stop disposable licensed packaging environment
+        if: always()
+        run: docker rm -f apk-builder || true

@@ -27,9 +27,9 @@
   "android_native_build_run": 36029237301,
   "android_native_build_url": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36029237301",
   "android_native_build_source_commit": "1ed2c8add2595cc1dbbb2939aeb9bed3bc9f43ce",
-  "android_native_build_last_observed_status": "in_progress",
-  "android_native_build_last_observed_conclusion": null,
-  "android_native_compile_verified": false,
+  "android_native_build_last_observed_status": "completed",
+  "android_native_build_last_observed_conclusion": "success",
+  "android_native_compile_verified": true,
   "private_engine_cache_repository": "tobirama2904-cell/poco-ue5-engine-cache",
   "private_engine_cache_restore_test_scope": "real 6.76 GB capture/publication verified; restored-use verification pending",
   "gameplay_source_implemented": true,
@@ -66,7 +66,7 @@
   "android_native_link_verified": true,
   "android_linked_library_bytes": 999680224,
   "private_engine_cache_publication_verified": true,
-  "private_engine_cache_release": "android-5.7.4-dev-36021238459",
+  "private_engine_cache_release": "android-5.7.4-dev-36029237301",
   "private_scene_content_retained": true,
   "private_scene_content_release": "scene-36033810711",
   "private_scene_content_archive_bytes": 227347850,
@@ -90,5 +90,7 @@
   "java_trusted_ca_count": 121,
   "unreal_scene_camera_framing_verified": true,
   "unreal_scene_camera_pitch_degrees": -10,
-  "unreal_scene_latest_image": "docs/verification/2026-09-24-unreal-third-person.png"
+  "unreal_scene_latest_image": "docs/verification/2026-09-24-unreal-third-person.png",
+  "android_arm64_elf_verified": true,
+  "android_native_library_bytes": 999768008
 }

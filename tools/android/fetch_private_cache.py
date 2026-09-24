@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Runner-side helper. GH_TOKEN is used by gh only; never passed into the engine."""
-import hashlib,json,re,shutil,subprocess
+import hashlib,json,re,shutil,subprocess,os
 from pathlib import Path
 REPO='tobirama2904-cell/poco-ue5-engine-cache'
 OUTPUT=Path('.cache/native-restore')
@@ -15,13 +15,15 @@ def main():
     if json.loads(gh('api','repos/'+REPO))['private'] is not True:raise ValueError('Cache repository must be private')
     engine=json.loads(Path('BuildData/engine.lock.json').read_text())
     releases=json.loads(gh('api','repos/'+REPO+'/releases?per_page=30'))
-    candidates=[r for r in releases if r['tag_name'].startswith('android-'+engine['engine_version']+'-dev-') and not r['draft']]
+    requested=os.environ.get('NATIVE_CACHE_TAG')
+    candidates=[r for r in releases if r['tag_name'].startswith('android-'+engine['engine_version']+'-dev-') and not r['draft'] and (not requested or r['tag_name']==requested)]
     for release in candidates:
         shutil.rmtree(OUTPUT,ignore_errors=True);OUTPUT.mkdir(parents=True)
         if not any(a['name']=='android-cache-manifest.json' for a in release['assets']):continue
         gh('release','download',release['tag_name'],'--repo',REPO,'--pattern','android-cache-manifest.json','--dir',str(OUTPUT))
         manifest=OUTPUT/'android-cache-manifest.json';j=json.loads(manifest.read_text())
         if j.get('schema')!=1 or j.get('engine_reference')!=engine['reference'] or j.get('configuration')!='Android arm64 Development':continue
+        if requested and j.get('build_exit_code')!=0:raise ValueError('Packaging requires a successful native build')
         parts=j['parts']
         if not 0<len(parts)<=64:raise ValueError('Invalid cache part count')
         names=[];compressed=0
@@ -37,5 +39,6 @@ def main():
             if path.stat().st_size!=part['bytes'] or sha(path)!=part['sha256']:raise ValueError('Private cache checksum mismatch')
         print('PRIVATE_CACHE_DOWNLOADED_AND_VERIFIED',release['tag_name'],len(parts),compressed,flush=True);return
     shutil.rmtree(OUTPUT,ignore_errors=True)
+    if requested:raise RuntimeError('Requested successful native cache unavailable')
     print('PRIVATE_NATIVE_CACHE_MISS',flush=True)
 if __name__=='__main__':main()

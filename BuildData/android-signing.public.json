@@ -1,0 +1,5 @@
+{
+  "alias": "poco-survival",
+  "certificate_sha256": "7de67cf84375b2c4ee3375163a6efe91328e64bde70ffcc9a83fda38a0dc0e5d",
+  "purpose": "stable internal Android update signing; not evidence of a produced or device-tested APK"
+}
