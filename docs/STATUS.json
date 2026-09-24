@@ -21,5 +21,5 @@
   "native_integration_rerun_result": "success",
   "android_platform_in_official_image": false,
   "native_integration_verified": true,
-  "latest_verified_unreal_source_commit": "c2c9893"
+  "latest_verified_unreal_source_commit": "c2c9893c64291970e9bf162189ca8a9b1c09c064"
 }

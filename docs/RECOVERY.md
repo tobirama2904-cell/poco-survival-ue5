@@ -6,7 +6,9 @@ published art; a chat error is not evidence that these were deleted.
 
 1. Read `docs/STATUS.json`, the latest git commits and Actions status before work.
 2. Use `python3 tools/remote_status.py --commit <source-commit>` to check the core
-   workflow. It is read-only and cannot accidentally launch a duplicate job.
+   workflow. Add `--workflow engine` and use `latest_verified_unreal_source_commit`
+   to check the actual editor integration. Both modes are read-only and cannot
+   accidentally launch a duplicate job.
    Public requests need no credential unless rate-limited; optional authentication
    is through GH_TOKEN or a private --token-file, never a token in command text.
 3. Check remote and local commits before any retry. Do not recreate the repository,

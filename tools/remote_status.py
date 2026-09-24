@@ -19,6 +19,7 @@ BASE = 'https://api.github.com/repos/tobirama2904-cell/poco-survival-ue5'
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--commit', required=True)
+    parser.add_argument('--workflow', choices=['core', 'engine'], default='core')
     parser.add_argument('--wait-seconds', type=int, default=0)
     parser.add_argument('--token-file', type=Path)
     args = parser.parse_args()
@@ -35,17 +36,18 @@ def main():
     last = None
     while True:
         runs = get('/actions/runs?' + urlencode({'head_sha': args.commit, 'per_page': 20}))['workflow_runs']
-        core = next((r for r in runs if r['path'] == '.github/workflows/core-tests.yml'), None)
+        workflow_path = '.github/workflows/' + ('core-tests.yml' if args.workflow == 'core' else 'engine-probe.yml')
+        core = next((r for r in runs if r['path'] == workflow_path), None)
         result = ({'commit': args.commit, 'id': core['id'], 'url': core['html_url'],
                    'status': core['status'], 'conclusion': core['conclusion'],
-                   'test_scope': 'portable domain C++; NOT Unreal or Android'} if core else
+                   'test_scope': ('portable domain C++; NOT Unreal or Android' if args.workflow == 'core' else 'UHT/UBT and headless Unreal integration; NOT Android or visual gameplay')} if core else
                   {'commit': args.commit, 'status': 'not_found', 'conclusion': None})
         if result != last:
             print(json.dumps(result), flush=True)
             last = result
         if core and core['status'] == 'completed':
             Path('.cache').mkdir(exist_ok=True)
-            Path('.cache/latest-core-status.json').write_text(json.dumps(result, indent=2) + '\n')
+            Path('.cache/latest-' + args.workflow + '-status.json').write_text(json.dumps(result, indent=2) + '\n')
             return 0 if core['conclusion'] == 'success' else 1
         if time.monotonic() >= deadline:
             return 2
