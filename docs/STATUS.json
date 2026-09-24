@@ -74,5 +74,10 @@
   "unreal_scene_render_failure": "PF_R64_UINT image format undefined on llvmpipe; no PNG/runtime proof",
   "unreal_native_gameplay_last_compiled_commit": "6ace5bbe90ea55ece8e8786f4f8f692e5ff0ff90",
   "scene_build_url": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36030652636",
-  "scene_build_source_commit": "627674f4c119fd61c47c00e4f134195524e2730c"
+  "scene_build_source_commit": "627674f4c119fd61c47c00e4f134195524e2730c",
+  "android_content_cook_run": 36031706716,
+  "android_content_cook_url": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36031706716",
+  "android_content_cook_source_commit": "196f3f93aedf1c45f20e59a3b15e6d49699ff3e8",
+  "android_content_cook_status": "in_progress",
+  "android_content_cook_verified": false
 }

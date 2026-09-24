@@ -92,3 +92,10 @@ selective constructor overrides ONLY for actually absent Android host libraries,
 are not rebuilt. The workflow requires an actual cooked CanalDistrict.umap and
 retains outputs privately; it does not produce or advertise an APK. Its result
 is pending — writing the workflow is not proof that the backend/cook succeeds.
+
+The first corrected R64 software attempt remained in rendering for several
+minutes (result still pending when this adjustment was authored). Its inherited
+Cinematic settings used ten 2048-pixel CSM cascades. A bounded corrective render
+now explicitly uses 640x360, two 512-pixel cascades and FXAA. This is a CPU-only
+diagnostic profile, not a POCO profile, quality acceptance or FPS claim. Authored
+geometry remains unchanged.
