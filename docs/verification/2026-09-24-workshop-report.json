@@ -15,5 +15,5 @@
   "configured_disk_bytes": 34359738368,
   "idle_timeout_minutes": 5,
   "retention_period_minutes": 60,
-  "state_after_verification": "ShuttingDown"
+  "state_after_verification": "Shutdown"
 }
