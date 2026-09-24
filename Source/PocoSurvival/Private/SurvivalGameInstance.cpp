@@ -1,6 +1,9 @@
 #include "SurvivalGameInstance.h"
 #include "SurvivalSaveGame.h"
 #include "SurvivalCharacter.h"
+#include "SurvivalInfected.h"
+#include "GameFramework/Controller.h"
+#include "EngineUtils.h"
 #include "Engine/World.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -60,7 +63,23 @@ bool USurvivalGameInstance::SaveProgress()
         if (!Player->IsAlive() || !Player->GetCharacterMovement()->IsMovingOnGround()) return false;
         Save->bHasPlayerState=true;Save->MapName=UGameplayStatics::GetCurrentLevelName(GetWorld(),true);
         Save->PlayerLocation=Player->GetActorLocation();Save->PlayerRotation=Player->GetActorRotation();
+        Save->ViewRotation=Player->GetController() ? Player->GetController()->GetControlRotation() : Save->PlayerRotation;
         Save->Health=Player->GetHealth();Save->Stamina=Player->GetStamina();
+    }
+    if (UWorld* World=GetWorld()) {
+        const FString Map=UGameplayStatics::GetCurrentLevelName(World,true);
+        if (PendingPlayerSave) for (const auto& Previous:PendingPlayerSave->InfectedStates)
+            if (Previous.MapName!=Map) Save->InfectedStates.Add(Previous);
+        TSet<FName> Ids;
+        for (TActorIterator<ASurvivalInfected> It(World);It;++It) {
+            if (It->PersistentId.IsNone()) continue;
+            if (Ids.Contains(It->PersistentId)) return false;
+            Ids.Add(It->PersistentId);
+            FSurvivalInfectedSnapshot State;State.PersistentId=It->PersistentId;State.MapName=Map;
+            State.Location=It->GetActorLocation();State.Rotation=It->GetActorRotation();
+            State.Health=It->GetHealth();State.Stamina=It->GetStamina();Save->InfectedStates.Add(State);
+        }
+        if (Save->InfectedStates.Num()>256) return false;
     }
     if (!UGameplayStatics::SaveGameToSlot(Save, SlotName(NextSaveSlot), 0)) return false;
     SaveGeneration=Save->SaveGeneration;PendingPlayerSave=Save;
@@ -78,12 +97,23 @@ bool USurvivalGameInstance::LoadProgress()
     {
         if (!UGameplayStatics::DoesSaveGameExist(SlotName(Index), 0)) continue;
         auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName(Index), 0));
-        if (!Save || (Save->FormatVersion != 1 && Save->FormatVersion != 2) || Save->CampaignVersion != TEXT("foundation-1") ||
+        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 3) || Save->CampaignVersion != TEXT("foundation-1") ||
             Save->StateRevision < 0 || Save->StateRevision != Save->ActionJournal.Num() || Save->SaveGeneration<0) continue;
         if (Save->bHasPlayerState && (Save->MapName.IsEmpty() || Save->PlayerLocation.ContainsNaN() ||
             Save->PlayerLocation.GetAbsMax()>1000000 || Save->PlayerRotation.ContainsNaN() ||
             !FMath::IsFinite(Save->Health) || Save->Health<=0 || Save->Health>100 ||
             !FMath::IsFinite(Save->Stamina) || Save->Stamina<0 || Save->Stamina>100)) continue;
+        if (Save->FormatVersion>=3 && (Save->ViewRotation.ContainsNaN() || Save->InfectedStates.Num()>256)) continue;
+        bool EncountersValid=true;TSet<FString> EncounterKeys;
+        for (const auto& State:Save->InfectedStates) {
+            const FString Key=State.MapName+TEXT("/")+State.PersistentId.ToString();
+            if (State.PersistentId.IsNone() || State.MapName.IsEmpty() || EncounterKeys.Contains(Key) ||
+                State.Location.ContainsNaN() || State.Location.GetAbsMax()>1000000 || State.Rotation.ContainsNaN() ||
+                !FMath::IsFinite(State.Health) || State.Health<0 || State.Health>100 ||
+                !FMath::IsFinite(State.Stamina) || State.Stamina<0 || State.Stamina>100) { EncountersValid=false;break; }
+            EncounterKeys.Add(Key);
+        }
+        if (!EncountersValid) continue;
         survival::Runtime Candidate;
         if (static_cast<size_t>(Save->ActionJournal.Num()) > Candidate.Definition().actions.size()) continue;
         bool bValid = true;
@@ -98,6 +128,7 @@ bool USurvivalGameInstance::LoadProgress()
     }
     if (!bFound || Runtime.Restore(Best) != survival::Error::None) return false;
     SaveGeneration=BestGeneration;PendingPlayerSave=BestSave;
+    if (UWorld* World=GetWorld()) for (TActorIterator<ASurvivalInfected> It(World);It;++It) ApplyLoadedInfectedState(*It);
     NextSaveSlot = 1 - BestSlot;
     OnWorldStateChanged.Broadcast();
     return true;
@@ -109,5 +140,16 @@ bool USurvivalGameInstance::ApplyLoadedPlayerState(ASurvivalCharacter* Player)
     // TeleportTo checks collision; an obstructed saved position must not force a
     // capsule into geometry. Vitals still recover at the current safe spawn.
     Player->TeleportTo(PendingPlayerSave->PlayerLocation,PendingPlayerSave->PlayerRotation,false,false);
+    if (PendingPlayerSave->FormatVersion>=3) if (auto* Controller=Player->GetController()) Controller->SetControlRotation(PendingPlayerSave->ViewRotation);
     return Player->RestoreVitals(PendingPlayerSave->Health,PendingPlayerSave->Stamina);
+}
+
+bool USurvivalGameInstance::ApplyLoadedInfectedState(ASurvivalInfected* Infected)
+{
+    if (!Infected || Infected->PersistentId.IsNone() || !PendingPlayerSave) return false;
+    const FString Map=UGameplayStatics::GetCurrentLevelName(Infected,true);
+    for (const auto& State:PendingPlayerSave->InfectedStates)
+        if (State.MapName==Map && State.PersistentId==Infected->PersistentId)
+            return Infected->RestoreEncounter(State.Location,State.Rotation,State.Health,State.Stamina);
+    return false;
 }

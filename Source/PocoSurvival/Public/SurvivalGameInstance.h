@@ -5,6 +5,7 @@
 #include "SurvivalGameInstance.generated.h"
 
 class ASurvivalCharacter;
+class ASurvivalInfected;
 class USurvivalSaveGame;
 
 USTRUCT(BlueprintType)
@@ -36,6 +37,7 @@ public:
     UFUNCTION(BlueprintCallable, Category="Survival|Save") bool SaveProgress();
     UFUNCTION(BlueprintCallable, Category="Survival|Save") bool LoadProgress();
     UFUNCTION(BlueprintCallable, Category="Survival|Save") bool ApplyLoadedPlayerState(ASurvivalCharacter* Player);
+    UFUNCTION(BlueprintCallable, Category="Survival|Save") bool ApplyLoadedInfectedState(ASurvivalInfected* Infected);
 private:
     UPROPERTY() TObjectPtr<USurvivalSaveGame> PendingPlayerSave;
     int64 SaveGeneration = 0;

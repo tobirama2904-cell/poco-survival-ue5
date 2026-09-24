@@ -14,6 +14,8 @@ public:
     ASurvivalInfected();
     virtual void BeginPlay() override;
     virtual void Tick(float Delta) override;
+    UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Save") FName PersistentId;
+    UFUNCTION(BlueprintCallable,Category="Save") bool RestoreEncounter(const FVector& Location,const FRotator& Rotation,float Health,float Stamina);
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AI") TArray<FVector> PatrolPoints;
     UPROPERTY(BlueprintReadOnly,Category="AI") EInfectedState State=EInfectedState::Patrol;
 private:
