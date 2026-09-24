@@ -1,0 +1,74 @@
+name: Verify official UE5 editor and native integration (NOT Android release)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: official-engine-probe
+  cancel-in-progress: false
+jobs:
+  editor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      DOCKER_CONFIG: ${{ runner.temp }}/ue-registry-auth
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Capacity gate on this disposable runner
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet /usr/local/.ghcup /opt/ghc /opt/hostedtoolcache/CodeQL
+          docker image prune -af
+          mkdir -p artifacts/engine-probe
+          python3 - <<'PY'
+          import json, os, shutil
+          from pathlib import Path
+          data={'disk_free_bytes':shutil.disk_usage('/var/lib/docker').free,
+                'ram_bytes':os.sysconf('SC_PHYS_PAGES')*os.sysconf('SC_PAGE_SIZE')}
+          Path('artifacts/engine-probe/runner-capacity.json').write_text(json.dumps(data,indent=2))
+          print(data,flush=True)
+          assert data['disk_free_bytes'] >= 85*1024**3, 'Insufficient disk for safe official image probe'
+          PY
+      - name: Pull digest-pinned licensed official engine
+        env:
+          UE_REGISTRY_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$UE_REGISTRY_TOKEN"
+          mkdir -p "$DOCKER_CONFIG"
+          trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf "$DOCKER_CONFIG"' EXIT
+          printf '%s' "$UE_REGISTRY_TOKEN" | docker login ghcr.io --username tobirama2904-cell --password-stdin
+          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          timeout --foreground 20m docker pull "$IMAGE"
+          docker image inspect "$IMAGE" --format 'Image extracted bytes={{.Size}}'
+          df -h /
+      - name: Compile with UHT and UBT, then run real native integration
+        run: |
+          set -euo pipefail
+          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          sudo chown -R 1000:1000 "$GITHUB_WORKSPACE"
+          docker run --rm --network=none --cpus=4 --memory=13g --memory-swap=13g --shm-size=1g \
+            --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/project" \
+            --entrypoint /bin/bash "$IMAGE" -lc '
+              set -euo pipefail
+              cd /project
+              python3 tools/engine_inventory.py
+              /home/ue4/UnrealEngine/Engine/Build/BatchFiles/Linux/Build.sh \
+                PocoSurvivalEditor Linux Development -Project=/project/PocoSurvival.uproject \
+                -NoHotReloadFromIDE -MaxParallelActions=2 -NoUBA 2>&1 | tee artifacts/engine-probe/ubt.log
+              /home/ue4/UnrealEngine/Engine/Binaries/Linux/UnrealEditor-Cmd \
+                /project/PocoSurvival.uproject -run=pythonscript -script=/project/tools/ue_integration_smoke.py \
+                -unattended -nop4 -nosplash -NullRHI -nosound -stdout -FullStdOutLogOutput \
+                2>&1 | tee artifacts/engine-probe/editor.log
+              test -s artifacts/engine-probe/unreal-integration.json
+            '
+      - name: Upload diagnostic metadata and project compiler logs only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: engine-probe-${{ github.run_id }}
+          path: artifacts/engine-probe/
+          retention-days: 7
+          if-no-files-found: warn

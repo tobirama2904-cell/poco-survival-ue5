@@ -1,8 +1,27 @@
 {
   "FileVersion": 3,
-  "EngineAssociation": "",
+  "EngineAssociation": "5.7",
   "Category": "Games",
   "Description": "Original Android survival project. Source foundation; not yet engine-built.",
-  "Modules": [{"Name": "PocoSurvival", "Type": "Runtime", "LoadingPhase": "Default"}],
-  "Plugins": [{"Name": "EnhancedInput", "Enabled": true}]
+  "Modules": [
+    {
+      "Name": "PocoSurvival",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "EnhancedInput",
+      "Enabled": true
+    },
+    {
+      "Name": "PythonScriptPlugin",
+      "Enabled": true
+    },
+    {
+      "Name": "EditorScriptingUtilities",
+      "Enabled": true
+    }
+  ]
 }

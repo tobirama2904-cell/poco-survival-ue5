@@ -1,0 +1,10 @@
+{
+  "engine_version": "5.7.4",
+  "registry": "ghcr.io/epicgames/unreal-engine",
+  "reference": "ghcr.io/epicgames/unreal-engine@sha256:60b3c65fd0319eeea3782694d0415adf93649de4d5923d9e9cb13370dc626947",
+  "linux_amd64_manifest_digest": "sha256:60b3c65fd0319eeea3782694d0415adf93649de4d5923d9e9cb13370dc626947",
+  "tag_at_selection": "dev-slim-5.7.4",
+  "compressed_layer_bytes": 21728342730,
+  "purpose": "Authorized official editor build and integration probe; Android platform support must be measured, not assumed",
+  "engine_redistribution": "Never upload this image, engine tree or its layers to this public project."
+}
