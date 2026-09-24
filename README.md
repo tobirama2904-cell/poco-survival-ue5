@@ -27,8 +27,11 @@ unstripped .so and intermediates privately, then failed during post-build Gradle
 TLS. The CA-store correction subsequently passed a real Java HTTPS test. Recursive
 inspection also corrected an earlier bad inventory assumption: Android host cook
 modules already ship under `Binaries/Linux/Android`; no speculative host rebuild
-is required. Cooking, packaged APK, physical-device performance and the full
-campaign have **not** been demonstrated.
+is required. Android ASTC cooking now succeeded in run 36034397538: 580 packages, 7421
+shaders, 1319 cooked files / 309,367,697 bytes, zero errors/warnings. Native
+ARM64 build 36029237301 also completed successfully with ELF header validation.
+APK packaging run 36038890496 is pending. A packaged APK, physical-device
+performance and the full campaign have **not** yet been demonstrated.
 
 The temporary licensed Manny character, technical HUD and courtyard are internal
 gates, not the requested finished characters, open world or several-hour campaign.

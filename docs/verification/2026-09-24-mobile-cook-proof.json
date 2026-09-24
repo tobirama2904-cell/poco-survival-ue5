@@ -1,0 +1,17 @@
+{
+  "run": 36034397538,
+  "source_commit": "5896a9da47971213c48f39e730f44f68f1eeff59",
+  "scene_release": "scene-36033810711",
+  "cooked_map": "/Game/Worlds/CanalDistrict",
+  "cooked_packages": 580,
+  "shaders_compiled": 7421,
+  "shader_jobs_in_flight_seconds": 2247.97,
+  "errors": 0,
+  "warnings": 0,
+  "file_count": 1319,
+  "cooked_bytes": 309367697,
+  "private_cooked_archive_bytes": 160252265,
+  "private_release": "mobile-cook-36034397538",
+  "apk_produced": false,
+  "physical_device_tested": false
+}

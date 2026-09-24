@@ -1,0 +1,12 @@
+{
+  "phase": "actual-mobile-content-cook",
+  "exit_code": 0,
+  "cooked_map_files": [
+    "Saved/Cooked/Android_ASTC/PocoSurvival/Content/Worlds/CanalDistrict.umap"
+  ],
+  "file_count": 1319,
+  "bytes": 309367697,
+  "content_cooked": true,
+  "apk_produced": false,
+  "physical_device_tested": false
+}
