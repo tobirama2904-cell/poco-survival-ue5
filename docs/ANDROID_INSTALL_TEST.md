@@ -20,3 +20,12 @@ signed APK successfully. Startup failed before world load: libndk_translation
 DecodeSimdScalarTwoRegMisc interpreter. The next test uses the official API 35
 image to test a newer translator. This is not a claim that the APK will or will
 not launch on physical ARM hardware; that remains unverified.
+
+Run 36042443571 installed the same unchanged APK on Android 15. Native startup
+passed the previous SIGILL point and initialized Unreal 5.7.4/ARM64, but Vulkan
+rejected the single software CPU device. The actual screenshot shows startup
+and an OS immersive-mode hint, not gameplay. Exact authorized engine source
+confirms Vulkan skips CPU devices unless `-AllowSoftwareRendering` is specified;
+the next emulator-only launch supplies this supported debug command-line extra
+without modifying/re-signing the APK. Test resolution is 960×540, not POCO native
+resolution. No software-engine feature checks are bypassed.

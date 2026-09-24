@@ -2,7 +2,7 @@
 """Install/launch an actual signed ARM64 APK on a development emulator.
 Records its ABI/native bridge and images. Never substitutes this for POCO testing.
 """
-import json,os,subprocess,time
+import json,os,subprocess,time,shlex
 from pathlib import Path
 ROOT=Path('artifacts/android-emulator');ROOT.mkdir(parents=True,exist_ok=True)
 SDK=Path(os.environ['ANDROID_HOME']);ADB=str(SDK/'platform-tools/adb');PACKAGE='com.pocosurvival.game'
@@ -16,11 +16,11 @@ def screenshot(name):
 def launch():
     activity=text('shell','cmd','package','resolve-activity','--brief',PACKAGE).splitlines()[-1]
     if '/' not in activity:raise RuntimeError('No launcher activity')
-    result=text('shell','am','start','-W','-n',activity,timeout=90);(ROOT/'launch.log').write_text(result)
+    result=text('shell','am','start','-W','-n',activity,'--es','cmdline',shlex.quote('-project="../../../PocoSurvival/PocoSurvival.uproject" -AllowSoftwareRendering'),timeout=90);(ROOT/'launch.log').write_text(result)
     if 'Error:' in result:raise RuntimeError('Activity launch failed')
     return activity
 emulator_log=(ROOT/'emulator.log').open('wb');process=None
-report={'physical_device_tested':False,'poco_f4_tested':False,'fps_claimed':False,'arm_translation_emulator_only':True,'installed':False,'launch_survived':False,'visual_quality_review_required':True}
+report={'physical_device_tested':False,'poco_f4_tested':False,'fps_claimed':False,'arm_translation_emulator_only':True,'installed':False,'launch_survived':False,'visual_quality_review_required':True,'emulator_only_commandline':'-AllowSoftwareRendering','requested_emulator_portrait_resolution':'540x960'}
 try:
     process=subprocess.Popen([str(SDK/'emulator/emulator'),'-avd','GameInstallCheck','-no-window','-no-audio','-no-boot-anim','-no-snapshot','-gpu','swiftshader_indirect','-memory','4096','-cores','2','-camera-back','none','-camera-front','none','-no-metrics'],stdout=emulator_log,stderr=subprocess.STDOUT)
     deadline=time.monotonic()+600
@@ -34,18 +34,28 @@ try:
     report['android_version']=text('shell','getprop','ro.build.version.release')
     report['build_fingerprint']=text('shell','getprop','ro.build.fingerprint')
     if 'arm64-v8a' not in report['abis']:raise RuntimeError('Image does not advertise ARM64 translation; cannot claim ARM install coverage')
-    adb('shell','input','keyevent','82');adb('logcat','-c')
+    adb('shell','input','keyevent','82')
+    adb('shell','settings','put','secure','immersive_mode_confirmations','confirmed')
+    adb('shell','settings','put','system','screen_off_timeout','1800000')
+    adb('shell','wm','size','540x960');adb('logcat','-c')
     install=text('install','-r','artifacts/apk/NulevayaOtmetka-internal-arm64.apk',timeout=180)
     (ROOT/'install.log').write_text(install)
     if 'Success' not in install:raise RuntimeError('APK installation failed')
     report['installed']=True;report['activity']=launch()
-    # Native translation + first Android shader initialization can be slow.
-    time.sleep(150)
+    # Wait for an actual map, not merely a surviving error-dialog process.
+    deadline=time.monotonic()+600;time.sleep(15)
+    while time.monotonic()<deadline:
+        logs=text('logcat','-d',timeout=60)
+        if 'CanalDistrict' in logs and 'Bringing World' in logs:break
+        if not text('shell','pidof',PACKAGE,check=False):break
+        if 'None of the 1 devices meet all the criteria!' in logs:break
+        time.sleep(10)
+    time.sleep(15)
     report['pid_after_start']=text('shell','pidof',PACKAGE,check=False)
     report['screenshots']=[screenshot('android-start.png')]
     logs=text('logcat','-d',timeout=60);(ROOT/'android-logcat.log').write_text(logs)
     if not report['pid_after_start']:raise RuntimeError('Game process did not survive startup')
-    if 'CanalDistrict' not in logs:raise RuntimeError('No real district-load evidence in Android logs')
+    if 'CanalDistrict' not in logs or 'Bringing World' not in logs:raise RuntimeError('No real district-load evidence in Android logs')
     report['launch_survived']=True
     width,height=report['screenshots'][0]['width'],report['screenshots'][0]['height']
     adb('shell','input','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'1500')
