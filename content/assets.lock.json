@@ -1,0 +1,746 @@
+{
+  "schema": 1,
+  "name": "Quarantine district source art pack 01",
+  "purpose": "Real source art for an original UE5 mobile survival project; NOT a playable game",
+  "license_policy": "Each listed asset is CC0; engine code is not included. Preserve source references.",
+  "assets": [
+    {
+      "id": "modular_urban_apartments_facade",
+      "role": "Residential street architecture",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/modular_urban_apartments_facade",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "James Ray Cock": "All"
+      },
+      "entrypoint": "modular_urban_apartments_facade.gltf",
+      "files": [
+        {
+          "path": "modular_urban_apartments_facade.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_2k.gltf",
+          "size": 270799,
+          "md5": "1ce22fcd5537779fcfbf941f6375a8a7"
+        },
+        {
+          "path": "modular_urban_apartments_facade.bin",
+          "size": 8168772,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/modular_urban_apartments_facade/modular_urban_apartments_facade.bin",
+          "md5": "e54b1de59041da0f44db64efb8bda8f6"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_objects_arm_2k.jpg",
+          "size": 2748860,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_objects_arm_2k.jpg",
+          "md5": "35e430dbb5fba6ec02c463d1b384a80a"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_objects_diff_2k.jpg",
+          "size": 2013153,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_objects_diff_2k.jpg",
+          "md5": "e52fdfcb5694cabffc38bc8de8af623d"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_objects_nor_gl_2k.jpg",
+          "size": 2064585,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_objects_nor_gl_2k.jpg",
+          "md5": "bcac084cb8270eea360a6ca596ea80ba"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_plaster_arm_2k.jpg",
+          "size": 2352206,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_plaster_arm_2k.jpg",
+          "md5": "f01279c252016feebe255da56d03e459"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_plaster_diff_2k.jpg",
+          "size": 2238064,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_plaster_diff_2k.jpg",
+          "md5": "719453e638edda0c75a98b56f03b8d25"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_plaster_nor_gl_2k.jpg",
+          "size": 4895944,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_plaster_nor_gl_2k.jpg",
+          "md5": "7d45cd5c65ac1bfe04626f11a5ac2436"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_trim_01_arm_2k.jpg",
+          "size": 2559719,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_trim_01_arm_2k.jpg",
+          "md5": "7a0024112f4038c16466e2c45c22e7db"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_trim_01_diff_2k.jpg",
+          "size": 2198191,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_trim_01_diff_2k.jpg",
+          "md5": "609c1fc3cbccfb481ac700e2a678b9ae"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_trim_01_nor_gl_2k.jpg",
+          "size": 3610799,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_trim_01_nor_gl_2k.jpg",
+          "md5": "8f6ca282e1c154b95468f59e99ada317"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_trim_02_arm_2k.jpg",
+          "size": 2887047,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_trim_02_arm_2k.jpg",
+          "md5": "129bac48a9995c901103d3ce6159b630"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_trim_02_diff_2k.jpg",
+          "size": 1991640,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_trim_02_diff_2k.jpg",
+          "md5": "9d0ab416e8b446f85181531805b6a3a7"
+        },
+        {
+          "path": "textures/modular_urban_apartments_facade_trim_02_nor_gl_2k.jpg",
+          "size": 3427345,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_urban_apartments_facade/modular_urban_apartments_facade_trim_02_nor_gl_2k.jpg",
+          "md5": "80031f2f13f19bf23f4953ecaa0ecdd6"
+        }
+      ]
+    },
+    {
+      "id": "modular_fire_escape",
+      "role": "Alternative vertical routes",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/modular_fire_escape",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "Juniix": "All"
+      },
+      "entrypoint": "modular_fire_escape.gltf",
+      "files": [
+        {
+          "path": "modular_fire_escape.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/modular_fire_escape/modular_fire_escape_2k.gltf",
+          "size": 13672,
+          "md5": "ea38482a33ff90c5f26f39187d28526e"
+        },
+        {
+          "path": "modular_fire_escape.bin",
+          "size": 515356,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/modular_fire_escape/modular_fire_escape.bin",
+          "md5": "2aec399d6248cb657cd26eaee303e778"
+        },
+        {
+          "path": "textures/modular_fire_escape_01_arm_2k.jpg",
+          "size": 2727166,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_fire_escape/modular_fire_escape_01_arm_2k.jpg",
+          "md5": "556559f4a29617bc18ebafc67855d2ed"
+        },
+        {
+          "path": "textures/modular_fire_escape_01_diff_2k.jpg",
+          "size": 2123381,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_fire_escape/modular_fire_escape_01_diff_2k.jpg",
+          "md5": "85e9eaf4ef3860b08215d4c4dc88e840"
+        },
+        {
+          "path": "textures/modular_fire_escape_01_nor_gl_2k.jpg",
+          "size": 2451897,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_fire_escape/modular_fire_escape_01_nor_gl_2k.jpg",
+          "md5": "53d6094d91fe8d848f9b917f931bd32d"
+        },
+        {
+          "path": "textures/modular_fire_escape_02_arm_2k.jpg",
+          "size": 2874079,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_fire_escape/modular_fire_escape_02_arm_2k.jpg",
+          "md5": "3a53c320c92a2d1ee7911f2cab2d3ec5"
+        },
+        {
+          "path": "textures/modular_fire_escape_02_diff_2k.jpg",
+          "size": 2271643,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_fire_escape/modular_fire_escape_02_diff_2k.jpg",
+          "md5": "1f36a8ddc0756f80ee968a16df8afccf"
+        },
+        {
+          "path": "textures/modular_fire_escape_02_nor_gl_2k.jpg",
+          "size": 3800107,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_fire_escape/modular_fire_escape_02_nor_gl_2k.jpg",
+          "md5": "3e1d61ed4efe744257ec0a4b78206306"
+        }
+      ]
+    },
+    {
+      "id": "modular_chainlink_fence",
+      "role": "Quarantine boundaries",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/modular_chainlink_fence",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "James Ray Cock": "All",
+        "Amal Kumar": "Fence Wire Material"
+      },
+      "entrypoint": "modular_chainlink_fence.gltf",
+      "files": [
+        {
+          "path": "modular_chainlink_fence.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/modular_chainlink_fence/modular_chainlink_fence_2k.gltf",
+          "size": 41838,
+          "md5": "f81323a83d2ae1e7b99a3ec156aa8da5"
+        },
+        {
+          "path": "modular_chainlink_fence.bin",
+          "size": 3168016,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/modular_chainlink_fence/modular_chainlink_fence.bin",
+          "md5": "953d32ee509142cf2ceb1e6b278b2430"
+        },
+        {
+          "path": "textures/modular_chainlink_fence_posts_arm_2k.jpg",
+          "size": 3004035,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_chainlink_fence/modular_chainlink_fence_posts_arm_2k.jpg",
+          "md5": "21a14ec9e416a3606a808139d0639c80"
+        },
+        {
+          "path": "textures/modular_chainlink_fence_posts_diff_2k.jpg",
+          "size": 2425889,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_chainlink_fence/modular_chainlink_fence_posts_diff_2k.jpg",
+          "md5": "e474fe890146a4c48e8497b238efe4f0"
+        },
+        {
+          "path": "textures/modular_chainlink_fence_posts_nor_gl_2k.jpg",
+          "size": 1869713,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_chainlink_fence/modular_chainlink_fence_posts_nor_gl_2k.jpg",
+          "md5": "4b4b4d3d4d61d9e27141f5ffe2abe872"
+        },
+        {
+          "path": "textures/modular_chainlink_fence_wire_arm_2k.jpg",
+          "size": 2082073,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_chainlink_fence/modular_chainlink_fence_wire_arm_2k.jpg",
+          "md5": "de230984104a87345c4aa8e78111f1e2"
+        },
+        {
+          "path": "textures/modular_chainlink_fence_wire_diff_2k.jpg",
+          "size": 1746959,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_chainlink_fence/modular_chainlink_fence_wire_diff_2k.jpg",
+          "md5": "4d99da51818311cff741329a3cbc912c"
+        },
+        {
+          "path": "textures/modular_chainlink_fence_wire_nor_gl_2k.jpg",
+          "size": 1882329,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/modular_chainlink_fence/modular_chainlink_fence_wire_nor_gl_2k.jpg",
+          "md5": "ba604a876a3b0ef5af11fd49b1482ee4"
+        }
+      ]
+    },
+    {
+      "id": "portable_generator",
+      "role": "Restorable district power objective",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/portable_generator",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "James Ray Cock": "All"
+      },
+      "entrypoint": "portable_generator.gltf",
+      "files": [
+        {
+          "path": "portable_generator.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/portable_generator/portable_generator_2k.gltf",
+          "size": 10130,
+          "md5": "e0a17eab37e83f0600dec32999399772"
+        },
+        {
+          "path": "portable_generator.bin",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/portable_generator/portable_generator.bin",
+          "md5": "81b2f4c4c6d0b0d7388ae9aa1123563a",
+          "size": 939572
+        },
+        {
+          "path": "textures/portable_generator_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/portable_generator/portable_generator_arm_2k.jpg",
+          "md5": "52eb05725b6cf9b7b8bd0d8891c084f6",
+          "size": 3133944
+        },
+        {
+          "path": "textures/portable_generator_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/portable_generator/portable_generator_diff_2k.jpg",
+          "md5": "a7c86c8dc782d1b2c0b8b8a5d8fac475",
+          "size": 2680935
+        },
+        {
+          "path": "textures/portable_generator_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/portable_generator/portable_generator_nor_gl_2k.jpg",
+          "md5": "9c173a6846c880da41a9151e61f1ef18",
+          "size": 2936023
+        },
+        {
+          "path": "textures/portable_generator_spec_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/portable_generator/portable_generator_spec_2k.jpg",
+          "md5": "6f57fd3e89e82613979385cf33e073f4",
+          "size": 74594
+        }
+      ]
+    },
+    {
+      "id": "metal_tool_chest",
+      "role": "Scavenging and repair station",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/metal_tool_chest",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "Yann Kervran": "Rigging",
+        "John Hutcheson": "Modeling & Texturing"
+      },
+      "entrypoint": "metal_tool_chest.gltf",
+      "files": [
+        {
+          "path": "metal_tool_chest.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/metal_tool_chest/metal_tool_chest_2k.gltf",
+          "size": 12256,
+          "md5": "41c7111278ac511e6d63a4c3e8e48677"
+        },
+        {
+          "path": "metal_tool_chest.bin",
+          "size": 434496,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/metal_tool_chest/metal_tool_chest.bin",
+          "md5": "b62c394a4f6764df8993a8965564b390"
+        },
+        {
+          "path": "textures/metal_tool_chest_arm_2k.jpg",
+          "size": 2758131,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/metal_tool_chest/metal_tool_chest_arm_2k.jpg",
+          "md5": "411cc17bbce90d646cd73917630e6e52"
+        },
+        {
+          "path": "textures/metal_tool_chest_diff_2k.jpg",
+          "size": 2086113,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/metal_tool_chest/metal_tool_chest_diff_2k.jpg",
+          "md5": "2d1a007df28b2b5a02044b4fde36a02c"
+        },
+        {
+          "path": "textures/metal_tool_chest_nor_gl_2k.jpg",
+          "size": 2456895,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/metal_tool_chest/metal_tool_chest_nor_gl_2k.jpg",
+          "md5": "7d9bb086def8ec7abf7aaa3c04e92433"
+        }
+      ]
+    },
+    {
+      "id": "rollershutter_door",
+      "role": "Service entrances and shortcuts",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/rollershutter_door",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "MP": "All"
+      },
+      "entrypoint": "rollershutter_door.gltf",
+      "files": [
+        {
+          "path": "rollershutter_door.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/rollershutter_door/rollershutter_door_2k.gltf",
+          "size": 5378,
+          "md5": "0b4c5a09d0abfcb2249b3eaa8f7ddaf9"
+        },
+        {
+          "path": "rollershutter_door.bin",
+          "size": 46192,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/rollershutter_door/rollershutter_door.bin",
+          "md5": "9df2ea3372b84dca7959d81cd5818d29"
+        },
+        {
+          "path": "textures/rollershutter_door_arm_2k.jpg",
+          "size": 2284955,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/rollershutter_door/rollershutter_door_arm_2k.jpg",
+          "md5": "da0f9ec575f447db858c311fa3c5ec6d"
+        },
+        {
+          "path": "textures/rollershutter_door_diff_2k.jpg",
+          "size": 2321049,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/rollershutter_door/rollershutter_door_diff_2k.jpg",
+          "md5": "6c85c2341fdf020e36c5b2ca07846bc0"
+        },
+        {
+          "path": "textures/rollershutter_door_graffiti_diff_2k.jpg",
+          "size": 2536479,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/rollershutter_door/rollershutter_door_graffiti_diff_2k.jpg",
+          "md5": "78d7e5798da1e8e62d13084e4dda2962"
+        },
+        {
+          "path": "textures/rollershutter_door_nor_gl_2k.jpg",
+          "size": 1471465,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/rollershutter_door/rollershutter_door_nor_gl_2k.jpg",
+          "md5": "b56d9639a89f08c93cf0096371613fc5"
+        }
+      ]
+    },
+    {
+      "id": "utility_box_01",
+      "role": "Electrical infrastructure",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/utility_box_01",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "James Ray Cock": "All"
+      },
+      "entrypoint": "utility_box_01.gltf",
+      "files": [
+        {
+          "path": "utility_box_01.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/utility_box_01/utility_box_01_2k.gltf",
+          "size": 2766,
+          "md5": "edf20949e134fa9ee2e3ab74fac4f538"
+        },
+        {
+          "path": "textures/utility_box_01_arm_2k.jpg",
+          "size": 2563064,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/utility_box_01/utility_box_01_arm_2k.jpg",
+          "md5": "e76524df06a634c01af0b6db9ca1f6e7"
+        },
+        {
+          "path": "textures/utility_box_01_diff_2k.jpg",
+          "size": 1983621,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/utility_box_01/utility_box_01_diff_2k.jpg",
+          "md5": "744dfa07f09368dad8124a6af1360176"
+        },
+        {
+          "path": "textures/utility_box_01_nor_gl_2k.jpg",
+          "size": 2362673,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/utility_box_01/utility_box_01_nor_gl_2k.jpg",
+          "md5": "bd7197b3f036caf082d639ed4b3ed9fa"
+        },
+        {
+          "path": "utility_box_01.bin",
+          "size": 142552,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/utility_box_01/utility_box_01.bin",
+          "md5": "5fa84789b367c3f04786e3ba92333c50"
+        }
+      ]
+    },
+    {
+      "id": "street_lamp_01",
+      "role": "District lighting",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/street_lamp_01",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "Josh Dean": "All"
+      },
+      "entrypoint": "street_lamp_01.gltf",
+      "files": [
+        {
+          "path": "street_lamp_01.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/street_lamp_01/street_lamp_01_2k.gltf",
+          "size": 6419,
+          "md5": "c3f9bdf69e98a0dc325aef79f9aca17c"
+        },
+        {
+          "path": "street_lamp_01.bin",
+          "size": 748908,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/street_lamp_01/street_lamp_01.bin",
+          "md5": "324bc6295e3962322514ddcfc7037b23"
+        },
+        {
+          "path": "textures/street_lamp_01_arm_2k.jpg",
+          "size": 2332682,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/street_lamp_01/street_lamp_01_arm_2k.jpg",
+          "md5": "f13fca31be6fda9b1444e36a866c0860"
+        },
+        {
+          "path": "textures/street_lamp_01_diff_2k.jpg",
+          "size": 993834,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/street_lamp_01/street_lamp_01_diff_2k.jpg",
+          "md5": "7487f2ca1deee8f1fcaaaaadaa6dade0"
+        },
+        {
+          "path": "textures/street_lamp_01_nor_gl_2k.jpg",
+          "size": 1827395,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/street_lamp_01/street_lamp_01_nor_gl_2k.jpg",
+          "md5": "b847bb892a00d30f516176fcfef54cb6"
+        }
+      ]
+    },
+    {
+      "id": "sofa_02",
+      "role": "Shelter interior",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/sofa_02",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "Kirill Sannikov": "All"
+      },
+      "entrypoint": "sofa_02.gltf",
+      "files": [
+        {
+          "path": "sofa_02.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/sofa_02/sofa_02_2k.gltf",
+          "size": 4183,
+          "md5": "d58bdde4cb00612fc070bc3e7caba265"
+        },
+        {
+          "path": "sofa_02.bin",
+          "size": 74864,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/4k/sofa_02/sofa_02.bin",
+          "md5": "024d6f57a7c2ee7915430cd6e1c2651e"
+        },
+        {
+          "path": "textures/sofa_02_arm_2k.jpg",
+          "size": 401876,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/sofa_02/sofa_02_arm_2k.jpg",
+          "md5": "4cdaf48033316b61832d220f1dcc48ef"
+        },
+        {
+          "path": "textures/sofa_02_diff_2k.jpg",
+          "size": 323319,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/sofa_02/sofa_02_diff_2k.jpg",
+          "md5": "37808357cc7d00fd62bda197cf89e6ae"
+        },
+        {
+          "path": "textures/sofa_02_nor_gl_2k.jpg",
+          "size": 463146,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/sofa_02/sofa_02_nor_gl_2k.jpg",
+          "md5": "d22e982ab8dac6a54ab06839efb0bafa"
+        }
+      ]
+    },
+    {
+      "id": "painted_wooden_cabinet",
+      "role": "Medical storage interior",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/painted_wooden_cabinet",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "Kirill Sannikov": "All"
+      },
+      "entrypoint": "painted_wooden_cabinet.gltf",
+      "files": [
+        {
+          "path": "painted_wooden_cabinet.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/painted_wooden_cabinet/painted_wooden_cabinet_2k.gltf",
+          "size": 9253,
+          "md5": "eaa66611e904cc3e637e82f9b4c307f4"
+        },
+        {
+          "path": "painted_wooden_cabinet.bin",
+          "size": 78072,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/4k/painted_wooden_cabinet/painted_wooden_cabinet.bin",
+          "md5": "c86f9e483a0da1d5a9f68b08099a4166"
+        },
+        {
+          "path": "textures/painted_wooden_cabinet_arm_2k.jpg",
+          "size": 2228994,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/painted_wooden_cabinet/painted_wooden_cabinet_arm_2k.jpg",
+          "md5": "27f4f179af9fe7ed7ee3e3936a434b0c"
+        },
+        {
+          "path": "textures/painted_wooden_cabinet_diff_2k.jpg",
+          "size": 2638553,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/painted_wooden_cabinet/painted_wooden_cabinet_diff_2k.jpg",
+          "md5": "a3d5e6f643b052e618212949f86ca81e"
+        },
+        {
+          "path": "textures/painted_wooden_cabinet_nor_gl_2k.jpg",
+          "size": 1864160,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/painted_wooden_cabinet/painted_wooden_cabinet_nor_gl_2k.jpg",
+          "md5": "9022a3a1d2f9e0506a46ee4d62f32d89"
+        }
+      ]
+    },
+    {
+      "id": "barrel_stove",
+      "role": "Shelter heating",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/barrel_stove",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "MP": "All"
+      },
+      "entrypoint": "barrel_stove.gltf",
+      "files": [
+        {
+          "path": "barrel_stove.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/barrel_stove/barrel_stove_2k.gltf",
+          "size": 2747,
+          "md5": "311afb0daef7e262cdf14668cc8f88bf"
+        },
+        {
+          "path": "barrel_stove.bin",
+          "size": 267680,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/barrel_stove/barrel_stove.bin",
+          "md5": "6f152ba1f02c40efc326247416d18a51"
+        },
+        {
+          "path": "textures/barrel_stove_arm_2k.jpg",
+          "size": 2937259,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/barrel_stove/barrel_stove_arm_2k.jpg",
+          "md5": "823ad3e734ffdd3d27fda743c85eb764"
+        },
+        {
+          "path": "textures/barrel_stove_diff_2k.jpg",
+          "size": 3451677,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/barrel_stove/barrel_stove_diff_2k.jpg",
+          "md5": "8ec2f1037f97c629f51f380c9beaa973"
+        },
+        {
+          "path": "textures/barrel_stove_nor_gl_2k.jpg",
+          "size": 694414,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/barrel_stove/barrel_stove_nor_gl_2k.jpg",
+          "md5": "cba827b983eb8dbb71562347e6880f4a"
+        }
+      ]
+    },
+    {
+      "id": "industrial_storage_cart",
+      "role": "Workshop cover and set dressing",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/industrial_storage_cart",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "Jule Bielitz": "All"
+      },
+      "entrypoint": "industrial_storage_cart.gltf",
+      "files": [
+        {
+          "path": "industrial_storage_cart.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/industrial_storage_cart/industrial_storage_cart_2k.gltf",
+          "size": 2878,
+          "md5": "c17b12884a47761124a64b8cf2780baa"
+        },
+        {
+          "path": "industrial_storage_cart.bin",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/industrial_storage_cart/industrial_storage_cart.bin",
+          "md5": "22c80526ee820188a193b4ea0b91fc2f",
+          "size": 664580
+        },
+        {
+          "path": "textures/industrial_storage_cart_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/industrial_storage_cart/industrial_storage_cart_arm_2k.jpg",
+          "md5": "88097189f0af4f9d297e0f8f7ff95c8b",
+          "size": 3001625
+        },
+        {
+          "path": "textures/industrial_storage_cart_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/industrial_storage_cart/industrial_storage_cart_diff_2k.jpg",
+          "md5": "462e1943aa6b6a211259476f4658e762",
+          "size": 2116931
+        },
+        {
+          "path": "textures/industrial_storage_cart_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/industrial_storage_cart/industrial_storage_cart_nor_gl_2k.jpg",
+          "md5": "f76a3077d22666a08b337bdff2841710",
+          "size": 2344898
+        }
+      ]
+    },
+    {
+      "id": "large_iron_gate",
+      "role": "Controlled district entrance",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/large_iron_gate",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "Josh Dean": "All"
+      },
+      "entrypoint": "large_iron_gate.gltf",
+      "files": [
+        {
+          "path": "large_iron_gate.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/large_iron_gate/large_iron_gate_2k.gltf",
+          "size": 7101,
+          "md5": "acd8128a05c100793eb9827a9b7c942e"
+        },
+        {
+          "path": "large_iron_gate.bin",
+          "size": 971848,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/large_iron_gate/large_iron_gate.bin",
+          "md5": "fdd655246ec98282a4d2faafcf0b8317"
+        },
+        {
+          "path": "textures/large_iron_gate_arm_2k.jpg",
+          "size": 2862243,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/large_iron_gate/large_iron_gate_arm_2k.jpg",
+          "md5": "628398c8d74d00d504d1b39886fbff83"
+        },
+        {
+          "path": "textures/large_iron_gate_diff_2k.jpg",
+          "size": 2170270,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/large_iron_gate/large_iron_gate_diff_2k.jpg",
+          "md5": "3b5af8b63c55e07fc95f089567c9846e"
+        },
+        {
+          "path": "textures/large_iron_gate_nor_gl_2k.jpg",
+          "size": 2786152,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/large_iron_gate/large_iron_gate_nor_gl_2k.jpg",
+          "md5": "5aa84baa5803884e9fa1cb1177207651"
+        }
+      ]
+    },
+    {
+      "id": "fire_hydrant",
+      "role": "Street infrastructure",
+      "resolution": "2k",
+      "source_page": "https://polyhaven.com/a/fire_hydrant",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "authors": {
+        "Gonçalo Felício": "All"
+      },
+      "entrypoint": "fire_hydrant.gltf",
+      "files": [
+        {
+          "path": "fire_hydrant.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/fire_hydrant/fire_hydrant_2k.gltf",
+          "size": 20926,
+          "md5": "1b90a8106f3d5827016a9e792eddab4d"
+        },
+        {
+          "path": "fire_hydrant.bin",
+          "size": 1928772,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/fire_hydrant/fire_hydrant.bin",
+          "md5": "636cd237cd1c9a793e3fc3edbf7f6a15"
+        },
+        {
+          "path": "textures/fire_hydrant_aged_arm_2k.jpg",
+          "size": 2268350,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fire_hydrant/fire_hydrant_aged_arm_2k.jpg",
+          "md5": "9af5c05ceced3edee35dcda0a0f69b1c"
+        },
+        {
+          "path": "textures/fire_hydrant_aged_diff_2k.jpg",
+          "size": 2191944,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fire_hydrant/fire_hydrant_aged_diff_2k.jpg",
+          "md5": "6de3683836cd0e6a39fdc58df2d61bf0"
+        },
+        {
+          "path": "textures/fire_hydrant_aged_nor_gl_2k.jpg",
+          "size": 2097229,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fire_hydrant/fire_hydrant_aged_nor_gl_2k.jpg",
+          "md5": "c81733bb9a71d3cd59681b1ec422432d"
+        },
+        {
+          "path": "textures/fire_hydrant_arm_2k.jpg",
+          "size": 2322663,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fire_hydrant/fire_hydrant_arm_2k.jpg",
+          "md5": "254425b57f8d70f3410d3cc5a27a25f3"
+        },
+        {
+          "path": "textures/fire_hydrant_diff_2k.jpg",
+          "size": 2012585,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fire_hydrant/fire_hydrant_diff_2k.jpg",
+          "md5": "2baa646929446dd229c1859ec3923de0"
+        },
+        {
+          "path": "textures/fire_hydrant_nor_gl_2k.jpg",
+          "size": 1847102,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fire_hydrant/fire_hydrant_nor_gl_2k.jpg",
+          "md5": "44a25b6356f63335369af805d65b899d"
+        }
+      ]
+    }
+  ]
+}

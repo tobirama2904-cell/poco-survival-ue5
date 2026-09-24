@@ -1,0 +1,41 @@
+name: Build verified environment resources
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish real art packages as a prerelease (NOT a game)
+        type: boolean
+        default: true
+permissions:
+  contents: write
+concurrency:
+  group: art-pack-build
+  cancel-in-progress: false
+jobs:
+  resources:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Test pipeline utilities
+        run: python3 -m unittest discover -s tests -v
+      - name: Install art build tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends blender
+          python3 -m pip install --disable-pip-version-check pillow==11.3.0
+      - name: Download and verify pinned CC0 source files
+        run: python3 tools/art_pack.py fetch --work "$RUNNER_TEMP/art"
+      - name: Condition actual meshes and textures; render studio previews
+        run: blender --background --threads 2 --python tools/condition_assets.py -- "$RUNNER_TEMP/art"
+      - name: Package and verify archives
+        run: |
+          python3 tools/art_pack.py package --work "$RUNNER_TEMP/art" --output artifacts
+          python3 tools/preview_sheet.py "$RUNNER_TEMP/art/previews" artifacts/art-preview.jpg
+      - name: Publish source and candidate art packages
+        if: ${{ inputs.publish }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="artpack-001-${GITHUB_RUN_NUMBER}"
+          gh release create "$TAG" artifacts/environment-source-v0.1.0.zip artifacts/environment-mobile-candidates-v0.1.0.zip artifacts/art-build-report.json artifacts/SHA256SUMS.txt artifacts/art-preview.jpg --title "Art pack 01 — source resources, NOT a game" --notes-file docs/ART_RELEASE.md --prerelease

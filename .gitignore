@@ -1,0 +1,13 @@
+.private/
+.cache/
+artifacts/
+__pycache__/
+*.pyc
+*.ulf
+*.keystore
+*.jks
+.env
+Saved/
+Intermediate/
+DerivedDataCache/
+Binaries/
