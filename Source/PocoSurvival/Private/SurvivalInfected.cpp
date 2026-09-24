@@ -2,6 +2,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+#include "SurvivalGameInstance.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimSequence.h"
 ASurvivalInfected::ASurvivalInfected()
 {
     GetCharacterMovement()->bRunPhysicsWithNoController=true;
@@ -10,6 +13,7 @@ void ASurvivalInfected::BeginPlay()
 {
     Super::BeginPlay();Destination=GetActorLocation();
     if (!PatrolPoints.Num()) { PatrolPoints.Add(Destination);PatrolPoints.Add(Destination+FVector(250,0,0)); }
+    if (auto* Game=Cast<USurvivalGameInstance>(GetGameInstance())) Game->ApplyLoadedInfectedState(this);
 }
 void ASurvivalInfected::Tick(float Delta)
 {
@@ -54,4 +58,22 @@ void ASurvivalInfected::Think(float Delta)
         if (!GetWorld()->SweepSingleByChannel(Hit,Start,Start+Left*130,FQuat::Identity,ECC_WorldStatic,FCollisionShape::MakeSphere(38),Params)) Direction=Left;
         else Direction=Direction.RotateAngleAxis(-70,FVector::UpVector);
     }
+}
+
+bool ASurvivalInfected::RestoreEncounter(const FVector& Location,const FRotator& Rotation,float Health,float Stamina)
+{
+    if (Location.ContainsNaN() || Location.GetAbsMax()>1000000 || Rotation.ContainsNaN() || !RestoreVitals(Health,Stamina)) return false;
+    // Failed collision-aware teleport leaves a safe existing position, never a
+    // capsule forced through a wall. Threat state restarts, health/death do not.
+    TeleportTo(Location,Rotation,false,false);
+    Destination=GetActorLocation();Direction=FVector::ZeroVector;
+    UnseenSeconds=100;ThinkDelay=0;AttackDelay=0;PatrolIndex=0;
+    State=IsAlive() ? EInfectedState::Patrol : EInfectedState::Dead;
+    if (!IsAlive()) {
+        GetCharacterMovement()->DisableMovement();
+        if (auto* Death=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01.MM_Death_Front_01"))) {
+            GetMesh()->PlayAnimation(Death,false);GetMesh()->SetPosition(Death->GetPlayLength(),false);
+        }
+    }
+    return true;
 }

@@ -69,8 +69,8 @@ try:
   actor=actors.spawn_actor_from_class(native('SurvivalInteraction'),point(item['position']));actor.set_actor_label('objective_'+item['action']);actor.set_editor_property('action_id',unreal.Name(item['action']))
  for p in [[-11,-6,3.5],[13,-6,3.5],[-10,14,3.5],[16,12,3.5]]:
   actors.spawn_actor_from_class(native('SurvivalPoweredLight'),point(p))
- for item in recipe['infected']:
-  actor=actors.spawn_actor_from_class(native('SurvivalInfected'),point(item['position']));actor.set_actor_label('infected_engineering_proxy');actor.set_editor_property('patrol_points',[point(p) for p in item['patrol']])
+ for index,item in enumerate(recipe['infected']):
+  actor=actors.spawn_actor_from_class(native('SurvivalInfected'),point(item['position']));actor.set_actor_label('infected_engineering_proxy');actor.set_editor_property('persistent_id',unreal.Name('canal_infected_%03d'%index));actor.set_editor_property('patrol_points',[point(p) for p in item['patrol']])
  spawn=point(recipe['spawn']);look=point(recipe['look_at']);rotation=unreal.MathLibrary.find_look_at_rotation(spawn,look)
  start=actors.spawn_actor_from_class(unreal.PlayerStart,spawn,unreal.Rotator(pitch=-10.0,yaw=rotation.yaw,roll=0.0));start.set_actor_label('safe_player_spawn')
  measured_start=start.get_actor_rotation()
