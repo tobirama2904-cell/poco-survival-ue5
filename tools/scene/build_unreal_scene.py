@@ -50,6 +50,12 @@ try:
  assert level.new_level('/Game/Worlds/CanalDistrict'),'Could not create actual map package'
  world=unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
  for mesh in meshes:
+  # Interchange enables Nanite by default in this engine. Mobile must retain the
+  # authored mesh, not the aggressively reduced Nanite fallback (256 yard tris).
+  nanite=mesh.get_editor_property('nanite_settings')
+  nanite.set_editor_property('enabled',False)
+  mesh.set_editor_property('nanite_settings',nanite)
+  assert not mesh.get_editor_property('nanite_settings').get_editor_property('enabled')
   body=mesh.get_editor_property('body_setup')
   assert body,('Missing mesh collision body',mesh.get_name())
   body.set_editor_property('collision_trace_flag',unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE)
@@ -89,7 +95,7 @@ try:
  player.attack();assert player.get_stamina()==42
  assert not player.restore_vitals(101,50)
  actors.destroy_actor(player)
- report.update({'map':'/Game/Worlds/CanalDistrict','native_vitals_damage_attack_cost_tested':True,'static_mesh_count':len(meshes),'interactions_placed':len(recipe['interactions']),'enemy_proxies_placed':len(recipe['infected']),'actors_in_saved_scene':len(actors.get_all_level_actors()),'source_triangles':recipe['triangles'],'complete_campaign':False,'final_character_art':False})
+ report.update({'map':'/Game/Worlds/CanalDistrict','native_vitals_damage_attack_cost_tested':True,'static_mesh_count':len(meshes),'nanite_disabled_for_mobile_geometry':True,'interactions_placed':len(recipe['interactions']),'enemy_proxies_placed':len(recipe['infected']),'actors_in_saved_scene':len(actors.get_all_level_actors()),'source_triangles':recipe['triangles'],'complete_campaign':False,'final_character_art':False})
  assert level.save_current_level(),'Map save failed'
  unreal.EditorAssetLibrary.save_directory('/Game',False,True)
  (report_dir/'scene-construction.json').write_text(json.dumps(report,indent=2)+'\n');print('GAMEPLAY_SCENE_CONSTRUCTION_PASS',json.dumps(report))

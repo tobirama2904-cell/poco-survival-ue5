@@ -16,12 +16,25 @@
 #include "InputCoreTypes.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
+#include "PixelFormat.h"
 ASurvivalGameMode::ASurvivalGameMode()
 {
     DefaultPawnClass=ASurvivalCharacter::StaticClass();PlayerControllerClass=ASurvivalPlayerController::StaticClass();HUDClass=ASurvivalHUD::StaticClass();
 }
 void ASurvivalGameMode::StartPlay()
 {
+#if PLATFORM_LINUX && WITH_EDITOR
+    // Diagnostic-only workaround for UE 5.7 Vulkan's buffer-only R64 support:
+    // velocity fallback tests Supported, although it needs an IMAGE format.
+    // Exact engine source confirms PlatformFormat==0 means VK_FORMAT_UNDEFINED.
+    // Never changes the shipped Android renderer or claims hardware-GPU coverage.
+    if (FParse::Param(FCommandLine::Get(),TEXT("SurvivalSoftwareVulkan")) &&
+        FParse::Param(FCommandLine::Get(),TEXT("vulkan")) &&
+        GPixelFormats[PF_R64_UINT].Supported && GPixelFormats[PF_R64_UINT].PlatformFormat==0) {
+        GPixelFormats[PF_R64_UINT].Supported=false;
+        UE_LOG(LogTemp,Warning,TEXT("SOFTWARE_VULKAN_IMAGE_FALLBACK: R64 buffer-only format excluded; renderer selects its R32G32 image fallback"));
+    }
+#endif
     Super::StartPlay();FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::Intro,0.3f,false);
     if (FParse::Param(FCommandLine::Get(),TEXT("SurvivalSmokeScreenshot"))) {
         FTimerHandle Capture,MoveStart,MoveEnd;

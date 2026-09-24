@@ -108,28 +108,40 @@ jobs:
           gh release create "scene-${GITHUB_RUN_ID}" .cache/private-scene/* --repo tobirama2904-cell/poco-ue5-engine-cache \
             --prerelease --title "Private editable development map ${GITHUB_RUN_ID}" \
             --notes 'Authored map and licensed temporary animation-test character. NOT final game content. NOT an APK.'
-      - name: Attempt actual Unreal game-mode screenshot with software Vulkan
+      - name: Render actual gameplay and require input/floor proof — attempt 1
+        id: render1
         if: ${{ !cancelled() }}
         continue-on-error: true
         run: |
-          set -euo pipefail
           test -s artifacts/gameplay-scene/scene-construction.json
-          docker exec -u ue4 scene-editor bash -lc '
-            cd /project
-            export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
-            xvfb-run -a vulkaninfo --summary > artifacts/gameplay-scene/software-vulkan.log 2>&1
-            timeout --foreground 15m xvfb-run -a -s "-screen 0 960x540x24" \
-              /home/ue4/UnrealEngine/Engine/Binaries/Linux/UnrealEditor \
-              /project/PocoSurvival.uproject /Game/Worlds/CanalDistrict -game -vulkan -sm5 \
-              -windowed -ResX=960 -ResY=540 -unattended -nosound -nop4 -nosplash \
-              -SurvivalSmokeScreenshot -AllowSoftwareRendering -stdout -FullStdOutLogOutput \
-              > artifacts/gameplay-scene/rendered-game.log 2>&1
-            RESULT=$?
-            find Saved/Screenshots -type f -name "*.png" -exec cp {} artifacts/gameplay-scene/ \;
-            exit "$RESULT"
-          '
-
-          test -n "$(find artifacts/gameplay-scene -name '*.png' -print -quit)"
+          docker exec -u ue4 scene-editor bash /project/tools/scene/render_gate.sh
+      - name: Expose first-frame render failure before bounded correction
+        if: steps.render1.outcome == 'failure'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: scene-render-attempt-1-${{ github.run_id }}
+          path: |
+            artifacts/gameplay-scene/*.json
+            artifacts/gameplay-scene/*.log
+            artifacts/gameplay-scene/*.png
+          retention-days: 3
+      - name: Bounded render repair window (reuse engine and content)
+        if: steps.render1.outcome == 'failure'
+        run: sudo python3 tools/scene/wait_for_correction.py
+      - name: Rebuild corrected scene and retry verified game rendering
+        if: steps.render1.outcome == 'failure'
+        run: |
+          docker exec -u ue4 scene-editor bash /project/tools/scene/editor_gate.sh
+          docker exec -u ue4 scene-editor bash /project/tools/scene/render_gate.sh
+      - name: Require actual screenshot and runtime proof, not optional-step success
+        run: python3 -c 'import json; assert json.load(open("artifacts/gameplay-scene/render-verification.json"))["gate_passed"]'
+      - name: Refresh retained private map after measured corrections
+        if: steps.render1.outcome == 'failure' && success()
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: |
+          docker exec -u ue4 scene-editor bash -lc 'cd /project && tar -czf .cache/private-scene/game-content.tar.gz Content && sha256sum .cache/private-scene/game-content.tar.gz > .cache/private-scene/SHA256SUMS'
+          gh release upload "scene-${GITHUB_RUN_ID}" .cache/private-scene/* --clobber --repo tobirama2904-cell/poco-ue5-engine-cache
       - name: Upload verification only, never licensed content or binaries
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
