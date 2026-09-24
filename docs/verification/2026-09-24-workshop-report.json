@@ -1,0 +1,19 @@
+{
+  "kind": "resource-workshop-verification",
+  "logical_cpus": 4,
+  "host_memory_bytes": 16770494464,
+  "effective_memory_ceiling_bytes": 16770494464,
+  "workspace_disk_total_bytes": 33636024320,
+  "workspace_disk_free_bytes": 29920522240,
+  "blender_smoke_passed": true,
+  "unreal_installed": false,
+  "unreal_android_packaging_tested": false,
+  "physical_poco_f4_tested": false,
+  "gpu_acceleration_claimed": false,
+  "configured_cpus": 4,
+  "configured_ram_bytes": 17179869184,
+  "configured_disk_bytes": 34359738368,
+  "idle_timeout_minutes": 5,
+  "retention_period_minutes": 60,
+  "state_after_verification": "ShuttingDown"
+}

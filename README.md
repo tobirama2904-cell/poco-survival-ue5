@@ -68,3 +68,11 @@ It does **not** install Unreal Engine or claim to package an Android game.
 Codespaces has a finite included allowance and storage accounting; it is not an
 unlimited free server. Our provisioned workshop must have a short idle timeout,
 be stopped after work, and use a short retention period. No paid upgrade is configured.
+
+Verified on 2026-09-24: authenticated remote SSH, all seven unit tests, and the
+Blender CPU-render integration test passed inside the 4-core workshop. It was
+stopped after verification. Measured workspace free space was about 27.9 GiB.
+The optional workshop has a 5-minute idle timeout and 60-minute stopped retention;
+its machine can expire, while the definition, code and published art remain on GitHub.
+The official precompiled Linux UE page was also checked and redirects to
+“Epic Account Required”; no Epic login or UE installation is claimed.
