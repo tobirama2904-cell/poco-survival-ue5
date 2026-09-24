@@ -36,7 +36,7 @@ def extract(stream,root=Path('/'),byte_limit=32*1024**3):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);a=p.parse_args();j=json.loads(a.manifest.read_text())
-    lock=json.loads(Path('/project/content/engine.lock.json').read_text())
+    lock=json.loads(Path('/project/BuildData/engine.lock.json').read_text())
     if j.get('engine_reference')!=lock['reference'] or j.get('configuration')!='Android arm64 Development':raise ValueError('Cache compatibility mismatch')
     result=extract(sys.stdin.buffer,byte_limit=int(j['uncompressed_bytes']));print('PRIVATE_NATIVE_CACHE_RESTORED',json.dumps(result),flush=True)
 if __name__=='__main__':main()

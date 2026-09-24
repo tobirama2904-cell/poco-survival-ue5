@@ -12,6 +12,7 @@ mkdir -p artifacts/gameplay-scene artifacts/engine-probe
   2>&1 | tee artifacts/gameplay-scene/native-save-test.log
 # Test slots must never leak into the scene capture or become shipped progress.
 rm -f Saved/SaveGames/Survival_A.sav Saved/SaveGames/Survival_B.sav
+rm -f Content/Worlds/CanalDistrict.umap
 "$ENGINE/Binaries/Linux/UnrealEditor-Cmd" /project/PocoSurvival.uproject \
   -run=pythonscript -script=/project/tools/scene/build_unreal_scene.py \
   -unattended -nop4 -nosplash -NullRHI -nosound -stdout -FullStdOutLogOutput \

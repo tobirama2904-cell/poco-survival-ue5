@@ -9,7 +9,7 @@ concurrency:
 jobs:
   scene:
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    timeout-minutes: 95
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -32,21 +32,66 @@ jobs:
           mkdir -p "$DOCKER_CONFIG"
           trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf "$DOCKER_CONFIG"' EXIT
           printf '%s' "$UE_REGISTRY_TOKEN" | docker login ghcr.io --username tobirama2904-cell --password-stdin
-          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          IMAGE=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["reference"])')
           timeout --foreground 20m docker pull "$IMAGE"
       - name: Prepare software-rendering attempt (no hardware GPU claimed)
         run: |
           set -euo pipefail
-          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          IMAGE=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["reference"])')
           sudo chown -R 1000:1000 "$GITHUB_WORKSPACE"
           docker run -d --name scene-editor --user root --cpus=4 --memory=13g --memory-swap=13g --shm-size=1g \
             --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/project" --entrypoint /bin/bash "$IMAGE" -lc 'sleep infinity'
           docker exec scene-editor bash -lc 'apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mesa-vulkan-drivers libvulkan1 xvfb xauth vulkan-tools'
           docker network disconnect bridge scene-editor
-      - name: Compile native classes, test saves, import and save actual UE map
-        run: |
-          set -euo pipefail
-          docker exec -u ue4 scene-editor bash /project/tools/scene/editor_gate.sh
+      - name: Compile native game and construct actual map — attempt 1
+        id: attempt1
+        continue-on-error: true
+        run: docker exec -u ue4 scene-editor bash /project/tools/scene/editor_gate.sh
+      - name: Expose measured failure diagnostics from attempt 1
+        if: steps.attempt1.outcome == 'failure'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: scene-attempt-1-${{ github.run_id }}
+          path: |
+            artifacts/gameplay-scene/*.json
+            artifacts/gameplay-scene/*.log
+          retention-days: 3
+      - name: Bounded repair window 1 without another engine download
+        if: steps.attempt1.outcome == 'failure'
+        run: sudo python3 tools/scene/wait_for_correction.py
+      - name: Compile native game and construct actual map — attempt 2
+        id: attempt2
+        if: steps.attempt1.outcome == 'failure'
+        continue-on-error: true
+        run: docker exec -u ue4 scene-editor bash /project/tools/scene/editor_gate.sh
+      - name: Expose measured failure diagnostics from attempt 2
+        if: steps.attempt2.outcome == 'failure'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: scene-attempt-2-${{ github.run_id }}
+          path: |
+            artifacts/gameplay-scene/*.json
+            artifacts/gameplay-scene/*.log
+          retention-days: 3
+      - name: Bounded repair window 2 without another engine download
+        if: steps.attempt2.outcome == 'failure'
+        run: sudo python3 tools/scene/wait_for_correction.py
+      - name: Compile native game and construct actual map — attempt 3
+        id: attempt3
+        if: steps.attempt2.outcome == 'failure'
+        continue-on-error: true
+        run: docker exec -u ue4 scene-editor bash /project/tools/scene/editor_gate.sh
+      - name: Expose measured failure diagnostics from attempt 3
+        if: steps.attempt3.outcome == 'failure'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: scene-attempt-3-${{ github.run_id }}
+          path: |
+            artifacts/gameplay-scene/*.json
+            artifacts/gameplay-scene/*.log
+          retention-days: 3
+      - name: Require a successful native scene construction
+        run: test -s artifacts/gameplay-scene/scene-construction.json
       - name: Preserve private editable project content (not a playable release)
         env:
           GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}

@@ -68,7 +68,7 @@ def zip_tree(folder,path):
  return {'file':path.name,'bytes':path.stat().st_size,'sha256':sha(path)}
 
 def acquire(work):
- lock=json.loads((ROOT/'content/assets.lock.json').read_text());source=work/'source';source.mkdir(parents=True,exist_ok=True)
+ lock=json.loads((ROOT/'BuildData/assets.lock.json').read_text());source=work/'source';source.mkdir(parents=True,exist_ok=True)
  jobs=[(source/a['id']/safe_path(f['path']),f) for a in lock['assets'] for f in a['files']]
  with ThreadPoolExecutor(max_workers=4) as pool:list(pool.map(fetch_file,jobs))
  models=[validate_model(source/a['id'],a) for a in lock['assets']]

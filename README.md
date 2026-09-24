@@ -36,7 +36,7 @@ Machine-readable reports are under `docs/verification/`.
 
 ## Actual first production pipeline
 
-`content/assets.lock.json` pins asset URLs, sizes, author credits and MD5 values supplied by Poly Haven. The pipeline verifies every download, validates glTF dependencies/geometry, creates separate mobile mesh/texture candidates in Blender, produces four clearly labelled studio previews, and packages source art with SHA-256 manifests.
+`BuildData/assets.lock.json` pins asset URLs, sizes, author credits and MD5 values supplied by Poly Haven. The pipeline verifies every download, validates glTF dependencies/geometry, creates separate mobile mesh/texture candidates in Blender, produces four clearly labelled studio previews, and packages source art with SHA-256 manifests.
 
 The workflow is **manual only** (`workflow_dispatch`). It performs an actual art build, not a synthetic compute/storage benchmark. Standard Ubuntu runners are selected; no paid runner or external paid service is configured. Releases contain art packages and build reports, **not a game** and **not Unreal Engine binaries/source**.
 

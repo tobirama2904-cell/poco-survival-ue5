@@ -12,8 +12,8 @@ A local Android SDK was not mounted into that tested container.
 The image left about 50 GiB free on the external runner. There is no need to
 repeat Epic account linking: source and registry authorization are both working.
 
-`content/engine.lock.json` pins the authorized official image digest and exact
-matching GitHub source commit. `content/android-toolchain.lock.json` pins Google
+`BuildData/engine.lock.json` pins the authorized official image digest and exact
+matching GitHub source commit. `BuildData/android-toolchain.lock.json` pins Google
 package metadata for API 35, build-tools 35.0.1 and NDK r27c; Java 21 is required.
 These Google packages were verified in the official repository metadata, not yet
 installed or tested in an Android UE build.

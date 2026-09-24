@@ -13,7 +13,7 @@ def sha(path):
     return h.hexdigest()
 def main():
     if json.loads(gh('api','repos/'+REPO))['private'] is not True:raise ValueError('Cache repository must be private')
-    engine=json.loads(Path('content/engine.lock.json').read_text())
+    engine=json.loads(Path('BuildData/engine.lock.json').read_text())
     releases=json.loads(gh('api','repos/'+REPO+'/releases?per_page=30'))
     candidates=[r for r in releases if r['tag_name'].startswith('android-'+engine['engine_version']+'-dev-') and not r['draft']]
     for release in candidates:

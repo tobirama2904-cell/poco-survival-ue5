@@ -43,7 +43,7 @@ def main():
     parts=Parts()
     write_archive(parts,[(p,p.relative_to('/').as_posix()) for p in roots],checked)
     parts.finish_part()
-    lock=json.loads((PROJECT/'content/engine.lock.json').read_text())
+    lock=json.loads((PROJECT/'BuildData/engine.lock.json').read_text())
     report={'schema':1,'private_licensed_engine_cache':True,'engine_reference':lock['reference'],'configuration':'Android arm64 Development','source_commit':os.environ.get('GAME_SOURCE_SHA'),'uncompressed_bytes':total,'parts':parts.parts,'build_exit_code':int(os.environ.get('NATIVE_BUILD_EXIT','-1')),'not_an_apk':True}
     (OUTPUT/'android-cache-manifest.json').write_text(json.dumps(report,indent=2)+'\n');print('PRIVATE_NATIVE_CACHE_READY',total,len(parts.parts),flush=True)
 if __name__=='__main__':main()

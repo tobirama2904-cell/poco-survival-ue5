@@ -63,7 +63,7 @@ fontpath=Path('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf');font=bpy.data.f
 def sign(text,pos,width,yaw=0):
  # Text local X right, Y up; board faces local -Y in world.
  panel=cube('sign_panel',pos,(width,.06,.85),dark,.02);panel.rotation_euler.z=yaw
- curve=bpy.data.curves.new('authored_sign','FONT');curve.body=text;curve.align_x='CENTER';curve.align_y='CENTER';curve.size=.26;curve.extrude=.001
+ curve=bpy.data.curves.new('authored_sign','FONT');curve.body=text;curve.align_x='CENTER';curve.align_y='CENTER';curve.size=min(.48,(width-.35)/(max(len(text),1)*.62));curve.extrude=.001
  if font:curve.font=font
  ob=bpy.data.objects.new('authored_sign_text',curve);world.objects.link(ob);ob.location=Vector(pos)+Matrix.Rotation(yaw,3,'Z')@Vector((0,-.038,0));ob.rotation_euler=(math.pi/2,0,yaw);curve.materials.append(ink)
  bpy.context.view_layer.objects.active=ob;ob.select_set(True);panel.select_set(False);bpy.ops.object.convert(target='MESH');ob.select_set(False);created.append(ob)
@@ -89,7 +89,7 @@ for floor in range(3):
   if floor==2:module('crown_standard_standard_01',(x,19,9))
 # Opaque structural backing prevents empty facade silhouettes; front modules
 # retain their real photographed material and window geometry.
-cube('north_volume',(1.5,24,4.5),(30,9.8,9),stone)
+cube('north_volume',(1.5,24,4.5),(30,9.8,9),kit['wall_standard_standard_01'].data.materials[0])
 cube('north_roof',(1.5,23.5,9.02),(30.5,10.5,.22),stone,.02)
 # Eastern housing wing faces the yard; west workshop is lower and sheltered.
 for side,yaw,anchor_x,floors in [('east',-math.pi/2,20,3),('west',math.pi/2,-18,1)]:
@@ -99,7 +99,7 @@ for side,yaw,anchor_x,floors in [('east',-math.pi/2,20,3),('west',math.pi/2,-18,
    module('wall_window_centered_small_01',(anchor_x,anchor_y,3*floor),yaw)
    module('window_centered_small_01',(anchor_x,anchor_y,3*floor),yaw)
    if floor==floors-1:module('crown_standard_standard_01',(anchor_x,anchor_y,3*floors),yaw)
- if side=='east':cube('east_volume',(24.5,6,4.5),(8.8,24,9),stone)
+ if side=='east':cube('east_volume',(24.5,6,4.5),(8.8,24,9),kit['wall_standard_standard_01'].data.materials[0])
  else:cube('workshop_volume',(-22.5,6,1.5),(8.8,24,3),stone)
 cube('workshop_canopy',(-16.6,5,3.1),(3.8,10,.18),iron,.01)
 for y in [0,10]:pipe('canopy_post',(-14.85,y,0),(-14.85,y,3.1),.055)
@@ -127,6 +127,16 @@ for x,y in [(-11,-6),(13,-6),(-10,14),(16,12)]:prop('street_lamp_01',(x,y,0))
 for x in [-10,-9.5,-9]:
  pipe('pump_risers',(x,18.4,.15),(x,18.4,3.1),.14)
  pipe('pump_elbows',(x,18.4,3.1),(x,17.6,3.1),.14)
+# Two planted islands divide the initial empty apron into readable approaches.
+soil=material('exposed_soil',(.085,.065,.035))
+for x,y in [(-5,4),(12,9)]:
+ cube('old_planter',(x,y,.17),(3.4,5.4,.34),stone,.045)
+ cube('planter_soil',(x,y,.35),(3.04,5.04,.05),soil)
+ prop('tree_small_02',(x,y,.38),random.uniform(0,math.tau),1.12)
+ for i in range(8):prop('grass_medium_02',(x+random.uniform(-1.3,1.3),y+random.uniform(-2.2,2.2),.39),random.uniform(0,math.tau),random.uniform(.6,1))
+for i in range(16):
+ x=random.choice([-17.1,18.8]);y=random.uniform(-7,16)
+ prop('grass_medium_02',(x,y,.01),random.uniform(0,math.tau),random.uniform(.5,.8))
 # Original rubble, repairs, warning stripes, and ivy concentrate at edges;
 # the main crossing and the three interaction approaches remain traversable.
 for i in range(45):
@@ -163,9 +173,11 @@ for key,objects in groups.items():
  for o in objects:o.select_set(True)
  bpy.context.view_layer.objects.active=objects[0];bpy.ops.object.join();bpy.context.object.name='district_'+key
 bpy.ops.object.select_all(action='DESELECT')
-for o in world.objects:o.select_set(o.type=='MESH')
+for o in world.objects:
+ if o.type=='MESH':o.data.name=o.name
+ o.select_set(o.type=='MESH')
 bpy.ops.export_scene.gltf(filepath=str(out/'courtyard.glb'),export_format='GLB',use_selection=True,export_apply=True,export_animations=False)
-recipe={'schema':1,'name':'CanalDistrict','stage':'internal gameplay gate; not complete campaign','coordinate_frame':'baked Blender metres; imported FRAME meshes calibrate UE axes and units','spawn':[-2,-17,1.05],'look_at':[-1,10,1.6],'intro_camera':[-14,-17,7],'intro_look_at':[0,11,3.2],'interactions':[{'action':'search_depot','position':[-16,3,0]},{'action':'recover_fuel','position':[8,-7,0]},{'action':'repair_generator','position':[-13,8,0]}],'infected':[{'position':[11,8,1.05],'patrol':[[10,7,1.05],[12,14,1.05]]}],'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in world.objects if o.type=='MESH'),'static_chunks':len(groups),'glb_sha256':hashlib.sha256((out/'courtyard.glb').read_bytes()).hexdigest(),'assets_used':sorted(sources)}
+recipe={'schema':1,'name':'CanalDistrict','stage':'internal gameplay gate; not complete campaign','coordinate_frame':'baked Blender metres; imported FRAME meshes calibrate UE axes and units','spawn':[0,-17,1.05],'look_at':[0,10,1.6],'intro_camera':[-14,-17,7],'intro_look_at':[0,11,3.2],'interactions':[{'action':'search_depot','position':[-16,3,0]},{'action':'recover_fuel','position':[8,-7,0]},{'action':'repair_generator','position':[-13,8,0]}],'infected':[{'position':[15,9,1.05],'patrol':[[15,5,1.05],[16,14,1.05]]}],'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in world.objects if o.type=='MESH'),'static_chunks':len(groups),'glb_sha256':hashlib.sha256((out/'courtyard.glb').read_bytes()).hexdigest(),'assets_used':sorted(sources)}
 (out/'courtyard.json').write_text(json.dumps(recipe,indent=2,ensure_ascii=False)+'\n')
 library.hide_render=True;library.hide_viewport=True
 for o in world.objects:

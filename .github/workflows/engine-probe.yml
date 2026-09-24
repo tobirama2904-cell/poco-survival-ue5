@@ -39,14 +39,14 @@ jobs:
           mkdir -p "$DOCKER_CONFIG"
           trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf "$DOCKER_CONFIG"' EXIT
           printf '%s' "$UE_REGISTRY_TOKEN" | docker login ghcr.io --username tobirama2904-cell --password-stdin
-          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          IMAGE=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["reference"])')
           timeout --foreground 20m docker pull "$IMAGE"
           docker image inspect "$IMAGE" --format 'Image extracted bytes={{.Size}}'
           df -h /
       - name: Compile with UHT and UBT, then run real native integration
         run: |
           set -euo pipefail
-          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          IMAGE=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["reference"])')
           sudo chown -R 1000:1000 "$GITHUB_WORKSPACE"
           docker run --rm --network=none --cpus=4 --memory=13g --memory-swap=13g --shm-size=1g \
             --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/project" \

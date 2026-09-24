@@ -6,7 +6,7 @@ import _cycles
 from pathlib import Path
 from mathutils import Vector
 args=sys.argv[sys.argv.index('--')+1:];work=Path(args[0]);root=Path(__file__).resolve().parents[1]
-lock_path=Path(args[1]) if len(args)>1 else root/'content/assets.lock.json'
+lock_path=Path(args[1]) if len(args)>1 else root/'BuildData/assets.lock.json'
 lock=json.loads(lock_path.read_text());out=work/'mobile';out.mkdir(parents=True,exist_ok=True)
 preview=work/'previews';preview.mkdir(exist_ok=True)
 results=[]

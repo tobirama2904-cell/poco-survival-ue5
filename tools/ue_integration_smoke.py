@@ -40,7 +40,21 @@ recovered=instance()
 assert recovered.load_progress(), 'Older valid slot was not recovered'
 assert recovered.has_world_flag(unreal.Name('generator_running'))
 assert not recovered.has_world_flag(unreal.Name('clinic_power'))
-report={'phase':'unreal-headless-native-integration','native_classes_loaded':3,
+# Equal quest revisions must be ordered by successful save generation, not
+# action count. This matters once position/vitals can change between quests.
+save_cls=unreal.load_class(None,'/Script/PocoSurvival.SurvivalSaveGame')
+for slot,generation,action in [('Survival_A',10,'search_depot'),('Survival_B',11,'recover_fuel')]:
+    save=unreal.GameplayStatics.create_save_game_object(save_cls)
+    save.set_editor_property('format_version',2)
+    save.set_editor_property('save_generation',generation)
+    save.set_editor_property('state_revision',1)
+    save.set_editor_property('action_journal',[action])
+    assert unreal.GameplayStatics.save_game_to_slot(save,slot,0)
+same_revision=instance();assert same_revision.load_progress()
+assert same_revision.get_item_count(unreal.Name('fuel'))==1
+assert same_revision.get_item_count(unreal.Name('starter_coil'))==0
+report={'phase' :'unreal-headless-native-integration','native_classes_loaded':3,
+ 'same_revision_save_generation_tested':True,
  'objective_count':11,'native_inventory_and_choices_tested':True,
  'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,
  'unreal_editor_version':unreal.SystemLibrary.get_engine_version(),

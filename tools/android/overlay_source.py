@@ -12,7 +12,7 @@ def sha(p):
         for b in iter(lambda:f.read(1024*1024),b''):h.update(b)
     return h.digest()
 def main():
-    metadata=json.loads(Path('/project/.cache/engine-source-checkout.json').read_text());lock=json.loads(Path('/project/content/engine.lock.json').read_text())
+    metadata=json.loads(Path('/project/.cache/engine-source-checkout.json').read_text());lock=json.loads(Path('/project/BuildData/engine.lock.json').read_text())
     if metadata['commit']!=lock['source_commit']:raise ValueError('Engine source revision mismatch')
     added=updated=unchanged=0
     for source in (SOURCE/'Engine').rglob('*'):
