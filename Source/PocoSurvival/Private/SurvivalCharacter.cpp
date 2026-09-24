@@ -118,6 +118,7 @@ void ASurvivalCharacter::Attack()
 {
     if (AttackCooldown>0 || !Stats.Spend(18)) return;
     AttackCooldown=0.75f;
+    if (IsPlayerControlled() && Controller) SetActorRotation(FRotator(0,Controller->GetControlRotation().Yaw,0));
     if (auto* Anim=GetMesh()->GetAnimInstance()) if (AttackAnimation) Anim->PlaySlotAnimationAsDynamicMontage(AttackAnimation,TEXT("DefaultSlot"),0.06f,0.12f);
     FTimerHandle HitTimer;GetWorldTimerManager().SetTimer(HitTimer,this,&ASurvivalCharacter::DeliverMelee,0.18f,false);
 }
@@ -150,6 +151,7 @@ float ASurvivalCharacter::TakeDamage(float Amount,const FDamageEvent& Event,ACon
 bool ASurvivalCharacter::RestoreVitals(float Health,float Stamina)
 {
     if (!Stats.Restore(Health,Stamina)) return false;
+    GetWorldTimerManager().ClearAllTimersForObject(this);AttackCooldown=0;
     if (Stats.Alive()) {
         GetCharacterMovement()->SetMovementMode(MOVE_Walking);
         GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
@@ -166,13 +168,16 @@ void ASurvivalCharacter::TouchPressed(ETouchIndex::Type Finger,FVector Position)
     if (P.X>0.83f && P.Y>0.70f && P.Y<0.90f) { Interact();return; }
     if (P.X>0.83f && P.Y>0.45f && P.Y<=0.70f) { Attack();return; }
     if (P.X>0.66f && P.X<0.83f && P.Y>0.70f) { ToggleSprint();return; }
-    if (P.X>0.66f && P.X<0.83f && P.Y>0.48f && P.Y<0.70f) { JumpPressed();return; }
+    if (P.X>0.66f && P.X<0.83f && P.Y>0.48f && P.Y<0.70f) { JumpFinger=static_cast<int32>(Finger);JumpPressed();return; }
     if (P.X>0.66f && P.X<0.83f && P.Y>0.30f && P.Y<0.48f) { ToggleCrouch();return; }
     if (P.X>0.66f && P.X<0.83f && P.Y<0.13f) { Save();return; }
     if (P.X>0.83f && P.Y<0.13f) { Load();return; }
     if (P.X>0.35f && LookFinger<0) { LookFinger=static_cast<int32>(Finger);LastTouch=Position; }
 }
-void ASurvivalCharacter::TouchReleased(ETouchIndex::Type Finger,FVector Position) { if (LookFinger==static_cast<int32>(Finger)) LookFinger=-1; }
+void ASurvivalCharacter::TouchReleased(ETouchIndex::Type Finger,FVector Position) {
+    if (LookFinger==static_cast<int32>(Finger)) LookFinger=-1;
+    if (JumpFinger==static_cast<int32>(Finger)) { StopJumping();JumpFinger=-1; }
+}
 void ASurvivalCharacter::TouchMoved(ETouchIndex::Type Finger,FVector Position)
 {
     if (LookFinger!=static_cast<int32>(Finger)) return;

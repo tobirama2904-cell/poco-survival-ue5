@@ -36,6 +36,7 @@ private:
     bool bSprintRequested=false;
     float AttackCooldown=0;
     int32 LookFinger=-1;
+    int32 JumpFinger=-1;
     FVector LastTouch=FVector::ZeroVector;
     UPROPERTY() TObjectPtr<UAnimSequence> AttackAnimation;
     void Forward(float Value); void Right(float Value); void Turn(float Value); void Look(float Value);

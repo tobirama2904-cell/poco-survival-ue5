@@ -62,7 +62,7 @@ bool USurvivalGameInstance::SaveProgress()
         Save->Health=Player->GetHealth();Save->Stamina=Player->GetStamina();
     }
     if (!UGameplayStatics::SaveGameToSlot(Save, SlotName(NextSaveSlot), 0)) return false;
-    SaveGeneration=Save->SaveGeneration;
+    SaveGeneration=Save->SaveGeneration;PendingPlayerSave=Save;
     NextSaveSlot = 1 - NextSaveSlot;
     return true;
 }

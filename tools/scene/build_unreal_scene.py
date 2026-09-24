@@ -1,5 +1,5 @@
 """Execute inside the pinned editor. No claim of rendering from this commandlet."""
-import json,hashlib,traceback
+import json,hashlib,traceback,struct,re
 from pathlib import Path
 import unreal
 root=Path('/project');source=root/'.cache/scene-source';report_dir=root/'artifacts/gameplay-scene';report_dir.mkdir(parents=True,exist_ok=True)
@@ -16,13 +16,21 @@ def import_file(file,destination):
 try:
  import_file(source/'courtyard.glb','/Game/Environment/Courtyard')
  import_file(source/'sky.hdr','/Game/Environment/Sky')
+ # Importer versions differ on mesh-name versus node-name preference.
+ # Both names come from the pinned GLB; never guess axes from engine folklore.
+ raw=(source/'courtyard.glb').read_bytes();length=struct.unpack_from('<I',raw,12)[0];gltf=json.loads(raw[20:20+length]);del raw
+ aliases={}
+ for node in gltf.get('nodes',[]):
+  if node.get('name','').startswith('FRAME_'):
+   label=node['name'].split('FRAME_',1)[1];aliases[node['name']]=label
+   aliases[re.sub('[^A-Za-z0-9_]','_',gltf['meshes'][node['mesh']].get('name',node['name']))]=label
  meshes=[];frames={}
  for path in unreal.EditorAssetLibrary.list_assets('/Game/Environment/Courtyard',True,False):
   ob=unreal.load_asset(path)
   if isinstance(ob,unreal.StaticMesh):
    name=ob.get_name();print('MESH',name)
-   if 'FRAME_' in name:
-    label=name.split('FRAME_',1)[1].split('.')[0]
+   label=next((value for key,value in aliases.items() if name==key or name.endswith('_'+key)),None)
+   if label:
     box=ob.get_bounding_box();frames[label]=(box.min+box.max)*.5
    else:meshes.append(ob)
  assert all(k in frames for k in ['ORIGIN','X','Y','Z']),str(frames)
@@ -45,6 +53,8 @@ try:
   cls=unreal.load_class(None,'/Script/PocoSurvival.'+name);assert cls,name;return cls
  for item in recipe['interactions']:
   actor=actors.spawn_actor_from_class(native('SurvivalInteraction'),point(item['position']));actor.set_actor_label('objective_'+item['action']);actor.set_editor_property('action_id',unreal.Name(item['action']))
+ for p in [[-11,-6,3.5],[13,-6,3.5],[-10,14,3.5],[16,12,3.5]]:
+  actors.spawn_actor_from_class(native('SurvivalPoweredLight'),point(p))
  for item in recipe['infected']:
   actor=actors.spawn_actor_from_class(native('SurvivalInfected'),point(item['position']));actor.set_actor_label('infected_engineering_proxy');actor.set_editor_property('patrol_points',[point(p) for p in item['patrol']])
  spawn=point(recipe['spawn']);look=point(recipe['look_at']);rotation=unreal.MathLibrary.find_look_at_rotation(spawn,look)

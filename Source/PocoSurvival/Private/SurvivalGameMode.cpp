@@ -1,4 +1,5 @@
 #include "SurvivalGameMode.h"
+#include "SurvivalGameInstance.h"
 #include "SurvivalCharacter.h"
 #include "SurvivalPlayerController.h"
 #include "SurvivalHUD.h"
@@ -31,7 +32,9 @@ void ASurvivalGameMode::Intro()
 }
 void ASurvivalGameMode::EndIntro()
 {
-    if (auto* PC=GetWorld()->GetFirstPlayerController()) if (auto* Player=Cast<ASurvivalCharacter>(PC->GetPawn())) { PC->SetViewTargetWithBlend(Player,0.8f);Player->GetCharacterMovement()->SetMovementMode(MOVE_Walking); }
+    if (auto* PC=GetWorld()->GetFirstPlayerController()) if (auto* Player=Cast<ASurvivalCharacter>(PC->GetPawn())) { PC->SetViewTargetWithBlend(Player,0.8f);Player->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+        if (auto* Game=Cast<USurvivalGameInstance>(GetGameInstance())) Game->SaveProgress();
+    }
 }
 void ASurvivalGameMode::CaptureProof()
 {
