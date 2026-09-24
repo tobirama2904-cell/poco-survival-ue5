@@ -39,9 +39,9 @@
   "blender_layout_visually_reviewed": true,
   "unreal_gameplay_render_verified": false,
   "physical_device_tested": false,
-  "scene_build_run": 36028188115,
+  "scene_build_run": 36030652636,
   "scene_build_initial_source_commit": "6ace5bbe90ea55ece8e8786f4f8f692e5ff0ff90",
-  "scene_build_last_observed_status": "completed",
+  "scene_build_last_observed_status": "in_progress",
   "scene_first_failure": "36022292082: Content/content directory collision before native compilation; metadata renamed BuildData",
   "character_art": "Licensed Epic mannequin/animations for internal testing only; not final original characters",
   "core_vitals_local_tests": "exhaustion, recovery, melee cost, damage and invalid-input rejection; ASan/UBSan pass",
@@ -60,7 +60,7 @@
   "unreal_map_construction_verified": true,
   "unreal_map_construction_source": "6fab0e9",
   "playable_map_exists_note": "Actual UE map was constructed and saved on the previous ephemeral runner, but private backup failed. Rebuild/private persistence/render pending; no downloadable playable build.",
-  "scene_build_last_observed_conclusion": "success; optional renderer FAILED",
+  "scene_build_last_observed_conclusion": null,
   "scene_actor_native_vitals_tests_verified": true,
   "private_scene_content_preserved": false,
   "android_native_link_verified": true,
@@ -72,5 +72,7 @@
   "private_scene_content_archive_bytes": 227348411,
   "unreal_scene_render_verified": false,
   "unreal_scene_render_failure": "PF_R64_UINT image format undefined on llvmpipe; no PNG/runtime proof",
-  "unreal_native_gameplay_last_compiled_commit": "6ace5bbe90ea55ece8e8786f4f8f692e5ff0ff90"
+  "unreal_native_gameplay_last_compiled_commit": "6ace5bbe90ea55ece8e8786f4f8f692e5ff0ff90",
+  "scene_build_url": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36030652636",
+  "scene_build_source_commit": "627674f4c119fd61c47c00e4f134195524e2730c"
 }

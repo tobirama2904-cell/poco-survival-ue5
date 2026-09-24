@@ -7,8 +7,10 @@ native-only workflow now uses the officially supported `-SkipDeploy` flag and an
 explicit read-only CA-store mount plus a real HTTPS preflight. This does not cook
 content or turn the native output into the requested game.
 
-The original official Linux image inventory reported no Android target-platform
-module. Before attempting an APK with actual content, inspect/build the host
+The original official Linux image inventory checked only the top-level Linux
+binaries directory, but Android Build.cs uses BinariesSubFolder=Android. That
+negative probe is therefore insufficient evidence of absence; recursive scanning
+is now required. Before attempting an APK with actual content, inspect/build the host
 cooking backend and confirm supported cook platforms. Do not fake an installed
 platform declaration or treat successful native linking as a successful cook.
 
@@ -64,3 +66,29 @@ The next render gate explicitly requires PNG + actual input/grounded evidence.
 The same render log exposed automatic Nanite import and a 256-triangle yard
 fallback. Mesh import now explicitly disables Nanite, preserving authored
 geometry for the mobile path. This asset-side fix still requires remote checking.
+
+Additional measured evidence: run 36028188115 scene-import.log loaded both
+TextureFormatASTC (ASTCEnc 5.0.1) and TextureFormatETC2. rendered-game.log loaded
+GLSL_ES3_1_ANDROID and SF_VULKAN_ES31_ANDROID shader formats. Do NOT rebuild
+those working host formats speculatively. Only Linux target platforms were
+registered in that SDK-less scene process; Android registration on a container
+with SDK/NDK still needs testing. Exact-source RulesCompiler/RulesAssembly
+inspection confirms `-ForceRulesCompile` reaches DynamicCompilation even for
+read-only installed rules. If recursive probing confirms missing Android host
+modules, per-module `bUsePrecompiled=false` overrides plus forced rules compilation
+are a concrete next experiment, while preserving existing Linux editor binaries.
+
+Pixel-format failure was narrowed against the pinned source, not guessed from
+Nanite alone: VulkanDevice.cpp MapFormatSupport marks Supported true for a
+buffer-only format. MapImageFormatSupport leaves PlatformFormat=0 if no acceptable
+image format exists. VelocityRendering.cpp chooses the dummy image format using
+Supported alone. The diagnostic fallback checks that exact inconsistent state;
+it does not universally disable R64 or run in Android shipping code.
+
+`android-cook.yml` now implements that experiment: recursive inventory, exact
+owner-private scene restore/checksum, unchanged installed Linux editor reuse,
+selective constructor overrides ONLY for actually absent Android host libraries,
+`-ForceRulesCompile`, then a real Android_ASTC map cook. Working ASTC/ETC2 formats
+are not rebuilt. The workflow requires an actual cooked CanalDistrict.umap and
+retains outputs privately; it does not produce or advertise an APK. Its result
+is pending — writing the workflow is not proof that the backend/cook succeeds.
