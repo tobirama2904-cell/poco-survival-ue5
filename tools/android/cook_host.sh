@@ -6,14 +6,21 @@ mkdir -p artifacts/android-build
 python3 tools/engine_inventory.py
 "$JAVA_HOME/bin/java" tools/android/TrustStoreProbe.java | tee artifacts/android-build/java-trust-store.log
 python3 tools/scene/restore_private_content.py
-python3 tools/android/overlay_source.py
-python3 tools/android/prepare_host_backend.py
-# Installed Linux libraries remain precompiled; only explicitly missing modules
-# have their individual rules overridden. -ForceRulesCompile is supported in 5.7.
+# Recursive inventory proved these host backends ALREADY SHIP in Linux/Android.
+# Do not overlay 70k unnecessary source files/plugins or rebuild engine modules.
+python3 - <<'PYHOST'
+from pathlib import Path
+import json
+engine=Path('/home/ue4/UnrealEngine/Engine');root=engine/'Binaries/Linux'
+names=['AndroidDeviceDetection','AndroidTargetPlatformSettings','AndroidTargetPlatformControls','AndroidTargetPlatform','TextureFormatASTC','TextureFormatETC2']
+found={name:[str(p.relative_to(engine)) for p in root.rglob('libUnrealEditor-'+name+'.so')] for name in names}
+assert all(found.values()),found
+Path('artifacts/android-build/host-backend-selection.json').write_text(json.dumps({'strategy':'reuse actual shipped host modules, no engine-source overlay','modules':found,'engine_modules_rebuilt':False},indent=2)+'\n')
+PYHOST
 set +e
 timeout --foreground 35m "$ENGINE/Engine/Build/BatchFiles/Linux/Build.sh" \
   PocoSurvivalEditor Linux Development -Project=/project/PocoSurvival.uproject \
-  -ForceRulesCompile -MaxParallelActions=2 -NoUBA -NoHotReloadFromIDE -Verbose \
+  -MaxParallelActions=2 -NoUBA -NoHotReloadFromIDE -Verbose \
   2>&1 | tee artifacts/android-build/host-backend-build.log
 RESULT=${PIPESTATUS[0]}
 set -e

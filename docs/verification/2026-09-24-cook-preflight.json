@@ -1,0 +1,14 @@
+{
+  "run": 36031706716,
+  "java_ca_entries": 121,
+  "gradle_tls_http_status": 307,
+  "java_tls_validation_passed": true,
+  "android_host_platform_modules_already_shipped": true,
+  "android_astc_registered_by_cooker": true,
+  "editor_game_cpp_build_succeeded": true,
+  "editor_native_actions": 16,
+  "editor_native_executor_seconds": 35.29,
+  "cooking_succeeded": false,
+  "failure": "Source overlay introduced default-enabled Fab editor plugin without matching binary; process exited before content cooking. Remove unnecessary host source overlay and explicitly disable unused Fab.",
+  "apk_produced": false
+}

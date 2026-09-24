@@ -99,3 +99,21 @@ Cinematic settings used ten 2048-pixel CSM cascades. A bounded corrective render
 now explicitly uses 640x360, two 512-pixel cascades and FXAA. This is a CPU-only
 diagnostic profile, not a POCO profile, quality acceptance or FPS claim. Authored
 geometry remains unchanged.
+
+## Measured correction — host modules were never missing
+
+Run 36031706716 recursively found all four Android host modules in
+`Engine/Binaries/Linux/Android/`. No per-module override was applied. The cooker
+registered Android_ASTC and the other Android variants with the mounted SDK.
+The original top-level-only inventory was wrong. Existing ASTC/ETC2 libraries
+also loaded. The game editor module built in 16 actions / 35.29 executor seconds.
+
+Java CA repair passed for real: 121 trusted entries and HTTPS 307 from the Gradle
+endpoint with certificate verification enabled.
+
+The cook then exited BEFORE cooking because the unnecessary source overlay added
+the default-enabled Fab plugin descriptor without its editor binary. The revised
+host workflow removes the source checkout/overlay and reuses the measured shipped
+host backends. Fab is explicitly disabled as an unused storefront/editor plugin.
+No fake platform declaration or recompilation of host engine modules is needed.
+Actual cooked-map/APK/device gates remain unverified.

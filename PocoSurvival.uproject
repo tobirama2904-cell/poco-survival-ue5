@@ -2,7 +2,7 @@
   "FileVersion": 3,
   "EngineAssociation": "5.7",
   "Category": "Games",
-  "Description": "Original Android survival project. Source foundation; not yet engine-built.",
+  "Description": "Original Android survival game in development; native code and desktop gameplay rendering verified, not released.",
   "Modules": [
     {
       "Name": "PocoSurvival",
@@ -26,6 +26,10 @@
     {
       "Name": "ControlRig",
       "Enabled": true
+    },
+    {
+      "Name": "Fab",
+      "Enabled": false
     }
   ]
 }

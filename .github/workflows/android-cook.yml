@@ -1,4 +1,4 @@
-name: Build missing Android cook backend and cook real retained district
+name: Cook actual district for Android using verified shipped host backend
 on:
   workflow_dispatch:
     inputs:
@@ -42,29 +42,12 @@ jobs:
           print(report,flush=True)
           assert report['disk_free_bytes']>=85*1024**3, 'Insufficient capacity before engine pull'
           PY
-      - name: Fetch authorized pinned dependency manifest and official engine
+      - name: Pull licensed pinned engine with verified Android host modules
         env:
           DOCKER_CONFIG: ${{ runner.temp }}/ue-registry-auth
           GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
         run: |
           set -euo pipefail
-          SOURCE_SHA=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["source_commit"])')
-          gh api -H 'Accept: application/vnd.github.raw+json' "repos/EpicGames/UnrealEngine/contents/Engine/Build/Commit.gitdeps.xml?ref=$SOURCE_SHA" > .cache/engine-dependencies.xml
-          git init .cache/engine-source
-          git -C .cache/engine-source remote add origin https://github.com/EpicGames/UnrealEngine.git
-          git -C .cache/engine-source -c credential.helper= -c 'credential.helper=!gh auth git-credential' fetch --depth=1 --filter=blob:none origin "$SOURCE_SHA"
-          git -C .cache/engine-source sparse-checkout init --no-cone
-          git -C .cache/engine-source sparse-checkout set --no-cone '/Engine/Source/' '/Engine/Config/' '/Engine/Build/' '/Engine/Platforms/' '/Engine/Shaders/' '/Engine/Plugins/**/Source/' '/Engine/Plugins/**/Config/' '/Engine/Plugins/**/Shaders/' '/Engine/Plugins/**/*.uplugin'
-          git -C .cache/engine-source -c credential.helper= -c 'credential.helper=!gh auth git-credential' checkout --detach FETCH_HEAD
-          python3 - <<'PYCODE'
-          import json,subprocess
-          from pathlib import Path
-          root='.cache/engine-source'
-          commit=subprocess.check_output(['git','-C',root,'rev-parse','HEAD'],text=True).strip()
-          epoch=int(subprocess.check_output(['git','-C',root,'show','-s','--format=%ct'],text=True).strip())
-          assert commit==json.loads(Path('BuildData/engine.lock.json').read_text())['source_commit']
-          Path('.cache/engine-source-checkout.json').write_text(json.dumps({'commit':commit,'commit_timestamp':epoch}))
-          PYCODE
           mkdir -p "$DOCKER_CONFIG"
           trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf "$DOCKER_CONFIG"' EXIT
           printf '%s' "$GH_TOKEN" | docker login ghcr.io --username tobirama2904-cell --password-stdin
@@ -86,7 +69,7 @@ jobs:
           done
           test "$READY" = 1
           gh release download "scene-$SCENE_RUN" --repo tobirama2904-cell/poco-ue5-engine-cache --dir .cache/private-scene --pattern game-content.tar.gz --pattern SHA256SUMS
-      - name: Compile only missing host modules and actually cook district for Android ASTC
+      - name: Build game editor module and actually cook district for Android ASTC
         run: |
           set -euo pipefail
           IMAGE=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["reference"])')
