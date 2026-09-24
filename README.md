@@ -6,8 +6,8 @@ Original Android survival-game development for POCO F4. **This repository is not
 
 - GitHub connection and repository administration: confirmed.
 - This repository is public; existing private repositories were not made public.
-- Source engine access: the authenticated EpicGames/UnrealEngine endpoint returned 404. No pending Epic invitation was found. Access must be granted by linking the owner's Epic and GitHub accounts.
-- Engine installation, Unreal import, Android packaging and POCO F4 performance: **not yet verified**.
+- Epic invitation accepted; active membership and authenticated engine source / official registry access confirmed (HTTP 200).
+- Official UE **5.7.4** installed on an external runner; project UHT/UBT compilation and editor startup verified. Native integration rerun is pending; art import, Android packaging and POCO F4 performance are **not yet verified**.
 - A pinned manifest contains 14 genuine CC0 environment assets, about 153 MiB of source data before packaging. These are not placeholder padding.
 
 ## Published and independently downloaded
@@ -52,6 +52,21 @@ python3 tools/art_pack.py package --work /tmp/poco-art --output artifacts
 python3 tools/preview_sheet.py /tmp/poco-art/previews artifacts/art-preview.jpg
 ```
 
+## Actual Unreal build, not just standalone C++
+
+[Run 36006749716](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36006749716)
+installed the digest-pinned official Epic UE 5.7.4 image, ran UHT, compiled and
+linked the game module with UBT, and started UnrealEditor-Cmd. UBT succeeded in
+58.21 seconds. The overall run failed afterwards because the integration Python
+script used an unavailable API; that call was corrected and
+[run 36008146202](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36008146202)
+was dispatched. Its outcome must be checked, not assumed successful.
+
+After runner cleanup, measured free disk was 98.6 GiB; after engine installation
+it was still about 50.4 GiB. The official slim image **does not contain Android
+target-platform modules or Android runtime binaries**. Installing an SDK alone
+will not solve that missing engine-platform component. No APK is claimed.
+
 ## Native game source foundation
 
 The repository now includes `PocoSurvival.uproject`, a native runtime module,
@@ -85,5 +100,5 @@ Blender CPU-render integration test passed inside the 4-core workshop. It was
 stopped after verification. Measured workspace free space was about 27.9 GiB.
 The optional workshop has a 5-minute idle timeout and 60-minute stopped retention;
 its machine can expire, while the definition, code and published art remain on GitHub.
-The official precompiled Linux UE page was also checked and redirects to
-“Epic Account Required”; no Epic login or UE installation is claimed.
+The website ZIP route requires a separate Epic web login, but the authorized
+official GHCR image route now works and has been used for a real editor build.

@@ -1,0 +1,49 @@
+{
+  "phase": "first-real-unreal-editor-build",
+  "run_id": 36006749716,
+  "run_url": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36006749716",
+  "workflow_conclusion": "failure",
+  "source_commit": "81b8ff3",
+  "engine_version": "5.7.4",
+  "epic_membership": "active; invitation accepted by assistant with user authorization",
+  "engine_source_access_http": 200,
+  "registry_access_http": 200,
+  "uht_succeeded": true,
+  "ubt_succeeded": true,
+  "ubt_total_seconds": 58.21,
+  "editor_launched": true,
+  "native_class_lookup_succeeded": true,
+  "native_instance_integration_succeeded": false,
+  "failure": "Integration Python script used unavailable unreal.get_transient_package API. Corrected to unreal.new_object(cls); rerun 36008146202 dispatched.",
+  "runner_capacity": {
+    "disk_free_bytes": 105858965504,
+    "ram_bytes": 16766414848
+  },
+  "engine_inventory": {
+    "phase": "official-engine-inventory",
+    "version": {
+      "MajorVersion": 5,
+      "MinorVersion": 7,
+      "PatchVersion": 4,
+      "Changelist": 51494982,
+      "CompatibleChangelist": 47537391,
+      "IsLicenseeVersion": 0,
+      "IsPromotedBuild": 1,
+      "BranchName": "UE5"
+    },
+    "installed_build_marker": true,
+    "editor_binary_exists": true,
+    "android_target_platform_module_exists": false,
+    "android_binary_directory_exists": false,
+    "android_installed_platform_declared": false,
+    "android_sdk_environment_present": false,
+    "linux_toolchain_directory_exists": true,
+    "container_free_disk_bytes": 54075371520,
+    "android_package_tested": false,
+    "visual_render_tested": false,
+    "physical_device_tested": false
+  },
+  "gameplay_visuals_verified": false,
+  "android_apk_produced": false,
+  "poco_device_tested": false
+}

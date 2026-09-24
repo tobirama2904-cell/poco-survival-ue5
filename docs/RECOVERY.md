@@ -21,8 +21,11 @@ published art; a chat error is not evidence that these were deleted.
 6. Codespaces is optional, allowance-limited and stopped when unused. Do not enable
    paid runners, paid upgrades or automatic unbounded compute. The workshop may
    auto-delete after its short retention period; its definition remains in git.
-7. Epic account/source access and an actual engine installation remain unresolved.
-   No engine binaries, Epic source, tokens or signing keys are in this public repo.
+7. Epic membership and source/registry access are confirmed. The official UE 5.7.4
+   editor was installed and compiled this project on an external runner. Check
+   the latest engine-probe run before retrying; the remaining engine-platform gap
+   is Android support, not Epic authorization. Never publish engine binaries,
+   Epic source, tokens or signing keys in this public repo.
 
 ## Non-negotiable project scope
 
