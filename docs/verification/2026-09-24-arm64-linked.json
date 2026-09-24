@@ -1,0 +1,20 @@
+{
+  "run": 36021238459,
+  "source_commit": "499e2d8fb7f331c38fdddf7c6791b571fef52e98",
+  "native_cpp_action_graph_completed": true,
+  "native_actions": 843,
+  "native_executor_seconds": 2435.05,
+  "linked_library": "PocoSurvival-arm64.so",
+  "linked_bytes": 999680224,
+  "native_link_evidence": "Actions 842 (clang++ link) and 843 (receipt) completed; UBT proceeded to Android deployment and Gradle",
+  "overall_result": "failure",
+  "failure": "Java HTTPS trustAnchors empty while downloading Gradle 8.7; native compilation/link completed before this post-build failure",
+  "private_cache_release": "android-5.7.4-dev-36021238459",
+  "private_cache_uncompressed_bytes": 6756451747,
+  "private_cache_compressed_bytes": 2627992938,
+  "real_private_cache_publication_verified": true,
+  "real_private_cache_restore_verified": false,
+  "cgroup_oom_events": 0,
+  "content_cooked": false,
+  "apk_produced": false
+}

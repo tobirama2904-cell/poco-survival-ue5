@@ -4,6 +4,7 @@ cd /project
 ENGINE=/home/ue4/UnrealEngine
 mkdir -p artifacts/android-build
 python3 tools/engine_inventory.py
+"$JAVA_HOME/bin/java" tools/android/TrustStoreProbe.java | tee artifacts/android-build/java-trust-store.log
 python3 tools/android/overlay_source.py
 python3 tools/android/engine_deps.py --manifest .cache/engine-dependencies.xml --engine-root "$ENGINE" --report artifacts/android-build/dependency-report.json
 # The official installed image lacks Android prebuilts but includes source.
@@ -19,7 +20,7 @@ fi
 set +e
 timeout --foreground 180m "$ENGINE/Engine/Build/BatchFiles/Linux/Build.sh" \
   PocoSurvival Android Development -Project=/project/PocoSurvival.uproject \
-  -architectures=arm64 -MaxParallelActions=2 -NoUBA -NoHotReloadFromIDE -Verbose \
+  -architectures=arm64 -MaxParallelActions=2 -NoUBA -NoHotReloadFromIDE -Verbose -SkipDeploy \
   2>&1 | tee artifacts/android-build/native-build.log
 RESULT=${PIPESTATUS[0]}
 set -e
@@ -27,10 +28,12 @@ export NATIVE_BUILD_EXIT="$RESULT"
 cp "$ENGINE/Engine/Programs/UnrealBuildTool/Log.txt" artifacts/android-build/ubt-detailed.log || true
 cat /sys/fs/cgroup/memory.events > artifacts/android-build/container-memory.log || true
 python3 - <<'PY'
-import json,os
+import json,os,sys
 from pathlib import Path
-binaries=[{'name':p.name,'bytes':p.stat().st_size} for p in Path('/project/Binaries/Android').glob('*.so')]
-result={'phase':'android-native-source-build','exit_code':int(os.environ['NATIVE_BUILD_EXIT']),'native_binaries':binaries,'native_compilation_succeeded':int(os.environ['NATIVE_BUILD_EXIT'])==0 and bool(binaries),'content_cooked':False,'apk_produced':False,'physical_device_tested':False}
+sys.path.insert(0,'tools/android')
+from inspect_elf import inspect
+binaries=[inspect(p) for p in Path('/project/Binaries/Android').glob('*.so')]
+result={'phase':'android-native-source-build','exit_code':int(os.environ['NATIVE_BUILD_EXIT']),'native_binaries':binaries,'phase_explicitly_skips_deployment_and_packaging':True,'arm64_elf_outputs_verified':bool(binaries),'native_compilation_succeeded':int(os.environ['NATIVE_BUILD_EXIT'])==0 and bool(binaries),'content_cooked':False,'apk_produced':False,'physical_device_tested':False}
 Path('artifacts/android-build/native-result.json').write_text(json.dumps(result,indent=2)+'\n');print('ANDROID_NATIVE_RESULT',json.dumps(result),flush=True)
 PY
 # Save useful partial work even when compilation fails. This folder must ONLY

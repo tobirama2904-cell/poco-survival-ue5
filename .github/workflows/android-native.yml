@@ -73,11 +73,15 @@ jobs:
         run: |
           set -euo pipefail
           IMAGE=$(python3 -c 'import json; print(json.load(open("BuildData/engine.lock.json"))["reference"])')
+          CA_STORE=$(readlink -f "$JAVA_HOME_21_X64/lib/security/cacerts")
+          test -s "$CA_STORE"
           sudo chown -R 1000:1000 "$GITHUB_WORKSPACE"
           docker run --rm --cpus=4 --memory=13g --memory-swap=13g --shm-size=1g \
             --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/project" \
             --mount "type=bind,src=$ANDROID_HOME,dst=/opt/android,readonly" \
             --mount "type=bind,src=$JAVA_HOME_21_X64,dst=/opt/java21,readonly" \
+            --mount "type=bind,src=$CA_STORE,dst=/opt/java-truststore/cacerts,readonly" \
+            -e JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=/opt/java-truststore/cacerts \
             -e ANDROID_HOME=/opt/android -e ANDROID_SDK_ROOT=/opt/android \
             -e NDKROOT=/opt/android/ndk/27.2.12479018 -e JAVA_HOME=/opt/java21 \
             -e GAME_SOURCE_SHA="$GITHUB_SHA" \
