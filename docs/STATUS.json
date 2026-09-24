@@ -45,7 +45,7 @@
   "scene_first_failure": "36022292082: Content/content directory collision before native compilation; metadata renamed BuildData",
   "character_art": "Licensed Epic mannequin/animations for internal testing only; not final original characters",
   "core_vitals_local_tests": "exhaustion, recovery, melee cost, damage and invalid-input rejection; ASan/UBSan pass",
-  "latest_verified_gameplay_cpp_source": "e237db03a52665281d0c343740f661726e3a709a",
+  "latest_verified_gameplay_cpp_source": "dfc0af8",
   "gameplay_cpp_verification": {
     "run": 36024498135,
     "attempt": 1,
@@ -53,5 +53,8 @@
     "ubt_actions": 16,
     "ubt_seconds": 66.18,
     "result": "success; subsequent Python save-fixture setup failed, map step not yet reached"
-  }
+  },
+  "gameplay_save_generation_native_verified": true,
+  "scene_second_attempt": "UHT/UBT and native save tests passed; glTF asset import wrote real UE assets, then AssetTools Content Browser sync crashed without Slate in commandlet",
+  "unreal_scene_assets_imported_before_ui_crash": true
 }

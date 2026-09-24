@@ -10,8 +10,15 @@ actors=unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 mesh_tools=unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem)
 report={'phase':'native-editor-scene-construction','source_glb_sha256':recipe['glb_sha256'],'visual_render_tested':False,'android_package_tested':False,'physical_device_tested':False}
 def import_file(file,destination):
- task=unreal.AssetImportTask();task.filename=str(file);task.destination_path=destination;task.automated=True;task.replace_existing=True;task.save=True
- asset_tools.import_asset_tasks([task]);paths=list(task.imported_object_paths);print('IMPORTED_PATHS',json.dumps(paths));assert paths,('Import produced no assets',str(file))
+ # AssetTools.ImportAssetTasks completed the import but then tried to sync
+ # the Content Browser, crashing in FSlateApplication under a commandlet.
+ # Call the synchronous Interchange API directly, without a browser callback.
+ manager=unreal.InterchangeManager.get_interchange_manager_scripted()
+ data=unreal.InterchangeManager.create_source_data(str(file))
+ params=unreal.ImportAssetParameters();params.set_editor_property('is_automated',True);params.set_editor_property('replace_existing',True)
+ assert manager.import_asset(destination,data,params),('Interchange import failed',str(file))
+ unreal.EditorAssetLibrary.save_directory(destination,False,True)
+ paths=list(unreal.EditorAssetLibrary.list_assets(destination,True,False));print('IMPORTED_PATHS',json.dumps(paths));assert paths,('Import produced no assets',str(file))
  return paths
 try:
  import_file(source/'courtyard.glb','/Game/Environment/Courtyard')
@@ -35,8 +42,9 @@ try:
    else:meshes.append(ob)
  assert all(k in frames for k in ['ORIGIN','X','Y','Z']),str(frames)
  origin=frames['ORIGIN'];axes=[frames[k]-origin for k in ['X','Y','Z']]
- for axis in axes:assert abs(axis.length()-100)<.1,('Invalid metre conversion',axis)
- assert abs(axes[0].dot(axes[1]))<.1 and abs(axes[0].dot(axes[2]))<.1 and abs(axes[1].dot(axes[2]))<.1
+ for axis in axes:assert abs((axis.x**2+axis.y**2+axis.z**2)**.5-100)<.1,('Invalid metre conversion',axis)
+ def dot(a,b):return a.x*b.x+a.y*b.y+a.z*b.z
+ assert abs(dot(axes[0],axes[1]))<.1 and abs(dot(axes[0],axes[2]))<.1 and abs(dot(axes[1],axes[2]))<.1
  def point(p):return origin+axes[0]*p[0]+axes[1]*p[1]+axes[2]*p[2]
  report['measured_import_basis_cm']=[[v.x,v.y,v.z] for v in axes]
  assert level.new_level('/Game/Worlds/CanalDistrict'),'Could not create actual map package'
