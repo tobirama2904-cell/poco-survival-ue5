@@ -11,13 +11,15 @@
   "playable_map_exists": false,
   "android_apk_exists": false,
   "epic_source_api_last_status": 200,
-  "next_gate": "Complete corrected headless integration; obtain/build missing Android platform modules and runtime, then import/cook/package and inspect actual scenes",
+  "next_gate": "Build/add missing Android engine platform components with pinned SDK/NDK, then import content, author and inspect scenes, cook/package for Android and measure on POCO F4",
   "never_claim": "The art collection or native logic tests are not a playable or device-tested game.",
   "engine_installation_scope": "Verified on ephemeral GitHub-hosted runner, not installed in the chat workspace",
   "epic_membership": "active",
-  "latest_engine_build_run": 36006749716,
-  "latest_engine_build_result": "UHT/UBT succeeded; headless test script failed",
+  "latest_engine_build_run": 36008146202,
+  "latest_engine_build_result": "success: UHT, UBT, headless native integration, two-slot save/load and truncated-slot recovery",
   "native_integration_rerun": 36008146202,
-  "native_integration_rerun_result": "pending",
-  "android_platform_in_official_image": false
+  "native_integration_rerun_result": "success",
+  "android_platform_in_official_image": false,
+  "native_integration_verified": true,
+  "latest_verified_unreal_source_commit": "c2c9893"
 }

@@ -7,7 +7,7 @@ Original Android survival-game development for POCO F4. **This repository is not
 - GitHub connection and repository administration: confirmed.
 - This repository is public; existing private repositories were not made public.
 - Epic invitation accepted; active membership and authenticated engine source / official registry access confirmed (HTTP 200).
-- Official UE **5.7.4** installed on an external runner; project UHT/UBT compilation and editor startup verified. Native integration rerun is pending; art import, Android packaging and POCO F4 performance are **not yet verified**.
+- Official UE **5.7.4** installed on an external runner; project UHT/UBT compilation and editor startup verified. Native quest/inventory/choice integration, save/load and recovery from a truncated newest save slot passed inside UE. Art import, Android packaging and POCO F4 performance are **not yet verified**.
 - A pinned manifest contains 14 genuine CC0 environment assets, about 153 MiB of source data before packaging. These are not placeholder padding.
 
 ## Published and independently downloaded
@@ -60,7 +60,10 @@ linked the game module with UBT, and started UnrealEditor-Cmd. UBT succeeded in
 58.21 seconds. The overall run failed afterwards because the integration Python
 script used an unavailable API; that call was corrected and
 [run 36008146202](https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36008146202)
-was dispatched. Its outcome must be checked, not assumed successful.
+**completed successfully**: three native classes loaded, eleven objective definitions
+were available, native inventory and choices worked, save/load passed, and the
+older valid save slot was recovered after truncating the newest slot. This is a
+headless integration check, not gameplay footage or a device test.
 
 After runner cleanup, measured free disk was 98.6 GiB; after engine installation
 it was still about 50.4 GiB. The official slim image **does not contain Android

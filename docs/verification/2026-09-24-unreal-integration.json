@@ -1,0 +1,54 @@
+{
+  "run_id": 36008146202,
+  "run_url": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36008146202",
+  "conclusion": "success",
+  "source_commit": "c2c9893",
+  "reports": {
+    "engine-inventory.json": {
+      "phase": "official-engine-inventory",
+      "version": {
+        "MajorVersion": 5,
+        "MinorVersion": 7,
+        "PatchVersion": 4,
+        "Changelist": 51494982,
+        "CompatibleChangelist": 47537391,
+        "IsLicenseeVersion": 0,
+        "IsPromotedBuild": 1,
+        "BranchName": "UE5"
+      },
+      "installed_build_marker": true,
+      "editor_binary_exists": true,
+      "android_target_platform_module_exists": false,
+      "android_binary_directory_exists": false,
+      "android_installed_platform_declared": false,
+      "android_sdk_environment_present": false,
+      "core_private_cpp_present": true,
+      "android_platform_source_present": true,
+      "android_ubt_source_present": true,
+      "linux_toolchain_directory_exists": true,
+      "container_free_disk_bytes": 54372249600,
+      "android_package_tested": false,
+      "visual_render_tested": false,
+      "physical_device_tested": false
+    },
+    "runner-capacity.json": {
+      "disk_free_bytes": 106156134400,
+      "ram_bytes": 16766406656
+    },
+    "unreal-integration.json": {
+      "phase": "unreal-headless-native-integration",
+      "native_classes_loaded": 3,
+      "objective_count": 11,
+      "native_inventory_and_choices_tested": true,
+      "save_write_and_load_tested": true,
+      "truncated_newest_slot_recovery_tested": true,
+      "unreal_editor_version": "5.7.4-51494982+UE5",
+      "visual_render_tested": false,
+      "android_package_tested": false,
+      "physical_device_tested": false
+    }
+  },
+  "uht_and_ubt_succeeded": true,
+  "visual_gameplay_build": false,
+  "android_apk_produced": false
+}

@@ -6,8 +6,8 @@
 is consumed by the Unreal GameInstance and compiled independently by the core CI.
 The official UE 5.7.4 image is now verified on an external runner: **UHT and UBT
 compiled and linked GameInstance, interaction and SaveGame adapter code**. Editor
-startup and native class lookup passed; the corrected native integration test is
-still pending, so instance behaviour and save I/O are not yet claimed verified. There is no map,
+startup, native class/instance use, objectives, inventory, choices, save/load and
+recovery from a truncated newest save slot have passed inside the actual engine. There is no map,
 character, controller, combat, touch UI, animation, audio, cutscene or APK yet.
 The art Release is still a separate, unimported resource collection.
 
@@ -23,11 +23,12 @@ Implemented and native-tested domain logic:
   limited graph. This does not prove a future physical level is navigable or fun.
 - 16,000 deterministic randomized action attempts with rollback/replay checks.
 
-Unreal integration source, engine-compiled; behavioural verification pending:
+Unreal integration, engine-compiled and headlessly tested:
 - Blueprint-accessible objectives, inventory and world flags.
 - A quest-prop actor with range and line-of-sight checks; no per-frame tick.
 - Two alternating save slots. Loading selects the newest replay-valid slot.
-  Actual disk interruption, Android storage and recovery tests are pending.
+  Recovery from a deliberately truncated newest slot passed in the Linux editor.
+  Actual power interruption and Android storage/device tests remain pending.
 
 ## Original dramatic premise (working outline, not a finished script)
 
@@ -50,7 +51,7 @@ an offered replacement for the requested several-hour campaign.
 
 ## Quality and performance gates
 
-Before growing the campaign: finish native integration; add the Android platform
+Before growing the campaign: add the Android platform
 components missing from the official Linux-only image and pin the Android toolchain; import the actual
 art; author representative interior/exterior spaces; integrate a properly rigged
 character and locomotion; build touch controls, combat, stealth and a directed
