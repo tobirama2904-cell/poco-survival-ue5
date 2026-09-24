@@ -97,6 +97,12 @@ jobs:
           done
           test "$READY" = 1
           gh release download "mobile-cook-$COOK_RUN" --repo tobirama2904-cell/poco-ue5-engine-cache --dir .cache/private-cook --pattern cooked-and-host.tar.gz --pattern SHA256SUMS
+      - name: Reject stale native gameplay or mismatched cooked C++ definitions
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+          NATIVE_RUN: ${{ inputs.native_run }}
+          COOK_RUN: ${{ inputs.cook_run }}
+        run: python3 tools/android/verify_package_sources.py
       - name: Start licensed packaging environment
         run: |
           set -euo pipefail
