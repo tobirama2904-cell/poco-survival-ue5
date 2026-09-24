@@ -23,7 +23,7 @@ Requires Python 3, Blender with glTF import/export, and Pillow for the contact s
 ```sh
 python3 -m unittest discover -s tests -v
 python3 tools/art_pack.py fetch --work /tmp/poco-art
-blender --background --threads 2 --python tools/condition_assets.py -- /tmp/poco-art
+blender --background --threads 2 --python-exit-code 1 --python tools/condition_assets.py -- /tmp/poco-art
 python3 tools/art_pack.py package --work /tmp/poco-art --output artifacts
 python3 tools/preview_sheet.py /tmp/poco-art/previews artifacts/art-preview.jpg
 ```

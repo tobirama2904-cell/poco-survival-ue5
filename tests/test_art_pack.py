@@ -5,7 +5,7 @@ from art_pack import safe_path,sha,validate_model,zip_tree
 class ArtPipelineTests(unittest.TestCase):
  def test_safe_relative_path(self):self.assertEqual(safe_path('textures/a.jpg'),Path('textures/a.jpg'))
  def test_traversal_is_rejected(self):
-  for x in ['../a','textures/../../a','%2e%2e/a','/etc/passwd','C:/file','a\\b']:
+  for x in ['../a','textures/../../a','%2e%2e/a','/etc/passwd','C:/file','a\\b','a%5Cb','C%3A/file','']:
    with self.subTest(x=x),self.assertRaises(ValueError):safe_path(x)
  def test_hash_known_bytes(self):
   with tempfile.TemporaryDirectory() as d:
@@ -27,4 +27,10 @@ class ArtPipelineTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    folder=Path(d);(folder/'a.gltf').write_text(json.dumps({'asset':{'version':'2.0'}}))
    with self.assertRaises(AssertionError):validate_model(folder,{'id':'empty','entrypoint':'a.gltf','files':[{'path':'a.gltf'}]})
+ def test_ci_blender_errors_are_fatal(self):
+  workflow=(Path(__file__).resolve().parents[1]/'.github/workflows/art-build.yml').read_text()
+  invocations=[line for line in workflow.splitlines() if 'run: blender ' in line]
+  self.assertGreaterEqual(len(invocations),2)
+  self.assertTrue(all('--python-exit-code 1' in line for line in invocations))
+  self.assertIn('blender python3-numpy',workflow)
 if __name__=='__main__':unittest.main()

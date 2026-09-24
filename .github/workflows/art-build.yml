@@ -22,12 +22,14 @@ jobs:
       - name: Install art build tools
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends blender
+          sudo apt-get install -y --no-install-recommends blender python3-numpy
           python3 -m pip install --disable-pip-version-check pillow==11.3.0
+      - name: Verify Blender Python dependencies
+        run: blender --background --threads 2 --python-exit-code 1 --python-expr "import bpy, numpy; print('BLENDER_NUMPY_READY', bpy.app.version_string, numpy.__version__)"
       - name: Download and verify pinned CC0 source files
         run: python3 tools/art_pack.py fetch --work "$RUNNER_TEMP/art"
       - name: Condition actual meshes and textures; render studio previews
-        run: blender --background --threads 2 --python tools/condition_assets.py -- "$RUNNER_TEMP/art"
+        run: blender --background --threads 2 --python-exit-code 1 --python tools/condition_assets.py -- "$RUNNER_TEMP/art"
       - name: Package and verify archives
         run: |
           python3 tools/art_pack.py package --work "$RUNNER_TEMP/art" --output artifacts

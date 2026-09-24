@@ -15,8 +15,9 @@ def sha(path, algo='sha256'):
  return h.hexdigest()
 
 def safe_path(name):
- p=PurePosixPath(unquote(name))
- if p.is_absolute() or '..' in p.parts or '\\' in name or ':' in name:raise ValueError('Unsafe relative path')
+ decoded=unquote(name)
+ p=PurePosixPath(decoded)
+ if not decoded or p.is_absolute() or '..' in p.parts or '\\' in decoded or ':' in decoded:raise ValueError('Unsafe relative path')
  return Path(*p.parts)
 
 def fetch_file(item):
