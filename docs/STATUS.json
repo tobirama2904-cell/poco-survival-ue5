@@ -112,7 +112,10 @@
   "android_apk_cooked_source_commit": "5896a9da47971213c48f39e730f44f68f1eeff59",
   "android_apk_signed_and_verified": true,
   "android_apk_independently_downloaded_and_checked": true,
-  "android_install_verified": false,
+  "android_install_verified": true,
   "encounter_persistence_verification_scope": "Actual UE5.7.4 Linux editor save/dead+damaged restore/invalid+duplicate fallback and rendered walking; not Android",
-  "encounter_persistence_in_current_apk": false
+  "encounter_persistence_in_current_apk": false,
+  "android_install_verification_scope": "Signed APK installed successfully on official Android 11 x86_64/ARM64-translation emulator; startup failed in native translator",
+  "android_launch_verified": false,
+  "android_install_test_run": 36041635033
 }

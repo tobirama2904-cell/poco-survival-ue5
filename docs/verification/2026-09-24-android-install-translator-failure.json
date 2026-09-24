@@ -1,0 +1,23 @@
+{
+  "physical_device_tested": false,
+  "poco_f4_tested": false,
+  "fps_claimed": false,
+  "arm_translation_emulator_only": true,
+  "installed": true,
+  "launch_survived": false,
+  "visual_quality_review_required": true,
+  "abis": "x86_64,x86,arm64-v8a,armeabi-v7a,armeabi",
+  "native_bridge": "libndk_translation.so",
+  "android_version": "11",
+  "build_fingerprint": "google/sdk_gphone_x86_64/generic_x86_64_arm64:11/RSR1.240422.006/12134477:userdebug/dev-keys",
+  "activity": "com.pocosurvival.game/com.epicgames.unreal.SplashActivity",
+  "pid_after_start": "",
+  "screenshots": [
+    {
+      "file": "android-start.png",
+      "width": 1080,
+      "height": 1920
+    }
+  ],
+  "failure": "RuntimeError: Game process did not survive startup"
+}

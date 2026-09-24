@@ -40,12 +40,12 @@ jobs:
           export JAVA_HOME="$JAVA_HOME_21_X64"
           export PATH="$JAVA_HOME/bin:$PATH"
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
-          "$SDKMANAGER" "platform-tools" "emulator" "system-images;android-30;google_apis;x86_64" "build-tools;35.0.1"
+          "$SDKMANAGER" "platform-tools" "emulator" "system-images;android-35;google_apis;x86_64" "build-tools;35.0.1"
           mkdir -p artifacts/android-emulator
           "$SDKMANAGER" --list_installed > artifacts/android-emulator/sdk-installed.log
           mkdir -p "$ANDROID_AVD_HOME" "$ANDROID_USER_HOME"
-          printf 'no\n' | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd --force --name GameInstallCheck --package "system-images;android-30;google_apis;x86_64" --device pixel_2 --path "$ANDROID_AVD_HOME/GameInstallCheck.avd"
-          printf 'avd.ini.encoding=UTF-8\npath=%s\ntarget=android-30\n' "$ANDROID_AVD_HOME/GameInstallCheck.avd" > "$ANDROID_AVD_HOME/GameInstallCheck.ini"
+          printf 'no\n' | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd --force --name GameInstallCheck --package "system-images;android-35;google_apis;x86_64" --device pixel_2 --path "$ANDROID_AVD_HOME/GameInstallCheck.avd"
+          printf 'avd.ini.encoding=UTF-8\npath=%s\ntarget=android-35\n' "$ANDROID_AVD_HOME/GameInstallCheck.avd" > "$ANDROID_AVD_HOME/GameInstallCheck.ini"
           "$ANDROID_HOME/emulator/emulator" -list-avds | tee artifacts/android-emulator/avd-list.log
           grep -qx GameInstallCheck artifacts/android-emulator/avd-list.log
           python3 tools/android/verify_apk.py
