@@ -1,0 +1,15 @@
+{
+  "run_id": 36005283944,
+  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36005283944",
+  "source_commit": "55d823912e8ef3f0fa199de21627ebad3af5975b",
+  "conclusion": "success",
+  "observed_result": [
+    "CORE_TEST_PASS checks=46819 reachable_states=40 terminal_variants=4 randomized_attempts=16000"
+  ],
+  "scope": "Engine-independent C++20 quest/inventory/event-journal domain with AddressSanitizer and UndefinedBehaviorSanitizer",
+  "unreal_header_tool_tested": false,
+  "unreal_adapter_compiled": false,
+  "android_apk_produced": false,
+  "physical_poco_f4_tested": false,
+  "visual_game_build_produced": false
+}

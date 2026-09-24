@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "updated_date": "2026-09-24",
+  "engine": "Unreal Engine 5; minor version not yet pinned",
+  "source_project": "PocoSurvival.uproject",
+  "latest_verified_game_source_commit": "55d823912e8ef3f0fa199de21627ebad3af5975b",
+  "core_ci": "https://github.com/tobirama2904-cell/poco-survival-ue5/actions/runs/36005283944",
+  "art_release": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/tag/artpack-001-3",
+  "engine_installed": false,
+  "unreal_code_built": false,
+  "playable_map_exists": false,
+  "android_apk_exists": false,
+  "epic_source_api_last_status": 404,
+  "next_gate": "Authorized engine access, pinned UE/Android toolchain, UHT/UBT compilation and real import/cook/package verification",
+  "never_claim": "The art collection or native logic tests are not a playable or device-tested game."
+}
