@@ -2,10 +2,12 @@
 Source art remains untouched. Candidate meshes require later in-engine review.
 """
 import bpy,sys,json,math,struct
+import _cycles
 from pathlib import Path
 from mathutils import Vector
 args=sys.argv[sys.argv.index('--')+1:];work=Path(args[0]);root=Path(__file__).resolve().parents[1]
-lock=json.loads((root/'content/assets.lock.json').read_text());out=work/'mobile';out.mkdir(parents=True,exist_ok=True)
+lock_path=Path(args[1]) if len(args)>1 else root/'content/assets.lock.json'
+lock=json.loads(lock_path.read_text());out=work/'mobile';out.mkdir(parents=True,exist_ok=True)
 preview=work/'previews';preview.mkdir(exist_ok=True)
 results=[]
 
@@ -14,8 +16,8 @@ def tri_count(obj):return sum(max(0,len(p.vertices)-2) for p in obj.data.polygon
 def studio_render(asset,meshes):
  points=[o.matrix_world@Vector(c) for o in meshes for c in o.bound_box]
  low=Vector([min(p[i] for p in points) for i in range(3)]);high=Vector([max(p[i] for p in points) for i in range(3)])
- center=(low+high)/2;radius=max(.2,(high-low).length()/2)
- scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.device='CPU';scene.cycles.samples=16;scene.cycles.use_denoising=True
+ center=(low+high)/2;radius=max(.2,(high-low).length/2)
+ scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.device='CPU';scene.cycles.use_denoising=bool(getattr(_cycles,'with_openimagedenoise',False));scene.cycles.samples=32 if scene.cycles.use_denoising else 96
  scene.render.resolution_x=640;scene.render.resolution_y=640;scene.render.resolution_percentage=100
  world=bpy.data.worlds.new('Neutral studio');world.use_nodes=True;world.node_tree.nodes['Background'].inputs['Color'].default_value=(.22,.25,.29,1);world.node_tree.nodes['Background'].inputs['Strength'].default_value=.5;scene.world=world
  bpy.ops.object.camera_add(location=center+Vector((1.4,-1.9,1.1))*radius);camera=bpy.context.object;camera.rotation_euler=(center-camera.location).to_track_quat('-Z','Y').to_euler();camera.data.lens=46;camera.data.clip_end=max(100,20*radius);scene.camera=camera
