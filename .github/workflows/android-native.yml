@@ -1,0 +1,92 @@
+name: Build real Android native code from authorized UE source
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: android-native-source-build
+  cancel-in-progress: false
+jobs:
+  android-native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Test dependency integrity and safe extraction
+        run: python3 -m unittest discover -s tests/android -v
+      - name: Prepare disposable runner capacity and pinned Android SDK
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet /usr/local/.ghcup /opt/ghc /opt/hostedtoolcache/CodeQL
+          docker image prune -af
+          mkdir -p .cache artifacts/android-build
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          test -x "$JAVA_HOME/bin/java"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          printf 'y\ny\ny\ny\ny\ny\ny\ny\ny\ny\n' | "$SDKMANAGER" --licenses >/dev/null
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platforms;android-35" "build-tools;35.0.1" "ndk;27.2.12479018"
+          "$JAVA_HOME/bin/java" -version
+          cat "$ANDROID_HOME/ndk/27.2.12479018/source.properties"
+          python3 - <<'PY'
+          import json,os,shutil
+          from pathlib import Path
+          report={'disk_free_bytes':shutil.disk_usage('/var/lib/docker').free,'ram_bytes':os.sysconf('SC_PHYS_PAGES')*os.sysconf('SC_PAGE_SIZE'),'sdk_platform':35,'ndk':'27.2.12479018','build_tools':'35.0.1','java_major':21}
+          Path('artifacts/android-build/host-toolchain.json').write_text(json.dumps(report,indent=2))
+          print(report,flush=True)
+          assert report['disk_free_bytes']>=85*1024**3, 'Insufficient capacity before engine pull'
+          PY
+      - name: Fetch authorized pinned dependency manifest and official engine
+        env:
+          DOCKER_CONFIG: ${{ runner.temp }}/ue-registry-auth
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: |
+          set -euo pipefail
+          SOURCE_SHA=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["source_commit"])')
+          gh api -H 'Accept: application/vnd.github.raw+json' "repos/EpicGames/UnrealEngine/contents/Engine/Build/Commit.gitdeps.xml?ref=$SOURCE_SHA" > .cache/engine-dependencies.xml
+          mkdir -p "$DOCKER_CONFIG"
+          trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf "$DOCKER_CONFIG"' EXIT
+          printf '%s' "$GH_TOKEN" | docker login ghcr.io --username tobirama2904-cell --password-stdin
+          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          timeout --foreground 20m docker pull "$IMAGE"
+      - name: Compile actual ARM64 Android game code and checkpoint intermediates
+        run: |
+          set -euo pipefail
+          IMAGE=$(python3 -c 'import json; print(json.load(open("content/engine.lock.json"))["reference"])')
+          sudo chown -R 1000:1000 "$GITHUB_WORKSPACE"
+          docker run --rm --cpus=4 --memory=13g --memory-swap=13g --shm-size=1g \
+            --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/project" \
+            --mount "type=bind,src=$ANDROID_HOME,dst=/opt/android,readonly" \
+            --mount "type=bind,src=$JAVA_HOME_21_X64,dst=/opt/java21,readonly" \
+            -e ANDROID_HOME=/opt/android -e ANDROID_SDK_ROOT=/opt/android \
+            -e NDKROOT=/opt/android/ndk/27.2.12479018 -e JAVA_HOME=/opt/java21 \
+            -e GAME_SOURCE_SHA="$GITHUB_SHA" \
+            --entrypoint /bin/bash "$IMAGE" /project/tools/android/build_native.sh
+      - name: Preserve licensed intermediates in private cache only
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ ! -s .cache/private-engine-cache/android-cache-manifest.json ]]; then
+            echo 'No useful compiled intermediates to preserve.'
+            exit 0
+          fi
+          test "$(gh api repos/tobirama2904-cell/poco-ue5-engine-cache --jq .private)" = true
+          TAG="android-5.7.4-dev-${GITHUB_RUN_ID}"
+          gh release create "$TAG" .cache/private-engine-cache/* \
+            --repo tobirama2904-cell/poco-ue5-engine-cache --prerelease \
+            --title "Private Android engine intermediates ${GITHUB_RUN_ID}" \
+            --notes 'Licensed build intermediates for the owner. May be incomplete; consult manifest. NOT an APK or playable release. Do not republish engine data publicly.'
+      - name: Upload diagnostic reports only (never engine binaries)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: android-native-diagnostics-${{ github.run_id }}
+          path: |
+            artifacts/android-build/*.json
+            artifacts/android-build/*.log
+            artifacts/engine-probe/engine-inventory.json
+          retention-days: 7
+          if-no-files-found: warn
