@@ -64,3 +64,13 @@ is absent in headless mode. Corrected to the already-tested BodySetup collision
 path; retry required. Character/audio imports are not final visual approval.
 Corrected Android run **36126987127** is queued behind the old-source native
 run; no source-mismatched packaging is approved.
+
+Attempt 3 exposed another Python API error (required sweep/teleport arguments),
+fixed in `a6b79ed`. Also closed a **pipeline false-green hole**: successful base
+map files alone no longer approve a failed field-population pass. A fresh
+`scene-ready.json` is required only after all stages and all 24 caches/24 doors.
+Old incomplete scene **36126057549 was cancelled** even though its frame stage
+had begun; it is not approved for packaging. Fresh strict scene **36128450801**
+uses source `64dc5cc`. Corrected native **36126987127** uses compatible C++
+`1cdc496`; initial-source native **36126059454** is retained only for checkpoint
+work, not approval of latest code. Latest local Python suite: **27 passed**.

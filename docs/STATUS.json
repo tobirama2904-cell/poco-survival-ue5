@@ -194,13 +194,15 @@
     "final_game": false,
     "measured_campaign_hours": null,
     "physical_poco_tested": false,
-    "source_commit": "8264256",
-    "scene_run": 36126057549,
-    "android_native_run": 36126059454,
-    "core_run": 36126058562,
+    "source_commit": "64dc5cc",
+    "scene_run": 36128450801,
+    "android_native_run": 36126987127,
+    "core_run": 36126920354,
     "core_result": "success",
-    "scene_status": "last observed pulling pinned engine",
-    "android_status": "last observed fetching pinned engine/source",
-    "local_python_tests": 25
+    "scene_status": "new stricter scene run dispatched; prior incomplete 36126057549 cancelled",
+    "android_status": "corrected native queued; old-source native kept for checkpoint",
+    "local_python_tests": 27,
+    "native_cpp_correction": "1cdc496",
+    "native_linux_result": "compiled and passed native save6/recovery tests during scene attempt2; later map population failures separately measured"
   }
 }
