@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_date": "2026-09-24",
+  "updated_date": "2026-09-25",
   "engine": "Unreal Engine 5.7.4; official Linux amd64 image pinned by digest",
   "source_project": "PocoSurvival.uproject",
   "latest_verified_game_source_commit": "55d823912e8ef3f0fa199de21627ebad3af5975b",
@@ -135,5 +135,20 @@
   "android_mobile_correction_previous_run": 36081210149,
   "android_mobile_correction_previous_result": "failed: commandlet audio decoder not initialized during SoundFactory import; map/sky/wind assets saved but cook not run",
   "android_final_release_available": false,
-  "full_requested_campaign_complete": false
+  "full_requested_campaign_complete": false,
+  "city_campaign": {
+    "implementation_commit": "da0ce394",
+    "branch": "gameplay/city-story",
+    "actions": 55,
+    "districts_authored": 6,
+    "dialogue_lines": 103,
+    "core_test": "passed: eight branch combinations, optional postgame, save migration/replay",
+    "scene_run": 36083382140,
+    "android_native_run": 36083383766,
+    "scene_result": "pending",
+    "android_native_result": "pending",
+    "measured_duration_hours": null,
+    "final_3d_characters": false,
+    "final_apk_available": false
+  }
 }
