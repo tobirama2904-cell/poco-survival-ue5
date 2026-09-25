@@ -1,0 +1,69 @@
+{
+  "physical_device_tested": false,
+  "poco_f4_tested": false,
+  "fps_claimed": false,
+  "arm_translation_emulator_only": true,
+  "installed": true,
+  "launch_survived": true,
+  "visual_quality_review_required": true,
+  "emulator_only_commandline": "-AllowSoftwareRendering",
+  "requested_emulator_portrait_resolution": "540x960",
+  "abis": "x86_64,arm64-v8a",
+  "native_bridge": "libndk_translation.so",
+  "android_version": "15",
+  "build_fingerprint": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+  "activity": "com.pocosurvival.game/com.epicgames.unreal.SplashActivity",
+  "pid_after_start": "3093 3244",
+  "screenshots": [
+    {
+      "file": "android-start.png",
+      "width": 960,
+      "height": 540,
+      "pixel_regression_checks": {
+        "black_fraction": 0.1126,
+        "strong_magenta_fraction": 0.0,
+        "not_black": true,
+        "no_strong_magenta_regression": true
+      }
+    },
+    {
+      "file": "android-after-input.png",
+      "width": 960,
+      "height": 540,
+      "pixel_regression_checks": {
+        "black_fraction": 0.1122,
+        "strong_magenta_fraction": 0.0,
+        "not_black": true,
+        "no_strong_magenta_regression": true
+      }
+    },
+    {
+      "file": "android-backpack.png",
+      "width": 960,
+      "height": 540
+    },
+    {
+      "file": "android-restart.png",
+      "width": 960,
+      "height": 540,
+      "pixel_regression_checks": {
+        "black_fraction": 0.1136,
+        "strong_magenta_fraction": 0.0,
+        "not_black": true,
+        "no_strong_magenta_regression": true
+      }
+    }
+  ],
+  "save_files": [],
+  "save_files_present": false,
+  "save_button_input_injected": true,
+  "save_restore_equality_verified": false,
+  "pid_after_restart": "4371 4410",
+  "restart_survived": true,
+  "visible_frames_verified": true,
+  "touch_input_injected": true,
+  "touch_movement_verified": false,
+  "run": 36149113269,
+  "package_run": 36147479631,
+  "manual_review": "Opened start and backpack-attempt images: intro then visible human/gameplay; backpack not open in attempted capture. Provisional art, not accepted final game. Input/save correctness unverified."
+}

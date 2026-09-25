@@ -26,3 +26,7 @@ New native compilation/UHT and save8 integration, actual companion movement/cine
 
 ## Local verification at commit preparation
 Eight portable ASan/UBSan suites passed. 51 Python tests passed with one cached nature-archive test skipped when its excluded cache is absent. Main audio archive independently fetched and SHA-verified. These checks do not compile Unreal actor code. The new native integration checks also exercise a zero-material receiver recovery kit and its actual UObject serialization.
+
+New main-campaign source: `02ed3201631e6e6cc81183cdfd273cd55335a418`; UE verification **36154689044** dispatched on gameplay/main-campaign. No matching Android native run has been dispatched for this source yet.
+
+Separately, the previous gameplay/low-water candidate completed cook 36140764253, package 36147479631 and emulator 36149113269. Actual Android start/backpack-attempt frames were opened: intro then visible human/gameplay, still provisional art. The backpack was not shown in the backpack-attempt frame. Input was injected but touch movement was not proven; save files were not collected by the probe, which does not establish whether the game failed to save or whether the probe could not access them. No POCO performance proof. This older candidate does NOT contain either the 144-line county story extension or the new main continuation. Do not label it as containing the new content.

@@ -294,7 +294,22 @@
     "python_tests_skipped": 1,
     "portable_suites_passed": 8,
     "repair_softlock_recovery_kit": true,
-    "native_scene_run": null,
-    "source_state": "ready for native UE verification"
+    "native_scene_run": 36154689044,
+    "source_state": "native UE scene/save8/companion/cinematic validation dispatched",
+    "source_commit": "02ed3201631e6e6cc81183cdfd273cd55335a418"
+  },
+  "stable_android_candidate": {
+    "native_run": 36133757073,
+    "cook_run": 36140764253,
+    "package_run": 36147479631,
+    "emulator_run": 36149113269,
+    "installed_and_restarted": true,
+    "frames_opened": true,
+    "contains_county_story_extension": false,
+    "contains_main_campaign_extension": false,
+    "save_files_collected": false,
+    "touch_movement_verified": false,
+    "poco_f4_tested": false,
+    "final_art_accepted": false
   }
 }
