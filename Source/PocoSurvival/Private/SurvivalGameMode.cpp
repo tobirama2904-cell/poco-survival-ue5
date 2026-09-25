@@ -139,11 +139,11 @@ void ASurvivalGameMode::BeginCompanionFilmProof()
 }
 void ASurvivalGameMode::CaptureCompanionFilmProof()
 {
- auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?PC->GetPawn():nullptr;
+ auto* PC=GetWorld()->GetFirstPlayerController();APawn* Player=nullptr;if(PC)Player=PC->GetPawn();
  const bool View=PC&&PC->GetViewTarget()&&PC->GetViewTarget()!=Player;
  const bool Pass=bCompanionAvailable&&bCompanionHuman&&bCompanionGrounded&&CompanionTravel>30&&CompanionDistance<1600&&View;
  const FString Report=FString::Printf(TEXT("{\"passed\":%s,\"diagnostic_story_state_injected\":true,\"available\":%s,\"human_mesh\":%s,\"grounded\":%s,\"walked_cm\":%.2f,\"distance_to_player_cm\":%.2f,\"cinematic_camera_active\":%s,\"full_campaign_playthrough\":false}\n"),Pass?TEXT("true"):TEXT("false"),bCompanionAvailable?TEXT("true"):TEXT("false"),bCompanionHuman?TEXT("true"):TEXT("false"),bCompanionGrounded?TEXT("true"):TEXT("false"),CompanionTravel,CompanionDistance,View?TEXT("true"):TEXT("false"));
  FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/companion-runtime.json")));
- if(auto* PC=GetWorld()->GetFirstPlayerController())PC->ConsoleCommand(TEXT("HighResShot 1"));
+ if(PC)PC->ConsoleCommand(TEXT("HighResShot 1"));
  FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,4.f,false);
 }
