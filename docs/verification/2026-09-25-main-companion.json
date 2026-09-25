@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "diagnostic_story_state_injected": true,
+  "available": true,
+  "human_mesh": true,
+  "grounded": true,
+  "walked_cm": 681.05,
+  "distance_to_player_cm": 116.05,
+  "cinematic_camera_active": true,
+  "full_campaign_playthrough": false,
+  "run": 36160065706,
+  "image_review": "Third actual image opened; both protagonists visible, framing functional, provisional art; no final photoreal approval."
+}

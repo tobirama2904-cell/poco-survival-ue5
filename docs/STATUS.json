@@ -346,7 +346,8 @@
     "full_acceptance": false,
     "source_commit": "d9cc508d0bc98384ebdd0d15d725bb14dbebd245",
     "ue_scene_run": 36160687330,
-    "corrected_base_scene_run": 36160065706
+    "corrected_base_scene_run": 36160065706,
+    "ue_scene_status": "in progress; preserved rather than cancelled"
   },
   "companion_support_stage": {
     "branch": "gameplay/companion-support",
@@ -368,6 +369,18 @@
     "unreal_actor_verification": false,
     "new_healing_animation": false,
     "physical_device_tested": false,
-    "final_game": false
+    "final_game": false,
+    "source_commit": "8ca515380fda519e941e7018229821e8c2966001",
+    "ue_scene_run": 36163624736,
+    "ue_scene_status": "queued",
+    "prior_main_following_verified": {
+      "run": 36160065706,
+      "walked_cm": 681.05,
+      "distance_to_player_cm": 116.05,
+      "grounded": true,
+      "cinematic_camera_active": true,
+      "diagnostic_setup": true,
+      "full_playthrough": false
+    }
   }
 }

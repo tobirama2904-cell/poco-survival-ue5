@@ -24,3 +24,7 @@ The treatment is mechanically timed and uses existing locomotion/crouch poses; n
 
 ## Remaining checks
 New Unreal compilation, actual hold/assist movement and UI image, reload placement, game audio/animation polish, matching Android build and physical POCO performance. Portable tests do not establish these results.
+
+New support source: 8ca515380fda519e941e7018229821e8c2966001. UE run **36163624736** queued. The preceding journey run 36160687330 had already started, so it was preserved, not cancelled.
+
+Corrected base-main run **36160065706 succeeded**. Its actual third screenshot was opened: two visible characters and cinematic framing, still clearly provisional environment/character art. Runtime evidence: Mara walked 681.05 cm, was grounded, ended 116.05 cm from the player, and the cinematic camera was active after blending. The fixture injects story state; it is not a campaign playthrough and does not verify the new hold/heal mechanics.
