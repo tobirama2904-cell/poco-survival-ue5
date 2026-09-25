@@ -13,3 +13,5 @@ This is an implementation checkpoint, not the requested finished APK and not a c
 - `portraits.jpg` contains original AI-generated fictional character concept portraits (Leyla / Nargis / Timur), generated for this project. It is not a photo of real people or proof of shipped character quality.
 
 Local verification: sanitizer-enabled legacy core and city tests passed, including eight branch combinations, post-ending actions, atomic invalid actions, historical journal migration, and randomized save replay. Sixteen Android pipeline unit tests passed. Python files compile. These tests do **not** validate native UE adapters, reachability, rendering, Android installation, playtime, or POCO frame rate.
+
+Previous baseline cook `36082332279` subsequently failed **before cooking**: the pinned editor's Python module does not expose `unreal.AudioSettings`. Log evidence confirms dummy audio device/submix initialization succeeded; this is not the previous missing-decoder error. The city branch now supplies the PCM default through the Engine ini command-line override, retaining explicit PCM on the imported wave. The repair still needs its actual cook gate.

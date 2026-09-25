@@ -150,5 +150,12 @@
     "measured_duration_hours": null,
     "final_3d_characters": false,
     "final_apk_available": false
+  },
+  "mobile_preparation_latest_failure": {
+    "run": 36082332279,
+    "result": "failed before cooking",
+    "reason": "Pinned Python module does not export unreal.AudioSettings",
+    "dummy_audio_initialization": "verified: SDL dummy device and master submix initialized",
+    "repair": "feature branch uses Engine ini override before editor startup; native verification pending"
   }
 }

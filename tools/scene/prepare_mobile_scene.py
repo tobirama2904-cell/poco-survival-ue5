@@ -37,7 +37,8 @@ for actor in actors.get_all_level_actors():
   actor.set_editor_property('settings',settings)
 # Actual original ambience, not an advertised completed soundtrack.
 # PCM is deliberately explicit for this small loop; no platform codec ambiguity.
-unreal.get_default_object(unreal.AudioSettings).set_editor_property('default_audio_compression_type',unreal.DefaultAudioCompressionType.PCM)
+# AudioSettings is not exported to Python in the pinned editor. The commandlet
+# receives its PCM default through the Engine ini override before audio startup.
 wind_path='/Game/Audio/Ambience/WindLoop'
 wind=unreal.load_asset(wind_path)
 if wind is None:

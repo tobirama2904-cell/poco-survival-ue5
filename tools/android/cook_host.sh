@@ -30,6 +30,7 @@ python3 tools/engine_inventory.py
 export SDL_AUDIODRIVER=dummy
 timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
  /project/PocoSurvival.uproject -run=pythonscript -script=/project/tools/scene/prepare_mobile_scene.py \
+ '-ini:Engine:[/Script/Engine.AudioSettings]:DefaultAudioCompressionType=PCM' \
  -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \
  > artifacts/android-build/mobile-scene-prepare.log 2>&1
 set +e
