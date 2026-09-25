@@ -26,3 +26,12 @@ class LowWaterContent(unittest.TestCase):
    p=ROOT/'BuildData/filmvoices'/f['name'];self.assertEqual(hashlib.sha256(p.read_bytes()).hexdigest(),f['sha256'])
    with wave.open(str(p)) as w:self.assertEqual(w.getframerate(),24000);self.assertEqual(w.getnchannels(),1);self.assertEqual(w.getsampwidth(),2);self.assertGreater(w.getnframes(),2400)
   alignment=json.loads((ROOT/'BuildData/filmvoices/voice-alignment.json').read_text());self.assertEqual(alignment['issues'],[])
+
+ def test_complete_scene_marker_cannot_be_reused_after_failed_build(self):
+  gate=(ROOT/'tools/scene/editor_gate.sh').read_text();self.assertIn('field-content,scene-ready,render-verification',gate)
+  self.assertIn("all_construction_steps_succeeded",(ROOT/'tools/scene/verify_render.py').read_text())
+ def test_unreal_focus_transforms_supply_required_arguments(self):
+  import ast
+  tree=ast.parse((ROOT/'tools/scene/populate_field.py').read_text())
+  for node in ast.walk(tree):
+   if isinstance(node,ast.Call) and isinstance(node.func,ast.Attribute) and node.func.attr=='set_relative_location':self.assertEqual({k.arg for k in node.keywords},{'sweep','teleport'})

@@ -14,10 +14,10 @@ for prop in ['SupplyCrate','Door']:
  body.set_editor_property('collision_trace_flag',unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE);lib.save_loaded_asset(mesh)
 positions=[(2,13),(13,31),(-115,42),(-185,46),(-148,103),(-210,110),(0,205),(20,236),(159,-182),(4,211),(-6,209),(195,-153),(208,46),(215,100),(185,105),(170,-123),(-118,44),(25,242),(-255,-60),(255,-60),(-240,205),(240,205),(-230,-215),(230,-215)]
 def prop(label,id,name,pos,scale=1):
- obj=a.spawn_actor_from_class(cls,unreal.Vector(pos[0]*100,pos[1]*100,15));obj.set_actor_label(label);obj.set_editor_property('action_id',unreal.Name(id));m=obj.get_editor_property('mesh');m.set_static_mesh(lib.load_asset('/Game/Story/Props/'+name));m.set_world_scale3d(unreal.Vector(scale,scale,scale));obj.get_editor_property('focus_volume').set_relative_location(unreal.Vector(0,0,70));return obj
+ obj=a.spawn_actor_from_class(cls,unreal.Vector(pos[0]*100,pos[1]*100,15));obj.set_actor_label(label);obj.set_editor_property('action_id',unreal.Name(id));m=obj.get_editor_property('mesh');m.set_static_mesh(lib.load_asset('/Game/Story/Props/'+name));m.set_world_scale3d(unreal.Vector(scale,scale,scale));obj.get_editor_property('focus_volume').set_relative_location(unreal.Vector(0,0,70),sweep=False,teleport=True);return obj
 for i,pos in enumerate(positions):prop('field_cache_'+str(i),'__cache_'+str(i),'SupplyCrate',pos)
 for i,(x,y,w,d) in enumerate(json.loads((root/'artifacts/gameplay-scene/interiors.json').read_text())[:24]):
- door=prop('field_door_'+str(i),'__door_'+str(i),'Door',(x-.6,y-d/2-.05));door.get_editor_property('focus_volume').set_relative_location(unreal.Vector(60,0,100))
+ door=prop('field_door_'+str(i),'__door_'+str(i),'Door',(x-.6,y-d/2-.05));door.get_editor_property('focus_volume').set_relative_location(unreal.Vector(60,0,100),sweep=False,teleport=True)
 for i,pos in enumerate([(179,-183),(182,-183)]):
  gate=prop('film_gate_'+str(i),'__gate_open' if i==0 else '__gate_hold','SupplyCrate',pos,.8)
  gate.get_editor_property('mesh').set_material(0,lib.load_asset('/Game/Story/Materials/M_City'+('5' if i==0 else '3')))

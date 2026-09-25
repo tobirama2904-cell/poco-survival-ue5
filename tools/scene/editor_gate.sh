@@ -3,7 +3,7 @@ set -euo pipefail
 cd /project
 ENGINE=/home/ue4/UnrealEngine/Engine
 mkdir -p artifacts/gameplay-scene artifacts/engine-probe artifacts/android-build
-rm -f artifacts/gameplay-scene/{scene-construction,city-construction,render-verification}.json
+rm -f artifacts/gameplay-scene/{scene-construction,city-construction,field-content,scene-ready,render-verification}.json
 "$ENGINE/Build/BatchFiles/Linux/Build.sh" PocoSurvivalEditor Linux Development \
   -Project=/project/PocoSurvival.uproject -NoHotReloadFromIDE -MaxParallelActions=2 -NoUBA \
   2>&1 | tee artifacts/gameplay-scene/ubt.log
@@ -40,3 +40,10 @@ for SCRIPT in /project/tools/scene/import_gameplay_assets.py /project/tools/scen
   -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \
   > "artifacts/gameplay-scene/$(basename "$SCRIPT" .py).log" 2>&1
 done
+
+python3 - <<'READY'
+import json,subprocess
+from pathlib import Path
+root=Path('artifacts/gameplay-scene');field=json.loads((root/'field-content.json').read_text());assert field['loot_caches']==24 and field['openable_doors']==24
+(root/'scene-ready.json').write_text(json.dumps({'source':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'all_construction_steps_succeeded':True,'field':field},indent=2)+'\n')
+READY
