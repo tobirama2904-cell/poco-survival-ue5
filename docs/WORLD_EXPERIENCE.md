@@ -40,3 +40,11 @@ Huge dense world, finished region/interior art, authored multi-hour pacing/event
 full animation blending/combat cinematics, bow, measured native control feel,
 render review of new environment, current APK and physical POCO performance.
 Neither this checkpoint nor old private engineering APK is the requested final game.
+
+## External run pins
+Feature source `a57d063f`: portable core CI **36120681313 succeeded**. Native
+scene **36120680424** was last observed pulling the engine; features are not
+yet Unreal-compiled or rendered. Separate old-source Android native **36114118993**
+is still compiling; reviewed scene **36117717433** may feed its compatible
+private Android cook/package/emulator chain on `gameplay/city-story`. That chain
+**does not include** the new controls/environment code and is not a final release.

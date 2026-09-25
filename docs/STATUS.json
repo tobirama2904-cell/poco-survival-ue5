@@ -153,7 +153,7 @@
     "previous_scene_result": "36083382140 failed overall; actual frame captured and rejected for overexposure; native 55-objective save tests passed",
     "previous_android_native_result": "36083383766 success",
     "human_character_foundations": 5,
-    "native_new_avatar_and_combat_verified": true,
+    "native_new_avatar_and_combat_verified": false,
     "fully_voiced": false,
     "new_external_runs": "old-source Android native still in progress; new feature native/render pending",
     "unreal_compile_verified": true,
@@ -166,7 +166,8 @@
     "previous_human_scene_run": 36114117078,
     "previous_human_scene_visual_result": "rejected: player mesh invisible despite successful object load",
     "written_dialogue_audio_coverage": "109 of 109 lines; five selected voices; 474.623 seconds",
-    "latest_feature_branch_commit": "8426fd0"
+    "latest_feature_branch_commit": "8426fd0",
+    "avatar_verification_scope": "Native avatar/combat code compiled; avatar visually present and grounded movement verified. Combat mechanics not exercised by the screenshot test."
   },
   "mobile_preparation_latest_failure": {
     "run": 36082332279,
@@ -191,6 +192,17 @@
       "bow",
       "final animation/art",
       "new Android APK and POCO performance"
-    ]
+    ],
+    "source_commit": "a57d063f",
+    "scene_run": 36120680424,
+    "scene_last_observed": "in progress: pinned engine pull",
+    "core_run": 36120681313,
+    "core_result": "success",
+    "old_source_internal_android_chain": {
+      "scene_run": 36117717433,
+      "native_run": 36114118993,
+      "branch": "gameplay/city-story",
+      "scope": "reviewed visible-body frame; private cook/package/emulator testing when compatible native succeeds; not final game"
+    }
   }
 }
