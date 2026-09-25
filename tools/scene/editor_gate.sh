@@ -18,3 +18,8 @@ rm -f Content/Worlds/CanalDistrict.umap
   -unattended -nop4 -nosplash -NullRHI -nosound -stdout -FullStdOutLogOutput \
   2>&1 | tee artifacts/gameplay-scene/scene-import.log
 test -s artifacts/gameplay-scene/scene-construction.json
+"$ENGINE/Binaries/Linux/UnrealEditor-Cmd" /project/PocoSurvival.uproject \
+  -run=pythonscript -script=/project/tools/scene/expand_city.py \
+  -unattended -nop4 -nosplash -NullRHI -nosound -stdout -FullStdOutLogOutput \
+  2>&1 | tee artifacts/gameplay-scene/city-import.log
+test -s artifacts/gameplay-scene/city-construction.json

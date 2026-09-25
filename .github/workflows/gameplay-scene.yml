@@ -91,7 +91,7 @@ jobs:
             artifacts/gameplay-scene/*.log
           retention-days: 3
       - name: Require a successful native scene construction
-        run: test -s artifacts/gameplay-scene/scene-construction.json
+        run: test -s artifacts/gameplay-scene/scene-construction.json && test -s artifacts/gameplay-scene/city-construction.json
       - name: Preserve private editable project content (not a playable release)
         env:
           GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}

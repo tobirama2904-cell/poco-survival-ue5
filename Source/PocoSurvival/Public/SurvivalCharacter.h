@@ -7,6 +7,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class ASurvivalInteraction;
 class UAnimSequence;
+class ACameraActor;
 UCLASS()
 class POCOSURVIVAL_API ASurvivalCharacter : public ACharacter
 {
@@ -32,7 +33,17 @@ public:
     UFUNCTION(BlueprintCallable,Category="Actions") void Save();
     UFUNCTION(BlueprintCallable,Category="Actions") void Load();
     UFUNCTION(BlueprintPure,Category="Actions") ASurvivalInteraction* GetFocusedInteraction() const;
+    void BeginStory(FName Id,AActor* Subject);
+    void AdvanceStory();
+    void EndStory();
+    void ToggleJournal();
+    bool bJournalOpen=false;
+    bool bStoryActive=false;
+    FString StorySpeaker;
+    TArray<FString> StoryLines;
+    int32 StoryLine=0;
 private:
+    UPROPERTY() TObjectPtr<ACameraActor> StoryCamera;
     survival::Vitals Stats;
     bool bSprintRequested=false;
     float AttackCooldown=0;

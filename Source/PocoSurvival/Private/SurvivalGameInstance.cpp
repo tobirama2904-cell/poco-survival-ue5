@@ -97,7 +97,7 @@ bool USurvivalGameInstance::LoadProgress()
     {
         if (!UGameplayStatics::DoesSaveGameExist(SlotName(Index), 0)) continue;
         auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName(Index), 0));
-        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 3) || Save->CampaignVersion != TEXT("foundation-1") ||
+        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 3) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
             Save->StateRevision < 0 || Save->StateRevision != Save->ActionJournal.Num() || Save->SaveGeneration<0) continue;
         if (Save->bHasPlayerState && (Save->MapName.IsEmpty() || Save->PlayerLocation.ContainsNaN() ||
             Save->PlayerLocation.GetAbsMax()>1000000 || Save->PlayerRotation.ContainsNaN() ||
@@ -114,7 +114,7 @@ bool USurvivalGameInstance::LoadProgress()
             EncounterKeys.Add(Key);
         }
         if (!EncountersValid) continue;
-        survival::Runtime Candidate;
+        survival::Runtime Candidate{survival::MakeCityCampaign()};
         if (static_cast<size_t>(Save->ActionJournal.Num()) > Candidate.Definition().actions.size()) continue;
         bool bValid = true;
         for (const auto& Id : Save->ActionJournal)

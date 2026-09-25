@@ -1,3 +1,5 @@
+#include "Camera/CameraActor.h"
+#include "Core/CityContent.h"
 #include "SurvivalCharacter.h"
 #include "SurvivalGameInstance.h"
 #include "SurvivalInteraction.h"
@@ -65,11 +67,11 @@ void ASurvivalCharacter::Tick(float Delta)
 }
 void ASurvivalCharacter::Forward(float Value)
 {
-    if (Controller && Stats.Alive()) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::X),Value);
+    if (Controller && Stats.Alive() && !bStoryActive && !bJournalOpen) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::X),Value);
 }
 void ASurvivalCharacter::Right(float Value)
 {
-    if (Controller && Stats.Alive()) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::Y),Value);
+    if (Controller && Stats.Alive() && !bStoryActive && !bJournalOpen) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::Y),Value);
 }
 void ASurvivalCharacter::Turn(float Value) { AddControllerYawInput(Value); }
 void ASurvivalCharacter::Look(float Value) { AddControllerPitchInput(Value); }
@@ -92,6 +94,7 @@ void ASurvivalCharacter::SetupPlayerInputComponent(UInputComponent* Input)
     Input->BindAction(TEXT("Jump"),IE_Released,this,&ACharacter::StopJumping);
     Input->BindAction(TEXT("Interact"),IE_Pressed,this,&ASurvivalCharacter::Interact);
     Input->BindAction(TEXT("Attack"),IE_Pressed,this,&ASurvivalCharacter::Attack);
+    Input->BindKey(EKeys::Tab,IE_Pressed,this,&ASurvivalCharacter::ToggleJournal);
     Input->BindAction(TEXT("Save"),IE_Pressed,this,&ASurvivalCharacter::Save);
     Input->BindAction(TEXT("Load"),IE_Pressed,this,&ASurvivalCharacter::Load);
     Input->BindTouch(IE_Pressed,this,&ASurvivalCharacter::TouchPressed);
@@ -108,7 +111,9 @@ ASurvivalInteraction* ASurvivalCharacter::GetFocusedInteraction() const
 }
 void ASurvivalCharacter::Interact()
 {
+    if (bStoryActive) { AdvanceStory();return; }
     if (!Stats.Alive()) return;
+    bJournalOpen=false;
     auto* Target=GetFocusedInteraction();
     if (!Target) { StatusMessage=TEXT("Посмотрите на предмет поближе."); return; }
     FString Error;
@@ -117,7 +122,7 @@ void ASurvivalCharacter::Interact()
 }
 void ASurvivalCharacter::Attack()
 {
-    if (AttackCooldown>0 || !Stats.Spend(18)) return;
+    if (bStoryActive || bJournalOpen || AttackCooldown>0 || !Stats.Spend(18)) return;
     AttackCooldown=0.75f;
     if (IsPlayerControlled() && Controller) SetActorRotation(FRotator(0,Controller->GetControlRotation().Yaw,0));
     if (auto* Anim=GetMesh()->GetAnimInstance()) if (AttackAnimation) Anim->PlaySlotAnimationAsDynamicMontage(AttackAnimation,TEXT("DefaultSlot"),0.06f,0.12f);
@@ -125,7 +130,7 @@ void ASurvivalCharacter::Attack()
 }
 void ASurvivalCharacter::DeliverMelee()
 {
-    if (!Stats.Alive()) return;
+    if (!Stats.Alive() || bStoryActive) return;
     const FVector Start=GetActorLocation()+FVector(0,0,30);
     const FVector End=Start+GetActorForwardVector()*170;
     TArray<FHitResult> Hits;FCollisionQueryParams Params(SCENE_QUERY_STAT(Melee),false,this);
@@ -142,6 +147,7 @@ void ASurvivalCharacter::DeliverMelee()
 }
 float ASurvivalCharacter::TakeDamage(float Amount,const FDamageEvent& Event,AController* Instigator,AActor* Causer)
 {
+    if (bStoryActive) return 0;
     const float Applied=Stats.Damage(Amount);
     if (Applied>0) Super::TakeDamage(Applied,Event,Instigator,Causer);
     if (Applied>0 && !Stats.Alive()) { GetCharacterMovement()->DisableMovement();
@@ -160,12 +166,13 @@ bool ASurvivalCharacter::RestoreVitals(float Health,float Stamina)
     return true;
 }
 void ASurvivalCharacter::Save() { if (auto* Game=Cast<USurvivalGameInstance>(GetGameInstance())) if (!Game->SaveProgress()) StatusMessage=TEXT("Не удалось сохранить прогресс."); }
-void ASurvivalCharacter::Load() { if (auto* Game=Cast<USurvivalGameInstance>(GetGameInstance())) if (Game->LoadProgress()) { Game->ApplyLoadedPlayerState(this);StatusMessage=TEXT("Прогресс восстановлен."); } }
+void ASurvivalCharacter::Load() { EndStory();bJournalOpen=false; if (auto* Game=Cast<USurvivalGameInstance>(GetGameInstance())) if (Game->LoadProgress()) { Game->ApplyLoadedPlayerState(this);StatusMessage=TEXT("Прогресс восстановлен."); } }
 void ASurvivalCharacter::TouchPressed(ETouchIndex::Type Finger,FVector Position)
 {
     auto* PC=Cast<APlayerController>(Controller);if (!PC) return;
     int32 W=0,H=0;PC->GetViewportSize(W,H);if (!W || !H) return;
     const FVector2D P(Position.X/W,Position.Y/H);
+    if (P.X>0.48f && P.X<0.63f && P.Y<0.13f) { ToggleJournal();return; }
     if (P.X>0.83f && P.Y>0.70f && P.Y<0.90f) { Interact();return; }
     if (P.X>0.83f && P.Y>0.45f && P.Y<=0.70f) { Attack();return; }
     if (P.X>0.66f && P.X<0.83f && P.Y>0.70f) { ToggleSprint();return; }
@@ -196,4 +203,38 @@ void ASurvivalCharacter::FellOutOfWorld(const UDamageType& DamageType)
                 RestoreVitals(100,100);Load();StatusMessage=TEXT("Возврат к безопасной точке.");return;
             }
     Super::FellOutOfWorld(DamageType);
+}
+
+void ASurvivalCharacter::ToggleJournal() { if (!bStoryActive) bJournalOpen=!bJournalOpen; }
+void ASurvivalCharacter::BeginStory(FName Id,AActor* Subject)
+{
+    const auto* Site=survival::FindCitySite(TCHAR_TO_UTF8(*Id.ToString()));
+    if (!Site || Site->lines.empty()) return;
+    EndStory();bJournalOpen=false;StoryLines.Reset();StoryLine=0;
+    StorySpeaker=UTF8_TO_TCHAR(Site->speaker.c_str());
+    for (const auto& Line:Site->lines) StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
+    bStoryActive=true;
+    if (auto* PC=Cast<APlayerController>(Controller)) {
+        PC->SetIgnoreMoveInput(true);PC->SetIgnoreLookInput(true);
+        if (Subject) {
+            const FVector Focus=Subject->GetActorLocation()+FVector(0,0,90);
+            FVector View=Focus+FVector(-260,-220,100);
+            FHitResult Hit;FCollisionQueryParams Params(SCENE_QUERY_STAT(StoryCamera),false,Subject);Params.AddIgnoredActor(this);
+            if (GetWorld()->LineTraceSingleByChannel(Hit,Focus,View,ECC_Visibility,Params)) View=Hit.Location+(Focus-Hit.Location).GetSafeNormal()*25;
+            StoryCamera=GetWorld()->SpawnActor<ACameraActor>(View,(Focus-View).Rotation());
+            if (StoryCamera) PC->SetViewTargetWithBlend(StoryCamera,0.6f);
+        }
+    }
+}
+void ASurvivalCharacter::AdvanceStory()
+{
+    if (!bStoryActive) return;
+    if (++StoryLine>=StoryLines.Num()) EndStory();
+}
+void ASurvivalCharacter::EndStory()
+{
+    if (!bStoryActive) return;
+    bStoryActive=false;
+    if (auto* PC=Cast<APlayerController>(Controller)) { PC->SetIgnoreMoveInput(false);PC->SetIgnoreLookInput(false);PC->SetViewTarget(this); }
+    if (StoryCamera) { StoryCamera->Destroy();StoryCamera=nullptr; }
 }

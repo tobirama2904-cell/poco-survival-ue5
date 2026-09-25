@@ -8,4 +8,6 @@ class POCOSURVIVAL_API ASurvivalHUD : public AHUD
     GENERATED_BODY()
 public:
     virtual void DrawHUD() override;
+private:
+    UPROPERTY() TObjectPtr<UTexture2D> Portraits;
 };

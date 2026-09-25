@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Core/SurvivalCore.h"
+#include "Core/CityContent.h"
 #include "SurvivalGameInstance.generated.h"
 
 class ASurvivalCharacter;
@@ -41,6 +42,6 @@ public:
 private:
     UPROPERTY() TObjectPtr<USurvivalSaveGame> PendingPlayerSave;
     int64 SaveGeneration = 0;
-    survival::Runtime Runtime;
+    survival::Runtime Runtime{survival::MakeCityCampaign()};
     int32 NextSaveSlot = 0;
 };

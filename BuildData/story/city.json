@@ -1,0 +1,1733 @@
+{
+  "schema": 1,
+  "title": "Нулевая отметка — Нижний Берег",
+  "coordinate_space": "UE world metres: x/y horizontal, z up",
+  "districts": [
+    {
+      "id": "depot",
+      "name": "Депо «Нулевая отметка»",
+      "center": [
+        0,
+        0
+      ],
+      "color": [
+        0.24,
+        0.31,
+        0.29
+      ]
+    },
+    {
+      "id": "residential",
+      "name": "Старые дворы",
+      "center": [
+        -180,
+        -160
+      ],
+      "color": [
+        0.31,
+        0.25,
+        0.18
+      ]
+    },
+    {
+      "id": "clinic",
+      "name": "Лазарет на площади",
+      "center": [
+        -180,
+        40
+      ],
+      "color": [
+        0.25,
+        0.32,
+        0.34
+      ]
+    },
+    {
+      "id": "pumpworks",
+      "name": "Насосный каскад",
+      "center": [
+        180,
+        -150
+      ],
+      "color": [
+        0.32,
+        0.27,
+        0.17
+      ]
+    },
+    {
+      "id": "relay_tower",
+      "name": "Релейная высота",
+      "center": [
+        180,
+        100
+      ],
+      "color": [
+        0.28,
+        0.3,
+        0.34
+      ]
+    },
+    {
+      "id": "market",
+      "name": "Крытый рынок",
+      "center": [
+        0,
+        210
+      ],
+      "color": [
+        0.32,
+        0.2,
+        0.16
+      ]
+    }
+  ],
+  "items": {
+    "clinic_key": [
+      60,
+      1
+    ],
+    "medicine_crate": [
+      900,
+      1
+    ],
+    "water_sample": [
+      250,
+      1
+    ],
+    "filter": [
+      3000,
+      1
+    ],
+    "tower_key": [
+      50,
+      1
+    ],
+    "electronics": [
+      150,
+      4
+    ],
+    "scrap": [
+      250,
+      12
+    ],
+    "cloth": [
+      80,
+      20
+    ],
+    "alcohol": [
+      180,
+      10
+    ],
+    "medkit": [
+      280,
+      8
+    ],
+    "letter": [
+      10,
+      1
+    ],
+    "tools": [
+      650,
+      1
+    ]
+  },
+  "actions": [
+    {
+      "id": "meet_dispatch",
+      "district": "depot",
+      "title": "Связь с диспетчером",
+      "required": [],
+      "sets": [
+        "briefed"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "inspect_break",
+      "district": "depot",
+      "title": "Сорванные пломбы",
+      "required": [
+        "briefed"
+      ],
+      "sets": [
+        "break_found"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "read_orders",
+      "district": "residential",
+      "title": "Чужая подпись",
+      "required": [
+        "break_found"
+      ],
+      "sets": [
+        "orders_found"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "collect_clinic_key",
+      "district": "market",
+      "title": "Ключ аптечного корпуса",
+      "required": [
+        "generator_running"
+      ],
+      "sets": [
+        "key_found"
+      ],
+      "consumes": {},
+      "grants": {
+        "clinic_key": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "unlock_clinic",
+      "district": "clinic",
+      "title": "Открыть лазарет",
+      "required": [
+        "key_found"
+      ],
+      "sets": [
+        "clinic_open"
+      ],
+      "consumes": {
+        "clinic_key": 1
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "meet_doctor",
+      "district": "clinic",
+      "title": "Те, кто остался",
+      "required": [
+        "clinic_open"
+      ],
+      "sets": [
+        "medical_plan"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "find_antibiotics",
+      "district": "market",
+      "title": "Холодильник без питания",
+      "required": [
+        "medical_plan"
+      ],
+      "sets": [
+        "medicine_found"
+      ],
+      "consumes": {},
+      "grants": {
+        "medicine_crate": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "deliver_antibiotics",
+      "district": "clinic",
+      "title": "Обычная помощь",
+      "required": [
+        "medical_plan"
+      ],
+      "sets": [
+        "clinic_stable"
+      ],
+      "consumes": {
+        "medicine_crate": 1
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "check_reservoir",
+      "district": "pumpworks",
+      "title": "Чёрная вода",
+      "required": [
+        "water_restored"
+      ],
+      "sets": [
+        "contamination_known"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "sample_water",
+      "district": "pumpworks",
+      "title": "Проба из отстойника",
+      "required": [
+        "contamination_known"
+      ],
+      "sets": [
+        "sample_taken"
+      ],
+      "consumes": {},
+      "grants": {
+        "water_sample": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "analyze_sample",
+      "district": "clinic",
+      "title": "Не та причина",
+      "required": [
+        "clinic_stable",
+        "sample_taken"
+      ],
+      "sets": [
+        "evidence_found"
+      ],
+      "consumes": {
+        "water_sample": 1
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "speak_guard",
+      "district": "residential",
+      "title": "Цена приказа",
+      "required": [
+        "orders_found",
+        "evidence_found"
+      ],
+      "sets": [
+        "guard_confessed"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "find_logbook",
+      "district": "residential",
+      "title": "Журнал ночной смены",
+      "required": [
+        "guard_confessed"
+      ],
+      "sets": [
+        "logbook_found"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "trace_pipeline",
+      "district": "pumpworks",
+      "title": "Обходная магистраль",
+      "required": [
+        "logbook_found"
+      ],
+      "sets": [
+        "filter_route"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "retrieve_filter",
+      "district": "market",
+      "title": "Последний кассетный фильтр",
+      "required": [
+        "filter_route"
+      ],
+      "sets": [
+        "filter_found"
+      ],
+      "consumes": {},
+      "grants": {
+        "filter": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "install_filter",
+      "district": "pumpworks",
+      "title": "Промывка",
+      "required": [
+        "filter_found",
+        "evidence_found"
+      ],
+      "sets": [
+        "clean_water"
+      ],
+      "consumes": {
+        "filter": 1
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "radio_brother",
+      "district": "relay_tower",
+      "title": "Знакомый стук",
+      "required": [
+        "clean_water"
+      ],
+      "sets": [
+        "brother_located"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "find_rooftop_key",
+      "district": "market",
+      "title": "Ключ связиста",
+      "required": [
+        "brother_located"
+      ],
+      "sets": [
+        "tower_key_found"
+      ],
+      "consumes": {},
+      "grants": {
+        "tower_key": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "rescue_brother",
+      "district": "relay_tower",
+      "title": "Не оставлять",
+      "required": [
+        "tower_key_found",
+        "brother_located"
+      ],
+      "sets": [
+        "brother_rescued"
+      ],
+      "consumes": {
+        "tower_key": 1
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "assemble_receiver",
+      "district": "relay_tower",
+      "title": "Голос для всех",
+      "required": [
+        "brother_rescued"
+      ],
+      "sets": [
+        "antenna_ready"
+      ],
+      "consumes": {
+        "electronics": 2
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "broadcast_truth",
+      "district": "relay_tower",
+      "title": "Передать журнал открыто",
+      "required": [
+        "antenna_ready",
+        "evidence_found"
+      ],
+      "sets": [
+        "truth_public",
+        "testimony_decided"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": [
+        "truth_sealed"
+      ]
+    },
+    {
+      "id": "seal_records",
+      "district": "relay_tower",
+      "title": "Сначала вывести людей",
+      "required": [
+        "antenna_ready",
+        "evidence_found"
+      ],
+      "sets": [
+        "truth_sealed",
+        "testimony_decided"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": [
+        "truth_public"
+      ]
+    },
+    {
+      "id": "open_shelter",
+      "district": "residential",
+      "title": "Дом с открытой дверью",
+      "required": [
+        "clean_water",
+        "clinic_stable"
+      ],
+      "sets": [
+        "shelter_ready"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "repair_lift",
+      "district": "pumpworks",
+      "title": "Подъёмник для раненых",
+      "required": [
+        "brother_rescued"
+      ],
+      "sets": [
+        "lift_ready"
+      ],
+      "consumes": {
+        "scrap": 3
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "settle_districts",
+      "district": "depot",
+      "title": "Остаться на нулевой отметке",
+      "required": [
+        "shelter_ready",
+        "testimony_decided",
+        "brother_rescued",
+        "local_network"
+      ],
+      "sets": [
+        "ending_stay",
+        "campaign_resolution"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": [
+        "ending_leave"
+      ]
+    },
+    {
+      "id": "lead_evacuation",
+      "district": "pumpworks",
+      "title": "Последний подъём",
+      "required": [
+        "shelter_ready",
+        "testimony_decided",
+        "brother_rescued",
+        "evacuation_beacon",
+        "lift_ready"
+      ],
+      "sets": [
+        "ending_leave",
+        "campaign_resolution"
+      ],
+      "consumes": {},
+      "grants": {},
+      "forbids": [
+        "ending_stay"
+      ]
+    },
+    {
+      "id": "find_mina_letter",
+      "district": "residential",
+      "title": "Письмо под дверью",
+      "required": [],
+      "sets": [
+        "letter_found"
+      ],
+      "consumes": {},
+      "grants": {
+        "letter": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "deliver_mina_letter",
+      "district": "clinic",
+      "title": "Доставить письмо",
+      "required": [
+        "letter_found",
+        "clinic_open"
+      ],
+      "sets": [
+        "letter_delivered"
+      ],
+      "consumes": {
+        "letter": 1
+      },
+      "grants": {
+        "cloth": 2
+      },
+      "forbids": []
+    },
+    {
+      "id": "find_tools",
+      "district": "market",
+      "title": "Ящик слесаря",
+      "required": [],
+      "sets": [
+        "tools_found"
+      ],
+      "consumes": {},
+      "grants": {
+        "tools": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "repair_bridge",
+      "district": "depot",
+      "title": "Чужую работу закончить",
+      "required": [
+        "tools_found"
+      ],
+      "sets": [
+        "bridge_repaired"
+      ],
+      "consumes": {
+        "tools": 1
+      },
+      "grants": {
+        "scrap": 2
+      },
+      "forbids": []
+    },
+    {
+      "id": "supply_0",
+      "district": "depot",
+      "title": "Припасы: тайник 1",
+      "required": [],
+      "sets": [],
+      "consumes": {},
+      "grants": {
+        "cloth": 2,
+        "alcohol": 1,
+        "scrap": 1,
+        "electronics": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "supply_1",
+      "district": "residential",
+      "title": "Припасы: тайник 2",
+      "required": [],
+      "sets": [],
+      "consumes": {},
+      "grants": {
+        "cloth": 2,
+        "alcohol": 1,
+        "scrap": 1,
+        "electronics": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "supply_2",
+      "district": "clinic",
+      "title": "Припасы: тайник 3",
+      "required": [],
+      "sets": [],
+      "consumes": {},
+      "grants": {
+        "cloth": 2,
+        "alcohol": 1,
+        "scrap": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "supply_3",
+      "district": "pumpworks",
+      "title": "Припасы: тайник 4",
+      "required": [],
+      "sets": [],
+      "consumes": {},
+      "grants": {
+        "cloth": 2,
+        "alcohol": 1,
+        "scrap": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "supply_4",
+      "district": "relay_tower",
+      "title": "Припасы: тайник 5",
+      "required": [],
+      "sets": [],
+      "consumes": {},
+      "grants": {
+        "cloth": 2,
+        "alcohol": 1,
+        "scrap": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "supply_5",
+      "district": "market",
+      "title": "Припасы: тайник 6",
+      "required": [],
+      "sets": [],
+      "consumes": {},
+      "grants": {
+        "cloth": 2,
+        "alcohol": 1,
+        "scrap": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "craft_medkit_0",
+      "district": "depot",
+      "title": "Собрать перевязочный комплект",
+      "required": [],
+      "sets": [],
+      "consumes": {
+        "cloth": 2,
+        "alcohol": 1
+      },
+      "grants": {
+        "medkit": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "use_medkit_0",
+      "district": "depot",
+      "title": "Перевязать раны",
+      "required": [],
+      "sets": [],
+      "consumes": {
+        "medkit": 1
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "craft_medkit_1",
+      "district": "clinic",
+      "title": "Собрать перевязочный комплект",
+      "required": [],
+      "sets": [],
+      "consumes": {
+        "cloth": 2,
+        "alcohol": 1
+      },
+      "grants": {
+        "medkit": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "use_medkit_1",
+      "district": "clinic",
+      "title": "Перевязать раны",
+      "required": [],
+      "sets": [],
+      "consumes": {
+        "medkit": 1
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "craft_medkit_2",
+      "district": "residential",
+      "title": "Собрать перевязочный комплект",
+      "required": [],
+      "sets": [],
+      "consumes": {
+        "cloth": 2,
+        "alcohol": 1
+      },
+      "grants": {
+        "medkit": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "use_medkit_2",
+      "district": "residential",
+      "title": "Перевязать раны",
+      "required": [],
+      "sets": [],
+      "consumes": {
+        "medkit": 1
+      },
+      "grants": {},
+      "forbids": []
+    },
+    {
+      "id": "craft_medkit_3",
+      "district": "pumpworks",
+      "title": "Собрать перевязочный комплект",
+      "required": [],
+      "sets": [],
+      "consumes": {
+        "cloth": 2,
+        "alcohol": 1
+      },
+      "grants": {
+        "medkit": 1
+      },
+      "forbids": []
+    },
+    {
+      "id": "use_medkit_3",
+      "district": "pumpworks",
+      "title": "Перевязать раны",
+      "required": [],
+      "sets": [],
+      "consumes": {
+        "medkit": 1
+      },
+      "grants": {},
+      "forbids": []
+    }
+  ],
+  "sites": [
+    {
+      "id": "search_depot",
+      "district": "depot",
+      "position": [
+        -16,
+        -3,
+        0
+      ],
+      "title": "Катушка стартера",
+      "kind": "terminal",
+      "speaker": "Арсен",
+      "lines": []
+    },
+    {
+      "id": "recover_fuel",
+      "district": "depot",
+      "position": [
+        8,
+        7,
+        0
+      ],
+      "title": "Канистра у шлюза",
+      "kind": "terminal",
+      "speaker": "Арсен",
+      "lines": []
+    },
+    {
+      "id": "repair_generator",
+      "district": "depot",
+      "position": [
+        -13,
+        -8,
+        0
+      ],
+      "title": "Генератор депо",
+      "kind": "terminal",
+      "speaker": "Лейла",
+      "lines": [
+        "Арсен: Есть ток. Депо снова слышит город.",
+        "Лейла: На оба контура мощности не хватит. Реши: лазарет или насосы."
+      ]
+    },
+    {
+      "id": "recover_handle",
+      "district": "residential",
+      "position": [
+        -167,
+        -154,
+        0
+      ],
+      "title": "Ручной привод",
+      "kind": "terminal",
+      "speaker": "Арсен",
+      "lines": []
+    },
+    {
+      "id": "recover_relay",
+      "district": "relay_tower",
+      "position": [
+        177,
+        102,
+        0
+      ],
+      "title": "Реле на высоте",
+      "kind": "terminal",
+      "speaker": "Арсен",
+      "lines": []
+    },
+    {
+      "id": "power_clinic",
+      "district": "depot",
+      "position": [
+        -10,
+        -8,
+        0
+      ],
+      "title": "Ток в лазарет",
+      "kind": "terminal",
+      "speaker": "Наргис",
+      "lines": [
+        "Наргис: Свет вернулся. Мы можем продолжать.",
+        "Лейла: Насосы придётся обходить вручную. Ищи привод в старых дворах."
+      ]
+    },
+    {
+      "id": "power_pumps",
+      "district": "depot",
+      "position": [
+        -7,
+        -8,
+        0
+      ],
+      "title": "Ток на насосы",
+      "kind": "terminal",
+      "speaker": "Лейла",
+      "lines": [
+        "Лейла: Контур насосной под напряжением.",
+        "Наргис: Тогда привезите припасы как можно быстрее. Мы работаем при фонарях."
+      ]
+    },
+    {
+      "id": "open_manual_bypass",
+      "district": "pumpworks",
+      "position": [
+        172,
+        -144,
+        0
+      ],
+      "title": "Ручной обход",
+      "kind": "terminal",
+      "speaker": "Арсен",
+      "lines": []
+    },
+    {
+      "id": "start_pumps",
+      "district": "pumpworks",
+      "position": [
+        180,
+        -144,
+        0
+      ],
+      "title": "Пуск насосов",
+      "kind": "terminal",
+      "speaker": "Арсен",
+      "lines": []
+    },
+    {
+      "id": "connect_local_network",
+      "district": "relay_tower",
+      "position": [
+        180,
+        113,
+        0
+      ],
+      "title": "Радиосеть кварталов",
+      "kind": "terminal",
+      "speaker": "Лейла",
+      "lines": [
+        "Лейла: Направление передачи выбрано. Осталось вернуть людям чистую воду, собрать раненых и решить судьбу журнала."
+      ]
+    },
+    {
+      "id": "send_evacuation_beacon",
+      "district": "relay_tower",
+      "position": [
+        184,
+        113,
+        0
+      ],
+      "title": "Вызов эвакуации",
+      "kind": "terminal",
+      "speaker": "Лейла",
+      "lines": [
+        "Лейла: Направление передачи выбрано. Осталось вернуть людям чистую воду, собрать раненых и решить судьбу журнала."
+      ]
+    },
+    {
+      "id": "meet_dispatch",
+      "district": "depot",
+      "position": [
+        -3,
+        14,
+        0
+      ],
+      "title": "Связь с диспетчером",
+      "kind": "radio",
+      "speaker": "Лейла",
+      "lines": [
+        "Лейла: Арсен? Не подходи к северным воротам. Там больше нет поста.",
+        "Арсен: Я пришёл за братом. Ильяс был в смене на насосной.",
+        "Лейла: Вчера его отметили в лазарете. Сначала запусти депо: у меня садится последняя батарея.",
+        "Арсен: Катушка в мастерской, топливо у шлюза. Помню. Но потом ты расскажешь всё."
+      ],
+      "optional": false
+    },
+    {
+      "id": "inspect_break",
+      "district": "depot",
+      "position": [
+        14,
+        -12,
+        0
+      ],
+      "title": "Сорванные пломбы",
+      "kind": "terminal",
+      "speaker": "Лейла",
+      "lines": [
+        "Арсен: Трубу не разорвало. Её перекрыли и сорвали журнал показаний.",
+        "Лейла: Распоряжение должно быть в старой конторе. Не обвиняй людей, пока не увидишь подпись."
+      ],
+      "optional": false
+    },
+    {
+      "id": "read_orders",
+      "district": "residential",
+      "position": [
+        -180,
+        -151,
+        0
+      ],
+      "title": "Чужая подпись",
+      "kind": "record",
+      "speaker": "Тимур",
+      "lines": [
+        "Арсен: «Изолировать нижние дворы». Подпись начальника охраны. Ни слова об эвакуации.",
+        "Тимур: Это моя подпись. Я открыл верхний шлюз, чтобы не затопило лазарет. Нижний уже не открылся.",
+        "Арсен: И сколько людей ты оставил там?",
+        "Тимур: Пойди в лазарет. Спроси у Наргис, сколько мы тогда вынесли. Потом вернёшься за остальным."
+      ],
+      "optional": false
+    },
+    {
+      "id": "collect_clinic_key",
+      "district": "market",
+      "position": [
+        -14,
+        203,
+        0
+      ],
+      "title": "Ключ аптечного корпуса",
+      "kind": "loot",
+      "speaker": "Лейла",
+      "lines": [
+        "Лейла: Ключ должен быть у стойки аптечного фургона. Не трать патроны на каждый звук.",
+        "Арсен: Я здесь не ради войны."
+      ],
+      "optional": false
+    },
+    {
+      "id": "unlock_clinic",
+      "district": "clinic",
+      "position": [
+        -178,
+        24,
+        0
+      ],
+      "title": "Открыть лазарет",
+      "kind": "door",
+      "speaker": "Наргис",
+      "lines": [
+        "Наргис: Закрой за собой. Они идут на шаги по стеклу.",
+        "Арсен: Где Ильяс?",
+        "Наргис: Живым ушёл к релейной вышке. Унёс наш передатчик. Чтобы вызвать помощь — так он сказал."
+      ],
+      "optional": false
+    },
+    {
+      "id": "meet_doctor",
+      "district": "clinic",
+      "position": [
+        -190,
+        43,
+        0
+      ],
+      "title": "Те, кто остался",
+      "kind": "person",
+      "speaker": "Наргис",
+      "lines": [
+        "Наргис: Здесь нет лекарства от заражения. Но люди умирают и от обычной грязной воды.",
+        "Арсен: Если дам ток насосам, ваша палата останется без света.",
+        "Наргис: Тогда сделай ручной обход. Выбирай сам. Только не называй людей потерями в отчёте."
+      ],
+      "optional": false
+    },
+    {
+      "id": "find_antibiotics",
+      "district": "market",
+      "position": [
+        15,
+        217,
+        0
+      ],
+      "title": "Холодильник без питания",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Холодильник ещё холодный. Возьму только запечатанные упаковки.",
+        "Наргис: Передай их мне. Дозировки определю я."
+      ],
+      "optional": false
+    },
+    {
+      "id": "deliver_antibiotics",
+      "district": "clinic",
+      "position": [
+        -188,
+        46,
+        0
+      ],
+      "title": "Обычная помощь",
+      "kind": "person",
+      "speaker": "Наргис",
+      "lines": [
+        "Наргис: Это не спасёт всех. Но этих двоих — может. Спасибо.",
+        "Арсен: Ильяс оставил сообщение?",
+        "Наргис: Сказал: «Если брат придёт, не пускайте его в старый отстойник». Значит, тебе туда."
+      ],
+      "optional": false
+    },
+    {
+      "id": "check_reservoir",
+      "district": "pumpworks",
+      "position": [
+        166,
+        -163,
+        0
+      ],
+      "title": "Чёрная вода",
+      "kind": "terminal",
+      "speaker": "Лейла",
+      "lines": [
+        "Арсен: Насосы работают, но вода идёт из технического резервуара.",
+        "Лейла: Давление вернулось во все районы. Ты можешь остановить поток.",
+        "Арсен: Сначала узнаю, что в нём. Иначе мы оставим их и без воды, и без ответа."
+      ],
+      "optional": false
+    },
+    {
+      "id": "sample_water",
+      "district": "pumpworks",
+      "position": [
+        155,
+        -169,
+        0
+      ],
+      "title": "Проба из отстойника",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: На стенке свежие следы. Ильяс был здесь после закрытия шлюзов."
+      ],
+      "optional": false
+    },
+    {
+      "id": "analyze_sample",
+      "district": "clinic",
+      "position": [
+        -171,
+        45,
+        0
+      ],
+      "title": "Не та причина",
+      "kind": "terminal",
+      "speaker": "Наргис",
+      "lines": [
+        "Наргис: В пробе промышленная взвесь. Это опасно, но не объясняет заражённых.",
+        "Арсен: Значит, изоляцию объявили из-за другой причины?",
+        "Наргис: Или прикрыли ею аварию. Найди фильтры. Город сейчас нуждается не в красивом объяснении."
+      ],
+      "optional": false
+    },
+    {
+      "id": "speak_guard",
+      "district": "residential",
+      "position": [
+        -186,
+        -164,
+        0
+      ],
+      "title": "Цена приказа",
+      "kind": "person",
+      "speaker": "Тимур",
+      "lines": [
+        "Тимур: Мне приказали удержать людей до прибытия колонны. Колонна не приехала.",
+        "Арсен: Ты мог открыть ворота.",
+        "Тимур: Да. Вот чего я боялся сказать. Журнал в подвале; коды резервного склада внутри.",
+        "Арсен: Пойдёшь со мной. Не как охранник. Носилки понесёшь."
+      ],
+      "optional": false
+    },
+    {
+      "id": "find_logbook",
+      "district": "residential",
+      "position": [
+        -174,
+        -176,
+        0
+      ],
+      "title": "Журнал ночной смены",
+      "kind": "record",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Три имени перечёркнуты. Напротив Ильяса — стрелка к радиостанции.",
+        "Лейла: Сохрани страницы. Люди должны узнать не только то, что удобно победителям."
+      ],
+      "optional": false
+    },
+    {
+      "id": "trace_pipeline",
+      "district": "pumpworks",
+      "position": [
+        196,
+        -177,
+        0
+      ],
+      "title": "Обходная магистраль",
+      "kind": "terminal",
+      "speaker": "Лейла",
+      "lines": [
+        "Арсен: Технический резервуар подключён в обход фильтров. Я могу вернуть старую схему.",
+        "Лейла: Фильтры вывезли в рыночный склад после затопления."
+      ],
+      "optional": false
+    },
+    {
+      "id": "retrieve_filter",
+      "district": "market",
+      "position": [
+        20,
+        197,
+        0
+      ],
+      "title": "Последний кассетный фильтр",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Кассета цела. Тяжёлая, но довезу.",
+        "Наргис: Не обещай людям чистую воду, пока не запустишь контрольный цикл."
+      ],
+      "optional": false
+    },
+    {
+      "id": "install_filter",
+      "district": "pumpworks",
+      "position": [
+        190,
+        -143,
+        0
+      ],
+      "title": "Промывка",
+      "kind": "terminal",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Первый поток — в дренаж. Второй — на пробу. Только третий в сеть.",
+        "Лейла: Наргис подтверждает: вода годится для технической обработки. Для питья пока нужна дополнительная очистка.",
+        "Арсен: Это начало. Не чудо."
+      ],
+      "optional": false
+    },
+    {
+      "id": "radio_brother",
+      "district": "relay_tower",
+      "position": [
+        169,
+        92,
+        0
+      ],
+      "title": "Знакомый стук",
+      "kind": "radio",
+      "speaker": "Ильяс",
+      "lines": [
+        "Ильяс: Арсен? Я думал, ты уехал.",
+        "Арсен: Я тоже. Где ты?",
+        "Ильяс: Внизу вышки. Лестницу завалило. Не включай прожекторы: они собираются на площадке.",
+        "Арсен: Найду служебный ключ. Сиди тихо."
+      ],
+      "optional": false
+    },
+    {
+      "id": "find_rooftop_key",
+      "district": "market",
+      "position": [
+        -19,
+        224,
+        0
+      ],
+      "title": "Ключ связиста",
+      "kind": "loot",
+      "speaker": "Лейла",
+      "lines": [
+        "Лейла: Дежурный связист ночевал у южного киоска. Ключи обычно под приёмником."
+      ],
+      "optional": false
+    },
+    {
+      "id": "rescue_brother",
+      "district": "relay_tower",
+      "position": [
+        192,
+        101,
+        0
+      ],
+      "title": "Не оставлять",
+      "kind": "person",
+      "speaker": "Ильяс",
+      "lines": [
+        "Ильяс: Я видел автобусы. Они были пустыми, Арсен. Их не собирались отправлять вниз.",
+        "Арсен: Ты пытался передать журнал?",
+        "Ильяс: Я пытался дозвониться тебе.",
+        "Арсен: Я здесь. Остальное скажешь, когда выйдем."
+      ],
+      "optional": false
+    },
+    {
+      "id": "assemble_receiver",
+      "district": "relay_tower",
+      "position": [
+        176,
+        117,
+        0
+      ],
+      "title": "Голос для всех",
+      "kind": "craft",
+      "speaker": "Лейла",
+      "lines": [
+        "Лейла: Две платы, одно рабочее реле и антенна. Этого хватит на город или на дальний маяк.",
+        "Арсен: А хватит, чтобы передать журнал?",
+        "Лейла: Хватит. И после передачи никто не сможет сделать вид, что не слышал."
+      ],
+      "optional": false
+    },
+    {
+      "id": "broadcast_truth",
+      "district": "relay_tower",
+      "position": [
+        178,
+        120,
+        0
+      ],
+      "title": "Передать журнал открыто",
+      "kind": "choice",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Всем, кто слышит: называю имена тех, кто остался в нижних дворах. И имена тех, кто подписал приказ.",
+        "Тимур: Моё называй первым.",
+        "Лейла: Запись пошла. Теперь это не только наша история."
+      ],
+      "optional": false
+    },
+    {
+      "id": "seal_records",
+      "district": "relay_tower",
+      "position": [
+        182,
+        120,
+        0
+      ],
+      "title": "Сначала вывести людей",
+      "kind": "choice",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Передадим маршруты и список раненых. Журнал остаётся у Наргис.",
+        "Наргис: Я сохраню его. Но обещаю не молчать вечно.",
+        "Лейла: Тогда начинаем с живых."
+      ],
+      "optional": false
+    },
+    {
+      "id": "open_shelter",
+      "district": "residential",
+      "position": [
+        -190,
+        -148,
+        0
+      ],
+      "title": "Дом с открытой дверью",
+      "kind": "terminal",
+      "speaker": "Наргис",
+      "lines": [
+        "Наргис: В этом доме можно отделить больных от остальных. Нужны тёплая вода и дежурные.",
+        "Тимур: Я останусь у двери. Без замка снаружи."
+      ],
+      "optional": false
+    },
+    {
+      "id": "repair_lift",
+      "district": "pumpworks",
+      "position": [
+        202,
+        -146,
+        0
+      ],
+      "title": "Подъёмник для раненых",
+      "kind": "craft",
+      "speaker": "Арсен",
+      "lines": [
+        "Ильяс: На руках по лестнице мы всех не поднимем.",
+        "Арсен: Привод восстановлен. Теперь помоги закрепить носилки."
+      ],
+      "optional": false
+    },
+    {
+      "id": "settle_districts",
+      "district": "depot",
+      "position": [
+        -3,
+        10,
+        0
+      ],
+      "title": "Остаться на нулевой отметке",
+      "kind": "finale",
+      "speaker": "Лейла",
+      "lines": [
+        "Лейла: Районы слышат друг друга. Первые дежурные уже у насосной.",
+        "Ильяс: И что теперь?",
+        "Арсен: Теперь каждый день придётся делать то, что сегодня получилось один раз.",
+        "Наргис: Город ещё болен. Но больше не молчит.",
+        "Исследование продолжается. Незавершённые просьбы жителей и найденные припасы остаются в мире."
+      ],
+      "optional": false
+    },
+    {
+      "id": "lead_evacuation",
+      "district": "pumpworks",
+      "position": [
+        210,
+        -130,
+        0
+      ],
+      "title": "Последний подъём",
+      "kind": "finale",
+      "speaker": "Лейла",
+      "lines": [
+        "Лейла: Маяк принят. Колонна будет у верхней дороги на рассвете.",
+        "Тимур: Сперва раненые. Я пойду последним.",
+        "Ильяс: Ты ведь вернёшься?",
+        "Арсен: Здесь осталась работа. И люди, которые не захотят уезжать.",
+        "Маршрут эвакуации открыт. До ухода можно свободно исследовать районы и закончить просьбы жителей."
+      ],
+      "optional": false
+    },
+    {
+      "id": "find_mina_letter",
+      "district": "residential",
+      "position": [
+        -198,
+        -179,
+        0
+      ],
+      "title": "Письмо под дверью",
+      "kind": "record",
+      "speaker": "Записка",
+      "lines": [
+        "Записка: «Мама, я у доктора. Не ищи меня в школе. Мина»."
+      ],
+      "optional": true
+    },
+    {
+      "id": "deliver_mina_letter",
+      "district": "clinic",
+      "position": [
+        -199,
+        37,
+        0
+      ],
+      "title": "Доставить письмо",
+      "kind": "person",
+      "speaker": "Наргис",
+      "lines": [
+        "Наргис: Её мать здесь. Я отдам письмо сама.",
+        "Арсен: Пусть знает, что девочка выбралась."
+      ],
+      "optional": true
+    },
+    {
+      "id": "find_tools",
+      "district": "market",
+      "position": [
+        7,
+        232,
+        0
+      ],
+      "title": "Ящик слесаря",
+      "kind": "loot",
+      "speaker": "Записка",
+      "lines": [
+        "Записка: «Кто возьмёт — закончите перила на мосту. Борис»."
+      ],
+      "optional": true
+    },
+    {
+      "id": "repair_bridge",
+      "district": "depot",
+      "position": [
+        4,
+        4,
+        0
+      ],
+      "title": "Чужую работу закончить",
+      "kind": "craft",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Крепления держат. Можно вести людей через мост.",
+        "Лейла: Имя слесаря оставь на ящике. Пусть знают, кому сказать спасибо."
+      ],
+      "optional": true
+    },
+    {
+      "id": "supply_0",
+      "district": "depot",
+      "position": [
+        18,
+        15,
+        0
+      ],
+      "title": "Припасы: тайник 1",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Возьму необходимое. Кто-то приготовил эти припасы не зря."
+      ],
+      "optional": true
+    },
+    {
+      "id": "supply_1",
+      "district": "residential",
+      "position": [
+        -161,
+        -181,
+        0
+      ],
+      "title": "Припасы: тайник 2",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Возьму необходимое. Кто-то приготовил эти припасы не зря."
+      ],
+      "optional": true
+    },
+    {
+      "id": "supply_2",
+      "district": "clinic",
+      "position": [
+        -204,
+        57,
+        0
+      ],
+      "title": "Припасы: тайник 3",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Возьму необходимое. Кто-то приготовил эти припасы не зря."
+      ],
+      "optional": true
+    },
+    {
+      "id": "supply_3",
+      "district": "pumpworks",
+      "position": [
+        162,
+        -132,
+        0
+      ],
+      "title": "Припасы: тайник 4",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Возьму необходимое. Кто-то приготовил эти припасы не зря."
+      ],
+      "optional": true
+    },
+    {
+      "id": "supply_4",
+      "district": "relay_tower",
+      "position": [
+        199,
+        83,
+        0
+      ],
+      "title": "Припасы: тайник 5",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Возьму необходимое. Кто-то приготовил эти припасы не зря."
+      ],
+      "optional": true
+    },
+    {
+      "id": "supply_5",
+      "district": "market",
+      "position": [
+        -27,
+        201,
+        0
+      ],
+      "title": "Припасы: тайник 6",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Возьму необходимое. Кто-то приготовил эти припасы не зря."
+      ],
+      "optional": true
+    },
+    {
+      "id": "craft_medkit_0",
+      "district": "depot",
+      "position": [
+        -18,
+        5,
+        0
+      ],
+      "title": "Собрать перевязочный комплект",
+      "kind": "craft",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Чистая ткань и антисептик. Пригодится до следующего лазарета."
+      ],
+      "optional": true
+    },
+    {
+      "id": "use_medkit_0",
+      "district": "depot",
+      "position": [
+        -16,
+        5,
+        0
+      ],
+      "title": "Перевязать раны",
+      "kind": "heal",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Можно идти дальше."
+      ],
+      "optional": true
+    },
+    {
+      "id": "craft_medkit_1",
+      "district": "clinic",
+      "position": [
+        -195,
+        51,
+        0
+      ],
+      "title": "Собрать перевязочный комплект",
+      "kind": "craft",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Чистая ткань и антисептик. Пригодится до следующего лазарета."
+      ],
+      "optional": true
+    },
+    {
+      "id": "use_medkit_1",
+      "district": "clinic",
+      "position": [
+        -193,
+        51,
+        0
+      ],
+      "title": "Перевязать раны",
+      "kind": "heal",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Можно идти дальше."
+      ],
+      "optional": true
+    },
+    {
+      "id": "craft_medkit_2",
+      "district": "residential",
+      "position": [
+        -177,
+        -146,
+        0
+      ],
+      "title": "Собрать перевязочный комплект",
+      "kind": "craft",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Чистая ткань и антисептик. Пригодится до следующего лазарета."
+      ],
+      "optional": true
+    },
+    {
+      "id": "use_medkit_2",
+      "district": "residential",
+      "position": [
+        -175,
+        -146,
+        0
+      ],
+      "title": "Перевязать раны",
+      "kind": "heal",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Можно идти дальше."
+      ],
+      "optional": true
+    },
+    {
+      "id": "craft_medkit_3",
+      "district": "pumpworks",
+      "position": [
+        188,
+        -155,
+        0
+      ],
+      "title": "Собрать перевязочный комплект",
+      "kind": "craft",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Чистая ткань и антисептик. Пригодится до следующего лазарета."
+      ],
+      "optional": true
+    },
+    {
+      "id": "use_medkit_3",
+      "district": "pumpworks",
+      "position": [
+        190,
+        -155,
+        0
+      ],
+      "title": "Перевязать раны",
+      "kind": "heal",
+      "speaker": "Арсен",
+      "lines": [
+        "Арсен: Можно идти дальше."
+      ],
+      "optional": true
+    }
+  ],
+  "exclusive_groups": [
+    [
+      "truth_public",
+      "truth_sealed"
+    ],
+    [
+      "ending_stay",
+      "ending_leave"
+    ]
+  ],
+  "narrative_duration_measured": false,
+  "final_character_models": false
+}

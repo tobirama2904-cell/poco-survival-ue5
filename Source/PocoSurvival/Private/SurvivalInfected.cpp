@@ -17,6 +17,7 @@ void ASurvivalInfected::BeginPlay()
 }
 void ASurvivalInfected::Tick(float Delta)
 {
+    if (auto* Player=Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(this,0))) if (Player->bStoryActive) return;
     Super::Tick(Delta);
     if (!IsAlive()) { State=EInfectedState::Dead;return; }
     UnseenSeconds+=Delta;AttackDelay=FMath::Max(0.0f,AttackDelay-Delta);ThinkDelay-=Delta;

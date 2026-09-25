@@ -1,5 +1,7 @@
 #include "SurvivalInteraction.h"
 #include "SurvivalGameInstance.h"
+#include "SurvivalCharacter.h"
+#include "Core/CityContent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Pawn.h"
@@ -30,5 +32,13 @@ bool ASurvivalInteraction::Interact(APawn* User, FString& FailureReason)
     { FailureReason = TEXT("occluded"); return false; }
     auto* Game = Cast<USurvivalGameInstance>(GetGameInstance());
     if (!Game) { FailureReason = TEXT("missing_game_instance"); return false; }
-    return Game->TryAction(ActionId, FailureReason);
+    auto* Player=Cast<ASurvivalCharacter>(User);
+    const auto* Site=survival::FindCitySite(TCHAR_TO_UTF8(*ActionId.ToString()));
+    if (Site && Site->kind=="heal" && (!Player || Player->GetHealth()>=100)) { FailureReason=TEXT("Здоровье уже полное");return false; }
+    if (!Game->TryAction(ActionId,FailureReason)) return false;
+    if (Player) {
+        if (Site && Site->kind=="heal") Player->RestoreVitals(FMath::Min(100.0f,Player->GetHealth()+55),Player->GetStamina());
+        Player->BeginStory(ActionId,this);
+    }
+    return true;
 }

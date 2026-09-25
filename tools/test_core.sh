@@ -10,3 +10,6 @@ ASAN_OPTIONS=detect_leaks=1 .cache/core/test_survival
 
 g++ -std=c++20 -Wall -Wextra -Werror -fsanitize=address,undefined -ISource/PocoSurvival/Public tests/core/test_vitals.cpp -o .cache/core/test_vitals
 .cache/core/test_vitals
+
+c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public Source/PocoSurvival/Private/Core/*.cpp tests/core/test_city.cpp -o .cache/core/test_city
+.cache/core/test_city

@@ -17,7 +17,7 @@ def apply(game, action, expected=True):
     assert bool(success)==expected, (action,result)
 
 game=instance()
-assert len(game.get_objectives())==11
+assert len(game.get_objectives())==55
 assert game.get_carried_weight_kg()==0.0
 apply(game,'repair_generator',False)
 for action in ['search_depot','recover_fuel','repair_generator']:
@@ -96,7 +96,7 @@ assert not enemy.restore_encounter(enemy.get_actor_location(),enemy.get_actor_ro
 actors.destroy_actor(enemy)
 report={'phase' :'unreal-headless-native-integration','native_classes_loaded':3,
  'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
- 'objective_count':11,'native_inventory_and_choices_tested':True,
+ 'objective_count':55,'native_inventory_and_choices_tested':True,
  'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,
  'unreal_editor_version':unreal.SystemLibrary.get_engine_version(),
  'visual_render_tested':False,'android_package_tested':False,'physical_device_tested':False}
