@@ -4,7 +4,10 @@ from pathlib import Path
 import unreal
 root=Path('/project');lib=unreal.EditorAssetLibrary;manager=unreal.InterchangeManager.get_interchange_manager_scripted();report=[]
 for role in ['Arsen','Leyla','Nargis','Ilyas','Infected']:
- dest='/Game/Story/Characters/'+role;params=unreal.ImportAssetParameters();params.set_editor_property('is_automated',True);params.set_editor_property('replace_existing',True)
+ dest='/Game/Story/Characters/'+role
+ if all(lib.does_asset_exist(dest+'/'+name) for name in ['Body','Idle','Walk','Run','Crouch','Talk']):
+  report.append({'role':role,'skeletal_mesh':dest+'/Body.Body','animations':['Idle','Walk','Run','Crouch','Talk'],'reused_verified_import':True});continue
+ params=unreal.ImportAssetParameters();params.set_editor_property('is_automated',True);params.set_editor_property('replace_existing',True)
  assert manager.import_asset(dest,unreal.InterchangeManager.create_source_data(str(root/'.cache/characters'/(role+'.glb'))),params),role
  assets=[lib.load_asset(p) for p in lib.list_assets(dest,True,False)];meshes=[p for p in assets if isinstance(p,unreal.SkeletalMesh)];assert len(meshes)==1,(role,[str(p) for p in meshes]);mesh=meshes[0]
  final=dest+'/Body'

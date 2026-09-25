@@ -29,6 +29,11 @@ cp "$ENGINE/Engine/Programs/UnrealBuildTool/Log.txt" artifacts/android-build/hos
 python3 tools/engine_inventory.py
 export SDL_AUDIODRIVER=dummy
 timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
+ /project/PocoSurvival.uproject -run=pythonscript -script=/project/tools/scene/import_gameplay_assets.py \
+ '-ini:Engine:[/Script/Engine.AudioSettings]:DefaultAudioCompressionType=PCM' \
+ -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \
+ > artifacts/android-build/gameplay-audio-import.log 2>&1
+timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
  /project/PocoSurvival.uproject -run=pythonscript -script=/project/tools/scene/prepare_mobile_scene.py \
  '-ini:Engine:[/Script/Engine.AudioSettings]:DefaultAudioCompressionType=PCM' \
  -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \
