@@ -44,3 +44,5 @@ Verified source downloads for CMU subject 13 trials 17/18 (boxing), plus ASF ske
 The existing Android candidate stays on gameplay/low-water, native 36133757073 (2c09ef3). The first material repair/cook 36137142659 correctly failed its new gate because County materials are instances whose shader parents live outside /Game/County. Sky repair and both movement checks passed; the remaining material fallback was not ignored. Branch gameplay/low-water commit 8f6a3a3 follows actual material parents and removes the purple runtime sky tint; repair/cook 36140764253 was dispatched without changing native C++.
 
 New story/gameplay/save changes live on **gameplay/county-stories**, so they do not silently invalidate that candidate's source compatibility or pretend to be in its APK.
+
+New content source: `cca898ff533e239162ba1b82cc166ea417bdbaf7`. Native UE scene/import/save7/render run: **36143714242**, dispatched on `gameplay/county-stories`. No Android build of this new branch has been dispatched; the older branch's candidate must not be described as containing these episodes.

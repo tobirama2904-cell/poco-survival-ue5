@@ -266,6 +266,9 @@
       "EvidenceFolder",
       "SignalSwitch"
     ],
-    "mocap_source_found": "CMU subject 13 trials 17/18; not yet retargeted"
+    "mocap_source_found": "CMU subject 13 trials 17/18; not yet retargeted",
+    "source_commit": "cca898ff533e239162ba1b82cc166ea417bdbaf7",
+    "native_scene_run": 36143714242,
+    "native_scene_status": "dispatched; actual new UE compile/runtime/voice playback not yet verified"
   }
 }
