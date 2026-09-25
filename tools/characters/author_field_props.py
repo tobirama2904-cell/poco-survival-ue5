@@ -19,7 +19,10 @@ def export(name):
 clear()
 points=[(.22*math.sin(math.pi*i/12),0,-.65+i*1.3/12) for i in range(13)]
 for i in range(12):rod('laminated_limb',points[i],points[i+1],.018 if 4<i<8 else .012,wood)
-rod('string',points[0],(-.09,0,0),.0018,fiber);rod('string',(-.09,0,0),points[-1],.0018,fiber);cube('grip',(.21,0,0),(.045,.055,.16),canvas);export('Bow')
+rod('string',points[0],(-.09,0,0),.0018,fiber);rod('string',(-.09,0,0),points[-1],.0018,fiber);cube('grip',(.21,0,0),(.045,.055,.16),canvas)
+# Grip is the attachment origin, not 21 cm away from the character's hand.
+for o in bpy.context.scene.objects:o.location.x-=.21
+export('Bow')
 clear();rod('shaft',(-.62,0,0),(0,0,0),.0035,wood);rod('head',(0,0,0),(.065,0,0),.007,steel)
 for a in [0,2.094,4.188]:o=cube('fletching',(-.54,0,.01),(.11,.002,.027),fiber);o.rotation_euler.x=a
 export('Arrow')
