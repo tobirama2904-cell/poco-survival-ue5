@@ -4,6 +4,7 @@ Records its ABI/native bridge and images. Never substitutes this for POCO testin
 """
 import json,os,subprocess,time,shlex
 from pathlib import Path
+from frame_quality import metrics
 ROOT=Path('artifacts/android-emulator');ROOT.mkdir(parents=True,exist_ok=True)
 SDK=Path(os.environ['ANDROID_HOME']);ADB=str(SDK/'platform-tools/adb');PACKAGE='com.pocosurvival.game'
 def adb(*args,timeout=45,check=True):
@@ -13,6 +14,16 @@ def screenshot(name):
     p=ROOT/name;p.write_bytes(adb('exec-out','screencap','-p').stdout)
     data=p.read_bytes();assert data[:8]==b'\x89PNG\r\n\x1a\n'
     return {'file':name,'width':int.from_bytes(data[16:20],'big'),'height':int.from_bytes(data[20:24],'big')}
+def wait_visible_frame(name,timeout=300):
+    deadline=time.monotonic()+timeout
+    while time.monotonic()<deadline:
+        if not text('shell','pidof',PACKAGE,check=False):raise RuntimeError('Game died while awaiting first visible frame')
+        image=screenshot(name);image['pixel_regression_checks']=metrics(ROOT/name)
+        if image['pixel_regression_checks']['not_black']:
+            if not image['pixel_regression_checks']['no_strong_magenta_regression']:raise RuntimeError('Strong magenta rendering regression; frame rejected')
+            return image
+        time.sleep(15)
+    raise TimeoutError('Map loaded but no visible frame arrived')
 def launch():
     activity=text('shell','cmd','package','resolve-activity','--brief',PACKAGE).splitlines()[-1]
     if '/' not in activity:raise RuntimeError('No launcher activity')
@@ -52,23 +63,27 @@ try:
         time.sleep(10)
     time.sleep(15)
     report['pid_after_start']=text('shell','pidof',PACKAGE,check=False)
-    report['screenshots']=[screenshot('android-start.png')]
+    report['screenshots']=[wait_visible_frame('android-start.png')]
     logs=text('logcat','-d',timeout=60);(ROOT/'android-logcat.log').write_text(logs)
     if not report['pid_after_start']:raise RuntimeError('Game process did not survive startup')
     if 'CanalDistrict' not in logs or 'Bringing World' not in logs:raise RuntimeError('No real district-load evidence in Android logs')
     report['launch_survived']=True
     width,height=report['screenshots'][0]['width'],report['screenshots'][0]['height']
     adb('shell','input','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'1500')
-    time.sleep(5);report['screenshots'].append(screenshot('android-after-input.png'))
+    time.sleep(5);report['screenshots'].append(wait_visible_frame('android-after-input.png'))
     adb('shell','input','tap',str(round(width*.75)),str(round(height*.08)))
     time.sleep(3)
     report['save_file_search']=text('shell','find','/sdcard/Android/data/'+PACKAGE+'/files','-name','Survival_*.sav',check=False)
-    adb('shell','am','force-stop',PACKAGE);launch();time.sleep(90)
+    adb('shell','am','force-stop',PACKAGE);adb('logcat','-c');launch();time.sleep(90)
     report['pid_after_restart']=text('shell','pidof',PACKAGE,check=False)
-    report['screenshots'].append(screenshot('android-restart.png'))
+    report['screenshots'].append(wait_visible_frame('android-restart.png'))
     (ROOT/'android-restart-logcat.log').write_text(text('logcat','-d',timeout=60))
     if not report['pid_after_restart']:raise RuntimeError('Game failed to survive relaunch')
     report['restart_survived']=True
+    report['visible_frames_verified']=True
+    report['touch_input_injected']=True
+    report['touch_movement_verified']=False
+    report['save_restore_equality_verified']=False
 except Exception as e:
     report['failure']=type(e).__name__+': '+str(e)
     try:(ROOT/'failure-logcat.log').write_text(text('logcat','-d',timeout=15,check=False))

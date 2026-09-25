@@ -29,3 +29,20 @@ confirms Vulkan skips CPU devices unless `-AllowSoftwareRendering` is specified;
 the next emulator-only launch supplies this supported debug command-line extra
 without modifying/re-signing the APK. Test resolution is 960×540, not POCO native
 resolution. No software-engine feature checks are bypassed.
+
+## Visual review of completed run 36043369641
+
+The API35 emulator installed and loaded the real map and survived restart. Its
+first two screenshots were black; the restart screenshot showed the actual
+courtyard/HUD but severe magenta glare and the mobile SkyAtmosphere missing-mesh
+warning. The earlier green process/map gate is NOT visual acceptance. New tests
+wait for actual nonblack frames and reject this large-magenta regression. They
+still do not claim touch displacement, equal restored state, final graphics,
+physical POCO compatibility or FPS.
+
+A mobile-content patch replaces the unsupported sky-atmosphere setup with a real
+unlit two-sided sky sphere, restrains bloom/lens flare, and adds an original
+looping wind SoundWave/AmbientSound. It requires a new cook/package and visual
+check. The prior latest save-format-3 cook timed out at 40 minutes with 7,218
+shaders complete and a remaining shader queue, not missing native code. The
+bounded cook limit is now 65 minutes; only successful exit plus actual map counts.

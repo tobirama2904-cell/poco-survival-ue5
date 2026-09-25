@@ -1,0 +1,13 @@
+{
+  "run": 36043369641,
+  "installed": true,
+  "world_load_logged": true,
+  "restart_survived": true,
+  "screenshots_visually_reviewed": true,
+  "initial_and_after_input_frames": "black",
+  "restart_frame": "actual district/HUD visible but severe magenta/overexposure and missing mobile sky-mesh error",
+  "visual_quality_accepted": false,
+  "physical_poco_tested": false,
+  "touch_movement_verified": false,
+  "save_restore_verified": false
+}

@@ -142,8 +142,8 @@ jobs:
         run: test -s artifacts/apk/unsigned-internal.apk
       - name: Apply stable private signing identity and verify actual APK
         env:
-          SIGNING_P12: ${{ secrets.ANDROID_SIGNING_P12_BASE64 }}
-          SIGNING_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
+          SIGNING_P12: ${{ secrets.ANDROID_SIGNING_V2_P12_BASE64 }}
+          SIGNING_PASSWORD: ${{ secrets.ANDROID_SIGNING_V2_PASSWORD }}
         run: |
           set -euo pipefail
           export JAVA_HOME="$JAVA_HOME_21_X64"
@@ -162,6 +162,10 @@ jobs:
         run: |
           test "$(gh api repos/tobirama2904-cell/poco-ue5-engine-cache --jq .private)" = true
           gh release create "internal-apk-${GITHUB_RUN_ID}" artifacts/apk/* artifacts/android-build/apk-verification.json --repo tobirama2904-cell/poco-ue5-engine-cache --prerelease --title "Internal ARM64 APK ${GITHUB_RUN_ID}" --notes 'Engineering installation candidate. Temporary art/short scene; not the requested finished campaign. Signature/structure checks do not prove device launch or performance.'
+      - name: Continue actual signed package into installation and visual testing
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+        run: gh workflow run android-install-test.yml --ref main -f apk_run="$GITHUB_RUN_ID"
       - name: Upload packaging diagnostics only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

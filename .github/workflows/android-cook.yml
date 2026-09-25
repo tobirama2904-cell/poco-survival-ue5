@@ -6,6 +6,16 @@ on:
         description: Verified private scene release run number
         required: true
         type: string
+      package_after_cook:
+        description: Continue to signed internal APK only after a successful matching cook
+        required: false
+        default: false
+        type: boolean
+      native_run:
+        description: Successful matching native source run for packaging
+        required: false
+        default: '36042319324'
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -91,6 +101,14 @@ jobs:
         run: |
           test "$(gh api repos/tobirama2904-cell/poco-ue5-engine-cache --jq .private)" = true
           gh release create "mobile-cook-${GITHUB_RUN_ID}" .cache/private-cook/* --repo tobirama2904-cell/poco-ue5-engine-cache --prerelease --title "Private mobile content cook ${GITHUB_RUN_ID}" --notes 'Actual Android ASTC cooking checkpoint; not an APK or final campaign.'
+      - name: Continue verified cooking into internal APK packaging
+        if: inputs.package_after_cook
+        env:
+          GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
+          NATIVE_RUN: ${{ inputs.native_run }}
+        run: |
+          [[ "$NATIVE_RUN" =~ ^[0-9]+$ ]]
+          gh workflow run android-package.yml --ref main -f native_run="$NATIVE_RUN" -f cook_run="$GITHUB_RUN_ID"
       - name: Upload diagnostics only, never licensed libraries or editable assets
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -1,0 +1,37 @@
+{
+  "physical_device_tested": false,
+  "poco_f4_tested": false,
+  "fps_claimed": false,
+  "arm_translation_emulator_only": true,
+  "installed": true,
+  "launch_survived": true,
+  "visual_quality_review_required": true,
+  "emulator_only_commandline": "-AllowSoftwareRendering",
+  "requested_emulator_portrait_resolution": "540x960",
+  "abis": "x86_64,arm64-v8a",
+  "native_bridge": "libndk_translation.so",
+  "android_version": "15",
+  "build_fingerprint": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+  "activity": "com.pocosurvival.game/com.epicgames.unreal.SplashActivity",
+  "pid_after_start": "3310 3387",
+  "screenshots": [
+    {
+      "file": "android-start.png",
+      "width": 960,
+      "height": 540
+    },
+    {
+      "file": "android-after-input.png",
+      "width": 960,
+      "height": 540
+    },
+    {
+      "file": "android-restart.png",
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "save_file_search": "",
+  "pid_after_restart": "4156 4201",
+  "restart_survived": true
+}

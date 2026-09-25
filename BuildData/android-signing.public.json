@@ -1,5 +1,9 @@
 {
   "alias": "poco-survival",
-  "certificate_sha256": "7de67cf84375b2c4ee3375163a6efe91328e64bde70ffcc9a83fda38a0dc0e5d",
-  "purpose": "stable internal Android update signing; not evidence of a produced or device-tested APK"
+  "certificate_sha256": "06a679790b10493546dcc6924a00fff007743d66e538abc971fbbdeef73f3340",
+  "purpose": "Internal build signing v2; not compatible as an in-place update over internal v1. No final release exists.",
+  "historical_internal_certificate_sha256": [
+    "7de67cf84375b2c4ee3375163a6efe91328e64bde70ffcc9a83fda38a0dc0e5d"
+  ],
+  "signing_generation": 2
 }

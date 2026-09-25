@@ -4,8 +4,10 @@ import hashlib,json,struct,subprocess,zipfile,os
 from pathlib import Path
 p=Path('artifacts/apk/NulevayaOtmetka-internal-arm64.apk');sdk=Path(os.environ['ANDROID_HOME'])/'build-tools/35.0.1'
 cert=subprocess.check_output([str(sdk/'apksigner'),'verify','--verbose','--print-certs',str(p)],text=True)
-expected=json.loads(Path('BuildData/android-signing.public.json').read_text())['certificate_sha256']
-if expected not in cert.lower().replace(':',''):raise ValueError('Unexpected APK signing certificate')
+identity=json.loads(Path('BuildData/android-signing.public.json').read_text());allowed=[identity['certificate_sha256']]
+if os.environ.get('ALLOW_HISTORIC_APK_SIGNER')=='1':allowed+=identity.get('historical_internal_certificate_sha256',[])
+expected=next((value for value in allowed if value in cert.lower().replace(':','')),None)
+if expected is None:raise ValueError('Unexpected APK signing certificate')
 with zipfile.ZipFile(p) as z:
     if z.testzip():raise ValueError('Corrupt APK ZIP')
     names=z.namelist();libs=[n for n in names if n.startswith('lib/arm64-v8a/') and n.endswith('.so')]

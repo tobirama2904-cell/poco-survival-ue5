@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
+      ALLOW_HISTORIC_APK_SIGNER: "1"
       ANDROID_AVD_HOME: ${{ github.workspace }}/.cache/android-avd
       ANDROID_USER_HOME: ${{ github.workspace }}/.cache/android-user
     steps:
@@ -35,6 +36,7 @@ jobs:
       - name: Prepare free development emulator and record exact installed SDK versions
         run: |
           set -euo pipefail
+          python3 -m pip install Pillow==11.3.0
           test -e /dev/kvm
           sudo chmod 666 /dev/kvm
           export JAVA_HOME="$JAVA_HOME_21_X64"

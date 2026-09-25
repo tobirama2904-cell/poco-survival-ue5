@@ -116,6 +116,15 @@
   "encounter_persistence_verification_scope": "Actual UE5.7.4 Linux editor save/dead+damaged restore/invalid+duplicate fallback and rendered walking; not Android",
   "encounter_persistence_in_current_apk": false,
   "android_install_verification_scope": "Signed APK installed successfully on official Android 11 x86_64/ARM64-translation emulator; startup failed in native translator",
-  "android_launch_verified": false,
-  "android_install_test_run": 36041635033
+  "android_launch_verified": true,
+  "android_install_test_run": 36043369641,
+  "android_launch_verification_scope": "Android15 translated ARM64 emulator with explicit CPU renderer; map logged and actual frame after restart, not physical POCO",
+  "android_mobile_visual_quality_accepted": false,
+  "android_mobile_visual_defects": [
+    "initial black frames",
+    "magenta/overexposure",
+    "SkyAtmosphere requires mobile sky mesh"
+  ],
+  "android_latest_native_run": 36042319324,
+  "android_latest_native_success": true
 }

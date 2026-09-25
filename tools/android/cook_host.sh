@@ -27,8 +27,12 @@ set -e
 cp "$ENGINE/Engine/Programs/UnrealBuildTool/Log.txt" artifacts/android-build/host-ubt-detailed.log || true
 [[ "$RESULT" -eq 0 ]] || exit "$RESULT"
 python3 tools/engine_inventory.py
+timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
+ /project/PocoSurvival.uproject -run=pythonscript -script=/project/tools/scene/prepare_mobile_scene.py \
+ -unattended -nop4 -NullRHI -stdout -FullStdOutLogOutput \
+ > artifacts/android-build/mobile-scene-prepare.log 2>&1
 set +e
-timeout --foreground 40m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
+timeout --foreground 65m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
   /project/PocoSurvival.uproject -run=Cook -TargetPlatform=Android_ASTC \
   -Map=/Game/Worlds/CanalDistrict -unattended -nop4 -NullRHI -stdout -FullStdOutLogOutput \
   2>&1 | tee artifacts/android-build/mobile-cook.log

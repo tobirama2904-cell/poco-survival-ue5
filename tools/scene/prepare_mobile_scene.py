@@ -1,0 +1,55 @@
+"""Patch actual retained map for mobile; run inside the licensed editor commandlet.
+A real sky mesh avoids the measured mobile SkyAtmosphere missing-mesh failure.
+No claimed final art quality; this is a renderer compatibility correction.
+"""
+import json
+from pathlib import Path
+import unreal
+level=unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
+actors=unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+assert level.load_level('/Game/Worlds/CanalDistrict')
+removed=0
+for actor in actors.get_all_level_actors():
+ if isinstance(actor,unreal.SkyAtmosphere):actors.destroy_actor(actor);removed+=1
+path='/Game/Environment/MobileSky/M_MobileSky'
+material=unreal.load_asset(path)
+if material is None:material=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_MobileSky','/Game/Environment/MobileSky',unreal.Material,unreal.MaterialFactoryNew())
+assert material
+material.set_editor_property('shading_model',unreal.MaterialShadingModel.MSM_UNLIT)
+material.set_editor_property('two_sided',True)
+material.set_editor_property('is_sky',True)
+unreal.MaterialEditingLibrary.delete_all_material_expressions(material)
+color=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionConstant3Vector,0,0)
+color.set_editor_property('constant',unreal.LinearColor(.12,.22,.36,1))
+unreal.MaterialEditingLibrary.connect_material_property(color,'',unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+unreal.MaterialEditingLibrary.recompile_material(material)
+unreal.EditorAssetLibrary.save_loaded_asset(material)
+for actor in actors.get_all_level_actors():
+ if actor.get_actor_label()=='mobile_sky_dome':actors.destroy_actor(actor)
+sky=actors.spawn_actor_from_class(unreal.StaticMeshActor,unreal.Vector(0,0,0));sky.set_actor_label('mobile_sky_dome')
+component=sky.static_mesh_component;component.set_static_mesh(unreal.load_asset('/Engine/BasicShapes/Sphere.Sphere'))
+component.set_material(0,material);component.set_collision_profile_name('NoCollision');component.set_editor_property('cast_shadow',False)
+sky.set_actor_scale3d(unreal.Vector(1600,1600,1600))
+for actor in actors.get_all_level_actors():
+ if isinstance(actor,unreal.PostProcessVolume):
+  settings=actor.get_editor_property('settings')
+  for key,value in [('override_bloom_intensity',True),('bloom_intensity',.12),('override_lens_flare_intensity',True),('lens_flare_intensity',0.0),('override_auto_exposure_bias',True),('auto_exposure_bias',-.7)]:settings.set_editor_property(key,value)
+  actor.set_editor_property('settings',settings)
+# Actual original ambience, not an advertised completed soundtrack.
+wind_path='/Game/Audio/Ambience/wind-loop'
+wind=unreal.load_asset(wind_path)
+if wind is None:
+ task=unreal.AssetImportTask();task.filename='/project/BuildData/audio/wind-loop.wav';task.destination_path='/Game/Audio/Ambience';task.destination_name='WindLoop';task.automated=True;task.save=True
+ task.factory=unreal.SoundFactory()
+ unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([task])
+ wind=next((unreal.load_asset(p) for p in task.imported_object_paths if isinstance(unreal.load_asset(p),unreal.SoundWave)),None)
+assert isinstance(wind,unreal.SoundWave),'Original wind SoundWave import failed'
+wind.set_editor_property('looping',True);unreal.EditorAssetLibrary.save_loaded_asset(wind)
+for actor in actors.get_all_level_actors():
+ if actor.get_actor_label()=='courtyard_wind':actors.destroy_actor(actor)
+ambience=actors.spawn_actor_from_class(unreal.AmbientSound,unreal.Vector(0,0,200));ambience.set_actor_label('courtyard_wind')
+ambience.audio_component.set_sound(wind);ambience.audio_component.set_volume_multiplier(.22);ambience.audio_component.set_auto_activate(True)
+assert level.save_current_level()
+r={'phase':'mobile-scene-correction','removed_sky_atmospheres':removed,'actual_sky_mesh':sky.get_path_name(),'unlit_sky_material':material.get_path_name(),'ambient_sound':wind.get_path_name(),'mobile_render_verified':False,'final_art':False}
+Path('/project/artifacts/android-build/mobile-scene-correction.json').write_text(json.dumps(r,indent=2)+'\n')
+print('MOBILE_SCENE_CORRECTED',json.dumps(r),flush=True)
