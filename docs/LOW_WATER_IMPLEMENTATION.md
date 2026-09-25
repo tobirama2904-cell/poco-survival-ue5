@@ -47,3 +47,11 @@ co-op, hardware profiling and finished consumer APK are not delivered here.
 short-line replacements after ASR flags; provenance retained. Exact coverage,
 PCM format and hashes tested. Original source audio retained in public release
 `low-water-voice-source-001` (NOT an APK); no in-game playback claim.
+
+## External source pins
+Source `8264256`: core CI **36126058562 succeeded**. Scene **36126057549**
+and Android native **36126059454** started, last observed acquiring the engine.
+These are separate from the older private Android cook **36123702654**.
+No automatic Low Water packaging approval before reviewing its actual frame.
+The local expanded diagnostics are cached; the verified archive is
+`/home/user/city-build-evidence-2026-09-25.zip`.

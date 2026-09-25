@@ -1,0 +1,6 @@
+{
+  "local_archive": "/home/user/city-build-evidence-2026-09-25.zip",
+  "restore": "unzip city-build-evidence-2026-09-25.zip -d city-build-evidence",
+  "contains": "downloaded UE/Android run diagnostics up to Low Water dispatch; no credentials",
+  "expanded_logs_are_reproducible_cache": true
+}
