@@ -195,12 +195,12 @@
     "measured_campaign_hours": null,
     "physical_poco_tested": false,
     "source_commit": "64dc5cc",
-    "scene_run": 36128450801,
-    "android_native_run": 36126987127,
+    "scene_run": 36133754596,
+    "android_native_run": 36133757073,
     "core_run": 36126920354,
     "core_result": "success",
-    "scene_status": "36128450801 completed success; frame manually reviewed, dark/unpolished, final art rejected.",
-    "android_status": "corrected native queued; old-source native kept for checkpoint",
+    "scene_status": "county/HUD scene verification in progress",
+    "android_status": "matching county/HUD native build in progress; superseded 1cdc496 run cancelled before compilation",
     "local_python_tests": 27,
     "native_cpp_correction": "1cdc496",
     "native_linux_result": "compiled and passed native save6/recovery tests during scene attempt2; later map population failures separately measured",
@@ -208,7 +208,7 @@
     "old_internal_emulator": 36129949647,
     "old_internal_emulator_result": "Install, visible frame and relaunch passed; old 5d6dde86 source, not Low Water or POCO performance.",
     "county_stage": {
-      "source": "worktree pending commit",
+      "source": "2c09ef3a4964c9b8e556e8b9d5e3d888a2200708",
       "extent_m": 2400,
       "terrain_tiles": 16,
       "nature_instances": 6188,
@@ -219,7 +219,15 @@
       "new_unreal_compile_verified": false,
       "new_unreal_render_reviewed": false,
       "new_android_apk_available": false,
-      "full_user_acceptance_complete": false
+      "full_user_acceptance_complete": false,
+      "scene_run": 36133754596,
+      "android_native_run": 36133757073,
+      "old_native_checkpoint": {
+        "run": 36126059454,
+        "result": "failed: known pre-1cdc496 misleading indentation; private checkpoint retained",
+        "engine_actions": 712,
+        "build_seconds": 3751.98
+      }
     }
   }
 }
