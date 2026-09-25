@@ -1,0 +1,22 @@
+{
+  "phase": "unreal-headless-native-integration",
+  "native_classes_loaded": 3,
+  "version6_field_and_film_serialization_fallback_tested": true,
+  "version5_world_clock_serialization_and_fallback_tested": true,
+  "version4_clock_migration_tested": true,
+  "same_revision_save_generation_tested": true,
+  "damaged_and_dead_encounters_restored": true,
+  "invalid_and_duplicate_encounter_fallback_tested": true,
+  "view_rotation_serialization_tested": true,
+  "objective_count": 61,
+  "native_inventory_and_choices_tested": true,
+  "save_write_and_load_tested": true,
+  "truncated_newest_slot_recovery_tested": true,
+  "unreal_editor_version": "5.7.4-51494982+UE5",
+  "visual_render_tested": false,
+  "android_package_tested": false,
+  "physical_device_tested": false,
+  "scene_run": 36126057549,
+  "cpp_source": "1cdc496",
+  "scope": "actual UE5 native integration; later map population failed, no completed frame or APK approved"
+}
