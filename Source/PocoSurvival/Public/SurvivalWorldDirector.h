@@ -34,6 +34,8 @@ private:
  void MixScore(class ASurvivalCharacter* Player,float Delta);
  float EnvironmentTimer=0,StoryTimer=0;
  float RainPhase=0;
+ float JourneyDelay=45,RestSeconds=0;
+ void TryJourneyConversation(class ASurvivalCharacter* Player,class USurvivalGameInstance* Game,float Delta);
  bool bSheltered=false;
  void AdvanceStory(class ASurvivalCharacter* Player,class USurvivalGameInstance* Game);
 };

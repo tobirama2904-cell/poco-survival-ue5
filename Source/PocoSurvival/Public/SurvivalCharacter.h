@@ -58,6 +58,8 @@ public:
     void FieldAction(int32 Action);
     void BeginFilm(int32 Index,AActor* Subject);
     void BeginCountyStory(int32 Arc,int32 Beat);
+    void BeginJourneyConversation(int32 Id);
+    bool IsJourneyConversation() const { return ActiveJourney>=0; }
     void PauseBanter(bool Pause);
     bool IsBanterPaused() const { return bBanterPaused; }
     bool bConversing=false;
@@ -85,7 +87,7 @@ private:
     survival::BowDraw Bow;
     int32 AttackFinger=-1;
     FTimerHandle FilmLineTimer;
-    int32 ActiveFilm=-1;
+    int32 ActiveFilm=-1,ActiveJourney=-1;
     bool bCountyStory=false,bBanterPaused=false;
     bool bHumanAvatar=false;
     float FootstepDelay=0;

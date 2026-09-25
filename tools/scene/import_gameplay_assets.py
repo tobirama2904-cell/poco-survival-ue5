@@ -11,8 +11,8 @@ for name in ['Pistol','Pipe','Bottle','Bow','Arrow','SupplyCrate','Door','FieldR
  assert lib.rename_asset(meshes[0].get_path_name(),'/Game/Story/Props/'+name)
  nanite=meshes[0].get_editor_property('nanite_settings');nanite.set_editor_property('enabled',False);meshes[0].set_editor_property('nanite_settings',nanite)
  lib.save_loaded_asset(meshes[0])
-for path in list((root/'BuildData/audio').glob('[A-Z]*.wav'))+list((root/'BuildData/voices').glob('*.wav'))+list((root/'BuildData/filmvoices').glob('*.wav'))+list((root/'BuildData/countyvoices').glob('*.wav'))+list((root/'BuildData/mainvoices').glob('*.wav')):
- dest='/Game/Story/MainVoices' if path.parent.name=='mainvoices' else '/Game/Story/CountyVoices' if path.parent.name=='countyvoices' else '/Game/Story/FilmVoices' if path.parent.name=='filmvoices' else '/Game/Story/Voices' if path.parent.name=='voices' else '/Game/Story/Audio'
+for path in list((root/'BuildData/audio').glob('[A-Z]*.wav'))+list((root/'BuildData/voices').glob('*.wav'))+list((root/'BuildData/filmvoices').glob('*.wav'))+list((root/'BuildData/countyvoices').glob('*.wav'))+list((root/'BuildData/mainvoices').glob('*.wav'))+list((root/'BuildData/journeyvoices').glob('*.wav')):
+ dest='/Game/Story/JourneyVoices' if path.parent.name=='journeyvoices' else '/Game/Story/MainVoices' if path.parent.name=='mainvoices' else '/Game/Story/CountyVoices' if path.parent.name=='countyvoices' else '/Game/Story/FilmVoices' if path.parent.name=='filmvoices' else '/Game/Story/Voices' if path.parent.name=='voices' else '/Game/Story/Audio'
  if lib.does_asset_exist(dest+'/'+path.stem):continue
  task=unreal.AssetImportTask();task.filename=str(path);task.destination_path=dest;task.destination_name=path.stem;task.automated=True;task.save=True;task.factory=unreal.SoundFactory()
  unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([task])

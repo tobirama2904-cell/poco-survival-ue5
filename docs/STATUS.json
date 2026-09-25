@@ -311,5 +311,38 @@
     "touch_movement_verified": false,
     "poco_f4_tested": false,
     "final_art_accepted": false
+  },
+  "journey_stage": {
+    "branch": "gameplay/journey-dialogue",
+    "base_main_campaign": "864251e950c88ac4fb8d44699653ea79cf7ace87",
+    "base_compiler_fix": "0450c41",
+    "main_campaign_scenes_retained": 30,
+    "main_scene_lines_per_language": 194,
+    "new_contextual_conversations": 12,
+    "new_contextual_lines_per_language": 72,
+    "new_recorded_russian_seconds": 217.18795833333334,
+    "audio_alignment_flags": 0,
+    "native_unreal_verified": false,
+    "in_game_voice_verified": false,
+    "treatment_chapters": 12,
+    "treatment_future_chapters_not_implemented": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "world_extent_still_m": 2400,
+    "portable_suites_passed": 9,
+    "history_masks_tested": 4096,
+    "python_tests_passed": 58,
+    "python_tests_skipped": 1,
+    "campaign_measured_hours": null,
+    "full_acceptance": false
   }
 }

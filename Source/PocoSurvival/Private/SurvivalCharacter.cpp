@@ -314,12 +314,12 @@ void ASurvivalCharacter::BeginStory(FName Id,AActor* Subject,bool Cinematic)
 void ASurvivalCharacter::AdvanceStory()
 {
     if (!bStoryActive||bBanterPaused) return;
-    if (++StoryLine>=StoryLines.Num()) {const int32 Completed=ActiveFilm;EndStory();if(Completed>=0)if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))if(G->FilmProgress==Completed){++G->FilmProgress;Save();}}else SpeakStoryLine();
+    if (++StoryLine>=StoryLines.Num()) {const int32 Completed=ActiveFilm,JourneyFinished=ActiveJourney;EndStory();if(JourneyFinished>=0)if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))if(G->FinishJourneyConversation(JourneyFinished))Save();if(Completed>=0)if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))if(G->FilmProgress==Completed){++G->FilmProgress;Save();}}else SpeakStoryLine();
 }
 void ASurvivalCharacter::EndStory()
 {
     if (!bStoryActive) return;
-    bStoryActive=false;GetWorldTimerManager().ClearTimer(FilmLineTimer);ActiveFilm=-1;bCountyStory=false;bBanterPaused=false;
+    bStoryActive=false;GetWorldTimerManager().ClearTimer(FilmLineTimer);ActiveFilm=-1;ActiveJourney=-1;bCountyStory=false;bBanterPaused=false;
     if (StoryAudio) { StoryAudio->OnAudioFinished.RemoveAll(this);StoryAudio->Stop();StoryAudio=nullptr; }
     if (bStoryLocksMovement) if (auto* PC=Cast<APlayerController>(Controller)) { PC->SetIgnoreMoveInput(false);PC->SetIgnoreLookInput(false);PC->SetViewTarget(this); }
     if (StoryCamera) { StoryCamera->Destroy();StoryCamera=nullptr; }
@@ -408,6 +408,11 @@ void ASurvivalCharacter::SpeakStoryLine()
         if(ClipLine>=0&&FPackageName::DoesPackageExist(Package))if(auto* Wave=LoadObject<USoundBase>(nullptr,*(Package+TEXT(".")+Name))){StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);if(StoryAudio){StoryAudio->OnAudioFinished.AddDynamic(this,&ASurvivalCharacter::AdvanceStory);return;}}
         GetWorldTimerManager().SetTimer(FilmLineTimer,this,&ASurvivalCharacter::AdvanceStory,FMath::Clamp(StoryLines[StoryLine].Len()*.065f,3.0f,11.0f),false);return;
     }
+    if(ActiveJourney>=0){
+        const FString Name=CurrentStory.ToString()+TEXT("_")+FString::FromInt(StoryLine);const FString Package=TEXT("/Game/Story/JourneyVoices/")+Name;
+        if(FPackageName::DoesPackageExist(Package))if(auto* Wave=LoadObject<USoundBase>(nullptr,*(Package+TEXT(".")+Name))){StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);if(StoryAudio){StoryAudio->OnAudioFinished.AddDynamic(this,&ASurvivalCharacter::AdvanceStory);return;}}
+        GetWorldTimerManager().SetTimer(FilmLineTimer,this,&ASurvivalCharacter::AdvanceStory,FMath::Clamp(Line.Len()*.065f,4.f,14.f),false);return;
+    }
     if(bCountyStory){
         const FString Name=CurrentStory.ToString()+TEXT("_")+FString::FromInt(StoryLine);const FString Package=TEXT("/Game/Story/CountyVoices/")+Name;
         if(FPackageName::DoesPackageExist(Package))if(auto* Wave=LoadObject<USoundBase>(nullptr,*(Package+TEXT(".")+Name))){StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);if(StoryAudio){StoryAudio->OnAudioFinished.AddDynamic(this,&ASurvivalCharacter::AdvanceStory);return;}}
@@ -484,4 +489,13 @@ void ASurvivalCharacter::PauseBanter(bool Pause)
  Pause=(Pause||bEditingControls||bJournalOpen)&&bStoryActive&&!bStoryLocksMovement;if(Pause==bBanterPaused)return;bBanterPaused=Pause;
  if(StoryAudio)StoryAudio->SetPaused(Pause);
  if(Pause)GetWorldTimerManager().PauseTimer(FilmLineTimer);else GetWorldTimerManager().UnPauseTimer(FilmLineTimer);
+}
+
+void ASurvivalCharacter::BeginJourneyConversation(int32 Id)
+{
+ const auto& Scenes=survival::JourneyScenes();if(bStoryActive||Id<0||Id>=static_cast<int32>(Scenes.size()))return;
+ EndStory();ActiveJourney=Id;ActiveFilm=-1;bCountyStory=false;bStoryActive=true;bStoryLocksMovement=false;bBanterPaused=false;StoryLines.Reset();StoryLine=0;StorySpeaker.Reset();
+ const auto& Scene=Scenes[Id];CurrentStory=FName(UTF8_TO_TCHAR(Scene.id.c_str()));
+ for(const auto& Line:USurvivalControlSettings::Get()->bEnglishStory?Scene.en:Scene.ru)StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
+ SpeakStoryLine();
 }

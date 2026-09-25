@@ -28,3 +28,6 @@ c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISo
 
 c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public Source/PocoSurvival/Private/Core/AmericanStory.cpp tests/core/test_main_campaign.cpp -o .cache/core/test_main_campaign
 .cache/core/test_main_campaign
+
+c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public Source/PocoSurvival/Private/Core/JourneyDialogue.cpp tests/core/test_journey.cpp -o .cache/core/test_journey
+.cache/core/test_journey

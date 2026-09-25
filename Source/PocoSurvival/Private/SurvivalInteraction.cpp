@@ -44,6 +44,7 @@ bool ASurvivalInteraction::Interact(APawn* User, FString& FailureReason)
         const auto Result=static_cast<survival::CampaignResult>(Game->TryMainAction(FCString::Atoi(*Index)));
         if(Result==survival::CampaignResult::Resources){FailureReason=TEXT("Для приёмника нужны дерево и деталь. Можно взять запасной комплект рядом");return false;}
         if(Result==survival::CampaignResult::Invalid||Result==survival::CampaignResult::Locked){FailureReason=TEXT("Продолжите разговор и узнайте, что нужно сделать");return false;}
+        if(Result==survival::CampaignResult::Advanced&&Player->IsJourneyConversation())Player->EndStory();
         return true;
     }
     if(Id.StartsWith(TEXT("__county_"))){

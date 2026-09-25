@@ -1,0 +1,657 @@
+{
+  "lines_expected": 72,
+  "lines_written": 72,
+  "voice_count": 2,
+  "issues": [],
+  "clips": [
+    {
+      "id": "wrong_shoes_0",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 0.0,
+      "end_seconds": 2.85,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "wrong_shoes_2",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 2.85,
+      "end_seconds": 7.38,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "wrong_shoes_4",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 7.38,
+      "end_seconds": 9.51,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_smell_0",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 9.51,
+      "end_seconds": 11.31,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_smell_2",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 11.31,
+      "end_seconds": 13.99,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_smell_4",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 13.99,
+      "end_seconds": 17.21,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "coffee_argument_1",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 17.21,
+      "end_seconds": 20.51,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "coffee_argument_3",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 20.51,
+      "end_seconds": 24.1,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "coffee_argument_5",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 24.1,
+      "end_seconds": 26.44,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "lost_shop_1",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 26.44,
+      "end_seconds": 30.55,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "lost_shop_3",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 30.55,
+      "end_seconds": 33.07,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "lost_shop_5",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 33.07,
+      "end_seconds": 35.44,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "night_space_0",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 35.44,
+      "end_seconds": 37.9,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "night_space_2",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 37.9,
+      "end_seconds": 40.2,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "night_space_4",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 40.2,
+      "end_seconds": 42.81,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "slow_breath_0",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 42.81,
+      "end_seconds": 46.28,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "slow_breath_2",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 46.28,
+      "end_seconds": 48.95,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "slow_breath_4",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 48.95,
+      "end_seconds": 53.59,
+      "lexical_coverage": 0.933
+    },
+    {
+      "id": "left_hand_0",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 53.59,
+      "end_seconds": 55.92,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "left_hand_2",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 55.92,
+      "end_seconds": 57.49,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "left_hand_4",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 57.49,
+      "end_seconds": 60.11,
+      "lexical_coverage": 0.714
+    },
+    {
+      "id": "missing_recipe_0",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 60.11,
+      "end_seconds": 63.5,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "missing_recipe_2",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 63.5,
+      "end_seconds": 68.41,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "missing_recipe_4",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 68.41,
+      "end_seconds": 71.42,
+      "lexical_coverage": 0.889
+    },
+    {
+      "id": "rain_afterward_1",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 71.42,
+      "end_seconds": 73.62,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_afterward_3",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 73.62,
+      "end_seconds": 76.7,
+      "lexical_coverage": 0.714
+    },
+    {
+      "id": "rain_afterward_5",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 76.7,
+      "end_seconds": 79.59,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "future_window_0",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 79.59,
+      "end_seconds": 82.69,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "future_window_2",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 82.69,
+      "end_seconds": 87.18,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "future_window_4",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 0,
+      "start_seconds": 87.18,
+      "end_seconds": 89.989,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "ordinary_names_0",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 1,
+      "start_seconds": 0.0,
+      "end_seconds": 4.07,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "ordinary_names_2",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 1,
+      "start_seconds": 4.07,
+      "end_seconds": 7.96,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "ordinary_names_4",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 1,
+      "start_seconds": 7.96,
+      "end_seconds": 11.47,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "shared_silence_1",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 1,
+      "start_seconds": 11.47,
+      "end_seconds": 13.64,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "shared_silence_3",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 1,
+      "start_seconds": 13.64,
+      "end_seconds": 16.57,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "shared_silence_5",
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "batch": 1,
+      "start_seconds": 16.57,
+      "end_seconds": 20.921,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "wrong_shoes_1",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 0.0,
+      "end_seconds": 2.35,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "wrong_shoes_3",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 2.35,
+      "end_seconds": 5.93,
+      "lexical_coverage": 0.857
+    },
+    {
+      "id": "wrong_shoes_5",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 5.93,
+      "end_seconds": 9.02,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_smell_1",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 9.02,
+      "end_seconds": 11.7,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_smell_3",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 11.7,
+      "end_seconds": 14.34,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_smell_5",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 14.34,
+      "end_seconds": 16.7,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "coffee_argument_0",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 16.7,
+      "end_seconds": 19.54,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "coffee_argument_2",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 19.54,
+      "end_seconds": 22.49,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "coffee_argument_4",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 22.49,
+      "end_seconds": 25.15,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "lost_shop_0",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 25.15,
+      "end_seconds": 29.26,
+      "lexical_coverage": 0.778
+    },
+    {
+      "id": "lost_shop_2",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 29.26,
+      "end_seconds": 33.42,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "lost_shop_4",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 33.42,
+      "end_seconds": 36.37,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "night_space_1",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 36.37,
+      "end_seconds": 38.8,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "night_space_3",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 38.8,
+      "end_seconds": 42.81,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "night_space_5",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 42.81,
+      "end_seconds": 46.7,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "slow_breath_1",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 46.7,
+      "end_seconds": 51.19,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "slow_breath_3",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 51.19,
+      "end_seconds": 53.98,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "slow_breath_5",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 53.98,
+      "end_seconds": 57.26,
+      "lexical_coverage": 0.875
+    },
+    {
+      "id": "left_hand_1",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 57.26,
+      "end_seconds": 59.68,
+      "lexical_coverage": 0.75
+    },
+    {
+      "id": "left_hand_3",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 59.68,
+      "end_seconds": 62.54,
+      "lexical_coverage": 0.833
+    },
+    {
+      "id": "left_hand_5",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 62.54,
+      "end_seconds": 65.23,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "missing_recipe_1",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 65.23,
+      "end_seconds": 68.92,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "missing_recipe_3",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 68.92,
+      "end_seconds": 70.88,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "missing_recipe_5",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 70.88,
+      "end_seconds": 74.97,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_afterward_0",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 74.97,
+      "end_seconds": 78.19,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_afterward_2",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 78.19,
+      "end_seconds": 80.63,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rain_afterward_4",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 80.63,
+      "end_seconds": 83.78,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "future_window_1",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 83.78,
+      "end_seconds": 85.06,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "future_window_3",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 85.06,
+      "end_seconds": 87.74,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "future_window_5",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 87.74,
+      "end_seconds": 91.97,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "ordinary_names_1",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 91.97,
+      "end_seconds": 94.31,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "ordinary_names_3",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 94.31,
+      "end_seconds": 97.81,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "ordinary_names_5",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 97.81,
+      "end_seconds": 100.66,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "shared_silence_0",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 2,
+      "start_seconds": 100.66,
+      "end_seconds": 102.609,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "shared_silence_2",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 3,
+      "start_seconds": 0.0,
+      "end_seconds": 1.94,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "shared_silence_4",
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "batch": 3,
+      "start_seconds": 1.94,
+      "end_seconds": 3.669,
+      "lexical_coverage": 1.0
+    }
+  ],
+  "in_game_audio_verified": false
+}

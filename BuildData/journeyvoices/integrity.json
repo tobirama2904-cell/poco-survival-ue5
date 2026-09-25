@@ -1,0 +1,438 @@
+{
+  "files": [
+    {
+      "name": "coffee_argument_0.wav",
+      "sha256": "6eb1e0bd0ff24a38468ed607d49b3297ad040f60503c6061f1a19d3a0732c6f2",
+      "bytes": 136364,
+      "seconds": 2.84
+    },
+    {
+      "name": "coffee_argument_1.wav",
+      "sha256": "a225acfd199d848e7808565cdceb102c724441bf58b0f7224e9e490308c1df51",
+      "bytes": 158442,
+      "seconds": 3.2999583333333335
+    },
+    {
+      "name": "coffee_argument_2.wav",
+      "sha256": "ca59f23ef58c0b29a1d7115f29d200edf06957b55e1abadd4ee5036062c00365",
+      "bytes": 141644,
+      "seconds": 2.95
+    },
+    {
+      "name": "coffee_argument_3.wav",
+      "sha256": "2aa7e2153338c6f868134d966cb125af2c2f82e0772d695d502f8c1fb9c7afe9",
+      "bytes": 172366,
+      "seconds": 3.5900416666666666
+    },
+    {
+      "name": "coffee_argument_4.wav",
+      "sha256": "f1679368136d418adc7daef92e8a698907f8382908d06b051fcf8fd70f885bd9",
+      "bytes": 127724,
+      "seconds": 2.66
+    },
+    {
+      "name": "coffee_argument_5.wav",
+      "sha256": "c6000deace2ca150d0449375fcf78af6bd62ec97fc03ddc670db221073795f38",
+      "bytes": 112364,
+      "seconds": 2.34
+    },
+    {
+      "name": "future_window_0.wav",
+      "sha256": "8873a596e6807f1e01f395d06dc71103fa01d98463162fd8593ac798b1ca3b2c",
+      "bytes": 148844,
+      "seconds": 3.1
+    },
+    {
+      "name": "future_window_1.wav",
+      "sha256": "543472101ffcd84da5f45e10229146cb55de82a12cd7c03b3c1c0bc37e9d98ad",
+      "bytes": 61484,
+      "seconds": 1.28
+    },
+    {
+      "name": "future_window_2.wav",
+      "sha256": "c78c2b04439068e3730ff03659b95a2919f7f60401f5a971bdcc1c2799dfa9dd",
+      "bytes": 215564,
+      "seconds": 4.49
+    },
+    {
+      "name": "future_window_3.wav",
+      "sha256": "e0968989b87c79d694aa8e435c387b571791bf0f4dd8b4a2161c057a2500fe78",
+      "bytes": 128684,
+      "seconds": 2.68
+    },
+    {
+      "name": "future_window_4.wav",
+      "sha256": "2e7f4e2b8a7d23272504ab06593bf49a66affdf189df66208323cf32b7e7035a",
+      "bytes": 134874,
+      "seconds": 2.8089583333333334
+    },
+    {
+      "name": "future_window_5.wav",
+      "sha256": "9eb5194d904c2054bd62495027b273f6dae4e98a0562b7a07a7a3973230bff4c",
+      "bytes": 203084,
+      "seconds": 4.23
+    },
+    {
+      "name": "left_hand_0.wav",
+      "sha256": "4d50026c24f69ef2d01ddff73030526eac223eea5361985f5309053e0651c7f2",
+      "bytes": 111884,
+      "seconds": 2.33
+    },
+    {
+      "name": "left_hand_1.wav",
+      "sha256": "23779e02138cfd1ce69e0871b4988ea193a7e846082d9278e8ac9ffc70993c3a",
+      "bytes": 116204,
+      "seconds": 2.42
+    },
+    {
+      "name": "left_hand_2.wav",
+      "sha256": "5dc4822d47480064875ad6dff8ab9840126f0c258b765469383681a82e875817",
+      "bytes": 75402,
+      "seconds": 1.5699583333333333
+    },
+    {
+      "name": "left_hand_3.wav",
+      "sha256": "ad8653f303e055018bd4d2df024bd60a8f2b3694c93c9be0338d1a2e5aa09263",
+      "bytes": 137324,
+      "seconds": 2.86
+    },
+    {
+      "name": "left_hand_4.wav",
+      "sha256": "e11fc17ac81a3924ca68130eafa68c8650fdd83868f1205fa53ff344842fc9f6",
+      "bytes": 125806,
+      "seconds": 2.620041666666667
+    },
+    {
+      "name": "left_hand_5.wav",
+      "sha256": "d2bb8e737b5b875d1c35a0a84714c987d0bdf723cea260bb73914bc02dacfdfe",
+      "bytes": 129164,
+      "seconds": 2.69
+    },
+    {
+      "name": "lost_shop_0.wav",
+      "sha256": "5ba96f76084e232dcc72043e6942cc457b6cb7fe7bce00640fcbbf902c97aa36",
+      "bytes": 197324,
+      "seconds": 4.11
+    },
+    {
+      "name": "lost_shop_1.wav",
+      "sha256": "9f43c3c04e3f4df6e0414b26e742dde486680448269ac0e311d34e39ef72dee5",
+      "bytes": 197324,
+      "seconds": 4.11
+    },
+    {
+      "name": "lost_shop_2.wav",
+      "sha256": "70a66e94cbed6c1ae847f6dddb84665f562b6039d05c5e93179c9d308740ec18",
+      "bytes": 199724,
+      "seconds": 4.16
+    },
+    {
+      "name": "lost_shop_3.wav",
+      "sha256": "66e254f3a601197a90078a08118b6cd985725f7252fc4941b96911dc7cbf9fc7",
+      "bytes": 121004,
+      "seconds": 2.52
+    },
+    {
+      "name": "lost_shop_4.wav",
+      "sha256": "4e9b4a1280d3fd0b7377354381f231f3cb96c5be062a34bef412241de8d0465b",
+      "bytes": 141642,
+      "seconds": 2.9499583333333335
+    },
+    {
+      "name": "lost_shop_5.wav",
+      "sha256": "10b5b81cae6946f1de01ab45ef6f8e4f33a9e3f07e5b8af209a35a66867ddb67",
+      "bytes": 113804,
+      "seconds": 2.37
+    },
+    {
+      "name": "missing_recipe_0.wav",
+      "sha256": "e850b0d06b7db124b27db90e2fd5fc30a832f1bc4d1f0fc863bea6084f0f16db",
+      "bytes": 162764,
+      "seconds": 3.39
+    },
+    {
+      "name": "missing_recipe_1.wav",
+      "sha256": "96132d27077daadc47000d7a93505845afc1525c71b94afd9a5659a946156330",
+      "bytes": 177164,
+      "seconds": 3.69
+    },
+    {
+      "name": "missing_recipe_2.wav",
+      "sha256": "df884eb7cde4284ef47e1a4c482a236d1bed3a3cfcfaa44a4774601d1f4f059d",
+      "bytes": 235724,
+      "seconds": 4.91
+    },
+    {
+      "name": "missing_recipe_3.wav",
+      "sha256": "f7d5f61e3b6434421bd77e7fb7d0b36bbd864e8bf9673795174390c8708a5d59",
+      "bytes": 94124,
+      "seconds": 1.96
+    },
+    {
+      "name": "missing_recipe_4.wav",
+      "sha256": "066aad6dbfce2516429dcdd54303cbe2c22a10db043824b60b9a1ec596b8dcd6",
+      "bytes": 144524,
+      "seconds": 3.01
+    },
+    {
+      "name": "missing_recipe_5.wav",
+      "sha256": "74c3b898910d1a4123a870bb24a90449baae735470f1e8389486dce2b946fe0b",
+      "bytes": 196364,
+      "seconds": 4.09
+    },
+    {
+      "name": "night_space_0.wav",
+      "sha256": "ea003feda623ca3f9f473e54d41cdadd73afbf3aaaf30625b5ff6728991a108d",
+      "bytes": 118124,
+      "seconds": 2.46
+    },
+    {
+      "name": "night_space_1.wav",
+      "sha256": "d0aafb22b6dfe351c3621298d00c11b044e426d930ae2c5a0d6801d905976db8",
+      "bytes": 116684,
+      "seconds": 2.43
+    },
+    {
+      "name": "night_space_2.wav",
+      "sha256": "17a540db739a1a63443d4304644596a8777945ea24f8a6429d4a6ade0fd67577",
+      "bytes": 110444,
+      "seconds": 2.3
+    },
+    {
+      "name": "night_space_3.wav",
+      "sha256": "bc663e7d4f0e915ccb609389d90b39df6b6fb96b4999e19f13ce641c735d687e",
+      "bytes": 192526,
+      "seconds": 4.010041666666667
+    },
+    {
+      "name": "night_space_4.wav",
+      "sha256": "eb4fee0b4fe5c1cc45ad4006d6f79df7aadaa099f91e4187fea285eb936088ab",
+      "bytes": 125324,
+      "seconds": 2.61
+    },
+    {
+      "name": "night_space_5.wav",
+      "sha256": "fd9073dbab695a1acba0f79cb56ee92984bc1b7d14d7c420768a3242c5d0c0d0",
+      "bytes": 186764,
+      "seconds": 3.89
+    },
+    {
+      "name": "ordinary_names_0.wav",
+      "sha256": "d98bd3229efb292f4c4f1d2f412c5607ddab8923a291d5f77a600b9b26c2994e",
+      "bytes": 195404,
+      "seconds": 4.07
+    },
+    {
+      "name": "ordinary_names_1.wav",
+      "sha256": "db5d5fa6dfa4031e9908b5cb6e7ff130688e2f272e3a4b40ed1a0c31010b4697",
+      "bytes": 112364,
+      "seconds": 2.34
+    },
+    {
+      "name": "ordinary_names_2.wav",
+      "sha256": "8c8a70a1d240f23fa145a202561a21d45b9981c720840ea36590506b5ddc68b4",
+      "bytes": 186764,
+      "seconds": 3.89
+    },
+    {
+      "name": "ordinary_names_3.wav",
+      "sha256": "5403f7a8feec25bdb63234bf87efc44d9174ee44a5f05d2db89f8aa74533eb60",
+      "bytes": 168044,
+      "seconds": 3.5
+    },
+    {
+      "name": "ordinary_names_4.wav",
+      "sha256": "09a71605ef7378019b7a8a2bac40a2eb2a446c3b36d3a21b168d02cb02ffb57a",
+      "bytes": 168524,
+      "seconds": 3.51
+    },
+    {
+      "name": "ordinary_names_5.wav",
+      "sha256": "0587cd9222ac4147701f32f792e20146f4281d0b91496638704cfb808324c153",
+      "bytes": 136844,
+      "seconds": 2.85
+    },
+    {
+      "name": "rain_afterward_0.wav",
+      "sha256": "6f50540975e777ddbd67d3f5c0e12e8288c151a212c55b95abce86ed7fb513f7",
+      "bytes": 154604,
+      "seconds": 3.22
+    },
+    {
+      "name": "rain_afterward_1.wav",
+      "sha256": "24e6e03691fb4286e070a69d114bdc63d6d55f619519137f9f36ddb2972b2735",
+      "bytes": 105644,
+      "seconds": 2.2
+    },
+    {
+      "name": "rain_afterward_2.wav",
+      "sha256": "7a25dc6a112ba45f9d1d7d8c0239a4e82ada33d965c6ed54db55627ac458d88d",
+      "bytes": 117164,
+      "seconds": 2.44
+    },
+    {
+      "name": "rain_afterward_3.wav",
+      "sha256": "f264e003f0fe2e62c5f04fc9fcf0f36b843aa7cf46179e5299c769e5444026b4",
+      "bytes": 147884,
+      "seconds": 3.08
+    },
+    {
+      "name": "rain_afterward_4.wav",
+      "sha256": "b0a06ae891cff0408d895bea195741411f0a9a30c5d300fa6db7c99d64d02d3d",
+      "bytes": 151244,
+      "seconds": 3.15
+    },
+    {
+      "name": "rain_afterward_5.wav",
+      "sha256": "7d5727e937977fce80ceb03dfdadfa22d215a0b456480c136cd8ed2378334470",
+      "bytes": 138764,
+      "seconds": 2.89
+    },
+    {
+      "name": "rain_smell_0.wav",
+      "sha256": "6a7d6ba20c3bfbac3deec1780950789b5ee54586c1b12cb3daac76980c1bc94c",
+      "bytes": 86444,
+      "seconds": 1.8
+    },
+    {
+      "name": "rain_smell_1.wav",
+      "sha256": "4a4888af7efaf41a0d92dea0510d36eaa717fecf098624c038960f30077f78cd",
+      "bytes": 128684,
+      "seconds": 2.68
+    },
+    {
+      "name": "rain_smell_2.wav",
+      "sha256": "a4dfc3b8fae5c4a79c02dc3a5343f500e186f8ddfc0fcc860d616770a0715d62",
+      "bytes": 128684,
+      "seconds": 2.68
+    },
+    {
+      "name": "rain_smell_3.wav",
+      "sha256": "28afc5b15cc072302874b0323d43843cfa098fec0373acbba05d7da34b6f8961",
+      "bytes": 126764,
+      "seconds": 2.64
+    },
+    {
+      "name": "rain_smell_4.wav",
+      "sha256": "78a2e7e7757abed4d78270873805c63432ff1ef527564a201f044c30889b3863",
+      "bytes": 154604,
+      "seconds": 3.22
+    },
+    {
+      "name": "rain_smell_5.wav",
+      "sha256": "774249076a9c684486449f05df60a340f85942891cb85b4f4167baf2d229ce42",
+      "bytes": 113324,
+      "seconds": 2.36
+    },
+    {
+      "name": "shared_silence_0.wav",
+      "sha256": "53a07b8e17e3ff55e3459046277cd9bfefccbe19024c8c04a256501d65d98e85",
+      "bytes": 93596,
+      "seconds": 1.949
+    },
+    {
+      "name": "shared_silence_1.wav",
+      "sha256": "7bf2f9a70547e967085a89907d5de97817cecfa1267b6bf61992ddbf51cca497",
+      "bytes": 104204,
+      "seconds": 2.17
+    },
+    {
+      "name": "shared_silence_2.wav",
+      "sha256": "cdcdef481b9a175864f840b3aea52ab851cff762e548c8d9b62c044e95434c36",
+      "bytes": 93164,
+      "seconds": 1.94
+    },
+    {
+      "name": "shared_silence_3.wav",
+      "sha256": "9a0aa029c4a9824b46290d71afcbd27e2898aeb4bee8bd47c65df83e2e315198",
+      "bytes": 140684,
+      "seconds": 2.93
+    },
+    {
+      "name": "shared_silence_4.wav",
+      "sha256": "58eb91b1dee248270d84f3898bc28cabed339c0a44450599619d2ba1cd0ad971",
+      "bytes": 83026,
+      "seconds": 1.7287916666666667
+    },
+    {
+      "name": "shared_silence_5.wav",
+      "sha256": "53af8124a3d827608a888ea5ed3c4bfb5067312c0b29af09f3d6fd698b0b2970",
+      "bytes": 208902,
+      "seconds": 4.351208333333333
+    },
+    {
+      "name": "slow_breath_0.wav",
+      "sha256": "5856e45d8becd273d32904eb8485615356be90afb19b0eb938fa4ea5db5c1b75",
+      "bytes": 166604,
+      "seconds": 3.47
+    },
+    {
+      "name": "slow_breath_1.wav",
+      "sha256": "2d0813fa9ab57011b4eaa9e24c02a25d3e33233037557dfc7fa6888e12da7c62",
+      "bytes": 215564,
+      "seconds": 4.49
+    },
+    {
+      "name": "slow_breath_2.wav",
+      "sha256": "2fee5f17c424c0c721dd7f0f60bed08e9fea77398027980a8cfb0a37b3a1a3ff",
+      "bytes": 128204,
+      "seconds": 2.67
+    },
+    {
+      "name": "slow_breath_3.wav",
+      "sha256": "9ade7ac30fe1e5d42f486b124fdeb6b27453cd02ea3a04346bead4dbb8b370a1",
+      "bytes": 133964,
+      "seconds": 2.79
+    },
+    {
+      "name": "slow_breath_4.wav",
+      "sha256": "658336bc6e88f7345fff0365253cbf803501e511c0bc0430344ce4a42a32a368",
+      "bytes": 222764,
+      "seconds": 4.64
+    },
+    {
+      "name": "slow_breath_5.wav",
+      "sha256": "0a43a3d6c2b1bafa91ded8ad4e991525f58f13dc9fefd4375563088f8dc0941d",
+      "bytes": 157484,
+      "seconds": 3.28
+    },
+    {
+      "name": "wrong_shoes_0.wav",
+      "sha256": "23aac425759d07a7675d0f7f43e1634862f2e36ffe1ead45c7ffb933b07c9b2a",
+      "bytes": 136844,
+      "seconds": 2.85
+    },
+    {
+      "name": "wrong_shoes_1.wav",
+      "sha256": "4881170432e9158c2972a9aedc86f5a81f2f84949537e1dd804747d21108a2a0",
+      "bytes": 112844,
+      "seconds": 2.35
+    },
+    {
+      "name": "wrong_shoes_2.wav",
+      "sha256": "dbb9470550c66d3d0e6332defe26776952efdee7d3b98c990d54f038451905d3",
+      "bytes": 217484,
+      "seconds": 4.53
+    },
+    {
+      "name": "wrong_shoes_3.wav",
+      "sha256": "6623d624f347753819fc1b65fba0569871ce7d0cbf5e9b549ac4c2927d75c5b9",
+      "bytes": 171884,
+      "seconds": 3.58
+    },
+    {
+      "name": "wrong_shoes_4.wav",
+      "sha256": "07a8ad8c3df13e00e445c89b7c300bc83af392b0d86416641b1c3728a2d38e36",
+      "bytes": 102284,
+      "seconds": 2.13
+    },
+    {
+      "name": "wrong_shoes_5.wav",
+      "sha256": "d77f8517e0c433971ba24cb39dcbbc4991d030dde82b313a25ffd98c993a7f95",
+      "bytes": 148364,
+      "seconds": 3.09
+    }
+  ],
+  "total_seconds": 217.18795833333334,
+  "in_game_playback_verified": false
+}

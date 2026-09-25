@@ -39,6 +39,7 @@ public:
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") FVector4 WoundState=FVector4(0,0,0,0);
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") bool bBowEquipped=false;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FilmProgress=0;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int64 JourneyHeard=0;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") TArray<int32> CountyStages={0,0,0,0,0,0};
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FilmDecision=0;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int64 MainStoryEvents=0;

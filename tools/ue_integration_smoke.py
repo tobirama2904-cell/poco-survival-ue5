@@ -195,7 +195,19 @@ assert unreal.GameplayStatics.save_game_to_slot(spare,'Survival_A',0)
 g=instance();assert g.load_progress();assert g.try_main_action(0)==3;assert g.try_main_action(5)==0;assert g.save_progress()
 spare_roundtrip=unreal.GameplayStatics.load_game_from_slot('Survival_B',0);assert spare_roundtrip.get_editor_property('main_repair_kit_recovered')
 g=instance();assert g.load_progress();assert g.try_main_action(0)==0;assert g.save_progress()
-report={'phase' :'unreal-headless-native-integration','native_classes_loaded':4,
+# Optional version-8 property extension: old save8 has a zero default; these
+# conversations never gate the main campaign. Cancelled speech is not finished.
+for slot in ['Survival_A','Survival_B']:unreal.GameplayStatics.delete_game_in_slot(slot,0)
+j=instance();assert j.get_journey_heard()==0
+assert j.finish_journey_conversation(0);assert not j.finish_journey_conversation(0)
+assert j.finish_journey_conversation(11);assert not j.finish_journey_conversation(12)
+assert j.save_progress()
+j2=instance();assert j2.load_progress();assert j2.get_journey_heard()==2049
+broken=unreal.GameplayStatics.load_game_from_slot('Survival_A',0)
+broken.set_editor_property('save_generation',999);broken.set_editor_property('journey_heard',4096)
+assert unreal.GameplayStatics.save_game_to_slot(broken,'Survival_B',0)
+j3=instance();assert j3.load_progress();assert j3.get_journey_heard()==2049
+report={'phase' :'unreal-headless-native-integration','journey_history_serialization_and_fallback_tested':True,'native_classes_loaded':4,
  'version8_main_rescue_and_legacy_migration_tested':True,'version7_county_choices_and_legacy_migration_tested':True,'version6_field_and_film_serialization_fallback_tested':True,'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
  'objective_count':61,'native_inventory_and_choices_tested':True,
  'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,
