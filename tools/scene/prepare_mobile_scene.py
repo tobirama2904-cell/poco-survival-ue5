@@ -11,11 +11,11 @@ assert level.load_level('/Game/Worlds/CanalDistrict')
 removed=0
 for actor in actors.get_all_level_actors():
  if isinstance(actor,unreal.SkyAtmosphere):actors.destroy_actor(actor);removed+=1
-path='/Game/Environment/MobileSky/M_MobileSkyPhotographic'
+path='/Game/Environment/MobileSky/M_MobileSkyPhotographicV2'
 if unreal.EditorAssetLibrary.does_asset_exist(path):
  material=unreal.load_asset(path)
 else:
- material=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_MobileSkyPhotographic','/Game/Environment/MobileSky',unreal.Material,unreal.MaterialFactoryNew())
+ material=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_MobileSkyPhotographicV2','/Game/Environment/MobileSky',unreal.Material,unreal.MaterialFactoryNew())
  assert material
  material.set_editor_property('shading_model',unreal.MaterialShadingModel.MSM_UNLIT)
  material.set_editor_property('two_sided',True)
@@ -27,12 +27,12 @@ else:
  sample=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionTextureSampleParameterCube);sample.set_editor_property('texture',cube);sample.set_editor_property('parameter_name','CountySky');sample.set_editor_property('sampler_type',unreal.MaterialSamplerType.SAMPLERTYPE_LINEAR_COLOR)
  view=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionCameraVectorWS)
  reverse=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionMultiply);reverse.set_editor_property('const_b',-1)
- unreal.MaterialEditingLibrary.connect_material_expressions(view,'',reverse,'A');unreal.MaterialEditingLibrary.connect_material_expressions(reverse,'',sample,'UVs')
+ assert unreal.MaterialEditingLibrary.connect_material_expressions(view,'',reverse,'A');assert unreal.MaterialEditingLibrary.connect_material_expressions(reverse,'',sample,'UVs')
  compress=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionDivide);compress.set_editor_property('const_b',4)
- unreal.MaterialEditingLibrary.connect_material_expressions(sample,'RGB',compress,'A')
- limit=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionSaturate);unreal.MaterialEditingLibrary.connect_material_expressions(compress,'',limit,'Input')
- tint=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionMultiply);unreal.MaterialEditingLibrary.connect_material_expressions(limit,'',tint,'A');unreal.MaterialEditingLibrary.connect_material_expressions(color,'',tint,'B')
- unreal.MaterialEditingLibrary.connect_material_property(tint,'',unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+ assert unreal.MaterialEditingLibrary.connect_material_expressions(sample,'RGB',compress,'A')
+ limit=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionSaturate);assert unreal.MaterialEditingLibrary.connect_material_expressions(compress,'',limit,'')
+ tint=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionMultiply);assert unreal.MaterialEditingLibrary.connect_material_expressions(limit,'',tint,'A');assert unreal.MaterialEditingLibrary.connect_material_expressions(color,'',tint,'B')
+ assert unreal.MaterialEditingLibrary.connect_material_property(tint,'',unreal.MaterialProperty.MP_EMISSIVE_COLOR)
  unreal.MaterialEditingLibrary.recompile_material(material)
  unreal.EditorAssetLibrary.save_loaded_asset(material)
 for actor in actors.get_all_level_actors():

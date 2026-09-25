@@ -1,0 +1,79 @@
+{
+  "county_runtime": {
+    "passed": true,
+    "rural_anchors": 6,
+    "valid_collision_floors": 6,
+    "walk_distance_cm": 545.77,
+    "grounded": true,
+    "physical_device_tested": false
+  },
+  "construction": {
+    "source": "2c09ef3a4964c9b8e556e8b9d5e3d888a2200708",
+    "all_construction_steps_succeeded": true,
+    "field": {
+      "loot_caches": 24,
+      "openable_doors": 24,
+      "main_cast_body_proxies": 4,
+      "final_art": false
+    },
+    "county": {
+      "connected_extent_m": 2400,
+      "terrain_tiles": 16,
+      "rural_shelters": 6,
+      "nature_instances": 6188,
+      "instanced_clusters": 6,
+      "simple_trunk_collision": true,
+      "river_crossing": true,
+      "native_runtime_traversal_verified": false,
+      "final_art": false
+    }
+  },
+  "renderer": "software Vulkan / llvmpipe; NOT hardware or POCO performance",
+  "renderer_exit_code": 0,
+  "screenshots": [
+    {
+      "name": "HighresScreenshot00000.png",
+      "bytes": 291031,
+      "width": 640,
+      "height": 360,
+      "character_presence": {
+        "test": "fixed first-spawn tan-clothing regression alarm; not general character recognition",
+        "candidate_pixels": 845,
+        "region_pixels": 10350,
+        "fraction": 0.08164,
+        "passed": true
+      }
+    },
+    {
+      "name": "HighresScreenshot00001.png",
+      "bytes": 316767,
+      "width": 640,
+      "height": 360,
+      "character_presence": {
+        "test": "fixed first-spawn tan-clothing regression alarm; not general character recognition",
+        "candidate_pixels": 2229,
+        "region_pixels": 10350,
+        "fraction": 0.21536,
+        "passed": true
+      }
+    }
+  ],
+  "runtime_movement": {
+    "phase": "actual-game-mode-input-and-floor-test",
+    "passed": true,
+    "walk_distance_cm": 387.72,
+    "grounded": true,
+    "camera_pitch_degrees": -10.0,
+    "player_view_target": true,
+    "camera_framed": true,
+    "human_avatar_loaded": true,
+    "touch_device_tested": false,
+    "android_tested": false
+  },
+  "gate_passed": true,
+  "visual_quality_review": "requires human/image inspection separately",
+  "physical_device_tested": false,
+  "run": 36133754596,
+  "manual_visual_acceptance": false,
+  "rejection": "Sky material shader failed (unnamed Saturate input was incorrectly named Input); missing instanced material usage flags caused fallbacks. Native runtime and 6/6 rural floors passed. Do not label this frame or a package of it as finished."
+}

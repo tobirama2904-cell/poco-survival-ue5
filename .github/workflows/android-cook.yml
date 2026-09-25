@@ -86,7 +86,7 @@ jobs:
           CA_STORE=$(readlink -f "$JAVA_HOME_21_X64/lib/security/cacerts")
           test -s "$CA_STORE"
           sudo chown -R 1000:1000 "$GITHUB_WORKSPACE"
-          docker run --rm --cpus=4 --memory=13g --memory-swap=13g \
+          docker run --rm --user root --entrypoint /bin/bash --cpus=4 --memory=13g --memory-swap=13g --shm-size=1g \
             --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/project" \
             --mount "type=bind,src=$ANDROID_HOME,dst=/opt/android,readonly" \
             --mount "type=bind,src=$JAVA_HOME_21_X64,dst=/opt/java21,readonly" \
@@ -94,7 +94,7 @@ jobs:
             -e JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=/opt/java-truststore/cacerts \
             -e ANDROID_HOME=/opt/android -e ANDROID_SDK_ROOT=/opt/android \
             -e NDKROOT=/opt/android/ndk/27.2.12479018 -e JAVA_HOME=/opt/java21 \
-            "$IMAGE" bash /project/tools/android/cook_host.sh
+            "$IMAGE" -lc 'apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mesa-vulkan-drivers libvulkan1 xvfb xauth vulkan-tools && runuser -u ue4 -- bash /project/tools/android/cook_host.sh'
       - name: Retain cooked content and licensed host modules privately
         env:
           GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
@@ -118,4 +118,7 @@ jobs:
             artifacts/android-build/*.json
             artifacts/android-build/*.log
             artifacts/engine-probe/*.json
+            artifacts/gameplay-scene/*.json
+            artifacts/gameplay-scene/*.log
+            artifacts/gameplay-scene/*.png
           retention-days: 7

@@ -2,7 +2,7 @@
 set -euo pipefail
 cd /project
 ENGINE=/home/ue4/UnrealEngine
-mkdir -p artifacts/android-build
+mkdir -p artifacts/android-build artifacts/gameplay-scene
 python3 tools/engine_inventory.py
 "$JAVA_HOME/bin/java" tools/android/TrustStoreProbe.java | tee artifacts/android-build/java-trust-store.log
 python3 tools/scene/restore_private_content.py
@@ -38,6 +38,13 @@ timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
  '-ini:Engine:[/Script/Engine.AudioSettings]:DefaultAudioCompressionType=PCM' \
  -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \
  > artifacts/android-build/mobile-scene-prepare.log 2>&1
+# Reuse the retained map, correct its material flags, and verify the exact
+# corrected content before cooking it. Failed shader fallbacks block the cook.
+timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
+ /project/PocoSurvival.uproject -run=pythonscript -script=/project/tools/scene/repair_materials.py \
+ -unattended -nop4 -NullRHI -nosound -stdout -FullStdOutLogOutput \
+ > artifacts/gameplay-scene/material-repair.log 2>&1
+bash tools/scene/render_gate.sh
 set +e
 timeout --foreground 65m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
   /project/PocoSurvival.uproject -run=Cook -TargetPlatform=Android_ASTC \

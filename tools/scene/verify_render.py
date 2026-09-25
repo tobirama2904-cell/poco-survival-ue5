@@ -2,6 +2,7 @@
 """Require an actual PNG and input/floor runtime evidence, not a green optional step."""
 import argparse,json
 from frame_character import character_presence
+from render_health import material_failures
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--exit-code',type=int,required=True);a=p.parse_args()
 root=Path('/project/artifacts/gameplay-scene');images=[]
@@ -15,7 +16,8 @@ for f in root.glob('*.png'):
 movement=json.loads((root/'runtime-movement.json').read_text()) if (root/'runtime-movement.json').exists() else {}
 construction=json.loads((root/'scene-ready.json').read_text()) if (root/'scene-ready.json').exists() else {}
 county=json.loads((root/'county-runtime.json').read_text()) if (root/'county-runtime.json').exists() else {}
-passed=county.get('passed') is True and len(images)>=2 and construction.get('all_construction_steps_succeeded') is True and a.exit_code==0 and bool(images) and movement.get('passed') is True and movement.get('human_avatar_loaded') is True and any(f['character_presence']['passed'] for f in images)
-report={'county_runtime':county,'construction':construction,'renderer':'software Vulkan / llvmpipe; NOT hardware or POCO performance','renderer_exit_code':a.exit_code,'screenshots':images,'runtime_movement':movement,'gate_passed':passed,'visual_quality_review':'requires human/image inspection separately','physical_device_tested':False}
+errors=material_failures((root/'rendered-game.log').read_text(errors='replace')) if (root/'rendered-game.log').exists() else ['Missing actual renderer log']
+passed=not errors and county.get('passed') is True and len(images)>=2 and construction.get('all_construction_steps_succeeded') is True and a.exit_code==0 and bool(images) and movement.get('passed') is True and movement.get('human_avatar_loaded') is True and any(f['character_presence']['passed'] for f in images)
+report={'material_failures':errors,'county_runtime':county,'construction':construction,'renderer':'software Vulkan / llvmpipe; NOT hardware or POCO performance','renderer_exit_code':a.exit_code,'screenshots':images,'runtime_movement':movement,'gate_passed':passed,'visual_quality_review':'requires human/image inspection separately','physical_device_tested':False}
 (root/'render-verification.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)
 raise SystemExit(0 if passed else 1)
