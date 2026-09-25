@@ -5,7 +5,7 @@ No claim of final art approval or device performance. Credentials are never stor
 import argparse,io,json,os,time,zipfile
 from pathlib import Path
 import requests
-p=argparse.ArgumentParser();p.add_argument('--scene',type=int,required=True);p.add_argument('--native',type=int,required=True);p.add_argument('--branch',default='gameplay/city-story');p.add_argument('--output',type=Path,required=True);p.add_argument('--token-file',type=Path,required=True);args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--scene',type=int,required=True);p.add_argument('--native',type=int,required=True);p.add_argument('--branch',default='gameplay/city-story');p.add_argument('--observe-only',action='store_true');p.add_argument('--output',type=Path,required=True);p.add_argument('--token-file',type=Path,required=True);args=p.parse_args()
 args.output.mkdir(parents=True,exist_ok=True);statefile=args.output/'watch-state.json'
 state=json.loads(statefile.read_text()) if statefile.exists() else {'scene':args.scene,'native':args.native,'artifacts':[],'cook_dispatch':None}
 assert state['scene']==args.scene and state['native']==args.native
@@ -38,6 +38,7 @@ while time.monotonic()<deadline:
   save()
   if any(r['status']=='completed' and r['conclusion']!='success' for r in runs):print('STOP: measured failure; inspect evidence, no packaging dispatch',flush=True);break
   if all(r['conclusion']=='success' for r in runs):
+   if args.observe_only:print('READY_FOR_VISUAL_REVIEW: no cook dispatched',flush=True);break
    if state['cook_dispatch'] is None:
     # A subsequent native/reflected/config change requires a new matching native run.
     compare=get(f"/compare/{runs[1]['head_sha']}...{args.branch}")
