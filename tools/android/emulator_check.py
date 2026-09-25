@@ -2,7 +2,7 @@
 """Install/launch an actual signed ARM64 APK on a development emulator.
 Records its ABI/native bridge and images. Never substitutes this for POCO testing.
 """
-import json,os,subprocess,time,shlex
+import json,os,subprocess,time,shlex,hashlib
 from pathlib import Path
 from frame_quality import metrics
 ROOT=Path('artifacts/android-emulator');ROOT.mkdir(parents=True,exist_ok=True)
@@ -71,9 +71,27 @@ try:
     width,height=report['screenshots'][0]['width'],report['screenshots'][0]['height']
     adb('shell','input','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'1500')
     time.sleep(5);report['screenshots'].append(wait_visible_frame('android-after-input.png'))
-    adb('shell','input','tap',str(round(width*.75)),str(round(height*.08)))
-    time.sleep(3)
-    report['save_file_search']=text('shell','find','/sdcard/Android/data/'+PACKAGE+'/files','-name','Survival_*.sav',check=False)
+    # Current compact HUD keeps Save inside the backpack, not on the normal HUD.
+    # Do not count injecting these taps as proof that an action was accepted.
+    time.sleep(35)
+    adb('shell','input','tap',str(round(width*.89)),str(round(height*.075)))
+    time.sleep(5);report['screenshots'].append(screenshot('android-backpack.png'))
+    adb('shell','input','tap',str(round(width*.75)),str(round(height*.075)))
+    time.sleep(5)
+    report['save_files']=[]
+    for directory in ['files','/sdcard/Android/data/'+PACKAGE+'/files']:
+        found=text('shell','run-as',PACKAGE,'find',directory,'-type','f','-name','Survival_*.sav',check=False)
+        for path in found.splitlines():
+            if not path.startswith(directory+'/') or not path.endswith(('/Survival_A.sav','/Survival_B.sav')):continue
+            data=adb('exec-out','run-as',PACKAGE,'cat',path,check=False).stdout
+            if not data.startswith(b'GVAS') or len(data)>2*1024**2:continue
+            name=('internal-' if directory=='files' else 'external-')+Path(path).name
+            (ROOT/name).write_bytes(data)
+            report['save_files'].append({'file':name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'gvas_header_verified':True})
+    report['save_files_present']=bool(report['save_files'])
+    report['save_button_input_injected']=True
+    report['save_restore_equality_verified']=False
+
     adb('shell','am','force-stop',PACKAGE);adb('logcat','-c');launch();time.sleep(90)
     report['pid_after_restart']=text('shell','pidof',PACKAGE,check=False)
     report['screenshots'].append(wait_visible_frame('android-restart.png'))
