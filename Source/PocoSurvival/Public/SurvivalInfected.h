@@ -18,11 +18,13 @@ public:
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Save") FName PersistentId;
     UFUNCTION(BlueprintCallable,Category="Save") bool RestoreEncounter(const FVector& Location,const FRotator& Rotation,float Health,float Stamina);
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AI") TArray<FVector> PatrolPoints;
+    UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AI") int32 Archetype=0;
     UPROPERTY(BlueprintReadOnly,Category="AI") EInfectedState State=EInfectedState::Patrol;
 private:
     FVector Destination=FVector::ZeroVector;
     FVector Direction=FVector::ZeroVector;
-    float ThinkDelay=0,UnseenSeconds=100,AttackDelay=0;
+    float ThinkDelay=0,UnseenSeconds=100,AttackDelay=0,AlertDelay=0;
+    FVector LastKnown=FVector::ZeroVector;
     int32 PatrolIndex=0;
     void Think(float Delta);
 };

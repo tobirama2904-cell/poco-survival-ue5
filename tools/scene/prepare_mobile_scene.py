@@ -38,7 +38,7 @@ for actor in actors.get_all_level_actors():
 for actor in actors.get_all_level_actors():
  if isinstance(actor,unreal.PostProcessVolume):
   settings=actor.get_editor_property('settings')
-  for key,value in [('override_bloom_intensity',True),('bloom_intensity',.12),('override_lens_flare_intensity',True),('lens_flare_intensity',0.0),('override_auto_exposure_bias',True),('auto_exposure_bias',-2.4)]:settings.set_editor_property(key,value)
+  for key,value in [('override_bloom_intensity',True),('bloom_intensity',.12),('override_lens_flare_intensity',True),('lens_flare_intensity',0.0),('override_auto_exposure_bias',True),('auto_exposure_bias',-1.25)]:settings.set_editor_property(key,value)
   actor.set_editor_property('settings',settings)
 # Actual original ambience, not an advertised completed soundtrack.
 # PCM is deliberately explicit for this small loop; no platform codec ambiguity.

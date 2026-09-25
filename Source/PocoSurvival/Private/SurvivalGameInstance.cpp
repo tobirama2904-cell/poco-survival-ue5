@@ -1,5 +1,7 @@
 #include "SurvivalGameInstance.h"
+#include "Sound/SoundAttenuation.h"
 #include "SurvivalSaveGame.h"
+#include "SurvivalInteraction.h"
 #include "SurvivalCharacter.h"
 #include "SurvivalInfected.h"
 #include "GameFramework/Controller.h"
@@ -56,6 +58,7 @@ bool USurvivalGameInstance::SaveProgress()
     auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::CreateSaveGameObject(USurvivalSaveGame::StaticClass()));
     if (!Save) return false;
     Save->SaveGeneration = SaveGeneration + 1;Save->WorldElapsedSeconds=Clock.seconds;Save->WeatherSeed=Clock.seed;
+    Save->FilmProgress=FilmProgress;Save->FilmDecision=FilmDecision;Save->LootedCaches=FieldInventory.looted;Save->OpenDoors=FieldInventory.doors;for(int32 N:FieldInventory.items)Save->FieldItems.Add(N);
     Save->StateRevision = static_cast<int64>(Runtime.State().revision);
     for (const auto& Id : Runtime.State().journal) Save->ActionJournal.Add(UTF8_TO_TCHAR(Id.c_str()));
     if (GetWorld()) if (auto* Player = Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(),0)))
@@ -64,6 +67,7 @@ bool USurvivalGameInstance::SaveProgress()
         Save->bHasPlayerState=true;Save->MapName=UGameplayStatics::GetCurrentLevelName(GetWorld(),true);
         Save->PlayerLocation=Player->GetActorLocation();Save->PlayerRotation=Player->GetActorRotation();
         Save->ViewRotation=Player->GetController() ? Player->GetController()->GetControlRotation() : Save->PlayerRotation;
+        Save->bBowEquipped=Player->bBowEquipped;const auto& W=Player->Wounds();Save->WoundState=FVector4(W.bleeding,W.arm,W.leg,W.concussion);
         Save->Health=Player->GetHealth();Save->Stamina=Player->GetStamina();
         const auto& Combat=Player->CombatState();Save->LoadedRounds=Combat.loaded;Save->RoundsSpent=Combat.spent;Save->BottlesUsed=Combat.bottlesUsed;Save->bPistolEquipped=Combat.pistol;
     }
@@ -98,7 +102,7 @@ bool USurvivalGameInstance::LoadProgress()
     {
         if (!UGameplayStatics::DoesSaveGameExist(SlotName(Index), 0)) continue;
         auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName(Index), 0));
-        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 5) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
+        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 6) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
             Save->StateRevision < 0 || Save->StateRevision != Save->ActionJournal.Num() || Save->SaveGeneration<0) continue;
         if (Save->bHasPlayerState && (Save->MapName.IsEmpty() || Save->PlayerLocation.ContainsNaN() ||
             Save->PlayerLocation.GetAbsMax()>1000000 || Save->PlayerRotation.ContainsNaN() ||
@@ -106,6 +110,13 @@ bool USurvivalGameInstance::LoadProgress()
             !FMath::IsFinite(Save->Stamina) || Save->Stamina<0 || Save->Stamina>100)) continue;
         if (Save->FormatVersion>=3 && (Save->ViewRotation.ContainsNaN() || Save->InfectedStates.Num()>256)) continue;
         if(Save->FormatVersion>=5&&(!FMath::IsFinite(Save->WorldElapsedSeconds)||Save->WorldElapsedSeconds<0||Save->WorldElapsedSeconds>315360000||Save->WeatherSeed<0||Save->WeatherSeed>MAX_uint32))continue;
+        survival::FieldKit Field;
+        if(Save->FormatVersion>=6){
+            if(Save->FieldItems.Num()!=static_cast<int32>(survival::Supply::Count)||Save->LootedCaches<0||Save->LootedCaches>=(1ll<<24)||Save->OpenDoors<0||Save->OpenDoors>=(1ll<<24)||Save->FilmProgress<0||Save->FilmProgress>18||Save->FilmDecision<0||Save->FilmDecision>2||(Save->FilmProgress>=15&&Save->FilmDecision==0)||(Save->FilmProgress<14&&Save->FilmDecision!=0))continue;
+            for(int32 I=0;I<Save->FieldItems.Num();++I)Field.items[I]=Save->FieldItems[I];Field.looted=static_cast<uint32>(Save->LootedCaches);Field.doors=static_cast<uint32>(Save->OpenDoors);
+            const auto W=Save->WoundState;const survival::Trauma T{static_cast<float>(W.X),static_cast<float>(W.Y),static_cast<float>(W.Z),static_cast<float>(W.W)};
+            if(!Field.Valid()||!T.Valid()||(Save->bBowEquipped&&(Field.Get(survival::Supply::Bow)==0||Save->bPistolEquipped)))continue;
+        }
         bool EncountersValid=true;TSet<FString> EncounterKeys;
         for (const auto& State:Save->InfectedStates) {
             const FString Key=State.MapName+TEXT("/")+State.PersistentId.ToString();
@@ -127,16 +138,18 @@ bool USurvivalGameInstance::LoadProgress()
         if (bValid && Save->FormatVersion>=4) {
             const auto& Inventory=Candidate.State().inventory;
             const auto Count=[&](const char* Name) { const auto It=Inventory.find(Name);return It==Inventory.end()?0:It->second; };
-            bValid=survival::Combat::Valid({Save->LoadedRounds,Save->RoundsSpent,Save->BottlesUsed,Save->bPistolEquipped},Count("ammo_pack")*8,Count("bottle_pack"),Candidate.HasFlag("has_pistol"));
+            bValid=survival::Combat::Valid({Save->LoadedRounds,Save->RoundsSpent,Save->BottlesUsed,Save->bPistolEquipped},Count("ammo_pack")*8+Field.Get(survival::Supply::Rounds),Count("bottle_pack"),Candidate.HasFlag("has_pistol"));
         }
         const int64 Generation = Save->FormatVersion>=2 ? Save->SaveGeneration : Save->StateRevision;
         if (bValid && (!bFound || Generation > BestGeneration))
         { bFound = true; Best = Candidate.State(); BestSlot = Index; BestGeneration=Generation;BestSave=Save; }
     }
     if (!bFound || Runtime.Restore(Best) != survival::Error::None) return false;
-    SaveGeneration=BestGeneration;PendingPlayerSave=BestSave;
+    SaveGeneration=BestGeneration;PendingPlayerSave=BestSave;FieldInventory={};FilmProgress=0;FilmDecision=0;
+    if(BestSave->FormatVersion>=6){for(int32 I=0;I<BestSave->FieldItems.Num();++I)FieldInventory.items[I]=BestSave->FieldItems[I];FieldInventory.looted=static_cast<uint32>(BestSave->LootedCaches);FieldInventory.doors=static_cast<uint32>(BestSave->OpenDoors);FilmProgress=BestSave->FilmProgress;FilmDecision=BestSave->FilmDecision;}
     if(BestSave->FormatVersion>=5)Clock.Restore(BestSave->WorldElapsedSeconds,static_cast<uint32>(BestSave->WeatherSeed));else Clock.Restore(61200,731);
     if (UWorld* World=GetWorld()) for (TActorIterator<ASurvivalInfected> It(World);It;++It) ApplyLoadedInfectedState(*It);
+    if(UWorld* World=GetWorld())for(TActorIterator<ASurvivalInteraction> It(World);It;++It){const FString Id=It->ActionId.ToString();if(Id.StartsWith(TEXT("__door_"))){const int32 I=FCString::Atoi(*Id.Mid(7));if(I>=0&&I<24)It->SetActorRotation(FRotator(0,(FieldInventory.doors&(1u<<I))?90:0,0));}if(Id.StartsWith(TEXT("__cache_"))){const int32 Index=FCString::Atoi(*Id.Mid(8));if(Index>=0&&Index<24){const bool Empty=(FieldInventory.looted&(1u<<Index))!=0;It->SetActorHiddenInGame(Empty);It->SetActorEnableCollision(!Empty);}}}
     NextSaveSlot = 1 - BestSlot;
     OnWorldStateChanged.Broadcast();
     return true;
@@ -150,6 +163,9 @@ bool USurvivalGameInstance::ApplyLoadedPlayerState(ASurvivalCharacter* Player)
     Player->TeleportTo(PendingPlayerSave->PlayerLocation,PendingPlayerSave->PlayerRotation,false,false);
     if (PendingPlayerSave->FormatVersion>=3) if (auto* Controller=Player->GetController()) Controller->SetControlRotation(PendingPlayerSave->ViewRotation);
     if (!Player->RestoreVitals(PendingPlayerSave->Health,PendingPlayerSave->Stamina)) return false;
+    Player->bBowEquipped=PendingPlayerSave->FormatVersion>=6&&PendingPlayerSave->bBowEquipped;
+    const FVector4 W=PendingPlayerSave->FormatVersion>=6?PendingPlayerSave->WoundState:FVector4(0,0,0,0);
+    Player->RestoreWounds({static_cast<float>(W.X),static_cast<float>(W.Y),static_cast<float>(W.Z),static_cast<float>(W.W)});
     const survival::CombatSnapshot Combat=PendingPlayerSave->FormatVersion>=4 ? survival::CombatSnapshot{PendingPlayerSave->LoadedRounds,PendingPlayerSave->RoundsSpent,PendingPlayerSave->BottlesUsed,PendingPlayerSave->bPistolEquipped}:survival::CombatSnapshot{};
     return Player->RestoreCombat(Combat);
 }
@@ -163,3 +179,5 @@ bool USurvivalGameInstance::ApplyLoadedInfectedState(ASurvivalInfected* Infected
             return Infected->RestoreEncounter(State.Location,State.Rotation,State.Health,State.Stamina);
     return false;
 }
+
+USoundAttenuation* USurvivalGameInstance::SpatialSound(){if(!SfxAttenuation){SfxAttenuation=NewObject<USoundAttenuation>(this);auto& S=SfxAttenuation->Attenuation;S.bAttenuate=true;S.bSpatialize=true;S.AttenuationShape=EAttenuationShape::Sphere;S.AttenuationShapeExtents=FVector(120,0,0);S.FalloffDistance=2600;}return SfxAttenuation;}

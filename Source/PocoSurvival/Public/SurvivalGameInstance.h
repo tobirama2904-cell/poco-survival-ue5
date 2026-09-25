@@ -4,8 +4,10 @@
 #include "Core/SurvivalCore.h"
 #include "Core/CityContent.h"
 #include "Core/Experience.h"
+#include "Core/FieldSurvival.h"
 #include "SurvivalGameInstance.generated.h"
 
+class USoundAttenuation;
 class ASurvivalCharacter;
 class ASurvivalInfected;
 class USurvivalSaveGame;
@@ -29,6 +31,9 @@ class POCOSURVIVAL_API USurvivalGameInstance : public UGameInstance
     GENERATED_BODY()
 public:
     virtual void Init() override;
+    USoundAttenuation* SpatialSound();
+    survival::FieldKit FieldInventory;
+    int32 FilmProgress=0,FilmDecision=0;
     UFUNCTION(BlueprintCallable,Category="World") void StepWorldClock(float Delta,bool Paused) { Clock.Step(Delta,Paused); }
     UFUNCTION(BlueprintPure,Category="World") float WorldHour() const { return Clock.Hour(); }
     UFUNCTION(BlueprintPure,Category="World") double WorldSeconds() const { return Clock.seconds; }
@@ -45,6 +50,7 @@ public:
     UFUNCTION(BlueprintCallable, Category="Survival|Save") bool ApplyLoadedPlayerState(ASurvivalCharacter* Player);
     UFUNCTION(BlueprintCallable, Category="Survival|Save") bool ApplyLoadedInfectedState(ASurvivalInfected* Infected);
 private:
+    UPROPERTY() TObjectPtr<USoundAttenuation> SfxAttenuation;
     UPROPERTY() TObjectPtr<USurvivalSaveGame> PendingPlayerSave;
     int64 SaveGeneration = 0;
     survival::WorldClock Clock;

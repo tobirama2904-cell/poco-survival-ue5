@@ -19,3 +19,6 @@ c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISo
 
 c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public tests/core/test_experience.cpp -o .cache/core/test_experience
 .cache/core/test_experience
+
+c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public tests/core/test_field.cpp -o .cache/core/test_field
+.cache/core/test_field

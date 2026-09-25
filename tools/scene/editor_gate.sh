@@ -24,13 +24,17 @@ rm -f Content/Worlds/CanalDistrict.umap
   2>&1 | tee artifacts/gameplay-scene/scene-import.log
 test -s artifacts/gameplay-scene/scene-construction.json
 "$ENGINE/Binaries/Linux/UnrealEditor-Cmd" /project/PocoSurvival.uproject \
+  -run=pythonscript -script=/project/tools/scene/import_surfaces.py \
+  -unattended -nop4 -nosplash -NullRHI -nosound -stdout -FullStdOutLogOutput \
+  2>&1 | tee artifacts/gameplay-scene/surface-import.log
+"$ENGINE/Binaries/Linux/UnrealEditor-Cmd" /project/PocoSurvival.uproject \
   -run=pythonscript -script=/project/tools/scene/expand_city.py \
   -unattended -nop4 -nosplash -NullRHI -nosound -stdout -FullStdOutLogOutput \
   2>&1 | tee artifacts/gameplay-scene/city-import.log
 test -s artifacts/gameplay-scene/city-construction.json
 
 export SDL_AUDIODRIVER=dummy
-for SCRIPT in /project/tools/scene/import_gameplay_assets.py /project/tools/scene/prepare_mobile_scene.py; do
+for SCRIPT in /project/tools/scene/import_gameplay_assets.py /project/tools/scene/populate_field.py /project/tools/scene/prepare_mobile_scene.py; do
  "$ENGINE/Binaries/Linux/UnrealEditor-Cmd" /project/PocoSurvival.uproject \
   -run=pythonscript -script="$SCRIPT" '-ini:Engine:[/Script/Engine.AudioSettings]:DefaultAudioCompressionType=PCM' \
   -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \

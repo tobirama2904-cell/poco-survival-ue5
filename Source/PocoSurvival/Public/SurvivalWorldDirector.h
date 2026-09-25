@@ -8,6 +8,7 @@ class AExponentialHeightFog;
 class UHierarchicalInstancedStaticMeshComponent;
 class UMaterialInstanceDynamic;
 class UAudioComponent;
+class UStaticMeshComponent;
 UCLASS()
 class POCOSURVIVAL_API ASurvivalWorldDirector : public AActor
 {
@@ -27,6 +28,10 @@ private:
  UPROPERTY() TArray<TObjectPtr<UMaterialInstanceDynamic>> WetMaterials;
  UPROPERTY() TObjectPtr<UHierarchicalInstancedStaticMeshComponent> Rain;
  UPROPERTY() TObjectPtr<UAudioComponent> RainSound;
+ UPROPERTY() TArray<TObjectPtr<UAudioComponent>> Score;
+ UPROPERTY() TObjectPtr<UStaticMeshComponent> FloodWater;
+ float ScoreLevels[4]={0,0,0,0};
+ void MixScore(class ASurvivalCharacter* Player,float Delta);
  float EnvironmentTimer=0,StoryTimer=0;
  float RainPhase=0;
  bool bSheltered=false;

@@ -1,0 +1,516 @@
+{
+  "schema": 1,
+  "title": {
+    "ru": "Низкая вода",
+    "en": "Low Water"
+  },
+  "setting": "Fictional Bellwether County, Oregon, United States; fourteen years after a fictional infectious collapse. Original narrative, not a retelling of The Last of Us.",
+  "cast": [
+    {
+      "id": "Daniel",
+      "name": "Daniel Reed",
+      "age": 41,
+      "role": "former county evacuation dispatcher; playable lead",
+      "body": "Arsen",
+      "final_model": false
+    },
+    {
+      "id": "Mara",
+      "name": "Mara Ellis",
+      "age": 34,
+      "role": "radio technician and survivor of the flooded district",
+      "body": "Leyla",
+      "final_model": false
+    },
+    {
+      "id": "Ruth",
+      "name": "Ruth Bennett",
+      "age": 58,
+      "role": "clinic coordinator",
+      "body": "Nargis",
+      "final_model": false
+    },
+    {
+      "id": "Owen",
+      "name": "Owen Hart",
+      "age": 49,
+      "role": "ferry leader and former floodgate operator",
+      "body": "Ilyas",
+      "final_model": false
+    }
+  ],
+  "scenes": [
+    {
+      "id": "arrival",
+      "title": "I • Радио не знает твоего имени",
+      "position": [
+        0,
+        14,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "ru": [
+        "Мара: Если слышишь это — не отвечай по общему каналу. Они записывают позывные.",
+        "Дэниел: Ты сама позвала меня в Беллуэзер.",
+        "Мара: Я позвала человека, который умеет открыть шлюз. Не человека, который его закрыл.",
+        "Дэниел: Это был приказ об эвакуации.",
+        "Мара: Тогда покажешь мне, куда вы всех эвакуировали. Лук и перевязки в ящике у лестницы."
+      ],
+      "en": [
+        "Mara: If you hear this, stay off the public channel. They record call signs.",
+        "Daniel: You asked me to come back to Bellwether.",
+        "Mara: I asked for someone who could open a gate. Not the man who closed it.",
+        "Daniel: It was an evacuation order.",
+        "Mara: Then show me where everyone went. There is a bow and dressings beside the stairs."
+      ]
+    },
+    {
+      "id": "depot",
+      "title": "I • Вещи, которые оставляют",
+      "position": [
+        14,
+        30,
+        0
+      ],
+      "cinematic": true,
+      "gate": 1,
+      "ru": [
+        "Мара: Мой отец записывал на стене рост детей. На бумагу вечно проливали кофе.",
+        "Дэниел: Здесь была диспетчерская.",
+        "Мара: А потом — комната на двадцать семей. Ты всё ещё говоришь о зданиях. Я — о людях.",
+        "Дэниел: Вода поднялась на два метра за ночь.",
+        "Мара: Поднялась по твоему расписанию. В школе осталась копия журнала."
+      ],
+      "en": [
+        "Mara: My father marked the children’s height on the wall. Someone always spilled coffee on the paper.",
+        "Daniel: This used to be the dispatch office.",
+        "Mara: Then twenty families slept here. You keep talking about buildings. I mean people.",
+        "Daniel: The water rose two metres overnight.",
+        "Mara: On your schedule. There is a copy of the log at the school."
+      ]
+    },
+    {
+      "id": "school",
+      "title": "II • Тридцать один стул",
+      "position": [
+        -120,
+        40,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "ru": [
+        "Дэниел: Все столы стоят у окон.",
+        "Мара: Сначала ждали автобусы. Потом считали лодки.",
+        "Дэниел: Тридцать один стул. В отчёте было двадцать восемь человек.",
+        "Мара: Без документов не считали. Мама оставила три тарелки на подоконнике.",
+        "Дэниел: Мы не будем брать их вещи.",
+        "Мара: Возьми бинты. Мёртвым не станет легче, если ты истечёшь кровью рядом."
+      ],
+      "en": [
+        "Daniel: Every desk faces the windows.",
+        "Mara: First they waited for buses. Then they counted boats.",
+        "Daniel: Thirty-one chairs. The report listed twenty-eight people.",
+        "Mara: No papers, no name on the list. Mum left three plates on the sill.",
+        "Daniel: We should leave their things.",
+        "Mara: Take the dressings. Bleeding beside them will not make amends."
+      ]
+    },
+    {
+      "id": "clinic",
+      "title": "II • Дежурство не заканчивается",
+      "position": [
+        -188,
+        43,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "ru": [
+        "Рут: Дверь закрывай медленно. Они слышат доводчик.",
+        "Дэниел: Сколько здесь людей?",
+        "Рут: Четверо спят. Двое делают вид. Одному я обещала, что будет утро.",
+        "Мара: Нам нужен журнал водомерного поста.",
+        "Рут: Он под аптечкой. Сначала перевяжись. История никуда не уйдёт, пока мы удерживаем твою кровь внутри.",
+        "Дэниел: Спасибо.",
+        "Рут: Это не прощение. Это работа."
+      ],
+      "en": [
+        "Ruth: Close it slowly. They can hear the spring.",
+        "Daniel: How many people are here?",
+        "Ruth: Four asleep. Two pretending. One I promised another morning.",
+        "Mara: We need the water-station log.",
+        "Ruth: Under the first-aid box. Dress that wound first. History can wait while we keep your blood inside.",
+        "Daniel: Thank you.",
+        "Ruth: This is not forgiveness. It is my job."
+      ]
+    },
+    {
+      "id": "river",
+      "title": "III • Неправильная отметка",
+      "position": [
+        -150,
+        100,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "ru": [
+        "Мара: Дождя тогда не было. Видишь полосу ила? Волна пришла снизу.",
+        "Дэниел: Нижний затвор не мог открыться без второго ключа.",
+        "Мара: Кто держал второй?",
+        "Дэниел: Я думал — никто. Его сняли с дежурства.",
+        "Мара: Имя, Дэниел.",
+        "Дэниел: Оуэн Харт. Он теперь держит переправу."
+      ],
+      "en": [
+        "Mara: It did not rain that night. See the silt? The surge came from downstream.",
+        "Daniel: The lower gate needed a second key.",
+        "Mara: Who had it?",
+        "Daniel: I thought nobody did. He was taken off duty.",
+        "Mara: A name, Daniel.",
+        "Daniel: Owen Hart. He runs the crossing now."
+      ]
+    },
+    {
+      "id": "crossing",
+      "title": "III • Цена прохода",
+      "position": [
+        0,
+        210,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "ru": [
+        "Оуэн: Людей я перевожу бесплатно. За оружие платят.",
+        "Мара: А за молчание?",
+        "Оуэн: Молчание здесь дороже патронов. Уберите пальцы со спусков.",
+        "Дэниел: Нам нужны записи нижнего поста.",
+        "Оуэн: Записи не вернут дорогу. У меня на том берегу люди, которых ваш шлюз всё ещё держит в ловушке.",
+        "Мара: Помоги — и мы откроем проход.",
+        "Оуэн: Сначала посмотрите на лесопилку. Потом обещайте."
+      ],
+      "en": [
+        "Owen: People cross free. Weapons cost extra.",
+        "Mara: What does silence cost?",
+        "Owen: More than ammunition here. Fingers off the triggers.",
+        "Daniel: We need the lower-station records.",
+        "Owen: Records will not bring back the road. Your gate still traps my people across the river.",
+        "Mara: Help us open a passage.",
+        "Owen: Look at the mill first. Make promises afterwards."
+      ]
+    },
+    {
+      "id": "mill",
+      "title": "IV • То, что держит берег",
+      "position": [
+        160,
+        -190,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "ru": [
+        "Дэниел: Подпорки свежие. Кто-то укреплял стену после заражения.",
+        "Мара: Не военные. Тут детский свитер вместо прокладки.",
+        "Дэниел: Они сдерживали не воду. Они запирали вход.",
+        "Мара: В дверь не стрелять. Слышишь, как отвечают изнутри?",
+        "Дэниел: Обойдём вдоль рельсов. Заберём чертёж и уйдём тихо."
+      ],
+      "en": [
+        "Daniel: Fresh braces. Someone reinforced this after the outbreak.",
+        "Mara: Not soldiers. That is a child’s jumper stuffed into the joint.",
+        "Daniel: They were not holding back water. They were keeping something in.",
+        "Mara: Do not shoot the door. Hear them answer?",
+        "Daniel: Along the tracks. Get the drawing and leave quietly."
+      ]
+    },
+    {
+      "id": "recording",
+      "title": "IV • Второй голос",
+      "position": [
+        190,
+        -160,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "ru": [
+        "Запись Харта: Северный канал заполнен. Если затвор останется закрыт, рухнет госпиталь.",
+        "Запись Дэниела: Внизу идут автобусы. Подождите девять минут.",
+        "Запись Харта: У нас нет девяти минут.",
+        "Мара: Ты сказал мне, что не знал про автобусы.",
+        "Дэниел: Я знал маршрут. Не знал, что они уже выехали.",
+        "Мара: Это разные фразы. Ты выбирал удобную четырнадцать лет."
+      ],
+      "en": [
+        "Hart recording: North channel is full. Leave that gate shut and the hospital goes down.",
+        "Daniel recording: The buses are below us. Wait nine minutes.",
+        "Hart recording: We do not have nine minutes.",
+        "Mara: You told me you did not know about the buses.",
+        "Daniel: I knew the route. Not that they had already left.",
+        "Mara: Different sentences. You chose the easier one for fourteen years."
+      ]
+    },
+    {
+      "id": "apartments",
+      "title": "V • Не чужая дверь",
+      "position": [
+        210,
+        50,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "ru": [
+        "Мара: В этой квартире жила моя сестра. Я не заходила с весны.",
+        "Дэниел: Подожду внизу.",
+        "Мара: Нет. Мне нужен кто-то, кто запомнит, что здесь было. Не спаситель.",
+        "Дэниел: Зелёные занавески. Радио на холодильнике. Собака грызла ножку стола.",
+        "Мара: Она грызла только когда оставалась одна."
+      ],
+      "en": [
+        "Mara: My sister lived here. I have not been inside since spring.",
+        "Daniel: I will wait downstairs.",
+        "Mara: No. I need someone to remember what was here. Not a rescuer.",
+        "Daniel: Green curtains. Radio on the fridge. A dog chewed the table leg.",
+        "Mara: She only did that when she was left alone."
+      ]
+    },
+    {
+      "id": "tower",
+      "title": "V • Свидетель",
+      "position": [
+        220,
+        100,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "ru": [
+        "Оуэн: Второй ключ был у меня. Но команда открыть пришла не от него.",
+        "Мара: Не говори, что виновата машина.",
+        "Оуэн: Виноват я. Система предложила два района. Я отметил тот, где было меньше зарегистрированных.",
+        "Дэниел: В школе не регистрировали семьи без документов.",
+        "Оуэн: Теперь знаю.",
+        "Мара: Нет. Теперь произносишь."
+      ],
+      "en": [
+        "Owen: I had the second key. But he did not send the order to open it.",
+        "Mara: Do not blame a machine.",
+        "Owen: Blame me. The system gave me two districts. I picked the one with fewer registered residents.",
+        "Daniel: The school did not register families without papers.",
+        "Owen: I know that now.",
+        "Mara: No. Now you are saying it aloud."
+      ]
+    },
+    {
+      "id": "shelter",
+      "title": "VI • Места хватит",
+      "position": [
+        20,
+        240,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "ru": [
+        "Рут: У нас кончается чистая вода. Но места ещё есть.",
+        "Мара: Харт хочет вывести людей через старый тоннель.",
+        "Рут: Тогда предупредите тех, кто не слушает его радио. Здесь у половины другие языки.",
+        "Дэниел: Есть местная сеть. Лейла, Наргис, люди из нижнего квартала.",
+        "Рут: Не решайте за них. Дайте им время собраться."
+      ],
+      "en": [
+        "Ruth: Clean water is running out. Space is not.",
+        "Mara: Hart wants his people out through the old tunnel.",
+        "Ruth: Warn the people who do not listen to his radio. Half this room speaks another language.",
+        "Daniel: There is a local network. Leyla, Nargis, the lower-quarter residents.",
+        "Ruth: Do not decide for them. Give them time to pack."
+      ]
+    },
+    {
+      "id": "warning",
+      "title": "VI • Имена в эфире",
+      "position": [
+        -15,
+        210,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "ru": [
+        "Дэниел: Беллуэзер, говорит Дэниел Рид. Нижний канал может быть открыт.",
+        "Дэниел: Не доверяйте старым спискам. Если ваш дом ниже белых отметок — сообщите соседям.",
+        "Мара: Ты забыл сказать, что сделал.",
+        "Дэниел: Не забыл. Сначала пусть они услышат выход.",
+        "Мара: Потом не выключай микрофон."
+      ],
+      "en": [
+        "Daniel: Bellwether, this is Daniel Reed. The lower channel may be opened.",
+        "Daniel: Do not trust the old lists. If your home is below the white marks, warn your neighbours.",
+        "Mara: You have not told them what you did.",
+        "Daniel: I remember. Let them hear the way out first.",
+        "Mara: Then keep the microphone on."
+      ]
+    },
+    {
+      "id": "return",
+      "title": "VII • Девять минут",
+      "position": [
+        170,
+        -130,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "ru": [
+        "Оуэн: Снимешь блокировку — тоннель обсохнет. Река уйдёт к домам.",
+        "Дэниел: Можно удержать затвор. Тогда переправу придётся разобрать на понтон.",
+        "Оуэн: Это наша еда и весь запас топлива.",
+        "Мара: А дома — не ваш запас. Там люди.",
+        "Дэниел: Оба пути стоят чего-то, чего у нас нет права брать молча."
+      ],
+      "en": [
+        "Owen: Release the lock and the tunnel drains. The river goes towards the houses.",
+        "Daniel: Or we hold it shut and turn the crossing into a pontoon.",
+        "Owen: That costs our food and every can of fuel.",
+        "Mara: The houses are not your supplies. People live there.",
+        "Daniel: Both ways take something we have no right to take in silence."
+      ]
+    },
+    {
+      "id": "decision",
+      "title": "VII • Рука на рычаге",
+      "position": [
+        180,
+        -185,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "ru": [
+        "Мара: Красный рычаг открывает канал. Синий удерживает затвор. Я не стану выбирать за тебя.",
+        "Дэниел: Ты доверяешь мне?",
+        "Мара: Нет. Поэтому стою здесь и смотрю.",
+        "Дэниел: Раньше я хотел, чтобы кто-то сказал, что другого выхода не было.",
+        "Мара: Теперь есть другой выход. Есть цена. Назови её прежде, чем потянешь."
+      ],
+      "en": [
+        "Mara: Red opens the channel. Blue holds the gate. I will not choose for you.",
+        "Daniel: Do you trust me?",
+        "Mara: No. That is why I am standing here watching.",
+        "Daniel: I wanted someone to tell me there was no other way.",
+        "Mara: There is another way now. It has a cost. Say it before you pull."
+      ]
+    },
+    {
+      "id": "aftermath",
+      "title": "VIII • Ни один отчёт",
+      "position": [
+        175,
+        -182,
+        0
+      ],
+      "cinematic": false,
+      "gate": 2,
+      "ru": [
+        "Мара: Решение принято. Теперь нельзя уйти, пока другие разгребают последствия.",
+        "Дэниел: Не уйду.",
+        "Рут: Мне нужны носилки, сухая ткань и люди, которые умеют слушать.",
+        "Оуэн: Я пришлю своих. Без оружия.",
+        "Мара: Сначала приди сам."
+      ],
+      "en": [
+        "Mara: It is done. You do not get to leave while everyone else lives with it.",
+        "Daniel: I am staying.",
+        "Ruth: I need stretchers, dry cloth and people who can listen.",
+        "Owen: I will send mine. Unarmed.",
+        "Mara: Come yourself first."
+      ]
+    },
+    {
+      "id": "testimony",
+      "title": "VIII • Оставить микрофон включённым",
+      "position": [
+        0,
+        14,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "ru": [
+        "Дэниел: Меня зовут Дэниел Рид. В ночь эвакуации я подтвердил маршрут, зная, что нижний пост не отвечает.",
+        "Дэниел: Я не открывал затвор. Но я послал людей туда, где не мог обещать им безопасность.",
+        "Мара: Скажи имена.",
+        "Дэниел: Я знаю не все.",
+        "Мара: Тогда начни с тех, что знаешь. Остальные мы найдём."
+      ],
+      "en": [
+        "Daniel: My name is Daniel Reed. On evacuation night I approved a route knowing the lower station had gone silent.",
+        "Daniel: I did not open the gate. But I sent people where I could not promise safety.",
+        "Mara: Say their names.",
+        "Daniel: I do not know all of them.",
+        "Mara: Begin with the ones you know. We will find the others."
+      ]
+    },
+    {
+      "id": "epilogue",
+      "title": "IX • Не прощение",
+      "position": [
+        -120,
+        40,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "ru": [
+        "Мара: Мы нашли ещё два имени. Теперь тридцать три.",
+        "Дэниел: Понадобится больше стульев.",
+        "Мара: Их не будут ставить перед судом. Их поставят за стол.",
+        "Дэниел: Ты останешься?",
+        "Мара: Сегодня. Завтра спросишь снова."
+      ],
+      "en": [
+        "Mara: We found two more names. Thirty-three now.",
+        "Daniel: We will need more chairs.",
+        "Mara: Not for a trial. For a table.",
+        "Daniel: Are you staying?",
+        "Mara: Today. Ask again tomorrow."
+      ]
+    },
+    {
+      "id": "free_roam",
+      "title": "Низкая вода",
+      "position": [
+        10,
+        40,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "ru": [
+        "Рут: Течение успокоилось. Работы меньше не стало.",
+        "Мара: В нижнем квартале ждут инструменты. У переправы видели чужой костёр.",
+        "Дэниел: С чего начнём?",
+        "Мара: На этот раз спросим людей.",
+        "Теперь можно свободно исследовать Беллуэзер. Запасы, раны и принятое решение сохраняются."
+      ],
+      "en": [
+        "Ruth: The current has settled. The work has not.",
+        "Mara: The lower quarter needs tools. Someone saw an unfamiliar fire by the crossing.",
+        "Daniel: Where do we start?",
+        "Mara: This time we ask.",
+        "Bellwether remains open to explore. Supplies, injuries and your decision persist."
+      ]
+    }
+  ],
+  "voiceover_recorded": true,
+  "measured_hours": null,
+  "legacy_voice_policy": "109 existing Russian clips retained for optional lower-quarter archive, not reused as new American main-cast performances",
+  "russian_voiced_lines": 97,
+  "english_voiceover_recorded": false,
+  "in_game_voice_playback_verified": false
+}

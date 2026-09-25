@@ -111,8 +111,27 @@ legacy=unreal.GameplayStatics.create_save_game_object(save_cls);legacy.set_edito
 legacy.set_editor_property('world_elapsed_seconds',-1)
 assert unreal.GameplayStatics.save_game_to_slot(legacy,'Survival_B',0)
 migrated=instance();assert migrated.load_progress();assert migrated.world_hour()==17
+# Version-6 field state roundtrip and corrupt-newest-slot recovery. Native
+# property serialization, NOT a substitute for firing/rendering/device tests.
+for slot in ['Survival_A','Survival_B']:unreal.GameplayStatics.delete_game_in_slot(slot,0)
+field=unreal.GameplayStatics.create_save_game_object(save_cls)
+field.set_editor_property('format_version',6);field.set_editor_property('save_generation',40)
+field.set_editor_property('field_items',[3,1,2,1,6,2,1,1,8]);field.set_editor_property('looted_caches',1)
+field.set_editor_property('open_doors',3);field.set_editor_property('wound_state',unreal.Vector4(1,.4,.6,1))
+field.set_editor_property('film_progress',14);field.set_editor_property('film_decision',1)
+assert unreal.GameplayStatics.save_game_to_slot(field,'Survival_A',0)
+f=instance();assert f.load_progress();assert f.save_progress()
+roundtrip=unreal.GameplayStatics.load_game_from_slot('Survival_B',0)
+assert list(roundtrip.get_editor_property('field_items'))==[3,1,2,1,6,2,1,1,8]
+assert roundtrip.get_editor_property('open_doors')==3
+assert roundtrip.get_editor_property('film_progress')==14 and roundtrip.get_editor_property('film_decision')==1
+for prop,value in [('field_items',[-1]*9),('looted_caches',1<<24),('open_doors',1<<24),('film_progress',99)]:
+    broken=unreal.GameplayStatics.load_game_from_slot('Survival_A',0);broken.set_editor_property('save_generation',99);broken.set_editor_property(prop,value)
+    assert unreal.GameplayStatics.save_game_to_slot(broken,'Survival_B',0)
+    recovery=instance();assert recovery.load_progress();assert recovery.save_progress()
+    fixed=unreal.GameplayStatics.load_game_from_slot('Survival_B',0);assert fixed.get_editor_property('film_progress')==14
 report={'phase' :'unreal-headless-native-integration','native_classes_loaded':3,
- 'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
+ 'version6_field_and_film_serialization_fallback_tested':True,'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
  'objective_count':61,'native_inventory_and_choices_tested':True,
  'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,
  'unreal_editor_version':unreal.SystemLibrary.get_engine_version(),

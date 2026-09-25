@@ -177,32 +177,22 @@
     "repair": "feature branch uses Engine ini override before editor startup; native verification pending"
   },
   "current_work": {
-    "branch": "gameplay/world-experience",
-    "native_compile": "not yet verified for new controls/environment code",
-    "local_tests": "ASan+UBSan core/vitals/city/combat/experience and 21 Python tests passed",
-    "implemented_not_runtime_verified": [
-      "shared touch settings/HUD/hitboxes; movable joystick; editor and persistence",
-      "world clock/weather, native sunlight/fog/local sheltered rain, sky/wetness parameters",
-      "save v5 climate persistence and legacy migration",
-      "automatic proximity radio/person scenes; radio permits movement; automatic voice advance"
+    "branch": "gameplay/low-water",
+    "compile_status": "new Low Water source not yet UE compiled",
+    "preceding_world_experience_run": 36120680424,
+    "preceding_result": "UHT/UBT/native clock save/render succeeded; actual frame reviewed too dark, not final quality",
+    "implemented_source": [
+      "original American story, 18 scenes, 98 bilingual subtitle lines, 97 new Russian clips",
+      "bow projectile/draw, bounded loot/craft, player injury and save6",
+      "PBR maps, ground-floor interiors, persistent doors",
+      "infected hearing profiles/search/alerts/lateral approach",
+      "adaptive original synthesized score and spatial SFX"
     ],
-    "not_implemented_or_accepted": [
-      "huge dense varied final world",
-      "12-28 hour continuous campaign",
-      "bow",
-      "final animation/art",
-      "new Android APK and POCO performance"
-    ],
-    "source_commit": "a57d063f",
-    "scene_run": 36120680424,
-    "scene_last_observed": "in progress: pinned engine pull",
-    "core_run": 36120681313,
-    "core_result": "success",
-    "old_source_internal_android_chain": {
-      "scene_run": 36117717433,
-      "native_run": 36114118993,
-      "branch": "gameplay/city-story",
-      "scope": "reviewed visible-body frame; private cook/package/emulator testing when compatible native succeeds; not final game"
-    }
+    "new_voice_seconds": 345.715,
+    "old_internal_cook": 36123702654,
+    "duplicate_cook_cancelled": 36124008482,
+    "final_game": false,
+    "measured_campaign_hours": null,
+    "physical_poco_tested": false
   }
 }

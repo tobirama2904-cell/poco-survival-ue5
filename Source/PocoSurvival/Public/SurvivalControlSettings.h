@@ -14,6 +14,7 @@ public:
  UPROPERTY(Config) float ButtonScale=1;
  UPROPERTY(Config) float Opacity=.65f;
  UPROPERTY(Config) bool bInvertY=false;
+ UPROPERTY(Config) bool bEnglishStory=false;
  UPROPERTY(Config) bool bLeftHanded=false;
  UPROPERTY(Config) bool bPerformanceMode=true;
  void Normalize();

@@ -3,6 +3,7 @@
 #include "GameFramework/Character.h"
 #include "Core/Vitals.h"
 #include "Core/Combat.h"
+#include "Core/FieldSurvival.h"
 #include "SurvivalCharacter.generated.h"
 class USpringArmComponent;
 class UCameraComponent;
@@ -37,7 +38,7 @@ public:
     UFUNCTION(BlueprintCallable,Category="Actions") void Save();
     UFUNCTION(BlueprintCallable,Category="Actions") void Load();
     UFUNCTION(BlueprintPure,Category="Actions") ASurvivalInteraction* GetFocusedInteraction() const;
-    UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Appearance") FName AvatarRole=TEXT("Arsen");
+    UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Appearance") FName AvatarRole=TEXT("Daniel");
     UFUNCTION(BlueprintPure,Category="Appearance") bool HasHumanAvatar() const { return bHumanAvatar; }
     UFUNCTION(BlueprintCallable,Category="Combat") void ReloadWeapon();
     UFUNCTION(BlueprintCallable,Category="Combat") void SwitchWeapon();
@@ -48,6 +49,14 @@ public:
     bool RestoreCombat(const survival::CombatSnapshot& State);
     bool IsReloading() const { return Equipment.reloading>0; }
     void SyncEquipment() { RefreshWeapon(); }
+    const survival::Trauma& Wounds() const { return Trauma; }
+    bool RestoreWounds(const survival::Trauma& T) { if(!T.Valid())return false;Trauma=T;return true; }
+    bool bBowEquipped=false,bAiming=false;
+    void ReleaseAttack();
+    void UseBandage();
+    void ToggleAim();
+    void FieldAction(int32 Action);
+    void BeginFilm(int32 Index,AActor* Subject);
     void ToggleControlEditor();
     void ToggleFlashlight();
     bool bEditingControls=false;
@@ -68,6 +77,11 @@ private:
     UPROPERTY() TMap<FName,TObjectPtr<UAnimSequence>> HumanAnimations;
     UPROPERTY() TObjectPtr<UAnimSequence> PlayingHumanAnimation;
     survival::Combat Equipment;
+    survival::Trauma Trauma;
+    survival::BowDraw Bow;
+    int32 AttackFinger=-1;
+    FTimerHandle FilmLineTimer;
+    int32 ActiveFilm=-1;
     bool bHumanAvatar=false;
     float FootstepDelay=0;
     FName CurrentStory;

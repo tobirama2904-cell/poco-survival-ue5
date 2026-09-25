@@ -6,10 +6,11 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
+#include "EngineUtils.h"
 
 ASurvivalInteraction::ASurvivalInteraction()
 {
-    PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bCanEverTick = true;PrimaryActorTick.bStartWithTickEnabled=false;
     Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
     SetRootComponent(Mesh);
     Mesh->SetCollisionProfileName(TEXT("BlockAll"));
@@ -33,6 +34,10 @@ bool ASurvivalInteraction::Interact(APawn* User, FString& FailureReason)
     auto* Game = Cast<USurvivalGameInstance>(GetGameInstance());
     if (!Game) { FailureReason = TEXT("missing_game_instance"); return false; }
     auto* Player=Cast<ASurvivalCharacter>(User);
+    const FString Id=ActionId.ToString();
+    if(Id.StartsWith(TEXT("__door_"))){const int32 I=FCString::Atoi(*Id.Mid(7));if(I<0||I>=24)return false;Game->FieldInventory.doors^=1u<<I;TargetDoorYaw=(Game->FieldInventory.doors&(1u<<I))?90:0;SetActorTickEnabled(true);return true;}
+    if(Id.StartsWith(TEXT("__cache_"))){const int32 Index=FCString::Atoi(*Id.Mid(8));if(!Game->FieldInventory.Loot(Index)){FailureReason=TEXT("Пусто или рюкзак полон");return false;}SetActorHiddenInGame(true);SetActorEnableCollision(false);if(Player)Player->SyncEquipment();return true;}
+    if(Id==TEXT("__gate_open")||Id==TEXT("__gate_hold")){if(Game->FilmProgress!=14||Game->FilmDecision!=0){FailureReason=TEXT("Сначала поговорите с Марой у шлюза");return false;}Game->FilmDecision=Id==TEXT("__gate_open")?1:2;if(Game->FilmDecision==2){Game->FieldInventory.looted|=(1u<<9)|(1u<<10);for(TActorIterator<ASurvivalInteraction> It(GetWorld());It;++It)if(It->ActionId==TEXT("__cache_9")||It->ActionId==TEXT("__cache_10")){It->SetActorHiddenInGame(true);It->SetActorEnableCollision(false);}}return true;}
     const auto* Site=survival::FindCitySite(TCHAR_TO_UTF8(*ActionId.ToString()));
     if (Site && Site->kind=="heal" && (!Player || Player->GetHealth()>=100)) { FailureReason=TEXT("Здоровье уже полное");return false; }
     if (!Game->TryAction(ActionId,FailureReason)) return false;
@@ -42,3 +47,7 @@ bool ASurvivalInteraction::Interact(APawn* User, FString& FailureReason)
     }
     return true;
 }
+
+void ASurvivalInteraction::BeginPlay(){Super::BeginPlay();const FString Id=ActionId.ToString();if(Id.StartsWith(TEXT("__door_")))if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance())){const int32 I=FCString::Atoi(*Id.Mid(7));if(I>=0&&I<24)SetActorRotation(FRotator(0,(G->FieldInventory.doors&(1u<<I))?90:0,0));}if(Id.StartsWith(TEXT("__cache_")))if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance())){const int32 I=FCString::Atoi(*Id.Mid(8));if(I>=0&&I<24&&(G->FieldInventory.looted&(1u<<I))){SetActorHiddenInGame(true);SetActorEnableCollision(false);}}}
+
+void ASurvivalInteraction::Tick(float Delta){Super::Tick(Delta);const float Yaw=FMath::FInterpConstantTo(GetActorRotation().Yaw,TargetDoorYaw,Delta,150);SetActorRotation(FRotator(0,Yaw,0));if(FMath::IsNearlyEqual(Yaw,TargetDoorYaw,.1f))SetActorTickEnabled(false);}

@@ -1,0 +1,482 @@
+{
+  "voices": {
+    "Мара": "voice-00",
+    "Дэниел": "voice-02",
+    "Рут": "voice-01",
+    "Оуэн": "voice-04"
+  },
+  "full_corpus_lines": 97,
+  "batches": [
+    {
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "lines": [
+        {
+          "id": "arrival_0",
+          "text": "Если слышишь это — не отвечай по общему каналу. Они записывают позывные."
+        },
+        {
+          "id": "arrival_2",
+          "text": "Я позвала человека, который умеет открыть шлюз. Не человека, который его закрыл."
+        },
+        {
+          "id": "arrival_4",
+          "text": "Тогда покажешь мне, куда вы всех эвакуировали. Лук и перевязки в ящике у лестницы."
+        },
+        {
+          "id": "depot_0",
+          "text": "Мой отец записывал на стене рост детей. На бумагу вечно проливали кофе."
+        },
+        {
+          "id": "depot_2",
+          "text": "А потом — комната на двадцать семей. Ты всё ещё говоришь о зданиях. Я — о людях."
+        },
+        {
+          "id": "depot_4",
+          "text": "Поднялась по твоему расписанию. В школе осталась копия журнала."
+        },
+        {
+          "id": "school_1",
+          "text": "Сначала ждали автобусы. Потом считали лодки."
+        },
+        {
+          "id": "school_3",
+          "text": "Без документов не считали. Мама оставила три тарелки на подоконнике."
+        },
+        {
+          "id": "school_5",
+          "text": "Возьми бинты. Мёртвым не станет легче, если ты истечёшь кровью рядом."
+        },
+        {
+          "id": "clinic_3",
+          "text": "Нам нужен журнал водомерного поста."
+        },
+        {
+          "id": "river_0",
+          "text": "Дождя тогда не было. Видишь полосу ила? Волна пришла снизу."
+        },
+        {
+          "id": "river_2",
+          "text": "Кто держал второй?"
+        },
+        {
+          "id": "river_4",
+          "text": "Имя, Дэниел."
+        },
+        {
+          "id": "crossing_1",
+          "text": "А за молчание?"
+        },
+        {
+          "id": "crossing_5",
+          "text": "Помоги — и мы откроем проход."
+        },
+        {
+          "id": "mill_1",
+          "text": "Не военные. Тут детский свитер вместо прокладки."
+        },
+        {
+          "id": "mill_3",
+          "text": "В дверь не стрелять. Слышишь, как отвечают изнутри?"
+        },
+        {
+          "id": "recording_3",
+          "text": "Ты сказал мне, что не знал про автобусы."
+        },
+        {
+          "id": "recording_5",
+          "text": "Это разные фразы. Ты выбирал удобную четырнадцать лет."
+        },
+        {
+          "id": "apartments_0",
+          "text": "В этой квартире жила моя сестра. Я не заходила с весны."
+        },
+        {
+          "id": "apartments_2",
+          "text": "Нет. Мне нужен кто-то, кто запомнит, что здесь было. Не спаситель."
+        },
+        {
+          "id": "apartments_4",
+          "text": "Она грызла только когда оставалась одна."
+        },
+        {
+          "id": "tower_1",
+          "text": "Не говори, что виновата машина."
+        },
+        {
+          "id": "tower_5",
+          "text": "Нет. Теперь произносишь."
+        }
+      ],
+      "file": "BuildData/filmvoices/source-0.flac",
+      "source_file": ".cache/filmvoice-sources/source-0.flac",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-source-0.flac",
+      "sha256": "4b43dc7829bcd2677ce33dbf68e40a29d5c7d909c8a6a08ef3005481a3b4f920"
+    },
+    {
+      "speaker": "Мара",
+      "voice_id": "voice-00",
+      "lines": [
+        {
+          "id": "shelter_1",
+          "text": "Харт хочет вывести людей через старый тоннель."
+        },
+        {
+          "id": "warning_2",
+          "text": "Ты забыл сказать, что сделал."
+        },
+        {
+          "id": "warning_4",
+          "text": "Потом не выключай микрофон."
+        },
+        {
+          "id": "return_3",
+          "text": "А дома — не ваш запас. Там люди."
+        },
+        {
+          "id": "decision_0",
+          "text": "Красный рычаг открывает канал. Синий удерживает затвор. Я не стану выбирать за тебя."
+        },
+        {
+          "id": "decision_2",
+          "text": "Нет. Поэтому стою здесь и смотрю."
+        },
+        {
+          "id": "decision_4",
+          "text": "Теперь есть другой выход. Есть цена. Назови её прежде, чем потянешь."
+        },
+        {
+          "id": "aftermath_0",
+          "text": "Решение принято. Теперь нельзя уйти, пока другие разгребают последствия."
+        },
+        {
+          "id": "aftermath_4",
+          "text": "Сначала приди сам."
+        },
+        {
+          "id": "testimony_2",
+          "text": "Скажи имена."
+        },
+        {
+          "id": "testimony_4",
+          "text": "Тогда начни с тех, что знаешь. Остальные мы найдём."
+        },
+        {
+          "id": "epilogue_0",
+          "text": "Мы нашли ещё два имени. Теперь тридцать три."
+        },
+        {
+          "id": "epilogue_2",
+          "text": "Их не будут ставить перед судом. Их поставят за стол."
+        },
+        {
+          "id": "epilogue_4",
+          "text": "Сегодня. Завтра спросишь снова."
+        },
+        {
+          "id": "free_roam_1",
+          "text": "В нижнем квартале ждут инструменты. У переправы видели чужой костёр."
+        },
+        {
+          "id": "free_roam_3",
+          "text": "На этот раз спросим людей."
+        }
+      ],
+      "file": "BuildData/filmvoices/source-1.flac",
+      "source_file": ".cache/filmvoice-sources/source-1.flac",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-source-1.flac",
+      "sha256": "4f8a5544f474a5d153d7fa8d72ae5de591b69cd97fb1273f73cb19d37a3b3f79"
+    },
+    {
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "lines": [
+        {
+          "id": "arrival_1",
+          "text": "Ты сама позвала меня в Беллуэзер."
+        },
+        {
+          "id": "arrival_3",
+          "text": "Это был приказ об эвакуации."
+        },
+        {
+          "id": "depot_1",
+          "text": "Здесь была диспетчерская."
+        },
+        {
+          "id": "depot_3",
+          "text": "Вода поднялась на два метра за ночь."
+        },
+        {
+          "id": "school_0",
+          "text": "Все столы стоят у окон."
+        },
+        {
+          "id": "school_2",
+          "text": "Тридцать один стул. В отчёте было двадцать восемь человек."
+        },
+        {
+          "id": "school_4",
+          "text": "Мы не будем брать их вещи."
+        },
+        {
+          "id": "clinic_1",
+          "text": "Сколько здесь людей?"
+        },
+        {
+          "id": "clinic_5",
+          "text": "Спасибо."
+        },
+        {
+          "id": "river_1",
+          "text": "Нижний затвор не мог открыться без второго ключа."
+        },
+        {
+          "id": "river_3",
+          "text": "Я думал — никто. Его сняли с дежурства."
+        },
+        {
+          "id": "river_5",
+          "text": "Оуэн Харт. Он теперь держит переправу."
+        },
+        {
+          "id": "crossing_3",
+          "text": "Нам нужны записи нижнего поста."
+        },
+        {
+          "id": "mill_0",
+          "text": "Подпорки свежие. Кто-то укреплял стену после заражения."
+        },
+        {
+          "id": "mill_2",
+          "text": "Они сдерживали не воду. Они запирали вход."
+        },
+        {
+          "id": "mill_4",
+          "text": "Обойдём вдоль рельсов. Заберём чертёж и уйдём тихо."
+        },
+        {
+          "id": "recording_1",
+          "text": "Внизу идут автобусы. Подождите девять минут."
+        },
+        {
+          "id": "recording_4",
+          "text": "Я знал маршрут. Не знал, что они уже выехали."
+        },
+        {
+          "id": "apartments_1",
+          "text": "Подожду внизу."
+        },
+        {
+          "id": "apartments_3",
+          "text": "Зелёные занавески. Радио на холодильнике. Собака грызла ножку стола."
+        },
+        {
+          "id": "tower_3",
+          "text": "В школе не регистрировали семьи без документов."
+        },
+        {
+          "id": "shelter_3",
+          "text": "Есть местная сеть. Лейла, Наргис, люди из нижнего квартала."
+        },
+        {
+          "id": "warning_0",
+          "text": "Беллуэзер, говорит Дэниел Рид. Нижний канал может быть открыт."
+        },
+        {
+          "id": "warning_1",
+          "text": "Не доверяйте старым спискам. Если ваш дом ниже белых отметок — сообщите соседям."
+        },
+        {
+          "id": "warning_3",
+          "text": "Не забыл. Сначала пусть они услышат выход."
+        },
+        {
+          "id": "return_1",
+          "text": "Можно удержать затвор. Тогда переправу придётся разобрать на понтон."
+        },
+        {
+          "id": "return_4",
+          "text": "Оба пути стоят чего-то, чего у нас нет права брать молча."
+        },
+        {
+          "id": "decision_1",
+          "text": "Ты доверяешь мне?"
+        }
+      ],
+      "file": "BuildData/filmvoices/source-2.flac",
+      "source_file": ".cache/filmvoice-sources/source-2.flac",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-source-2.flac",
+      "sha256": "6b5f472f9e049d3ed4f9c645b434b885475b54a181d27d18314aff800c070071"
+    },
+    {
+      "speaker": "Дэниел",
+      "voice_id": "voice-02",
+      "lines": [
+        {
+          "id": "decision_3",
+          "text": "Раньше я хотел, чтобы кто-то сказал, что другого выхода не было."
+        },
+        {
+          "id": "aftermath_1",
+          "text": "Не уйду."
+        },
+        {
+          "id": "testimony_0",
+          "text": "Меня зовут Дэниел Рид. В ночь эвакуации я подтвердил маршрут, зная, что нижний пост не отвечает."
+        },
+        {
+          "id": "testimony_1",
+          "text": "Я не открывал затвор. Но я послал людей туда, где не мог обещать им безопасность."
+        },
+        {
+          "id": "testimony_3",
+          "text": "Я знаю не все."
+        },
+        {
+          "id": "epilogue_1",
+          "text": "Понадобится больше стульев."
+        },
+        {
+          "id": "epilogue_3",
+          "text": "Ты останешься?"
+        },
+        {
+          "id": "free_roam_2",
+          "text": "С чего начнём?"
+        }
+      ],
+      "file": "BuildData/filmvoices/source-3.flac",
+      "source_file": ".cache/filmvoice-sources/source-3.flac",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-source-3.flac",
+      "sha256": "11375fd7e6234a4f63d4689cdbdb2767923238889d8cb9f0d43b5701d8a425c0"
+    },
+    {
+      "speaker": "Рут",
+      "voice_id": "voice-01",
+      "lines": [
+        {
+          "id": "clinic_0",
+          "text": "Дверь закрывай медленно. Они слышат доводчик."
+        },
+        {
+          "id": "clinic_2",
+          "text": "Четверо спят. Двое делают вид. Одному я обещала, что будет утро."
+        },
+        {
+          "id": "clinic_4",
+          "text": "Он под аптечкой. Сначала перевяжись. История никуда не уйдёт, пока мы удерживаем твою кровь внутри."
+        },
+        {
+          "id": "clinic_6",
+          "text": "Это не прощение. Это работа."
+        },
+        {
+          "id": "shelter_0",
+          "text": "У нас кончается чистая вода. Но места ещё есть."
+        },
+        {
+          "id": "shelter_2",
+          "text": "Тогда предупредите тех, кто не слушает его радио. Здесь у половины другие языки."
+        },
+        {
+          "id": "shelter_4",
+          "text": "Не решайте за них. Дайте им время собраться."
+        },
+        {
+          "id": "aftermath_2",
+          "text": "Мне нужны носилки, сухая ткань и люди, которые умеют слушать."
+        },
+        {
+          "id": "free_roam_0",
+          "text": "Течение успокоилось. Работы меньше не стало."
+        }
+      ],
+      "file": "BuildData/filmvoices/source-4.flac",
+      "source_file": ".cache/filmvoice-sources/source-4.flac",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-source-4.flac",
+      "sha256": "1e936aa91f13f01699dae742b577dc5b877c255cc2ca3f6a9b63dfe269466738"
+    },
+    {
+      "speaker": "Оуэн",
+      "voice_id": "voice-04",
+      "lines": [
+        {
+          "id": "crossing_0",
+          "text": "Людей я перевожу бесплатно. За оружие платят."
+        },
+        {
+          "id": "crossing_2",
+          "text": "Молчание здесь дороже патронов. Уберите пальцы со спусков."
+        },
+        {
+          "id": "crossing_4",
+          "text": "Записи не вернут дорогу. У меня на том берегу люди, которых ваш шлюз всё ещё держит в ловушке."
+        },
+        {
+          "id": "crossing_6",
+          "text": "Сначала посмотрите на лесопилку. Потом обещайте."
+        },
+        {
+          "id": "recording_0",
+          "text": "Северный канал заполнен. Если затвор останется закрыт, рухнет госпиталь."
+        },
+        {
+          "id": "recording_2",
+          "text": "У нас нет девяти минут."
+        },
+        {
+          "id": "tower_0",
+          "text": "Второй ключ был у меня. Но команда открыть пришла не от него."
+        },
+        {
+          "id": "tower_2",
+          "text": "Виноват я. Система предложила два района. Я отметил тот, где было меньше зарегистрированных."
+        },
+        {
+          "id": "tower_4",
+          "text": "Теперь знаю."
+        },
+        {
+          "id": "return_0",
+          "text": "Снимешь блокировку — тоннель обсохнет. Река уйдёт к домам."
+        },
+        {
+          "id": "return_2",
+          "text": "Это наша еда и весь запас топлива."
+        },
+        {
+          "id": "aftermath_3",
+          "text": "Я пришлю своих. Без оружия."
+        }
+      ],
+      "file": "BuildData/filmvoices/source-5.flac",
+      "source_file": ".cache/filmvoice-sources/source-5.flac",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-source-5.flac",
+      "sha256": "719de65a4412b8eb510fb667da1c31aa3e29ed07e88f1a6696d4b16199aca518"
+    }
+  ],
+  "note": "New performances for original American characters in Russian dub, reusing selected voice actors, not legacy audio clips. One system subtitle intentionally unvoiced.",
+  "direct_overrides": {
+    "river_4": {
+      "source_file": ".cache/filmvoice-sources/direct-river_4.wav",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-direct-river_4.wav",
+      "sha256": "fbdb56be4f5c1b61ea552e9dddcf72b997b7cd575cbec632e96edd9e2687f972"
+    },
+    "crossing_1": {
+      "source_file": ".cache/filmvoice-sources/direct-crossing_1.wav",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-direct-crossing_1.wav",
+      "sha256": "b91760078c2210d6b08e4f6fc46f16211c7d8816bb47c23194335a1638587f1a"
+    },
+    "apartments_3": {
+      "source_file": ".cache/filmvoice-sources/direct-apartments_3.wav",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-direct-apartments_3.wav",
+      "sha256": "5b51fa9955864444d737c71bdf6d85bf56a390013543a0a45f9dcccd72d9ebe4"
+    },
+    "clinic_6": {
+      "source_file": ".cache/filmvoice-sources/direct-clinic_6.wav",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/low-water-voice-source-001/low-water-direct-clinic_6.wav",
+      "sha256": "f3496a6c5b06792802b6e36b09fc59ac6ba2ec2320c2050cb80c5bc529efd4f1"
+    }
+  }
+}

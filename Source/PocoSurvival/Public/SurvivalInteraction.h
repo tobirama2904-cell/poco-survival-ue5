@@ -14,6 +14,9 @@ class POCOSURVIVAL_API ASurvivalInteraction : public AActor
     GENERATED_BODY()
 public:
     ASurvivalInteraction();
+    virtual void BeginPlay() override;
+    virtual void Tick(float Delta) override;
+    float TargetDoorYaw=0;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Interaction") TObjectPtr<UStaticMeshComponent> Mesh;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Interaction") TObjectPtr<USphereComponent> FocusVolume;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Interaction") FName ActionId;

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "ScoreExplore",
+    "seconds": 32,
+    "sha256": "63d62be3bda14eb73e01194b07773610abeb22e09007917d2ac330506cf86ee5",
+    "authorship": "original deterministic synthesis; tools/scene/compose_score.py"
+  },
+  {
+    "name": "ScoreStealth",
+    "seconds": 32,
+    "sha256": "308b72854251cbbb8ea5cf6037a5aeb54afccacbe279f9f7bcacb8f235c44895",
+    "authorship": "original deterministic synthesis; tools/scene/compose_score.py"
+  },
+  {
+    "name": "ScoreCombat",
+    "seconds": 32,
+    "sha256": "c6d03b8f0971c7c4465167be8bf1cf82a6ced4fca707d2fea708a5d9676a01da",
+    "authorship": "original deterministic synthesis; tools/scene/compose_score.py"
+  },
+  {
+    "name": "ScoreMemory",
+    "seconds": 32,
+    "sha256": "34e70df439ef8919d313b81b6ef84d9595b2a8ca1bc4583ad42375cfdd43c03b",
+    "authorship": "original deterministic synthesis; tools/scene/compose_score.py"
+  }
+]
