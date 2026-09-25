@@ -10,7 +10,7 @@ void ASurvivalPlayerController::BeginPlay()
 }
 void ASurvivalPlayerController::Tick(float Delta)
 {
- Super::Tick(Delta);int32 W,H;GetViewportSize(W,H);if(W>0&&H>0&&LastViewport!=FIntPoint(W,H)) { LastViewport=FIntPoint(W,H);auto* P=Cast<ASurvivalCharacter>(GetPawn());RefreshTouchLayout(!P||!P->bEditingControls); }
+ Super::Tick(Delta);int32 W,H;GetViewportSize(W,H);auto* P=Cast<ASurvivalCharacter>(GetPawn());const bool Visible=!P||(!P->bEditingControls&&!P->bJournalOpen&&!P->IsCinematicLocked());if(W>0&&H>0&&(LastViewport!=FIntPoint(W,H)||Visible!=bLastTouchVisible)) { LastViewport=FIntPoint(W,H);bLastTouchVisible=Visible;RefreshTouchLayout(Visible); }
 }
 void ASurvivalPlayerController::RefreshTouchLayout(bool Visible)
 {
@@ -19,7 +19,7 @@ void ASurvivalPlayerController::RefreshTouchLayout(bool Visible)
  if(MobileStick&&MobileStick->Controls.Num()) {
   MobileStick->Controls.SetNum(1);auto& C=MobileStick->Controls[0];C.Center=S->Position(survival::Control::Move,Aspect);
   C.VisualSize=FVector2D(.2f/Aspect,.2f)*S->ButtonScale;C.ThumbSize=FVector2D(.09f/Aspect,.09f)*S->ButtonScale;C.InteractionSize=FVector2D(.32f/Aspect,.32f)*S->ButtonScale;
-  MobileStick->bPreventRecenter=true;MobileStick->InactiveOpacity=S->Opacity;ActivateTouchInterface(Visible?MobileStick.Get():nullptr);
+  MobileStick->bPreventRecenter=true;MobileStick->InactiveOpacity=S->Opacity*.45f;MobileStick->ActiveOpacity=FMath::Min(.85f,S->Opacity+.2f);ActivateTouchInterface(Visible?MobileStick.Get():nullptr);
  }
- if(GEngine)if(auto* Settings=GEngine->GetGameUserSettings()) { Settings->SetFrameRateLimit(30);Settings->SetOverallScalabilityLevel(S->bPerformanceMode?1:2);Settings->ApplyNonResolutionSettings();Settings->SaveSettings(); }
+ if(GEngine)if(auto* Settings=GEngine->GetGameUserSettings()) { const int32 Quality=S->bPerformanceMode?1:2;if(AppliedQuality!=Quality){AppliedQuality=Quality;Settings->SetFrameRateLimit(30);Settings->SetOverallScalabilityLevel(Quality);Settings->ApplyNonResolutionSettings();Settings->SaveSettings();} }
 }

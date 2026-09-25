@@ -6,7 +6,19 @@
 namespace survival {
 enum class Control : int { Interact,Attack,Sprint,Jump,Crouch,Reload,Throw,Weapon,Journal,Save,Load,Settings,Flashlight,Move,Count };
 struct ControlPoint { float x,y; };
-inline constexpr std::array<ControlPoint,14> DefaultControls={{{.91f,.80f},{.91f,.59f},{.75f,.80f},{.75f,.59f},{.75f,.39f},{.91f,.39f},{.91f,.23f},{.75f,.23f},{.55f,.08f},{.75f,.08f},{.91f,.08f},{.39f,.08f},{.55f,.23f},{.13f,.80f}}};
+inline constexpr std::array<ControlPoint,14> LegacyControls={{{.91f,.80f},{.91f,.59f},{.75f,.80f},{.75f,.59f},{.75f,.39f},{.91f,.39f},{.91f,.23f},{.75f,.23f},{.55f,.08f},{.75f,.08f},{.91f,.08f},{.39f,.08f},{.55f,.23f},{.13f,.80f}}};
+// Keep the centre and upper-right view clear. Save/load live inside the backpack.
+inline constexpr std::array<ControlPoint,14> DefaultControls={{{.93f,.82f},{.91f,.59f},{.25f,.81f},{.77f,.72f},{.83f,.87f},{.94f,.40f},{.83f,.40f},{.82f,.56f},{.89f,.075f},{.75f,.075f},{.68f,.075f},{.96f,.075f},{.82f,.075f},{.12f,.79f}}};
+inline float ControlRadius(Control id) {
+ return id==Control::Move?.095f:id==Control::Interact?.060f:id==Control::Attack?.058f:
+        (id==Control::Journal||id==Control::Save||id==Control::Load||id==Control::Settings||id==Control::Flashlight)?.030f:.043f;
+}
+inline bool ControlVisible(Control id,bool journal,bool editing,bool cinematic) {
+ if(editing)return true;
+ if(cinematic)return id==Control::Interact;
+ if(journal)return id==Control::Journal||id==Control::Save||id==Control::Load||id==Control::Settings;
+ return id!=Control::Save&&id!=Control::Load&&id!=Control::Move;
+}
 inline ControlPoint ClampControl(ControlPoint p,float radius,float aspect) {
  if(!std::isfinite(p.x)||!std::isfinite(p.y))p={.5f,.5f};
  aspect=std::isfinite(aspect)?std::clamp(aspect,1.0f,3.0f):1.8f;
@@ -15,7 +27,7 @@ inline ControlPoint ClampControl(ControlPoint p,float radius,float aspect) {
 }
 inline bool ControlHit(ControlPoint p,ControlPoint center,float radius,float aspect) {
  if(!std::isfinite(p.x)||!std::isfinite(p.y)||!std::isfinite(radius)||radius<=0||!std::isfinite(aspect)||aspect<=0)return false;
- return std::abs(p.x-center.x)*aspect<=radius && std::abs(p.y-center.y)<=radius;
+ const float dx=(p.x-center.x)*aspect,dy=p.y-center.y;return dx*dx+dy*dy<=radius*radius;
 }
 struct Climate { float daylight=0,rain=0,fog=0,cloud=0; };
 class WorldClock {

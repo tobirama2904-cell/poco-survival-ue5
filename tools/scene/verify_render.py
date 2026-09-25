@@ -14,7 +14,8 @@ for f in root.glob('*.png'):
     images.append({'name':f.name,'bytes':f.stat().st_size,'width':width,'height':height,'character_presence':character_presence(f)})
 movement=json.loads((root/'runtime-movement.json').read_text()) if (root/'runtime-movement.json').exists() else {}
 construction=json.loads((root/'scene-ready.json').read_text()) if (root/'scene-ready.json').exists() else {}
-passed=construction.get('all_construction_steps_succeeded') is True and a.exit_code==0 and bool(images) and movement.get('passed') is True and movement.get('human_avatar_loaded') is True and any(f['character_presence']['passed'] for f in images)
-report={'construction':construction,'renderer':'software Vulkan / llvmpipe; NOT hardware or POCO performance','renderer_exit_code':a.exit_code,'screenshots':images,'runtime_movement':movement,'gate_passed':passed,'visual_quality_review':'requires human/image inspection separately','physical_device_tested':False}
+county=json.loads((root/'county-runtime.json').read_text()) if (root/'county-runtime.json').exists() else {}
+passed=county.get('passed') is True and len(images)>=2 and construction.get('all_construction_steps_succeeded') is True and a.exit_code==0 and bool(images) and movement.get('passed') is True and movement.get('human_avatar_loaded') is True and any(f['character_presence']['passed'] for f in images)
+report={'county_runtime':county,'construction':construction,'renderer':'software Vulkan / llvmpipe; NOT hardware or POCO performance','renderer_exit_code':a.exit_code,'screenshots':images,'runtime_movement':movement,'gate_passed':passed,'visual_quality_review':'requires human/image inspection separately','physical_device_tested':False}
 (root/'render-verification.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)
 raise SystemExit(0 if passed else 1)

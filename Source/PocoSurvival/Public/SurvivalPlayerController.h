@@ -12,6 +12,8 @@ public:
     virtual void Tick(float Delta) override;
     void RefreshTouchLayout(bool Visible=true);
 private:
+ bool bLastTouchVisible=true;
+ int32 AppliedQuality=-1;
     FIntPoint LastViewport=FIntPoint::ZeroValue;
     UPROPERTY() TObjectPtr<UTouchInterface> MobileStick;
 };

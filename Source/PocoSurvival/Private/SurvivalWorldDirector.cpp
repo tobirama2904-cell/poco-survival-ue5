@@ -54,11 +54,11 @@ void ASurvivalWorldDirector::Tick(float Delta)
  if(Paused)return;const auto Climate=Game->WorldClimate();EnvironmentTimer-=Delta;StoryTimer-=Delta;
  if(EnvironmentTimer<=0){EnvironmentTimer=1;
   const float Day=Climate.daylight;
-  if(Sun){Sun->SetActorRotation(FRotator(-FMath::Max(12.f,Day*72),Game->WorldHour()*15-90,0));auto* Light=Cast<UDirectionalLightComponent>(Sun->GetLightComponent());if(Light){Light->SetIntensity((.12f+FMath::Sqrt(Day)*3.8f)*(1-Climate.cloud*.60f));Light->SetLightColor(FLinearColor::LerpUsingHSV(FLinearColor(.40,.55,.95),FLinearColor(1,.87,.69),FMath::Min(1.f,Day*3)));}}
-  if(Fill)Fill->GetLightComponent()->SetIntensity(.25f+FMath::Sqrt(Day)*.9f);
+  if(Sun){Sun->SetActorRotation(FRotator(-FMath::Max(12.f,Day*72),Game->WorldHour()*15-90,0));auto* Light=Cast<UDirectionalLightComponent>(Sun->GetLightComponent());if(Light){Light->SetIntensity((.16f+FMath::Sqrt(Day)*2.65f)*(1-Climate.cloud*.60f));Light->SetLightColor(FLinearColor::LerpUsingHSV(FLinearColor(.40,.55,.95),FLinearColor(1,.87,.69),FMath::Min(1.f,Day*3)));}}
+  if(Fill)Fill->GetLightComponent()->SetIntensity(.55f+FMath::Sqrt(Day)*2.15f);
   if(Fog){auto* C=Fog->GetComponent();C->SetFogDensity(.003f+Climate.fog*.025f);C->SetFogInscatteringColor(FLinearColor::LerpUsingHSV(FLinearColor(.025,.04,.065),FLinearColor(.32,.38,.40),Day));C->SetStartDistance(1500);}
   if(Sky)Sky->SetActorLocation(Player->GetActorLocation());
-  if(SkyMaterial)SkyMaterial->SetVectorParameterValue(TEXT("SkyColor"),FLinearColor::LerpUsingHSV(FLinearColor(.004,.009,.025),FLinearColor(.12,.22,.36),FMath::Min(1.f,Day*2))*(1-Climate.cloud*.4f));
+  if(SkyMaterial)SkyMaterial->SetVectorParameterValue(TEXT("SkyColor"),FLinearColor::LerpUsingHSV(FLinearColor(.016,.028,.06),FLinearColor(1,.98,.94),FMath::Min(1.f,Day*2))*(1-Climate.cloud*.4f));
   for(const auto& M:WetMaterials)if(M)M->SetScalarParameterValue(TEXT("Wetness"),Climate.rain);
   FHitResult Shelter;FCollisionQueryParams Params(SCENE_QUERY_STAT(RainShelter),false,Player);Params.AddIgnoredActor(this);
   bSheltered=GetWorld()->LineTraceSingleByChannel(Shelter,Player->GetActorLocation()+FVector(0,0,80),Player->GetActorLocation()+FVector(0,0,2500),ECC_Visibility,Params);

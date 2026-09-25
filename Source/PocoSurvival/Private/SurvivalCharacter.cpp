@@ -221,7 +221,10 @@ void ASurvivalCharacter::TouchPressed(ETouchIndex::Type Finger,FVector Position)
     int32 W=0,H=0;PC->GetViewportSize(W,H);if (!W || !H) return;
     const FVector2D P(Position.X/W,Position.Y/H);const float Aspect=static_cast<float>(W)/H;auto* Settings=USurvivalControlSettings::Get();
     if(bJournalOpen){
-        const int32 Hit=Settings->Hit(P,Aspect,false);if(Hit==static_cast<int32>(survival::Control::Journal)){ToggleJournal();return;}
+        const int32 Hit=Settings->Hit(P,Aspect,false,true);if(Hit==static_cast<int32>(survival::Control::Journal)){ToggleJournal();return;}
+        if(Hit==static_cast<int32>(survival::Control::Save)){Save();return;}
+        if(Hit==static_cast<int32>(survival::Control::Load)){Load();return;}
+        if(Hit==static_cast<int32>(survival::Control::Settings)){ToggleControlEditor();return;}
         if(P.X>=.12f&&P.X<=.88f&&P.Y>=.79f&&P.Y<.86f){Settings->bEnglishStory=!Settings->bEnglishStory;Settings->Store();return;}
         if(P.X>=.12f&&P.X<=.88f&&P.Y>=.53f&&P.Y<.78f)FieldAction(FMath::Clamp(FMath::FloorToInt((P.Y-.53f)/.05f),0,4));return;
     }
@@ -238,7 +241,7 @@ void ASurvivalCharacter::TouchPressed(ETouchIndex::Type Finger,FVector Position)
         }
         ControlDragIndex=Settings->Hit(P,Aspect,true);if(ControlDragIndex!=INDEX_NONE)ControlDragFinger=static_cast<int32>(Finger);return;
     }
-    const int32 Hit=Settings->Hit(P,Aspect,false);
+    const int32 Hit=Settings->Hit(P,Aspect,false,false,IsCinematicLocked());
     if(Hit!=INDEX_NONE) { switch(static_cast<survival::Control>(Hit)) {
       case survival::Control::Interact:Interact();break;case survival::Control::Attack:AttackFinger=static_cast<int32>(Finger);Attack();break;
       case survival::Control::Sprint:ToggleSprint();break;case survival::Control::Jump:JumpFinger=static_cast<int32>(Finger);JumpPressed();break;

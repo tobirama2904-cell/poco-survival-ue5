@@ -1,0 +1,46 @@
+{
+  "construction": {
+    "source": "64dc5cc60f19c206e66604d99f38ef9f765827cc",
+    "all_construction_steps_succeeded": true,
+    "field": {
+      "loot_caches": 24,
+      "openable_doors": 24,
+      "main_cast_body_proxies": 4,
+      "final_art": false
+    }
+  },
+  "renderer": "software Vulkan / llvmpipe; NOT hardware or POCO performance",
+  "renderer_exit_code": 0,
+  "screenshots": [
+    {
+      "name": "HighresScreenshot00000.png",
+      "bytes": 234660,
+      "width": 640,
+      "height": 360,
+      "character_presence": {
+        "test": "fixed first-spawn tan-clothing regression alarm; not general character recognition",
+        "candidate_pixels": 1099,
+        "region_pixels": 10350,
+        "fraction": 0.10618,
+        "passed": true
+      }
+    }
+  ],
+  "runtime_movement": {
+    "phase": "actual-game-mode-input-and-floor-test",
+    "passed": true,
+    "walk_distance_cm": 387.72,
+    "grounded": true,
+    "camera_pitch_degrees": -10.0,
+    "player_view_target": true,
+    "camera_framed": true,
+    "human_avatar_loaded": true,
+    "touch_device_tested": false,
+    "android_tested": false
+  },
+  "gate_passed": true,
+  "visual_quality_review": "requires human/image inspection separately",
+  "physical_device_tested": false,
+  "run": 36128450801,
+  "visual_review": "Visible human and controls; too dark, intrusive grid HUD. Rejected for final-quality delivery. New county/UI revision not in this evidence."
+}

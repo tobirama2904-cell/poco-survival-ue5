@@ -10,9 +10,10 @@ class POCOSURVIVAL_API USurvivalControlSettings : public UObject
 public:
  static USurvivalControlSettings* Get();
  UPROPERTY(Config) TArray<FVector2D> Positions;
+ UPROPERTY(Config) int32 LayoutRevision=1;
  UPROPERTY(Config) float Sensitivity=1;
  UPROPERTY(Config) float ButtonScale=1;
- UPROPERTY(Config) float Opacity=.65f;
+ UPROPERTY(Config) float Opacity=.48f;
  UPROPERTY(Config) bool bInvertY=false;
  UPROPERTY(Config) bool bEnglishStory=false;
  UPROPERTY(Config) bool bLeftHanded=false;
@@ -23,7 +24,7 @@ public:
  void Store();
  FVector2D Position(survival::Control Id,float Aspect) const;
  float Radius(survival::Control Id) const;
- int32 Hit(FVector2D Point,float Aspect,bool Editing) const;
+ int32 Hit(FVector2D Point,float Aspect,bool Editing,bool Journal=false,bool Cinematic=false) const;
  void Move(int32 Id,FVector2D Point,float Aspect);
  static const TCHAR* Label(survival::Control Id);
 };

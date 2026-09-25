@@ -8,10 +8,10 @@
   "art_release": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/tag/artpack-001-3",
   "engine_installed": true,
   "unreal_code_built": true,
-  "playable_map_exists": false,
-  "android_apk_exists": false,
+  "playable_map_exists": true,
+  "android_apk_exists": true,
   "epic_source_api_last_status": 200,
-  "next_gate": "Compile and render world-experience feature branch; separately finish compatible old-source Android native/cook/emulator visual tests. No final game accepted.",
+  "next_gate": "Compile/render county and compact HUD revision; require six rural collision checks and second walking/frame proof. Native Android queued separately; no final release.",
   "never_claim": "The art collection or native logic tests are not a playable or device-tested game.",
   "engine_installation_scope": "Verified on ephemeral GitHub-hosted runner, not installed in the chat workspace",
   "epic_membership": "active",
@@ -59,7 +59,7 @@
   "unreal_scene_assets_imported_before_ui_crash": true,
   "unreal_map_construction_verified": true,
   "unreal_map_construction_source": "6fab0e9",
-  "playable_map_exists_note": "Actual UE map was constructed and saved on the previous ephemeral runner, but private backup failed. Rebuild/private persistence/render pending; no downloadable playable build.",
+  "playable_map_exists_note": "Retained Low Water Linux UE development map; final art and Android current-story APK unapproved.",
   "scene_build_last_observed_conclusion": "success: actual third-person frame and input/floor/camera gates",
   "scene_actor_native_vitals_tests_verified": true,
   "private_scene_content_preserved": false,
@@ -178,7 +178,7 @@
   },
   "current_work": {
     "branch": "gameplay/low-water",
-    "compile_status": "new Low Water source not yet UE compiled",
+    "compile_status": "Previous 64dc5cc Low Water scene compiled and rendered successfully; new county/HUD C++ verification pending.",
     "preceding_world_experience_run": 36120680424,
     "preceding_result": "UHT/UBT/native clock save/render succeeded; actual frame reviewed too dark, not final quality",
     "implemented_source": [
@@ -199,10 +199,27 @@
     "android_native_run": 36126987127,
     "core_run": 36126920354,
     "core_result": "success",
-    "scene_status": "new stricter scene run dispatched; prior incomplete 36126057549 cancelled",
+    "scene_status": "36128450801 completed success; frame manually reviewed, dark/unpolished, final art rejected.",
     "android_status": "corrected native queued; old-source native kept for checkpoint",
     "local_python_tests": 27,
     "native_cpp_correction": "1cdc496",
-    "native_linux_result": "compiled and passed native save6/recovery tests during scene attempt2; later map population failures separately measured"
+    "native_linux_result": "compiled and passed native save6/recovery tests during scene attempt2; later map population failures separately measured",
+    "old_internal_package": 36128395326,
+    "old_internal_emulator": 36129949647,
+    "old_internal_emulator_result": "Install, visible frame and relaunch passed; old 5d6dde86 source, not Low Water or POCO performance.",
+    "county_stage": {
+      "source": "worktree pending commit",
+      "extent_m": 2400,
+      "terrain_tiles": 16,
+      "nature_instances": 6188,
+      "rural_shelters": 6,
+      "public_art_pack": "county-art-002",
+      "source_python_tests": 33,
+      "source_portable_tests": "passed; new layout assertions also passed",
+      "new_unreal_compile_verified": false,
+      "new_unreal_render_reviewed": false,
+      "new_android_apk_available": false,
+      "full_user_acceptance_complete": false
+    }
   }
 }

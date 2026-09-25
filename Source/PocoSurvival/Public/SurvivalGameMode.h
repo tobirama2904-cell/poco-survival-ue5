@@ -12,6 +12,10 @@ public:
 private:
     void Intro();void EndIntro();void CaptureProof();void ExitProof();
     void BeginMovementProof();void EndMovementProof();
+    void BeginCountyProof();void EndCountyMovement();void CaptureCountyProof();
+    FVector CountyMovementStart=FVector::ZeroVector;
+    int32 CountyFloors=0;
+    int32 CountyAnchors=0;
     FVector MovementProofStart=FVector::ZeroVector;
     bool bMovementProofStarted=false;
 };

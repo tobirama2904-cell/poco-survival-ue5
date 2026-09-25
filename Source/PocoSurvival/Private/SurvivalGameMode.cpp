@@ -18,6 +18,7 @@
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
 #include "PixelFormat.h"
+#include "EngineUtils.h"
 ASurvivalGameMode::ASurvivalGameMode()
 {
     DefaultPawnClass=ASurvivalCharacter::StaticClass();PlayerControllerClass=ASurvivalPlayerController::StaticClass();HUDClass=ASurvivalHUD::StaticClass();
@@ -62,7 +63,7 @@ void ASurvivalGameMode::EndIntro()
 void ASurvivalGameMode::CaptureProof()
 {
     if (auto* PC=GetWorld()->GetFirstPlayerController()) PC->ConsoleCommand(TEXT("HighResShot 1"));
-    FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,4.0f,false);
+    FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::BeginCountyProof,1.8f,false);
 }
 void ASurvivalGameMode::ExitProof() { FPlatformMisc::RequestExit(false); }
 
@@ -90,4 +91,35 @@ void ASurvivalGameMode::EndMovementProof()
     const bool Passed=bMovementProofStarted && Distance>100 && Grounded && CameraFramed && HumanLoaded;
     const FString Report=FString::Printf(TEXT("{\"phase\":\"actual-game-mode-input-and-floor-test\",\"passed\":%s,\"walk_distance_cm\":%.2f,\"grounded\":%s,\"camera_pitch_degrees\":%.2f,\"player_view_target\":%s,\"camera_framed\":%s,\"human_avatar_loaded\":%s,\"touch_device_tested\":false,\"android_tested\":false}\n"),Passed?TEXT("true"):TEXT("false"),Distance,Grounded?TEXT("true"):TEXT("false"),CameraPitch,PlayerView?TEXT("true"):TEXT("false"),CameraFramed?TEXT("true"):TEXT("false"),HumanLoaded?TEXT("true"):TEXT("false"));
     FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/runtime-movement.json")));
+}
+
+void ASurvivalGameMode::BeginCountyProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
+ FVector Destination=FVector::ZeroVector;
+ for(TActorIterator<AActor> It(GetWorld());It;++It)if(It->ActorHasTag(TEXT("county_proof"))){
+  ++CountyAnchors;const FVector P=It->GetActorLocation();FHitResult Hit;FCollisionQueryParams Params;Params.AddIgnoredActor(*It);if(Player)Params.AddIgnoredActor(Player);
+  if(GetWorld()->LineTraceSingleByChannel(Hit,FVector(P.X,P.Y,50000),FVector(P.X,P.Y,-10000),ECC_Visibility,Params)&&FMath::Abs(Hit.ImpactPoint.Z-(P.Z-400))<180){++CountyFloors;if(It->ActorHasTag(TEXT("ranger_station")))Destination=Hit.ImpactPoint+FVector(0,0,100);}
+ }
+ if(Player&&Destination!=FVector::ZeroVector){
+  Player->EndStory();Player->SetActorLocation(Destination,false,nullptr,ETeleportType::TeleportPhysics);Player->GetCharacterMovement()->SetMovementMode(MOVE_Walking);PC->SetControlRotation(FRotator(-8,53,0));PC->SetViewTarget(Player);CountyMovementStart=Destination;
+  PC->InputKey(FInputKeyEventArgs(nullptr,FInputDeviceId::CreateFromInternalId(0),EKeys::W,IE_Pressed));
+ }
+ FTimerHandle Move,Capture;GetWorldTimerManager().SetTimer(Move,this,&ASurvivalGameMode::EndCountyMovement,1.3f,false);GetWorldTimerManager().SetTimer(Capture,this,&ASurvivalGameMode::CaptureCountyProof,2.3f,false);
+}
+void ASurvivalGameMode::EndCountyMovement()
+{
+ float Distance=0;bool Grounded=false;
+ if(auto* PC=GetWorld()->GetFirstPlayerController()){
+  PC->InputKey(FInputKeyEventArgs(nullptr,FInputDeviceId::CreateFromInternalId(0),EKeys::W,IE_Released));
+  if(auto* Player=Cast<ASurvivalCharacter>(PC->GetPawn())){Distance=FVector::Dist2D(CountyMovementStart,Player->GetActorLocation());Grounded=Player->GetCharacterMovement()->IsMovingOnGround();}
+ }
+ const bool Passed=CountyAnchors==6&&CountyFloors==6&&Grounded&&Distance>100&&Distance<2000;
+ const FString Report=FString::Printf(TEXT("{\"passed\":%s,\"rural_anchors\":%d,\"valid_collision_floors\":%d,\"walk_distance_cm\":%.2f,\"grounded\":%s,\"physical_device_tested\":false}\n"),Passed?TEXT("true"):TEXT("false"),CountyAnchors,CountyFloors,Distance,Grounded?TEXT("true"):TEXT("false"));
+ FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/county-runtime.json")));
+}
+void ASurvivalGameMode::CaptureCountyProof()
+{
+ if(auto* PC=GetWorld()->GetFirstPlayerController())PC->ConsoleCommand(TEXT("HighResShot 1"));
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,4.f,false);
 }

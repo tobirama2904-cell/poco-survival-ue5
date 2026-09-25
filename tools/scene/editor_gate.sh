@@ -3,7 +3,7 @@ set -euo pipefail
 cd /project
 ENGINE=/home/ue4/UnrealEngine/Engine
 mkdir -p artifacts/gameplay-scene artifacts/engine-probe artifacts/android-build
-rm -f artifacts/gameplay-scene/{scene-construction,city-construction,field-content,scene-ready,render-verification}.json
+rm -f artifacts/gameplay-scene/{scene-construction,city-construction,field-content,county-content,county-runtime,scene-ready,render-verification}.json
 "$ENGINE/Build/BatchFiles/Linux/Build.sh" PocoSurvivalEditor Linux Development \
   -Project=/project/PocoSurvival.uproject -NoHotReloadFromIDE -MaxParallelActions=2 -NoUBA \
   2>&1 | tee artifacts/gameplay-scene/ubt.log
@@ -34,7 +34,7 @@ test -s artifacts/gameplay-scene/scene-construction.json
 test -s artifacts/gameplay-scene/city-construction.json
 
 export SDL_AUDIODRIVER=dummy
-for SCRIPT in /project/tools/scene/import_gameplay_assets.py /project/tools/scene/populate_field.py /project/tools/scene/prepare_mobile_scene.py; do
+for SCRIPT in /project/tools/scene/import_gameplay_assets.py /project/tools/scene/populate_field.py /project/tools/scene/populate_county.py /project/tools/scene/prepare_mobile_scene.py; do
  "$ENGINE/Binaries/Linux/UnrealEditor-Cmd" /project/PocoSurvival.uproject \
   -run=pythonscript -script="$SCRIPT" '-ini:Engine:[/Script/Engine.AudioSettings]:DefaultAudioCompressionType=PCM' \
   -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \
@@ -45,5 +45,6 @@ python3 - <<'READY'
 import json,subprocess
 from pathlib import Path
 root=Path('artifacts/gameplay-scene');field=json.loads((root/'field-content.json').read_text());assert field['loot_caches']==24 and field['openable_doors']==24
-(root/'scene-ready.json').write_text(json.dumps({'source':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'all_construction_steps_succeeded':True,'field':field},indent=2)+'\n')
+county=json.loads((root/'county-content.json').read_text());assert county['terrain_tiles']==16 and county['rural_shelters']==6
+(root/'scene-ready.json').write_text(json.dumps({'source':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'all_construction_steps_succeeded':True,'field':field,'county':county},indent=2)+'\n')
 READY

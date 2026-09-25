@@ -21,3 +21,5 @@ shutil.copytree(stage/'Templates/TemplateResources/High/Characters/Content',root
 print('SCENE_SOURCES_READY licensed template characters are internal test art, not final characters',flush=True)
 
 subprocess.run(['python3',str(root/'tools/characters/fetch_conditioned.py')],check=True)
+
+subprocess.run(['python3',str(root/'tools/scene/fetch_county.py')],check=True)

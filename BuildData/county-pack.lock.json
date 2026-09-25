@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/county-art-002/county-art-002.zip",
+  "bytes": 22767435,
+  "sha256": "2fa70bce5fc7c5375095617c5bc74d4b05445171873c5d46550d376200cbae5e",
+  "license": "CC0 source derivatives and original project geometry",
+  "epic_assets": false,
+  "files": [
+    {
+      "name": "Broadleaf.glb",
+      "bytes": 7153520,
+      "sha256": "db36c627190b287c67804aa3acc5986e66e08d470dfd95d56819b9e77203da56"
+    },
+    {
+      "name": "CREDITS.md",
+      "bytes": 612,
+      "sha256": "792d08a55f6409ed6489f0c4d62eafbe91d79fa15f7d59a38d9db452e5561ec3"
+    },
+    {
+      "name": "Deadwood.glb",
+      "bytes": 2550476,
+      "sha256": "915e8a55891802ffa19e9e8bf0ff62ef4cd0e8b03a19340fc69d3e226cc51167"
+    },
+    {
+      "name": "Fern.glb",
+      "bytes": 1623732,
+      "sha256": "cf30a1b80dd7e2bcdcb9fec7964188fe7ad0e805e8b60218c5025cb21f1c7bbc"
+    },
+    {
+      "name": "MossRock.glb",
+      "bytes": 527132,
+      "sha256": "e23325da8ad2a11ec48c25c08ad4b8272fc4fea250ba8f8fd6bb6f15831f16b6"
+    },
+    {
+      "name": "Pine.glb",
+      "bytes": 5321532,
+      "sha256": "c069682bb529c45c5c4639ad967751a5bcecfcec134ec862fc7be74ccd3dce2b"
+    },
+    {
+      "name": "River.glb",
+      "bytes": 12636,
+      "sha256": "74ed921fec42aea911ca65fc2f7b426999b701b755fd912152bc1a15fb719c05"
+    },
+    {
+      "name": "Shelter.glb",
+      "bytes": 1190112,
+      "sha256": "686842be597057376155be8a9da316b89c4cc6d9b85af17103b1fa660b7291c2"
+    },
+    {
+      "name": "Stump.glb",
+      "bytes": 3031268,
+      "sha256": "59a4dabeb8852dbe2e2b536bf6a1ad2223149ac39032667a0352c66ba6a5304c"
+    },
+    {
+      "name": "Terrain.glb",
+      "bytes": 2381660,
+      "sha256": "fe3bc9480babc4b25bec9c3f9271065f1e604718685db19fcef68701c48e5a63"
+    },
+    {
+      "name": "conditioning.json",
+      "bytes": 2463,
+      "sha256": "45a91b6c441297424cf64df688c784383ca1f2031bf6a6bb681464a5f19d4486"
+    },
+    {
+      "name": "county.json",
+      "bytes": 1077902,
+      "sha256": "197bf70014610fcfdf9d7f1bbd3ffa3070be14857c2a8b1459b57ae481b65a17"
+    },
+    {
+      "name": "ground-source.json",
+      "bytes": 315,
+      "sha256": "0ecf51785e45ec8cf89fb47d366b57a348d3ad7cce2d32503fca4d27f99131bb"
+    },
+    {
+      "name": "sources.json",
+      "bytes": 12630,
+      "sha256": "dfb7a2b65177d86fef3357b603bdd284795266ca5c350e52a7be4049acbc6657"
+    }
+  ]
+}
