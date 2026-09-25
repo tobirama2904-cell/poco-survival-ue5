@@ -1,6 +1,7 @@
 #include "SurvivalGameInstance.h"
 #include "Sound/SoundAttenuation.h"
 #include "SurvivalSaveGame.h"
+#include "Core/AmericanStory.h"
 #include "SurvivalInteraction.h"
 #include "SurvivalCharacter.h"
 #include "SurvivalInfected.h"
@@ -58,7 +59,7 @@ bool USurvivalGameInstance::SaveProgress()
     auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::CreateSaveGameObject(USurvivalSaveGame::StaticClass()));
     if (!Save) return false;
     Save->SaveGeneration = SaveGeneration + 1;Save->WorldElapsedSeconds=Clock.seconds;Save->WeatherSeed=Clock.seed;
-    Save->FilmProgress=FilmProgress;Save->FilmDecision=FilmDecision;Save->LootedCaches=FieldInventory.looted;Save->OpenDoors=FieldInventory.doors;for(int32 N:FieldInventory.items)Save->FieldItems.Add(N);
+    Save->MainRepairKitRecovered=MainStory.spareRecovered;Save->MainStoryEvents=MainStory.events;Save->FilmProgress=FilmProgress;Save->FilmDecision=FilmDecision;Save->LootedCaches=FieldInventory.looted;Save->OpenDoors=FieldInventory.doors;for(int32 N:FieldInventory.items)Save->FieldItems.Add(N);
     Save->CountyStages.Reset();for(int32 Stage:County.stages)Save->CountyStages.Add(Stage);
     Save->StateRevision = static_cast<int64>(Runtime.State().revision);
     for (const auto& Id : Runtime.State().journal) Save->ActionJournal.Add(UTF8_TO_TCHAR(Id.c_str()));
@@ -103,7 +104,7 @@ bool USurvivalGameInstance::LoadProgress()
     {
         if (!UGameplayStatics::DoesSaveGameExist(SlotName(Index), 0)) continue;
         auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName(Index), 0));
-        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 7) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
+        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 8) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
             Save->StateRevision < 0 || Save->StateRevision != Save->ActionJournal.Num() || Save->SaveGeneration<0) continue;
         if (Save->bHasPlayerState && (Save->MapName.IsEmpty() || Save->PlayerLocation.ContainsNaN() ||
             Save->PlayerLocation.GetAbsMax()>1000000 || Save->PlayerRotation.ContainsNaN() ||
@@ -116,9 +117,18 @@ bool USurvivalGameInstance::LoadProgress()
             survival::CountyState Check;for(int32 I=0;I<survival::CountyState::Count;++I)Check.stages[I]=Save->CountyStages[I];
             if(!Check.Valid())continue;
         }
+        if(Save->FormatVersion<8&&Save->FilmProgress>18)continue;
+        if(Save->FormatVersion>=8){
+            if(Save->MainStoryEvents<0||Save->MainStoryEvents>31)continue;
+            survival::CampaignState Check;Check.events=static_cast<uint32>(Save->MainStoryEvents);if(!Check.Valid())continue;
+            unsigned Required=0;const auto& Scenes=survival::FilmScenes();
+            if(Save->FilmProgress<0||Save->FilmProgress>static_cast<int32>(Scenes.size()))continue;
+            for(int32 I=0;I<Save->FilmProgress;++I)Required|=Scenes[I].requiredEvents;
+            if(!Check.Has(Required))continue;
+        }
         survival::FieldKit Field;
         if(Save->FormatVersion>=6){
-            if(Save->FieldItems.Num()!=static_cast<int32>(survival::Supply::Count)||Save->LootedCaches<0||Save->LootedCaches>=(1ll<<24)||Save->OpenDoors<0||Save->OpenDoors>=(1ll<<24)||Save->FilmProgress<0||Save->FilmProgress>18||Save->FilmDecision<0||Save->FilmDecision>2||(Save->FilmProgress>=15&&Save->FilmDecision==0)||(Save->FilmProgress<14&&Save->FilmDecision!=0))continue;
+            if(Save->FieldItems.Num()!=static_cast<int32>(survival::Supply::Count)||Save->LootedCaches<0||Save->LootedCaches>=(1ll<<24)||Save->OpenDoors<0||Save->OpenDoors>=(1ll<<24)||Save->FilmProgress<0||Save->FilmProgress>static_cast<int32>(survival::FilmScenes().size())||Save->FilmDecision<0||Save->FilmDecision>2||(Save->FilmProgress>=15&&Save->FilmDecision==0)||(Save->FilmProgress<14&&Save->FilmDecision!=0))continue;
             for(int32 I=0;I<Save->FieldItems.Num();++I)Field.items[I]=Save->FieldItems[I];Field.looted=static_cast<uint32>(Save->LootedCaches);Field.doors=static_cast<uint32>(Save->OpenDoors);
             const auto W=Save->WoundState;const survival::Trauma T{static_cast<float>(W.X),static_cast<float>(W.Y),static_cast<float>(W.Z),static_cast<float>(W.W)};
             if(!Field.Valid()||!T.Valid()||(Save->bBowEquipped&&(Field.Get(survival::Supply::Bow)==0||Save->bPistolEquipped)))continue;
@@ -151,7 +161,7 @@ bool USurvivalGameInstance::LoadProgress()
         { bFound = true; Best = Candidate.State(); BestSlot = Index; BestGeneration=Generation;BestSave=Save; }
     }
     if (!bFound || Runtime.Restore(Best) != survival::Error::None) return false;
-    SaveGeneration=BestGeneration;PendingPlayerSave=BestSave;FieldInventory={};County={};if(BestSave->FormatVersion>=7)for(int32 I=0;I<survival::CountyState::Count;++I)County.stages[I]=BestSave->CountyStages[I];FilmProgress=0;FilmDecision=0;
+    SaveGeneration=BestGeneration;PendingPlayerSave=BestSave;FieldInventory={};MainStory={};if(BestSave->FormatVersion>=8){MainStory.events=static_cast<uint32>(BestSave->MainStoryEvents);MainStory.spareRecovered=BestSave->MainRepairKitRecovered;}County={};if(BestSave->FormatVersion>=7)for(int32 I=0;I<survival::CountyState::Count;++I)County.stages[I]=BestSave->CountyStages[I];FilmProgress=0;FilmDecision=0;
     if(BestSave->FormatVersion>=6){for(int32 I=0;I<BestSave->FieldItems.Num();++I)FieldInventory.items[I]=BestSave->FieldItems[I];FieldInventory.looted=static_cast<uint32>(BestSave->LootedCaches);FieldInventory.doors=static_cast<uint32>(BestSave->OpenDoors);FilmProgress=BestSave->FilmProgress;FilmDecision=BestSave->FilmDecision;}
     if(BestSave->FormatVersion>=5)Clock.Restore(BestSave->WorldElapsedSeconds,static_cast<uint32>(BestSave->WeatherSeed));else Clock.Restore(61200,731);
     if (UWorld* World=GetWorld()) for (TActorIterator<ASurvivalInfected> It(World);It;++It) ApplyLoadedInfectedState(*It);

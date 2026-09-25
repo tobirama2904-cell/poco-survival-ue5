@@ -2,6 +2,7 @@
 #include "SurvivalWorldDirector.h"
 #include "SurvivalGameInstance.h"
 #include "SurvivalCharacter.h"
+#include "SurvivalCompanion.h"
 #include "SurvivalPlayerController.h"
 #include "SurvivalHUD.h"
 #include "GameFramework/PlayerController.h"
@@ -102,6 +103,7 @@ void ASurvivalGameMode::BeginCountyProof()
   if(GetWorld()->LineTraceSingleByChannel(Hit,FVector(P.X,P.Y,50000),FVector(P.X,P.Y,-10000),ECC_Visibility,Params)&&FMath::Abs(Hit.ImpactPoint.Z-(P.Z-400))<180){++CountyFloors;if(It->ActorHasTag(TEXT("ranger_station")))Destination=Hit.ImpactPoint+FVector(0,0,100);}
  }
  if(Player&&Destination!=FVector::ZeroVector){
+  if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance())){G->FilmProgress=18;G->FilmDecision=2;} // diagnostic setup, not campaign-completion evidence
   Player->EndStory();Player->SetActorLocation(Destination,false,nullptr,ETeleportType::TeleportPhysics);Player->GetCharacterMovement()->SetMovementMode(MOVE_Walking);PC->SetControlRotation(FRotator(-8,53,0));PC->SetViewTarget(Player);CountyMovementStart=Destination;
   PC->InputKey(FInputKeyEventArgs(nullptr,FInputDeviceId::CreateFromInternalId(0),EKeys::W,IE_Pressed));
  }
@@ -120,6 +122,28 @@ void ASurvivalGameMode::EndCountyMovement()
 }
 void ASurvivalGameMode::CaptureCountyProof()
 {
+ if(auto* PC=GetWorld()->GetFirstPlayerController())PC->ConsoleCommand(TEXT("HighResShot 1"));
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::BeginCompanionFilmProof,2.f,false);
+}
+
+void ASurvivalGameMode::BeginCompanionFilmProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
+ bool Available=false,Human=false,Grounded=false;float Travel=0,Distance=0;
+ for(TActorIterator<ASurvivalCompanion> Friend(GetWorld());Friend;++Friend)if(!Friend->RuthRole){
+  Available=Friend->IsAvailable();Human=Friend->HasHumanAvatar();Grounded=Friend->GetCharacterMovement()->IsMovingOnGround();Travel=Friend->Travelled;
+  if(Player){Distance=FVector::Dist2D(Player->GetActorLocation(),Friend->GetActorLocation());Player->BeginFilm(18,*Friend);}break;
+ }
+ bCompanionAvailable=Available;bCompanionHuman=Human;bCompanionGrounded=Grounded;CompanionTravel=Travel;CompanionDistance=Distance;
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::CaptureCompanionFilmProof,1.1f,false);
+}
+void ASurvivalGameMode::CaptureCompanionFilmProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?PC->GetPawn():nullptr;
+ const bool View=PC&&PC->GetViewTarget()&&PC->GetViewTarget()!=Player;
+ const bool Pass=bCompanionAvailable&&bCompanionHuman&&bCompanionGrounded&&CompanionTravel>30&&CompanionDistance<1600&&View;
+ const FString Report=FString::Printf(TEXT("{\"passed\":%s,\"diagnostic_story_state_injected\":true,\"available\":%s,\"human_mesh\":%s,\"grounded\":%s,\"walked_cm\":%.2f,\"distance_to_player_cm\":%.2f,\"cinematic_camera_active\":%s,\"full_campaign_playthrough\":false}\n"),Pass?TEXT("true"):TEXT("false"),bCompanionAvailable?TEXT("true"):TEXT("false"),bCompanionHuman?TEXT("true"):TEXT("false"),bCompanionGrounded?TEXT("true"):TEXT("false"),CompanionTravel,CompanionDistance,View?TEXT("true"):TEXT("false"));
+ FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/companion-runtime.json")));
  if(auto* PC=GetWorld()->GetFirstPlayerController())PC->ConsoleCommand(TEXT("HighResShot 1"));
  FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,4.f,false);
 }

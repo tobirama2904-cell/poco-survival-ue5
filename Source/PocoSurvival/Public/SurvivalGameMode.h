@@ -13,6 +13,10 @@ private:
     void Intro();void EndIntro();void CaptureProof();void ExitProof();
     void BeginMovementProof();void EndMovementProof();
     void BeginCountyProof();void EndCountyMovement();void CaptureCountyProof();
+    void BeginCompanionFilmProof();
+    void CaptureCompanionFilmProof();
+    bool bCompanionAvailable=false,bCompanionHuman=false,bCompanionGrounded=false;
+    float CompanionTravel=0,CompanionDistance=0;
     FVector CountyMovementStart=FVector::ZeroVector;
     int32 CountyFloors=0;
     int32 CountyAnchors=0;

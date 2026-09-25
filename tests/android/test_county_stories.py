@@ -23,7 +23,7 @@ class CountyStoryTests(unittest.TestCase):
     self.assertEqual(hashlib.sha256(p.read_bytes()).hexdigest(),f['sha256'])
     with wave.open(str(p)) as w:self.assertEqual(w.getframerate(),24000);self.assertEqual(w.getnchannels(),1)
  def test_save_initializers_do_not_double_count(self):
-  s=(ROOT/'Source/PocoSurvival/Private/SurvivalGameInstance.cpp').read_text();self.assertIn('CountyStages.Reset();for',s);self.assertIn('Save->FormatVersion > 7',s)
+  s=(ROOT/'Source/PocoSurvival/Private/SurvivalGameInstance.cpp').read_text();self.assertIn('CountyStages.Reset();for',s);self.assertIn('Save->FormatVersion > 8',s)
  def test_actual_native_roundtrip_exercises_new_state(self):
   s=(ROOT/'tools/ue_integration_smoke.py').read_text();self.assertIn('county_game.try_county_action',s);self.assertIn("'version7_county_choices_and_legacy_migration_tested':True",s)
 if __name__=='__main__':unittest.main()

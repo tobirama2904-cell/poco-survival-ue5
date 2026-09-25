@@ -2,6 +2,7 @@
 #include "Core/AmericanStory.h"
 #include "SurvivalGameInstance.h"
 #include "SurvivalCharacter.h"
+#include "SurvivalCompanion.h"
 #include "SurvivalInteraction.h"
 #include "SurvivalInfected.h"
 #include "SurvivalCityGeometry.h"
@@ -57,6 +58,12 @@ void ASurvivalWorldDirector::Tick(float Delta)
   for(TActorIterator<AActor> It(GetWorld());It;++It)if(It->ActorHasTag(TEXT("county_story_lamp"))){
    for(int32 I=0;I<survival::CountyState::Count;++I)if(It->ActorHasTag(FName(*FString::Printf(TEXT("county_arc_%d"),I))))if(auto* Light=It->FindComponentByClass<UPointLightComponent>())Light->SetVisibility(Game->County.stages[I]==3);
   }
+  for(TActorIterator<AActor> It(GetWorld());It;++It){
+   if(It->ActorHasTag(TEXT("main_route_barrier"))){const bool Open=Game->MainStory.Has(8);It->SetActorHiddenInGame(Open);It->SetActorEnableCollision(!Open);}
+   if(It->ActorHasTag(TEXT("main_repair_spares"))){const bool Taken=Game->MainStory.spareRecovered||Game->MainStory.Has(1);It->SetActorHiddenInGame(Taken);It->SetActorEnableCollision(!Taken);}
+   if(It->ActorHasTag(TEXT("main_medical_pack"))){const bool Taken=Game->MainStory.Has(2);It->SetActorHiddenInGame(Taken);It->SetActorEnableCollision(!Taken);}
+   if(It->ActorHasTag(TEXT("main_refuge_lamp")))if(auto* L=It->FindComponentByClass<UPointLightComponent>())L->SetVisibility(Game->MainStory.Has(16));
+  }
   const float Day=Climate.daylight;
   if(Sun){Sun->SetActorRotation(FRotator(-FMath::Max(12.f,Day*72),Game->WorldHour()*15-90,0));auto* Light=Cast<UDirectionalLightComponent>(Sun->GetLightComponent());if(Light){Light->SetIntensity((.16f+FMath::Sqrt(Day)*2.65f)*(1-Climate.cloud*.60f));Light->SetLightColor(FLinearColor::LerpUsingHSV(FLinearColor(.40,.55,.95),FLinearColor(1,.87,.69),FMath::Min(1.f,Day*3)));}}
   if(Fill)Fill->GetLightComponent()->SetIntensity(.55f+FMath::Sqrt(Day)*2.15f);
@@ -77,21 +84,38 @@ void ASurvivalWorldDirector::AdvanceStory(ASurvivalCharacter* Player,USurvivalGa
  if(!Player->IsAlive()||Player->bStoryActive||Player->bJournalOpen||Player->bEditingControls||!Player->GetCharacterMovement()->IsMovingOnGround())return;
  const auto& Scenes=survival::FilmScenes();if(Game->FilmProgress<0||Game->FilmProgress>=static_cast<int32>(Scenes.size()))return;const auto& Scene=Scenes[Game->FilmProgress];
  const FVector Target(Scene.x*100,Scene.y*100,Scene.z*100);
+ if(!Game->MainStory.Has(Scene.requiredEvents))return;
+ if(Scene.escort>0){bool Near=false;for(TActorIterator<ASurvivalCompanion> Friend(GetWorld());Friend;++Friend)if(Friend->RuthRole==(Scene.escort==2)&&Friend->IsAvailable()&&FVector::DistSquared2D(Friend->GetActorLocation(),Player->GetActorLocation())<FMath::Square(950.f))Near=true;if(!Near)return;}
+
  if(FVector::DistSquared2D(Target,Player->GetActorLocation())>FMath::Square(480.f))return;
  if(Scene.gate==1&&Game->FieldInventory.Get(survival::Supply::Bow)==0){Player->StatusMessage=TEXT("Возьми снаряжение из ящика у лестницы депо.");return;}
  if(Scene.gate==2&&Game->FilmDecision==0){Player->StatusMessage=TEXT("Красный рычаг: открыть канал. Синий: удержать затвор.");return;}
  for(TActorIterator<ASurvivalInfected> Enemy(GetWorld());Enemy;++Enemy)if(Enemy->IsAlive()&&FVector::DistSquared(Enemy->GetActorLocation(),Player->GetActorLocation())<FMath::Square(1300.f))return;
- AActor* Speaker=nullptr;float Best=FMath::Square(1200.f);for(TActorIterator<AActor> It(GetWorld());It;++It)if(It->ActorHasTag(TEXT("american_cast"))){const float D=FVector::DistSquared(It->GetActorLocation(),Target);if(D<Best){Best=D;Speaker=*It;}}
+ AActor* Speaker=nullptr;float Best=FMath::Square(1200.f);for(TActorIterator<AActor> It(GetWorld());It;++It)if(!It->IsHidden()&&It->ActorHasTag(TEXT("american_cast"))&&(Scene.focus.empty()||It->ActorHasTag(FName(UTF8_TO_TCHAR(Scene.focus.c_str()))))){const float D=FVector::DistSquared(It->GetActorLocation(),Target);if(D<Best){Best=D;Speaker=*It;}}
  Player->BeginFilm(Game->FilmProgress,Speaker);
 
 }
 FString ASurvivalWorldDirector::Chapter(USurvivalGameInstance* G){if(!G)return TEXT("Беллуэзер");const auto& S=survival::FilmScenes();return G->FilmProgress<static_cast<int32>(S.size())?UTF8_TO_TCHAR(S[G->FilmProgress].title.c_str()):TEXT("БЕЛЛУЭЗЕР • ПОСЛЕ НАВОДНЕНИЯ");}
-FString ASurvivalWorldDirector::Intention(USurvivalGameInstance* G){if(!G)return TEXT("");return G->FilmProgress>=18?TEXT("Свободное исследование. Помогай жителям, ищи припасы, вернись в нижний квартал."):TEXT("Дэниел Рид вернулся в Беллуэзер. Мара ждёт у следующей отметки.");}
+FString ASurvivalWorldDirector::Intention(USurvivalGameInstance* G)
+{
+ if(!G)return TEXT("");const auto& Scenes=survival::FilmScenes();const bool English=USurvivalControlSettings::Get()->bEnglishStory;
+ if(G->FilmProgress>=0&&G->FilmProgress<static_cast<int32>(Scenes.size())){
+  const auto& S=Scenes[G->FilmProgress];
+  if(S.escort>0&&G->MainStory.Has(S.requiredEvents))if(auto* Player=UGameplayStatics::GetPlayerPawn(G,0)){
+   bool Near=false;for(TActorIterator<ASurvivalCompanion> Friend(G->GetWorld());Friend;++Friend)if(Friend->RuthRole==(S.escort==2)&&Friend->IsAvailable()&&FVector::DistSquared2D(Friend->GetActorLocation(),Player->GetActorLocation())<FMath::Square(950.f))Near=true;
+   if(!Near)return English?(S.escort==2?TEXT("Wait for Ruth somewhere safe. Stay close to her."):TEXT("Wait for Mara somewhere safe.")):(S.escort==2?TEXT("Дождитесь Рут в безопасном месте. Не уходите далеко."):TEXT("Дождитесь Мары в безопасном месте."));
+  }
+  return UTF8_TO_TCHAR((English?S.intentEn:S.intentRu).c_str());
+ }
+ return English?TEXT("Bellwether stays open. The orchard shelter remains available."):TEXT("Беллуэзер открыт для исследования. Убежище в саду остаётся доступным.");
+}
+
 
 void ASurvivalWorldDirector::MixScore(ASurvivalCharacter* Player,float Delta){
  int32 Mode=-1;bool Threat=false,Fight=false;
  for(TActorIterator<ASurvivalInfected> It(GetWorld());It;++It)if(It->IsAlive()&&FVector::DistSquared(It->GetActorLocation(),Player->GetActorLocation())<FMath::Square(1900.f)){Threat=true;Fight|=It->State==EInfectedState::Chase||It->State==EInfectedState::Attack;}
- const float Cycle=FMath::Fmod(GetWorld()->GetTimeSeconds(),160.f);if(Player->bStoryActive)Mode=3;else if(Fight)Mode=2;else if(Threat)Mode=1;else if(Cycle<42)Mode=0;
+ Player->PauseBanter(Fight&&!Player->IsCinematicLocked());
+ const float Cycle=FMath::Fmod(GetWorld()->GetTimeSeconds(),160.f);if(Fight&&!Player->IsCinematicLocked())Mode=2;else if(Player->bStoryActive)Mode=3;else if(Threat)Mode=1;else if(Cycle<42)Mode=0;
  if(Player->bEditingControls||!Player->IsAlive())Mode=-1;
  for(int32 I=0;I<Score.Num();++I){const float Target=I==Mode?(Player->bStoryActive?.10f:.20f):0;ScoreLevels[I]=FMath::FInterpTo(ScoreLevels[I],Target,Delta,.6f);if(Score[I])Score[I]->SetVolumeMultiplier(ScoreLevels[I]);}
 }

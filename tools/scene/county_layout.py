@@ -64,3 +64,7 @@ def placements(seed=28031):
    px,py=x+r.uniform(-3,3),y+r.uniform(-3,3)
    records.append({'mesh':'Fern','x':px,'y':py,'z':-.09,'yaw':r.uniform(0,360),'scale':r.uniform(.8,1.4)})
  return records
+
+def bridge_deck():
+ x=river_x(40)
+ return x,40.,max(height(x-78,40),height(x+78,40))+1.5

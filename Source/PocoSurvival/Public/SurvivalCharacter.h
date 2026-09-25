@@ -58,6 +58,9 @@ public:
     void FieldAction(int32 Action);
     void BeginFilm(int32 Index,AActor* Subject);
     void BeginCountyStory(int32 Arc,int32 Beat);
+    void PauseBanter(bool Pause);
+    bool IsBanterPaused() const { return bBanterPaused; }
+    bool bConversing=false;
     void ToggleControlEditor();
     void ToggleFlashlight();
     bool bEditingControls=false;
@@ -83,7 +86,7 @@ private:
     int32 AttackFinger=-1;
     FTimerHandle FilmLineTimer;
     int32 ActiveFilm=-1;
-    bool bCountyStory=false;
+    bool bCountyStory=false,bBanterPaused=false;
     bool bHumanAvatar=false;
     float FootstepDelay=0;
     FName CurrentStory;

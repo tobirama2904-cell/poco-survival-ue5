@@ -17,3 +17,5 @@ BuildData/characters/unit-root/
 
 # Reproducible authored speech is kept in a pinned release, not duplicated in git.
 BuildData/countyvoices/*.wav
+
+BuildData/mainvoices/*.wav

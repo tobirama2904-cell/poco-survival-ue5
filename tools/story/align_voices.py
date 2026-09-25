@@ -10,7 +10,7 @@ import numpy as np
 import soundfile as sf
 from faster_whisper import WhisperModel
 from huggingface_hub import snapshot_download
-parser=argparse.ArgumentParser();parser.add_argument('--corpus',choices=['voices','filmvoices','countyvoices'],default='voices');args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--corpus',choices=['voices','filmvoices','countyvoices','mainvoices'],default='voices');args=parser.parse_args()
 root=Path(__file__).resolve().parents[2];out=root/'BuildData'/args.corpus;plan=json.loads((out/'voice-plan.json').read_text());cache=root/'.cache'/('batches-'+args.corpus);cache.mkdir(parents=True,exist_ok=True);model=None;reports=[];issues=[]
 def source(entry):
  path=root/entry.get('source_file',entry.get('file',''))
@@ -44,7 +44,7 @@ for i,batch in enumerate(plan['batches']):
    pin=json.loads((root/'BuildData/voices/asr-model.lock.json').read_text())
    folder=snapshot_download(pin['repository'],revision=pin['revision'],allow_patterns=['config.json','model.bin','tokenizer.json','vocabulary.json'],cache_dir=str(root/'.cache/whisper'))
    model=WhisperModel(folder,device='cpu',compute_type='int8',cpu_threads=2)
-  segments,info=model.transcribe(str(pcm),language='ru',word_timestamps=True,beam_size=5,condition_on_previous_text=False,initial_prompt=('Дэниел Рид, Мара Эллис, Оуэн Харт, Рут. Беллуэзер, шлюз, водомерный пост.' if args.corpus in ('filmvoices','countyvoices') else 'Арсен, Лейла, Наргис, Тимур, Ильяс. Лазарет, насосная, шлюз.'))
+  segments,info=model.transcribe(str(pcm),language='ru',word_timestamps=True,beam_size=5,condition_on_previous_text=False,initial_prompt=('Дэниел Рид, Мара Эллис, Оуэн Харт, Рут. Беллуэзер, шлюз, водомерный пост.' if args.corpus in ('filmvoices','countyvoices','mainvoices') else 'Арсен, Лейла, Наргис, Тимур, Ильяс. Лазарет, насосная, шлюз.'))
   words=[{'text':w.word,'start':w.start,'end':w.end} for seg in segments for w in (seg.words or [])];transcript.write_text(json.dumps(words,ensure_ascii=False,indent=2))
  expected=[];ranges=[]
  for line in batch['lines']:

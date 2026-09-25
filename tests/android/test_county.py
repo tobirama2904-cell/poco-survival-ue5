@@ -24,7 +24,7 @@ class CountyTests(unittest.TestCase):
   self.assertGreater(county.height(1190,0),80)
  def test_mobile_assets_disable_nanite_and_retain_collision(self):
   source=(ROOT/'tools/scene/populate_county.py').read_text();self.assertIn("nanite.set_editor_property('enabled',False)",source);self.assertIn('CTF_USE_COMPLEX_AS_SIMPLE',source)
-  gate=(ROOT/'tools/scene/verify_render.py').read_text();self.assertIn("county.get('passed') is True",gate);self.assertIn('len(images)>=2',gate)
+  gate=(ROOT/'tools/scene/verify_render.py').read_text();self.assertIn("county.get('passed') is True",gate);self.assertIn('len(images)>=3',gate)
   self.assertIn('measured_import_basis_cm',source)
  def test_art_pack_checksums_if_local(self):
   import hashlib

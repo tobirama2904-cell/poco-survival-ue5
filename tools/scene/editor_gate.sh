@@ -3,7 +3,7 @@ set -euo pipefail
 cd /project
 ENGINE=/home/ue4/UnrealEngine/Engine
 mkdir -p artifacts/gameplay-scene artifacts/engine-probe artifacts/android-build
-rm -f artifacts/gameplay-scene/{scene-construction,city-construction,field-content,county-content,county-runtime,scene-ready,render-verification}.json
+rm -f artifacts/gameplay-scene/{scene-construction,city-construction,field-content,county-content,county-runtime,companion-runtime,scene-ready,render-verification}.json
 "$ENGINE/Build/BatchFiles/Linux/Build.sh" PocoSurvivalEditor Linux Development \
   -Project=/project/PocoSurvival.uproject -NoHotReloadFromIDE -MaxParallelActions=2 -NoUBA \
   2>&1 | tee artifacts/gameplay-scene/ubt.log
@@ -34,7 +34,7 @@ test -s artifacts/gameplay-scene/scene-construction.json
 test -s artifacts/gameplay-scene/city-construction.json
 
 export SDL_AUDIODRIVER=dummy
-for SCRIPT in /project/tools/scene/import_gameplay_assets.py /project/tools/scene/populate_field.py /project/tools/scene/populate_county.py /project/tools/scene/populate_county_stories.py /project/tools/scene/prepare_mobile_scene.py /project/tools/scene/repair_materials.py; do
+for SCRIPT in /project/tools/scene/import_gameplay_assets.py /project/tools/scene/populate_field.py /project/tools/scene/populate_county.py /project/tools/scene/populate_county_stories.py /project/tools/scene/populate_main_continuation.py /project/tools/scene/prepare_mobile_scene.py /project/tools/scene/repair_materials.py; do
  "$ENGINE/Binaries/Linux/UnrealEditor-Cmd" /project/PocoSurvival.uproject \
   -run=pythonscript -script="$SCRIPT" '-ini:Engine:[/Script/Engine.AudioSettings]:DefaultAudioCompressionType=PCM' \
   -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \

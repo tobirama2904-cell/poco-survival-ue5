@@ -147,7 +147,11 @@ ASurvivalInteraction* ASurvivalCharacter::GetFocusedInteraction() const
 void ASurvivalCharacter::Interact()
 {
     if (bEditingControls) return;
-    if (bStoryActive) { AdvanceStory();return; }
+    if (bStoryActive) {
+        const auto* Focus=GetFocusedInteraction();const FString Id=Focus?Focus->ActionId.ToString():TEXT("");
+        const bool Simple=Id.StartsWith(TEXT("__cache_"))||Id.StartsWith(TEXT("__door_"))||Id.StartsWith(TEXT("__main_"));
+        if(IsCinematicLocked()||!Simple){AdvanceStory();return;}
+    }
     if (!Stats.Alive()) return;
     bJournalOpen=false;
     auto* Target=GetFocusedInteraction();
@@ -196,7 +200,7 @@ float ASurvivalCharacter::TakeDamage(float Amount,const FDamageEvent& Event,ACon
     }
     const float Applied=Stats.Damage(Trauma.Hit(Amount,Zone));
     if (Applied>0) Super::TakeDamage(Applied,Event,Instigator,Causer);
-    if (Applied>0 && !Stats.Alive()) { GetCharacterMovement()->DisableMovement();
+    if (Applied>0 && !Stats.Alive()) { EndStory();GetCharacterMovement()->DisableMovement();
         if (!bHumanAvatar) if (auto* Death=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01.MM_Death_Front_01"))) GetMesh()->PlayAnimation(Death,false);
         StatusMessage=TEXT("Вы погибли. F9 / Загрузить — вернуться к сохранению."); }
     return Applied;
@@ -309,16 +313,17 @@ void ASurvivalCharacter::BeginStory(FName Id,AActor* Subject,bool Cinematic)
 }
 void ASurvivalCharacter::AdvanceStory()
 {
-    if (!bStoryActive) return;
+    if (!bStoryActive||bBanterPaused) return;
     if (++StoryLine>=StoryLines.Num()) {const int32 Completed=ActiveFilm;EndStory();if(Completed>=0)if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))if(G->FilmProgress==Completed){++G->FilmProgress;Save();}}else SpeakStoryLine();
 }
 void ASurvivalCharacter::EndStory()
 {
     if (!bStoryActive) return;
-    bStoryActive=false;GetWorldTimerManager().ClearTimer(FilmLineTimer);ActiveFilm=-1;bCountyStory=false;
+    bStoryActive=false;GetWorldTimerManager().ClearTimer(FilmLineTimer);ActiveFilm=-1;bCountyStory=false;bBanterPaused=false;
     if (StoryAudio) { StoryAudio->OnAudioFinished.RemoveAll(this);StoryAudio->Stop();StoryAudio=nullptr; }
     if (bStoryLocksMovement) if (auto* PC=Cast<APlayerController>(Controller)) { PC->SetIgnoreMoveInput(false);PC->SetIgnoreLookInput(false);PC->SetViewTarget(this); }
     if (StoryCamera) { StoryCamera->Destroy();StoryCamera=nullptr; }
+    RefreshWeapon();
 }
 
 void ASurvivalCharacter::ConfigureHuman()
@@ -328,7 +333,7 @@ void ASurvivalCharacter::ConfigureHuman()
     auto* Body=LoadObject<USkeletalMesh>(nullptr,*(Base+TEXT("Body.Body")));
     if (!Body) return;
     GetMesh()->SetSkeletalMesh(Body);GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);bHumanAvatar=true;
-    for (const TCHAR* Name:{TEXT("Idle"),TEXT("Walk"),TEXT("Run"),TEXT("Crouch")}) {
+    for (const TCHAR* Name:{TEXT("Idle"),TEXT("Walk"),TEXT("Run"),TEXT("Crouch"),TEXT("Talk")}) {
         const FString Clip=Base+Name+TEXT(".")+Name;
         if (auto* Anim=LoadObject<UAnimSequence>(nullptr,*Clip)) HumanAnimations.Add(FName(Name),Anim);
     }
@@ -337,7 +342,8 @@ void ASurvivalCharacter::ConfigureHuman()
 void ASurvivalCharacter::UpdateHuman()
 {
     if (!IsAlive()) { GetMesh()->bPauseAnims=true;GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-75),FRotator(0,-90,85));if (!IsPlayerControlled()) GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);return; }GetMesh()->bPauseAnims=false;
-    const float Speed=GetVelocity().Size2D();const FName Key=bIsCrouched?TEXT("Crouch"):Speed>390?TEXT("Run"):Speed>15?TEXT("Walk"):TEXT("Idle");
+    if(IsPlayerControlled())bConversing=bStoryActive&&!bBanterPaused&&(StorySpeaker==TEXT("Дэниел")||StorySpeaker==TEXT("Daniel"));
+    const float Speed=GetVelocity().Size2D();const FName Key=bIsCrouched?TEXT("Crouch"):Speed>390?TEXT("Run"):Speed>15?TEXT("Walk"):(bConversing&&!bAiming&&!Bow.drawing)?TEXT("Talk"):TEXT("Idle");
     if (auto* Anim=HumanAnimations.Find(Key)) if (PlayingHumanAnimation!=*Anim) { PlayingHumanAnimation=*Anim;GetMesh()->PlayAnimation(*Anim,true); }
     GetMesh()->SetPlayRate(Key==TEXT("Walk")?FMath::Clamp(Speed/140,.6f,2.4f):Key==TEXT("Run")?FMath::Clamp(Speed/390,.8f,1.5f):1.0f);
 }
@@ -398,7 +404,7 @@ void ASurvivalCharacter::SpeakStoryLine()
     FString& Line=StoryLines[StoryLine];int32 Colon;
     if (Line.FindChar(TEXT(':'),Colon) && Colon>0 && Colon<18) { StorySpeaker=Line.Left(Colon);Line=Line.Mid(Colon+1).TrimStartAndEnd(); }
     if(ActiveFilm>=0){
-        const int32 ClipLine=ActiveFilm==14?StoryLine-1:StoryLine;const auto& Scene=survival::FilmScenes()[ActiveFilm];const FString Name=FString(UTF8_TO_TCHAR(Scene.id.c_str()))+TEXT("_")+FString::FromInt(ClipLine);const FString Package=TEXT("/Game/Story/FilmVoices/")+Name;
+        const int32 ClipLine=ActiveFilm==14?StoryLine-1:StoryLine;const auto& Scene=survival::FilmScenes()[ActiveFilm];const FString Name=FString(UTF8_TO_TCHAR(Scene.id.c_str()))+TEXT("_")+FString::FromInt(ClipLine);const FString Package=(ActiveFilm>=18?TEXT("/Game/Story/MainVoices/"):TEXT("/Game/Story/FilmVoices/"))+Name;
         if(ClipLine>=0&&FPackageName::DoesPackageExist(Package))if(auto* Wave=LoadObject<USoundBase>(nullptr,*(Package+TEXT(".")+Name))){StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);if(StoryAudio){StoryAudio->OnAudioFinished.AddDynamic(this,&ASurvivalCharacter::AdvanceStory);return;}}
         GetWorldTimerManager().SetTimer(FilmLineTimer,this,&ASurvivalCharacter::AdvanceStory,FMath::Clamp(StoryLines[StoryLine].Len()*.065f,3.0f,11.0f),false);return;
     }
@@ -445,7 +451,7 @@ void ASurvivalCharacter::FieldAction(int32 Action){
 
 void ASurvivalCharacter::BeginFilm(int32 Index,AActor* Subject){
  const auto& Scenes=survival::FilmScenes();if(Index<0||Index>=static_cast<int32>(Scenes.size()))return;
- EndStory();Bow.Cancel();const auto& Scene=Scenes[Index];ActiveFilm=Index;bStoryActive=true;bStoryLocksMovement=Scene.cinematic;bJournalOpen=false;StoryLine=0;StorySpeaker=TEXT("");StoryLines.Reset();
+ EndStory();StatusMessage.Reset();Bow.Cancel();const auto& Scene=Scenes[Index];ActiveFilm=Index;bStoryActive=true;bStoryLocksMovement=Scene.cinematic;bJournalOpen=false;StoryLine=0;StorySpeaker=TEXT("");StoryLines.Reset();
  for(const auto& Line:USurvivalControlSettings::Get()->bEnglishStory?Scene.en:Scene.ru)StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
  if(Index==14)if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))StoryLines.Insert(USurvivalControlSettings::Get()->bEnglishStory?(G->FilmDecision==1?TEXT("Water enters the lower quarter. Homes must be abandoned; the tunnel is open."):TEXT("The gate holds. Homes stay dry; Hart dismantles his crossing and loses its supplies.")):(G->FilmDecision==1?TEXT("В канале появилась вода. Низкие дома придётся оставить; тоннель к переправе открыт."):TEXT("Шлюз удержан. Дома остались сухими; Харт разбирает переправу на понтон и теряет запасы.")),0);
  if(Index==17)if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))if(G->County.Complete()>0){
@@ -453,8 +459,9 @@ void ASurvivalCharacter::BeginFilm(int32 Index,AActor* Subject){
   StoryLines.Add(USurvivalControlSettings::Get()->bEnglishStory?(Lit>0?TEXT("Ruth: Some lights are back along the road. They do not promise safety. They tell people someone might answer."):TEXT("Owen: The addresses stayed off the air. I will carry the copies myself. We still owe people an answer.")):(Lit>0?TEXT("Рут: На дороге снова есть огни. Они не обещают безопасности. Они говорят, что кто-то может ответить."):TEXT("Оуэн: Адреса не ушли в эфир. Копии я отнесу сам. Мы всё ещё должны людям ответ.")));
  }
  if(bStoryLocksMovement){
+  WeaponMesh->SetVisibility(false);
   if(auto* PC=Cast<APlayerController>(Controller)){
-  PC->SetIgnoreMoveInput(true);PC->SetIgnoreLookInput(true);GetCharacterMovement()->StopMovementImmediately();const FVector Focus=Subject?Subject->GetActorLocation()+FVector(0,0,155):GetActorLocation()+FVector(0,0,60);
+  PC->SetIgnoreMoveInput(true);PC->SetIgnoreLookInput(true);GetCharacterMovement()->StopMovementImmediately();const FVector Focus=Subject?Subject->GetActorLocation()+FVector(0,0,Cast<ASurvivalCharacter>(Subject)?60:155):GetActorLocation()+FVector(0,0,60);
   FVector View=Focus+GetActorForwardVector()*280+GetActorRightVector()*220+FVector(0,0,50);FHitResult Hit;FCollisionQueryParams Params(SCENE_QUERY_STAT(FilmCamera),false,this);if(Subject)Params.AddIgnoredActor(Subject);
   if(GetWorld()->LineTraceSingleByChannel(Hit,Focus,View,ECC_Visibility,Params))View=Hit.Location+(Focus-Hit.Location).GetSafeNormal()*25;
   StoryCamera=GetWorld()->SpawnActor<ACameraActor>(View,(Focus-View).Rotation());if(StoryCamera)PC->SetViewTargetWithBlend(StoryCamera,.7f);
@@ -470,4 +477,11 @@ void ASurvivalCharacter::BeginCountyStory(int32 Arc,int32 Beat)
  const auto& A=Arcs[Arc];CurrentStory=FName(*(FString(UTF8_TO_TCHAR(A.id.c_str()))+TEXT("_")+FString::FromInt(Beat)));
  for(const auto& Line:USurvivalControlSettings::Get()->bEnglishStory?A.beats[Beat].en:A.beats[Beat].ru)StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
  SpeakStoryLine();
+}
+
+void ASurvivalCharacter::PauseBanter(bool Pause)
+{
+ Pause=(Pause||bEditingControls||bJournalOpen)&&bStoryActive&&!bStoryLocksMovement;if(Pause==bBanterPaused)return;bBanterPaused=Pause;
+ if(StoryAudio)StoryAudio->SetPaused(Pause);
+ if(Pause)GetWorldTimerManager().PauseTimer(FilmLineTimer);else GetWorldTimerManager().UnPauseTimer(FilmLineTimer);
 }

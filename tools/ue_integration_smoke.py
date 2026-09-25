@@ -8,6 +8,7 @@ cls=unreal.load_class(None,'/Script/PocoSurvival.SurvivalGameInstance')
 assert cls is not None, 'Native GameInstance class failed to load'
 assert unreal.load_class(None,'/Script/PocoSurvival.SurvivalInteraction') is not None
 assert unreal.load_class(None,'/Script/PocoSurvival.SurvivalSaveGame') is not None
+assert unreal.load_class(None,'/Script/PocoSurvival.SurvivalCompanion') is not None
 
 def instance():
     return unreal.new_object(cls)
@@ -158,8 +159,44 @@ for bad in [[0]*5,[5,0,0,0,0,0],[-1,0,0,0,0,0]]:
 county_save.set_editor_property('format_version',6);county_save.set_editor_property('save_generation',101);county_save.set_editor_property('county_stages',[-1]*6)
 assert unreal.GameplayStatics.save_game_to_slot(county_save,'Survival_A',0)
 legacy_county=instance();assert legacy_county.load_progress();assert all(legacy_county.get_county_stage(i)==0 for i in range(6))
-report={'phase' :'unreal-headless-native-integration','native_classes_loaded':3,
- 'version7_county_choices_and_legacy_migration_tested':True,'version6_field_and_film_serialization_fallback_tested':True,'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
+# Version 8: one main rescue chain, independent of all optional county choices.
+for slot in ['Survival_A','Survival_B']:unreal.GameplayStatics.delete_game_in_slot(slot,0)
+main_save=unreal.GameplayStatics.create_save_game_object(save_cls)
+main_save.set_editor_property('format_version',8);main_save.set_editor_property('save_generation',200)
+main_save.set_editor_property('film_decision',2);main_save.set_editor_property('field_items',[0,0,1,1,0,0,0,0,0])
+for action,progress in enumerate([20,22,24,26,29]):
+ for slot in ['Survival_A','Survival_B']:unreal.GameplayStatics.delete_game_in_slot(slot,0)
+ main_save.set_editor_property('film_progress',progress)
+ assert unreal.GameplayStatics.save_game_to_slot(main_save,'Survival_A',0)
+ main_game=instance();assert main_game.load_progress();assert main_game.try_main_action(action)==0
+ assert main_game.try_main_action(action)==1
+ assert main_game.save_progress()
+ main_save=unreal.GameplayStatics.load_game_from_slot('Survival_B',0)
+ assert main_save.get_editor_property('main_story_events')==(1<<(action+1))-1
+ assert list(main_save.get_editor_property('county_stages'))==[0]*6
+ assert main_save.get_editor_property('field_items')[5]==0
+for broken_mask in [-1,2,5,63,0]:
+ broken=unreal.GameplayStatics.load_game_from_slot('Survival_B',0);broken.set_editor_property('save_generation',9999);broken.set_editor_property('main_story_events',broken_mask)
+ assert unreal.GameplayStatics.save_game_to_slot(broken,'Survival_A',0)
+ fallback=instance();assert fallback.load_progress();assert fallback.save_progress()
+ fixed=unreal.GameplayStatics.load_game_from_slot('Survival_A',0);assert fixed.get_editor_property('main_story_events')==31
+legacy_main=unreal.GameplayStatics.create_save_game_object(save_cls);legacy_main.set_editor_property('format_version',7);legacy_main.set_editor_property('save_generation',20000)
+legacy_main.set_editor_property('film_progress',18);legacy_main.set_editor_property('film_decision',2);legacy_main.set_editor_property('field_items',[0]*9)
+legacy_main.set_editor_property('main_story_events',-1)
+assert unreal.GameplayStatics.save_game_to_slot(legacy_main,'Survival_A',0)
+migrated_main=instance();assert migrated_main.load_progress();assert migrated_main.save_progress()
+migrated_save=unreal.GameplayStatics.load_game_from_slot('Survival_B',0);assert migrated_save.get_editor_property('main_story_events')==0
+# A player who spent all ordinary crafting materials can still repair the
+# required receiver using the protected spare kit placed beside it.
+for slot in ['Survival_A','Survival_B']:unreal.GameplayStatics.delete_game_in_slot(slot,0)
+spare=unreal.GameplayStatics.create_save_game_object(save_cls);spare.set_editor_property('format_version',8)
+spare.set_editor_property('film_progress',20);spare.set_editor_property('film_decision',2);spare.set_editor_property('field_items',[0]*9)
+assert unreal.GameplayStatics.save_game_to_slot(spare,'Survival_A',0)
+g=instance();assert g.load_progress();assert g.try_main_action(0)==3;assert g.try_main_action(5)==0;assert g.save_progress()
+spare_roundtrip=unreal.GameplayStatics.load_game_from_slot('Survival_B',0);assert spare_roundtrip.get_editor_property('main_repair_kit_recovered')
+g=instance();assert g.load_progress();assert g.try_main_action(0)==0;assert g.save_progress()
+report={'phase' :'unreal-headless-native-integration','native_classes_loaded':4,
+ 'version8_main_rescue_and_legacy_migration_tested':True,'version7_county_choices_and_legacy_migration_tested':True,'version6_field_and_film_serialization_fallback_tested':True,'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
  'objective_count':61,'native_inventory_and_choices_tested':True,
  'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,
  'unreal_editor_version':unreal.SystemLibrary.get_engine_version(),

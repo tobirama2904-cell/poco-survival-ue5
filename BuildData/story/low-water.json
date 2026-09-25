@@ -63,7 +63,13 @@
         "Mara: I asked for someone who could open a gate. Not the man who closed it.",
         "Daniel: It was an evacuation order.",
         "Mara: Then show me where everyone went. There is a bow and dressings beside the stairs."
-      ]
+      ],
+      "intent_ru": "Найти радио у депо.",
+      "intent_en": "Find the depot radio.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "depot",
@@ -88,7 +94,13 @@
         "Mara: Then twenty families slept here. You keep talking about buildings. I mean people.",
         "Daniel: The water rose two metres overnight.",
         "Mara: On your schedule. There is a copy of the log at the school."
-      ]
+      ],
+      "intent_ru": "Забрать снаряжение у лестницы и поговорить с Марой.",
+      "intent_en": "Collect the equipment beside the stairs and speak with Mara.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "school",
@@ -115,7 +127,13 @@
         "Mara: No papers, no name on the list. Mum left three plates on the sill.",
         "Daniel: We should leave their things.",
         "Mara: Take the dressings. Bleeding beside them will not make amends."
-      ]
+      ],
+      "intent_ru": "Добраться до школы: там сохранился журнал эвакуации.",
+      "intent_en": "Reach the school and its evacuation log.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "clinic",
@@ -144,7 +162,13 @@
         "Ruth: Under the first-aid box. Dress that wound first. History can wait while we keep your blood inside.",
         "Daniel: Thank you.",
         "Ruth: This is not forgiveness. It is my job."
-      ]
+      ],
+      "intent_ru": "Найти Рут в клинике.",
+      "intent_en": "Find Ruth at the clinic.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "river",
@@ -171,7 +195,13 @@
         "Daniel: I thought nobody did. He was taken off duty.",
         "Mara: A name, Daniel.",
         "Daniel: Owen Hart. He runs the crossing now."
-      ]
+      ],
+      "intent_ru": "Проверить старую отметку воды.",
+      "intent_en": "Check the old water mark.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "crossing",
@@ -200,7 +230,13 @@
         "Owen: Records will not bring back the road. Your gate still traps my people across the river.",
         "Mara: Help us open a passage.",
         "Owen: Look at the mill first. Make promises afterwards."
-      ]
+      ],
+      "intent_ru": "Поговорить с Оуэном у переправы.",
+      "intent_en": "Speak to Owen at the crossing.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "mill",
@@ -225,7 +261,13 @@
         "Daniel: They were not holding back water. They were keeping something in.",
         "Mara: Do not shoot the door. Hear them answer?",
         "Daniel: Along the tracks. Get the drawing and leave quietly."
-      ]
+      ],
+      "intent_ru": "Найти привод у мельницы.",
+      "intent_en": "Find the mill actuator.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "recording",
@@ -252,7 +294,13 @@
         "Mara: You told me you did not know about the buses.",
         "Daniel: I knew the route. Not that they had already left.",
         "Mara: Different sentences. You chose the easier one for fourteen years."
-      ]
+      ],
+      "intent_ru": "Прослушать запись диспетчерской.",
+      "intent_en": "Listen to the dispatch recording.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "apartments",
@@ -277,7 +325,13 @@
         "Mara: No. I need someone to remember what was here. Not a rescuer.",
         "Daniel: Green curtains. Radio on the fridge. A dog chewed the table leg.",
         "Mara: She only did that when she was left alone."
-      ]
+      ],
+      "intent_ru": "Осмотреть квартиру над нижним кварталом.",
+      "intent_en": "Inspect the apartment above the lower quarter.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "tower",
@@ -304,7 +358,13 @@
         "Daniel: The school did not register families without papers.",
         "Owen: I know that now.",
         "Mara: No. Now you are saying it aloud."
-      ]
+      ],
+      "intent_ru": "Подняться к передающей башне.",
+      "intent_en": "Reach the transmission tower.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "shelter",
@@ -329,7 +389,13 @@
         "Ruth: Warn the people who do not listen to his radio. Half this room speaks another language.",
         "Daniel: There is a local network. Leyla, Nargis, the lower-quarter residents.",
         "Ruth: Do not decide for them. Give them time to pack."
-      ]
+      ],
+      "intent_ru": "Проверить убежище у переправы.",
+      "intent_en": "Check the shelter by the crossing.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "warning",
@@ -354,7 +420,13 @@
         "Mara: You have not told them what you did.",
         "Daniel: I remember. Let them hear the way out first.",
         "Mara: Then keep the microphone on."
-      ]
+      ],
+      "intent_ru": "Вернуться к общему каналу.",
+      "intent_en": "Return to the public channel.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "return",
@@ -379,7 +451,13 @@
         "Owen: That costs our food and every can of fuel.",
         "Mara: The houses are not your supplies. People live there.",
         "Daniel: Both ways take something we have no right to take in silence."
-      ]
+      ],
+      "intent_ru": "Вернуться к мельнице вместе с Марой.",
+      "intent_en": "Return to the mill with Mara.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "decision",
@@ -404,7 +482,13 @@
         "Mara: No. That is why I am standing here watching.",
         "Daniel: I wanted someone to tell me there was no other way.",
         "Mara: There is another way now. It has a cost. Say it before you pull."
-      ]
+      ],
+      "intent_ru": "Поговорить у шлюза, прежде чем трогать рычаги.",
+      "intent_en": "Speak at the gate before touching the levers.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "aftermath",
@@ -429,7 +513,13 @@
         "Ruth: I need stretchers, dry cloth and people who can listen.",
         "Owen: I will send mine. Unarmed.",
         "Mara: Come yourself first."
-      ]
+      ],
+      "intent_ru": "Открыть канал или удержать затвор.",
+      "intent_en": "Open the channel or hold the gate.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "testimony",
@@ -454,7 +544,13 @@
         "Mara: Say their names.",
         "Daniel: I do not know all of them.",
         "Mara: Begin with the ones you know. We will find the others."
-      ]
+      ],
+      "intent_ru": "Вернуться к радио в депо.",
+      "intent_en": "Return to the depot radio.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "epilogue",
@@ -479,11 +575,17 @@
         "Mara: Not for a trial. For a table.",
         "Daniel: Are you staying?",
         "Mara: Today. Ask again tomorrow."
-      ]
+      ],
+      "intent_ru": "Встретиться с Марой у школы.",
+      "intent_en": "Meet Mara at the school.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
     },
     {
       "id": "free_roam",
-      "title": "Низкая вода",
+      "title": "Часть I • Ответный вызов",
       "position": [
         10,
         40,
@@ -496,14 +598,464 @@
         "Мара: В нижнем квартале ждут инструменты. У переправы видели чужой костёр.",
         "Дэниел: С чего начнём?",
         "Мара: На этот раз спросим людей.",
-        "Теперь можно свободно исследовать Беллуэзер. Запасы, раны и принятое решение сохраняются."
+        "Беллуэзер открыт для исследования. История продолжается. Оставайтесь на связи с клиникой."
       ],
       "en": [
         "Ruth: The current has settled. The work has not.",
         "Mara: The lower quarter needs tools. Someone saw an unfamiliar fire by the crossing.",
         "Daniel: Where do we start?",
         "Mara: This time we ask.",
-        "Bellwether remains open to explore. Supplies, injuries and your decision persist."
+        "Bellwether remains open to explore. The story continues. Stay in contact with the clinic."
+      ],
+      "intent_ru": "Остаться на связи с клиникой.",
+      "intent_en": "Stay in contact with the clinic.",
+      "required_events": 0,
+      "escort": 0,
+      "focus": "",
+      "part": 1
+    },
+    {
+      "id": "return_call",
+      "title": "Часть II • Тот, кто ответил",
+      "position": [
+        10,
+        40,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "required_events": 0,
+      "escort": 1,
+      "focus": "Mara",
+      "intent_ru": "Ответить на вызов Рут вместе с Марой.",
+      "intent_en": "Answer Ruth’s call with Mara.",
+      "part": 2,
+      "ru": [
+        "Рут: Дэниел, не выключай радио. Я не закончила.",
+        "Дэниел: Ты сказала, что течение успокоилось.",
+        "Рут: Вода — да. В клинике просела лестница. На верхнем этаже остались люди.",
+        "Мара: Сколько ты можешь вывести сама?",
+        "Рут: Я спрашиваю их, кто может идти. Не ставлю цифру в отчёт.",
+        "Дэниел: Где ближайший исправный приёмник? Я проверю дорогу для вас.",
+        "Мара: На станции смотрителя. Пойдём вместе. По радио ты слишком легко звучишь уверенно.",
+        "Дэниел: Тогда скажешь мне это в лицо. Я буду рядом."
+      ],
+      "en": [
+        "Ruth: Daniel, keep the radio on. I have not finished.",
+        "Daniel: You said the current had settled.",
+        "Ruth: The water has. The clinic stairs have subsided. People are still upstairs.",
+        "Mara: How many can you bring out yourself?",
+        "Ruth: I am asking who can walk. Not putting a number in a report.",
+        "Daniel: Where is the nearest working receiver? I will check a route for you.",
+        "Mara: At the ranger station. We go together. You sound certain far too easily on the radio.",
+        "Daniel: Then you can tell me to my face. I will be there."
+      ]
+    },
+    {
+      "id": "walking_company",
+      "title": "Часть II • Рядом, а не впереди",
+      "position": [
+        0,
+        14,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "required_events": 0,
+      "escort": 1,
+      "focus": "",
+      "intent_ru": "Дойти до станции смотрителя и восстановить приёмник. Нужны дерево и деталь.",
+      "intent_en": "Reach the ranger station and repair its receiver. Bring wood and scrap.",
+      "part": 2,
+      "ru": [
+        "Мара: Ты всё время прибавляешь шаг.",
+        "Дэниел: Привычка. Если быстро прийти, кажется, что ещё можно успеть.",
+        "Мара: А тот, кто не успевает за тобой?",
+        "Дэниел: Раньше я считал, что он сам скажет.",
+        "Мара: Моя мать никогда не говорила. Даже когда обувь наполнялась кровью.",
+        "Дэниел: Я могу идти медленнее.",
+        "Мара: Не обещай. Просто иди.",
+        "Дэниел: Хорошо."
+      ],
+      "en": [
+        "Mara: You keep walking faster.",
+        "Daniel: Habit. Getting there quickly makes it feel as though there is still time.",
+        "Mara: And the person who cannot keep up?",
+        "Daniel: I used to think they would tell me.",
+        "Mara: My mother never did. Not even when her shoes filled with blood.",
+        "Daniel: I can slow down.",
+        "Mara: Do not promise it. Just walk.",
+        "Daniel: All right."
+      ]
+    },
+    {
+      "id": "receiver_restored",
+      "title": "Часть II • Голос без помех",
+      "position": [
+        675,
+        -460,
+        11.62339942305199
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "required_events": 1,
+      "escort": 1,
+      "focus": "Mara",
+      "intent_ru": "На станции смотрителя восстановить приёмник: дерево и деталь.",
+      "intent_en": "Repair the ranger-station receiver with wood and scrap.",
+      "part": 2,
+      "ru": [
+        "Дэниел: Контакт закреплён. Рут, слышишь нас?",
+        "Рут: Теперь слышу, как ты дышишь. Не наваливайся на микрофон.",
+        "Мара: Значит, до свадьбы доживёшь. Ругаешься как обычно.",
+        "Рут: Только не устраивайте свадьбу в моей палате. Я там только убралась.",
+        "Дэниел: Кто идёт с тобой?",
+        "Рут: Ходячих встретят у нижнего входа. Я выйду последней. Нога плохо держит.",
+        "Мара: Ты собиралась сообщить нам об этом когда-нибудь?",
+        "Рут: Как только нашла бы время перестать быть врачом."
+      ],
+      "en": [
+        "Daniel: The contact is secured. Ruth, can you hear us?",
+        "Ruth: I can hear you breathing now. Do not lean on the microphone.",
+        "Mara: You will outlive us yet. You sound as cross as ever.",
+        "Ruth: Just do not hold a wedding in my ward. I have only just cleaned it.",
+        "Daniel: Who is coming with you?",
+        "Ruth: The people who can walk will be met at the lower entrance. I am coming out last. My leg is giving way.",
+        "Mara: Were you planning to tell us that at some point?",
+        "Ruth: As soon as I found time to stop being the doctor."
+      ]
+    },
+    {
+      "id": "not_a_number",
+      "title": "Часть II • Последняя в списке",
+      "position": [
+        675,
+        -450,
+        11.62339942305199
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "required_events": 1,
+      "escort": 1,
+      "focus": "",
+      "intent_ru": "Поговорить с Марой у северного выхода со станции.",
+      "intent_en": "Speak with Mara at the north side of the station.",
+      "part": 2,
+      "ru": [
+        "Мара: Она не попросит помочь, пока в здании остаётся хоть кто-нибудь.",
+        "Дэниел: Тогда не будем ждать просьбы.",
+        "Мара: А решение за неё тоже примем?",
+        "Дэниел: Принесём то, что позволит ей выйти. Остальное она решит сама.",
+        "Мара: В нашем саду осталась аптечка. Погреб выше уровня воды.",
+        "Дэниел: Это сад твоей семьи?",
+        "Мара: Я ещё не научилась говорить «бывшем».",
+        "Дэниел: И не обязана."
+      ],
+      "en": [
+        "Mara: She will not ask for help while anyone is left in that building.",
+        "Daniel: Then we do not wait for her to ask.",
+        "Mara: Shall we make her decision for her too?",
+        "Daniel: We bring what will let her leave. She decides the rest.",
+        "Mara: There is a first-aid reserve in our orchard. The cellar is above the water.",
+        "Daniel: Your family’s orchard?",
+        "Mara: I have not learned to call it our former orchard yet.",
+        "Daniel: You do not have to."
+      ]
+    },
+    {
+      "id": "orchard_dressing",
+      "title": "Часть II • То, что оставили другим",
+      "position": [
+        780,
+        590,
+        9.808966614091235
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "required_events": 3,
+      "escort": 1,
+      "focus": "",
+      "intent_ru": "В саду Эллисов забрать отдельный медицинский комплект для Рут.",
+      "intent_en": "Collect Ruth’s protected medical pack at Ellis Orchard.",
+      "part": 2,
+      "ru": [
+        "Мара: Нашлась. Мама заворачивала всё в ткань, даже пустые банки.",
+        "Дэниел: Почему?",
+        "Мара: Чтобы стекло не стучало, когда младшие спят.",
+        "Дэниел: Теперь это пригодится нам.",
+        "Мара: Только не говори, что всё было не зря.",
+        "Дэниел: Я собирался сказать: спасибо, что привела.",
+        "Мара: Тогда спасибо принято. Больше пока ничего.",
+        "Дэниел: Мне достаточно."
+      ],
+      "en": [
+        "Mara: Found it. Mum wrapped everything in cloth, even empty jars.",
+        "Daniel: Why?",
+        "Mara: So the glass would not rattle while the little ones slept.",
+        "Daniel: It will help us now.",
+        "Mara: Just do not tell me it was all worth something.",
+        "Daniel: I was going to say thank you for bringing me here.",
+        "Mara: Then the thanks are accepted. Nothing more for now.",
+        "Daniel: That is enough for me."
+      ]
+    },
+    {
+      "id": "unwritten_letter",
+      "title": "Часть II • Письмо без адреса",
+      "position": [
+        760,
+        580,
+        9.668684764896167
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "required_events": 3,
+      "escort": 1,
+      "focus": "",
+      "intent_ru": "Дойти до клиники с отдельным медицинским комплектом для Рут.",
+      "intent_en": "Reach the clinic with Ruth’s protected medical pack.",
+      "part": 2,
+      "ru": [
+        "Дэниел: Я писал тебе после эвакуации.",
+        "Мара: Я не получала писем.",
+        "Дэниел: Я не отправил. Каждый раз начинал с объяснения, почему ничего нельзя было изменить.",
+        "Мара: Удобно. Можно отвечать и не услышать ответа.",
+        "Дэниел: Да.",
+        "Мара: А потом?",
+        "Дэниел: Потом заканчивалась бумага. Не оправдания.",
+        "Мара: Оставь письма при себе. Сейчас нам нужна перевязка."
+      ],
+      "en": [
+        "Daniel: I wrote to you after the evacuation.",
+        "Mara: I received no letters.",
+        "Daniel: I never sent them. Every time I began by explaining why nothing could have been changed.",
+        "Mara: Convenient. You can answer without hearing a reply.",
+        "Daniel: Yes.",
+        "Mara: And then?",
+        "Daniel: Then I ran out of paper. Not excuses.",
+        "Mara: Keep the letters. What we need now is the dressing."
+      ]
+    },
+    {
+      "id": "clinic_step",
+      "title": "Часть II • Одна ступень",
+      "position": [
+        -188,
+        43,
+        0
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "required_events": 7,
+      "escort": 1,
+      "focus": "Ruth",
+      "intent_ru": "В клинике помочь Рут, используя медицинский комплект.",
+      "intent_en": "Use the medical pack to help Ruth at the clinic.",
+      "part": 2,
+      "ru": [
+        "Рут: Осторожнее. Это моя единственная приличная штанина.",
+        "Мара: Считаешь это приличным?",
+        "Рут: Здесь никто не выдавал мне форму за красивые глаза.",
+        "Дэниел: Повязка держит. Можешь встать?",
+        "Рут: Могу попробовать. Не дёргай меня, если я остановлюсь.",
+        "Мара: Мы подождём.",
+        "Рут: Вы оба умеете это произносить. Посмотрим, умеете ли делать.",
+        "Дэниел: Начнём с одной ступени."
+      ],
+      "en": [
+        "Ruth: Careful. That is my only decent trouser leg.",
+        "Mara: You call this decent?",
+        "Ruth: Nobody here ever gave me a uniform for my pretty eyes.",
+        "Daniel: The dressing holds. Can you stand?",
+        "Ruth: I can try. Do not pull me along if I stop.",
+        "Mara: We will wait.",
+        "Ruth: You both know how to say that. We will see whether you can do it.",
+        "Daniel: We start with one step."
+      ]
+    },
+    {
+      "id": "outside_again",
+      "title": "Часть II • Небо без потолка",
+      "position": [
+        -180,
+        38,
+        0
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "required_events": 7,
+      "escort": 2,
+      "focus": "",
+      "intent_ru": "Дождаться Рут у выхода из клиники.",
+      "intent_en": "Wait for Ruth outside the clinic.",
+      "part": 2,
+      "ru": [
+        "Рут: Снаружи всегда было так шумно?",
+        "Мара: Ты слишком долго слышала только наш коридор.",
+        "Рут: Я думала, что однажды выйду и начну плакать.",
+        "Дэниел: А сейчас?",
+        "Рут: Сейчас мне хочется поправить чужую вывеску. Она висит криво.",
+        "Мара: Значит, с тобой всё в порядке.",
+        "Рут: Нет. Просто я всё ещё я.",
+        "Дэниел: Вывеска подождёт. Мы тоже, если понадобится."
+      ],
+      "en": [
+        "Ruth: Was it always this noisy outside?",
+        "Mara: You have spent too long hearing nothing but our corridor.",
+        "Ruth: I thought I would start crying when I finally stepped outside.",
+        "Daniel: And now?",
+        "Ruth: Now I want to straighten that sign. It is crooked.",
+        "Mara: Then you are all right.",
+        "Ruth: No. I am simply still myself.",
+        "Daniel: The sign can wait. So can we, if we need to."
+      ]
+    },
+    {
+      "id": "bridge_latch",
+      "title": "Часть II • Не закрывать за собой",
+      "position": [
+        430,
+        40,
+        25.07758178667191
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "required_events": 15,
+      "escort": 2,
+      "focus": "",
+      "intent_ru": "У западной части моста снять фиксатор и дождаться Рут.",
+      "intent_en": "Release the latch on the western bridge deck and wait for Ruth.",
+      "part": 2,
+      "ru": [
+        "Мара: Фиксатор снят. Проход свободен.",
+        "Оуэн: После себя закройте. Ночью сюда придут чужие.",
+        "Дэниел: Сегодня мы тоже пришли с другого берега.",
+        "Оуэн: Я не о вас.",
+        "Мара: Обычно так и начинают.",
+        "Рут: Мне нужен свободный проход, а не спор на середине моста.",
+        "Дэниел: Проход останется свободным. Я отвечу за это, когда вернусь.",
+        "Оуэн: Тогда возвращайся. Не присылай вместо себя объяснение."
+      ],
+      "en": [
+        "Mara: The latch is released. The way is clear.",
+        "Owen: Close it behind you. Strangers will come here at night.",
+        "Daniel: Today we came from the other bank too.",
+        "Owen: I do not mean you.",
+        "Mara: That is usually how it begins.",
+        "Ruth: What I need is a clear crossing, not an argument halfway across the bridge.",
+        "Daniel: The crossing stays clear. I will answer for it when I return.",
+        "Owen: Then return. Do not send an explanation in your place."
+      ]
+    },
+    {
+      "id": "other_bank",
+      "title": "Часть II • Другой берег",
+      "position": [
+        555,
+        40,
+        25.07758178667191
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "required_events": 15,
+      "escort": 2,
+      "focus": "",
+      "intent_ru": "Продолжать путь к саду вместе с Рут.",
+      "intent_en": "Continue to the orchard with Ruth.",
+      "part": 2,
+      "ru": [
+        "Рут: Не смотри всё время на мою ногу. Я чувствую каждый взгляд.",
+        "Дэниел: Скажи, если нужно остановиться.",
+        "Мара: Дэниел, ты опять торопишься.",
+        "Дэниел: Да. Помню. Остановимся здесь.",
+        "Рут: Вы что-то обсуждали без меня?",
+        "Мара: Учились ходить.",
+        "Рут: Отлично. Я почти шестьдесят лет занимаюсь тем же.",
+        "Дэниел: Тогда у нас хороший учитель."
+      ],
+      "en": [
+        "Ruth: Stop watching my leg. I can feel every glance.",
+        "Daniel: Tell me if you need to stop.",
+        "Mara: Daniel, you are rushing again.",
+        "Daniel: Yes. I remember. We stop here.",
+        "Ruth: Have you two been discussing something without me?",
+        "Mara: Learning to walk.",
+        "Ruth: Excellent. I have been working on that for nearly sixty years.",
+        "Daniel: Then we have a good teacher."
+      ]
+    },
+    {
+      "id": "the_way_back",
+      "title": "Часть II • Дорога назад",
+      "position": [
+        700,
+        480,
+        10.03373084049787
+      ],
+      "cinematic": false,
+      "gate": 0,
+      "required_events": 15,
+      "escort": 2,
+      "focus": "",
+      "intent_ru": "Довести Рут до сада и включить свет у убежища.",
+      "intent_en": "Bring Ruth to the orchard and switch on the shelter light.",
+      "part": 2,
+      "ru": [
+        "Мара: Ты ведь понимаешь, что дорога назад ничего не отменит?",
+        "Дэниел: Да.",
+        "Мара: Я могу дойти с тобой до самого сада и всё равно злиться.",
+        "Дэниел: Ты не обязана выбирать что-то одно.",
+        "Рут: А я могу любить вас обоих и хотеть, чтобы вы наконец помолчали.",
+        "Мара: Любить нас обоих — плохое медицинское решение.",
+        "Рут: Я сегодня не на смене.",
+        "Дэниел: Тогда остаток пути — без приказов."
+      ],
+      "en": [
+        "Mara: You know the journey back will not undo anything, do you?",
+        "Daniel: Yes.",
+        "Mara: I can walk all the way to the orchard with you and still be angry.",
+        "Daniel: You do not have to choose between the two.",
+        "Ruth: And I can love you both and wish you would finally be quiet.",
+        "Mara: Loving us both is a poor medical decision.",
+        "Ruth: I am off duty today.",
+        "Daniel: Then no orders for the rest of the way."
+      ]
+    },
+    {
+      "id": "a_place_to_return",
+      "title": "Часть II • Куда возвращаются",
+      "position": [
+        780,
+        590,
+        9.808966614091235
+      ],
+      "cinematic": true,
+      "gate": 0,
+      "required_events": 31,
+      "escort": 2,
+      "focus": "Ruth",
+      "intent_ru": "Привести Рут в сад и включить свет у убежища.",
+      "intent_en": "Bring Ruth to the orchard and switch on the shelter light.",
+      "part": 2,
+      "ru": [
+        "Рут: Свет включили для меня или чтобы видеть, как я ворчу?",
+        "Мара: Для того, кто придёт следующим.",
+        "Дэниел: На двери нет списка.",
+        "Рут: Тогда поставьте стул. Людям должно быть куда сесть, прежде чем отвечать на вопросы.",
+        "Мара: Я останусь, пока она не уснёт.",
+        "Дэниел: А потом?",
+        "Мара: Потом найдём Оуэна. Вместе. Это ещё не прощение, если ты об этом.",
+        "Дэниел: Я хотел спросить, оставить ли тебе место у двери."
+      ],
+      "en": [
+        "Ruth: Is the light for me, or so you can see me complain?",
+        "Mara: For whoever comes next.",
+        "Daniel: There is no list on the door.",
+        "Ruth: Put a chair there, then. People need somewhere to sit before answering questions.",
+        "Mara: I will stay until she falls asleep.",
+        "Daniel: And afterwards?",
+        "Mara: Afterwards we find Owen. Together. It is still not forgiveness, if that is what you are wondering.",
+        "Daniel: I was going to ask whether to leave you a place beside the door."
       ]
     }
   ],
@@ -512,5 +1064,11 @@
   "legacy_voice_policy": "109 existing Russian clips retained for optional lower-quarter archive, not reused as new American main-cast performances",
   "russian_voiced_lines": 97,
   "english_voiceover_recorded": false,
-  "in_game_voice_playback_verified": false
+  "in_game_voice_playback_verified": false,
+  "campaign_structure": "One continuous Daniel/Mara journey; county stories are optional, not the main campaign.",
+  "target_playtime_hours": [
+    12,
+    24
+  ],
+  "continuation_voiceover_recorded": true
 }

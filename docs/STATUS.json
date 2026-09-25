@@ -257,7 +257,7 @@
     "choice_combinations_portable_tested": 64,
     "python_tests_passed": 44,
     "python_tests_skipped": 1,
-    "new_native_unreal_verified": false,
+    "new_native_unreal_verified": true,
     "new_native_android_verified": false,
     "measured_campaign_hours": null,
     "final_game": false,
@@ -269,6 +269,32 @@
     "mocap_source_found": "CMU subject 13 trials 17/18; not yet retargeted",
     "source_commit": "cca898ff533e239162ba1b82cc166ea417bdbaf7",
     "native_scene_run": 36143714242,
-    "native_scene_status": "dispatched; actual new UE compile/runtime/voice playback not yet verified"
+    "native_scene_status": "36143714242 success; images opened, still provisional art"
+  },
+  "main_campaign_stage": {
+    "branch": "gameplay/main-campaign",
+    "main_scenes": 30,
+    "main_lines_per_language": 194,
+    "new_main_lines": 96,
+    "new_russian_seconds": 283.1513333333334,
+    "optional_county_stories_required": false,
+    "protected_companions": 2,
+    "new_final_animation": false,
+    "save_version": 8,
+    "world_extent_m": 2400,
+    "new_unreal_verified": false,
+    "new_android_verified": false,
+    "measured_campaign_hours": null,
+    "target_campaign_hours": [
+      12,
+      24
+    ],
+    "completed_game": false,
+    "python_tests_passed": 51,
+    "python_tests_skipped": 1,
+    "portable_suites_passed": 8,
+    "repair_softlock_recovery_kit": true,
+    "native_scene_run": null,
+    "source_state": "ready for native UE verification"
   }
 }

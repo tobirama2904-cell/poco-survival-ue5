@@ -39,6 +39,13 @@ bool ASurvivalInteraction::Interact(APawn* User, FString& FailureReason)
     if(Id.StartsWith(TEXT("__door_"))){const int32 I=FCString::Atoi(*Id.Mid(7));if(I<0||I>=24)return false;Game->FieldInventory.doors^=1u<<I;TargetDoorYaw=(Game->FieldInventory.doors&(1u<<I))?90:0;SetActorTickEnabled(true);return true;}
     if(Id.StartsWith(TEXT("__cache_"))){const int32 Index=FCString::Atoi(*Id.Mid(8));if(!Game->FieldInventory.Loot(Index)){FailureReason=TEXT("Пусто или рюкзак полон");return false;}SetActorHiddenInGame(true);SetActorEnableCollision(false);if(Player)Player->SyncEquipment();return true;}
     if(Id==TEXT("__gate_open")||Id==TEXT("__gate_hold")){if(Game->FilmProgress!=14||Game->FilmDecision!=0){FailureReason=TEXT("Сначала поговорите с Марой у шлюза");return false;}Game->FilmDecision=Id==TEXT("__gate_open")?1:2;if(Game->FilmDecision==2){Game->FieldInventory.looted|=(1u<<9)|(1u<<10);for(TActorIterator<ASurvivalInteraction> It(GetWorld());It;++It)if(It->ActionId==TEXT("__cache_9")||It->ActionId==TEXT("__cache_10")){It->SetActorHiddenInGame(true);It->SetActorEnableCollision(false);}}return true;}
+    if(Id.StartsWith(TEXT("__main_"))){
+        const FString Index=Id.Mid(7);if(!Player||!Index.IsNumeric()){FailureReason=TEXT("invalid_story_action");return false;}
+        const auto Result=static_cast<survival::CampaignResult>(Game->TryMainAction(FCString::Atoi(*Index)));
+        if(Result==survival::CampaignResult::Resources){FailureReason=TEXT("Для приёмника нужны дерево и деталь. Можно взять запасной комплект рядом");return false;}
+        if(Result==survival::CampaignResult::Invalid||Result==survival::CampaignResult::Locked){FailureReason=TEXT("Продолжите разговор и узнайте, что нужно сделать");return false;}
+        return true;
+    }
     if(Id.StartsWith(TEXT("__county_"))){
         TArray<FString> Parts;Id.Mid(9).ParseIntoArray(Parts,TEXT("_"));
         if(!Player||Parts.Num()!=2||!Parts[0].IsNumeric()||!Parts[1].IsNumeric()){FailureReason=TEXT("invalid_county_action");return false;}
