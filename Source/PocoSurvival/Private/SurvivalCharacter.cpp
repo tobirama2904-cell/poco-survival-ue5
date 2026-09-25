@@ -440,10 +440,13 @@ void ASurvivalCharacter::BeginFilm(int32 Index,AActor* Subject){
  EndStory();Bow.Cancel();const auto& Scene=Scenes[Index];ActiveFilm=Index;bStoryActive=true;bStoryLocksMovement=Scene.cinematic;bJournalOpen=false;StoryLine=0;StorySpeaker=TEXT("");StoryLines.Reset();
  for(const auto& Line:USurvivalControlSettings::Get()->bEnglishStory?Scene.en:Scene.ru)StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
  if(Index==14)if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))StoryLines.Insert(USurvivalControlSettings::Get()->bEnglishStory?(G->FilmDecision==1?TEXT("Water enters the lower quarter. Homes must be abandoned; the tunnel is open."):TEXT("The gate holds. Homes stay dry; Hart dismantles his crossing and loses its supplies.")):(G->FilmDecision==1?TEXT("В канале появилась вода. Низкие дома придётся оставить; тоннель к переправе открыт."):TEXT("Шлюз удержан. Дома остались сухими; Харт разбирает переправу на понтон и теряет запасы.")),0);
- if(bStoryLocksMovement)if(auto* PC=Cast<APlayerController>(Controller)){
-  PC->SetIgnoreMoveInput(true);PC->SetIgnoreLookInput(true);GetCharacterMovement()->StopMovementImmediately();const FVector Focus=(Subject?Subject->GetActorLocation():GetActorLocation())+FVector(0,0,60);
+ if(bStoryLocksMovement){
+  if(auto* PC=Cast<APlayerController>(Controller)){
+  PC->SetIgnoreMoveInput(true);PC->SetIgnoreLookInput(true);GetCharacterMovement()->StopMovementImmediately();const FVector Focus=Subject?Subject->GetActorLocation()+FVector(0,0,155):GetActorLocation()+FVector(0,0,60);
   FVector View=Focus+GetActorForwardVector()*280+GetActorRightVector()*220+FVector(0,0,50);FHitResult Hit;FCollisionQueryParams Params(SCENE_QUERY_STAT(FilmCamera),false,this);if(Subject)Params.AddIgnoredActor(Subject);
   if(GetWorld()->LineTraceSingleByChannel(Hit,Focus,View,ECC_Visibility,Params))View=Hit.Location+(Focus-Hit.Location).GetSafeNormal()*25;
   StoryCamera=GetWorld()->SpawnActor<ACameraActor>(View,(Focus-View).Rotation());if(StoryCamera)PC->SetViewTargetWithBlend(StoryCamera,.7f);
- }SpeakStoryLine();
+  }
+ }
+ SpeakStoryLine();
 }
