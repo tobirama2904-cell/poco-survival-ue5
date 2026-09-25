@@ -165,7 +165,7 @@ jobs:
       - name: Continue actual signed package into installation and visual testing
         env:
           GH_TOKEN: ${{ secrets.UE_REGISTRY_TOKEN }}
-        run: gh workflow run android-install-test.yml --ref main -f apk_run="$GITHUB_RUN_ID"
+        run: gh workflow run android-install-test.yml --ref "$GITHUB_REF_NAME" -f apk_run="$GITHUB_RUN_ID"
       - name: Upload packaging diagnostics only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

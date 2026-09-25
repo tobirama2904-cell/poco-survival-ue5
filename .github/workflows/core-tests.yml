@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'Source/**'
+      - 'BuildData/story/**'
+      - 'tools/story/**'
       - 'Config/**'
       - '*.uproject'
       - 'tests/core/**'
@@ -23,6 +25,7 @@ jobs:
       - name: Compile and exercise the actual portable gameplay code
         run: |
           set -o pipefail
+          python3 tools/story/check_generated.py
           bash tools/test_core.sh | tee core-test-result.txt
           cat core-test-result.txt >> "$GITHUB_STEP_SUMMARY"
           echo 'This tests domain C++ only. UHT, Unreal adapters, map, rendering, Android and physical device are NOT tested.' >> "$GITHUB_STEP_SUMMARY"
