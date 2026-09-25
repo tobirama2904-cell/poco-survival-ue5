@@ -11,7 +11,16 @@ for role,sub in lock['characters'].items():
  bpy.ops.wm.read_factory_settings(use_empty=True)
  folder=source/'Assets/Avatars'/sub;file=folder/'Export'/(sub.split('/')[-1]+'.fbx');bpy.ops.import_scene.fbx(filepath=str(file))
  rig=next(o for o in bpy.data.objects if o.type=='ARMATURE');meshes=[o for o in bpy.data.objects if o.type=='MESH'];assert meshes
- keep=set(meshes+[rig]);tex={p.name.lower():p for p in folder.rglob('*.tga')}
+ keep=set(meshes+[rig])
+ # FBX centimetre armatures otherwise export an animated root scale of .01.
+ # Unreal's skeletal animation import does not consistently preserve this
+ # object-level scale. Bake all object transforms BEFORE retargeting motion.
+ bpy.ops.object.select_all(action='DESELECT')
+ for o in keep:o.select_set(True)
+ bpy.context.view_layer.objects.active=rig
+ bpy.ops.object.transform_apply(location=True,rotation=True,scale=True)
+ assert all(abs(v-1)<.00001 for v in rig.scale),tuple(rig.scale)
+ tex={p.name.lower():p for p in folder.rglob('*.tga')}
  for o in list(bpy.data.objects):
   if o not in keep:bpy.data.objects.remove(o,do_unlink=True)
  for im in list(bpy.data.images):

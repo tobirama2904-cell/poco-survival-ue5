@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Require an actual PNG and input/floor runtime evidence, not a green optional step."""
 import argparse,json
+from frame_character import character_presence
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--exit-code',type=int,required=True);a=p.parse_args()
 root=Path('/project/artifacts/gameplay-scene');images=[]
@@ -10,9 +11,9 @@ for f in root.glob('*.png'):
     if header[:8]!=b'\x89PNG\r\n\x1a\n' or len(header)!=24:raise ValueError('Invalid screenshot PNG')
     width=int.from_bytes(header[16:20],'big');height=int.from_bytes(header[20:24],'big')
     if width<480 or height<270:raise ValueError('Screenshot unexpectedly small')
-    images.append({'name':f.name,'bytes':f.stat().st_size,'width':width,'height':height})
+    images.append({'name':f.name,'bytes':f.stat().st_size,'width':width,'height':height,'character_presence':character_presence(f)})
 movement=json.loads((root/'runtime-movement.json').read_text()) if (root/'runtime-movement.json').exists() else {}
-passed=a.exit_code==0 and bool(images) and movement.get('passed') is True
+passed=a.exit_code==0 and bool(images) and movement.get('passed') is True and movement.get('human_avatar_loaded') is True and any(f['character_presence']['passed'] for f in images)
 report={'renderer':'software Vulkan / llvmpipe; NOT hardware or POCO performance','renderer_exit_code':a.exit_code,'screenshots':images,'runtime_movement':movement,'gate_passed':passed,'visual_quality_review':'requires human/image inspection separately','physical_device_tested':False}
 (root/'render-verification.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)
 raise SystemExit(0 if passed else 1)

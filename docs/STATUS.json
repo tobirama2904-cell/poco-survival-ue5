@@ -145,7 +145,7 @@
     "core_test": "passed: eight branch combinations, optional postgame, save migration/replay",
     "scene_run": 36114117078,
     "android_native_run": 36114118993,
-    "scene_result": "pending",
+    "scene_result": "36114117078 workflow success BUT actual frame rejected: loaded human mesh not visible",
     "android_native_result": "pending",
     "measured_duration_hours": null,
     "final_3d_characters": false,
@@ -160,7 +160,9 @@
     "human_asset_import_verified": true,
     "voiced_written_lines": 109,
     "voiced_file_seconds": 474.623,
-    "in_game_voice_playback_verified": false
+    "in_game_voice_playback_verified": false,
+    "automatic_apk_chain": "stopped before cook dispatch pending visible-player correction",
+    "character_source_correction": "character-source-002 unit root, native validation pending"
   },
   "mobile_preparation_latest_failure": {
     "run": 36082332279,

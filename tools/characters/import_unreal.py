@@ -19,5 +19,10 @@ for role in ['Arsen','Leyla','Nargis','Ilyas','Infected']:
   final=dest+'/'+clip
   if anim.get_path_name().split('.')[0]!=final:assert lib.rename_asset(anim.get_path_name(),final)
   lib.save_loaded_asset(anim);clips.append(clip)
- lib.save_directory(dest,False,True);report.append({'role':role,'skeletal_mesh':mesh.get_path_name(),'animations':clips})
+ probe=unreal.get_editor_subsystem(unreal.EditorActorSubsystem).spawn_actor_from_class(unreal.SkeletalMeshActor,unreal.Vector(0,0,0))
+ probe.skeletal_mesh_component.set_skeletal_mesh_asset(mesh)
+ origin,extent=probe.get_actor_bounds(False)
+ assert 55<extent.z<130,(role,'unexpected skeletal bounds in cm',extent)
+ unreal.get_editor_subsystem(unreal.EditorActorSubsystem).destroy_actor(probe)
+ lib.save_directory(dest,False,True);report.append({'role':role,'skeletal_mesh':mesh.get_path_name(),'animations':clips,'body_height_cm':extent.z*2})
 (root/'artifacts/gameplay-scene/character-import.json').write_text(json.dumps(report,indent=2));print('CHARACTER_IMPORT_PASS',json.dumps(report))
