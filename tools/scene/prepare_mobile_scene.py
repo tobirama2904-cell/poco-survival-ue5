@@ -11,11 +11,11 @@ assert level.load_level('/Game/Worlds/CanalDistrict')
 removed=0
 for actor in actors.get_all_level_actors():
  if isinstance(actor,unreal.SkyAtmosphere):actors.destroy_actor(actor);removed+=1
-path='/Game/Environment/MobileSky/M_MobileSkyPhotographicV2'
+path='/Game/Environment/MobileSky/M_MobileSkyPhotographicV3'
 if unreal.EditorAssetLibrary.does_asset_exist(path):
  material=unreal.load_asset(path)
 else:
- material=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_MobileSkyPhotographicV2','/Game/Environment/MobileSky',unreal.Material,unreal.MaterialFactoryNew())
+ material=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_MobileSkyPhotographicV3','/Game/Environment/MobileSky',unreal.Material,unreal.MaterialFactoryNew())
  assert material
  material.set_editor_property('shading_model',unreal.MaterialShadingModel.MSM_UNLIT)
  material.set_editor_property('two_sided',True)
@@ -31,7 +31,10 @@ else:
  compress=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionDivide);compress.set_editor_property('const_b',4)
  assert unreal.MaterialEditingLibrary.connect_material_expressions(sample,'RGB',compress,'A')
  limit=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionSaturate);assert unreal.MaterialEditingLibrary.connect_material_expressions(compress,'',limit,'')
- tint=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionMultiply);assert unreal.MaterialEditingLibrary.connect_material_expressions(limit,'',tint,'A');assert unreal.MaterialEditingLibrary.connect_material_expressions(color,'',tint,'B')
+ tint=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionMultiply);assert unreal.MaterialEditingLibrary.connect_material_expressions(limit,'',tint,'A');weights=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionConstant3Vector);weights.set_editor_property('constant',unreal.LinearColor(.2126,.7152,.0722,1))
+ luminance=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionDotProduct)
+ assert unreal.MaterialEditingLibrary.connect_material_expressions(color,'',luminance,'A');assert unreal.MaterialEditingLibrary.connect_material_expressions(weights,'',luminance,'B')
+ assert unreal.MaterialEditingLibrary.connect_material_expressions(luminance,'',tint,'B')
  assert unreal.MaterialEditingLibrary.connect_material_property(tint,'',unreal.MaterialProperty.MP_EMISSIVE_COLOR)
  unreal.MaterialEditingLibrary.recompile_material(material)
  unreal.EditorAssetLibrary.save_loaded_asset(material)

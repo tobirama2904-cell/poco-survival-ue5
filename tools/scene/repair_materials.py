@@ -7,15 +7,23 @@ import unreal
 root=Path('/project');out=root/'artifacts/gameplay-scene';out.mkdir(parents=True,exist_ok=True)
 lib=unreal.EditorAssetLibrary;level=unreal.get_editor_subsystem(unreal.LevelEditorSubsystem);actors=unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 assert level.load_level('/Game/Worlds/CanalDistrict')
-changed=[]
+changed=[];visited=set()
+def repair_parent(asset):
+ if asset is None or asset.get_path_name() in visited:return
+ visited.add(asset.get_path_name())
+ if isinstance(asset,unreal.Material):
+  asset.set_editor_property('used_with_instanced_static_meshes',True)
+  unreal.MaterialEditingLibrary.recompile_material(asset);assert lib.save_loaded_asset(asset)
+  assert asset.get_editor_property('used_with_instanced_static_meshes')
+  changed.append(asset.get_path_name())
+ elif isinstance(asset,unreal.MaterialInstanceConstant):
+  # glTF imports MaterialInstances whose shader-bearing parent can live in
+  # the Interchange plugin, outside /Game/County. Repair that parent too.
+  repair_parent(asset.get_editor_property('parent'))
+  unreal.MaterialEditingLibrary.update_material_instance(asset)
+  assert lib.save_loaded_asset(asset)
 for directory in ['/Game/Story/Materials','/Game/County']:
- for path in lib.list_assets(directory,True,False):
-  asset=lib.load_asset(path)
-  if isinstance(asset,unreal.Material):
-   asset.set_editor_property('used_with_instanced_static_meshes',True)
-   unreal.MaterialEditingLibrary.recompile_material(asset);assert lib.save_loaded_asset(asset)
-   assert asset.get_editor_property('used_with_instanced_static_meshes')
-   changed.append(path)
+ for path in lib.list_assets(directory,True,False):repair_parent(lib.load_asset(path))
 labels=[a.get_actor_label() for a in actors.get_all_level_actors()]
 field={'loot_caches':sum(s.startswith('field_cache_') for s in labels),'openable_doors':sum(s.startswith('field_door_') for s in labels)}
 county={'terrain_tiles':sum(s.startswith('county_Terrain_') for s in labels),'rural_shelters':sum(s.startswith('county_anchor_') for s in labels),'nature_instances':0}
