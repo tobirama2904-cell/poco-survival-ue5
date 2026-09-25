@@ -1,8 +1,9 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "SurvivalCharacter.h"
+#include "Core/CompanionSupport.h"
 #include "SurvivalCompanion.generated.h"
-// Protected narrative escort foundation: following, crouching and conversation.
+// Protected narrative escort/companion: following, hold, conversation and bandage aid.
 // Not yet tactical combat, relationships/permanent-death AI or global navigation.
 UCLASS()
 class POCOSURVIVAL_API ASurvivalCompanion : public ASurvivalCharacter
@@ -17,7 +18,16 @@ public:
  UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Companion") bool RuthRole=false;
  UFUNCTION(BlueprintPure,Category="Companion") bool IsAvailable() const { return bAvailable; }
  float Travelled=0;
+ bool ToggleHold(ASurvivalCharacter* Player);
+ bool RequestAid(ASurvivalCharacter* Player);
+ bool IsHelping() const { return Aid.Active(); }
+ float HelpProgress() const { return Aid.Progress(); }
 private:
+ survival::CompanionAid Aid;
+ float AidStarted=-1000;
+ uint32 SupportEpoch=MAX_uint32;
+ bool RestoreHold(class USurvivalGameInstance* Game);
+ void UpdateAid(float Delta,ASurvivalCharacter* Player,class USurvivalGameInstance* Game);
  bool bAvailable=false,bSettled=false,bProxyStateApplied=false,bProxyActive=false;
  FVector Refuge=FVector::ZeroVector;
  FVector Direction=FVector::ZeroVector,Last=FVector::ZeroVector;

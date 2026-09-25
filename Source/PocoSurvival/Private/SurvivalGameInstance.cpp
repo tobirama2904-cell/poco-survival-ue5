@@ -61,7 +61,7 @@ bool USurvivalGameInstance::SaveProgress()
     Save->SaveGeneration = SaveGeneration + 1;Save->WorldElapsedSeconds=Clock.seconds;Save->WeatherSeed=Clock.seed;
     Save->MainRepairKitRecovered=MainStory.spareRecovered;Save->MainStoryEvents=MainStory.events;Save->FilmProgress=FilmProgress;Save->FilmDecision=FilmDecision;Save->LootedCaches=FieldInventory.looted;Save->OpenDoors=FieldInventory.doors;for(int32 N:FieldInventory.items)Save->FieldItems.Add(N);
     Save->CountyStages.Reset();for(int32 Stage:County.stages)Save->CountyStages.Add(Stage);
-    Save->JourneyHeard=Journey.heard;
+    Save->JourneyHeard=Journey.heard;Save->bMaraHolding=bMaraHolding;Save->MaraHoldLocation=MaraHoldLocation;Save->MaraHoldMap=MaraHoldMap;
     Save->StateRevision = static_cast<int64>(Runtime.State().revision);
     for (const auto& Id : Runtime.State().journal) Save->ActionJournal.Add(UTF8_TO_TCHAR(Id.c_str()));
     if (GetWorld()) if (auto* Player = Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(),0)))
@@ -128,6 +128,7 @@ bool USurvivalGameInstance::LoadProgress()
             if(!Check.Has(Required))continue;
         }
         if(Save->JourneyHeard<0||Save->JourneyHeard>=(1ll<<survival::JourneyHistory::Count))continue;
+        if(Save->bMaraHolding&&(Save->FilmProgress<18||Save->MaraHoldMap.IsEmpty()||Save->MaraHoldLocation.ContainsNaN()||Save->MaraHoldLocation.GetAbsMax()>1000000))continue;
         survival::FieldKit Field;
         if(Save->FormatVersion>=6){
             if(Save->FieldItems.Num()!=static_cast<int32>(survival::Supply::Count)||Save->LootedCaches<0||Save->LootedCaches>=(1ll<<24)||Save->OpenDoors<0||Save->OpenDoors>=(1ll<<24)||Save->FilmProgress<0||Save->FilmProgress>static_cast<int32>(survival::FilmScenes().size())||Save->FilmDecision<0||Save->FilmDecision>2||(Save->FilmProgress>=15&&Save->FilmDecision==0)||(Save->FilmProgress<14&&Save->FilmDecision!=0))continue;
@@ -163,7 +164,7 @@ bool USurvivalGameInstance::LoadProgress()
         { bFound = true; Best = Candidate.State(); BestSlot = Index; BestGeneration=Generation;BestSave=Save; }
     }
     if (!bFound || Runtime.Restore(Best) != survival::Error::None) return false;
-    Journey.heard=static_cast<uint32>(BestSave->JourneyHeard);
+    Journey.heard=static_cast<uint32>(BestSave->JourneyHeard);bMaraHolding=BestSave->bMaraHolding;MaraHoldLocation=BestSave->MaraHoldLocation;MaraHoldMap=BestSave->MaraHoldMap;++SupportLoadRevision;
     SaveGeneration=BestGeneration;PendingPlayerSave=BestSave;FieldInventory={};MainStory={};if(BestSave->FormatVersion>=8){MainStory.events=static_cast<uint32>(BestSave->MainStoryEvents);MainStory.spareRecovered=BestSave->MainRepairKitRecovered;}County={};if(BestSave->FormatVersion>=7)for(int32 I=0;I<survival::CountyState::Count;++I)County.stages[I]=BestSave->CountyStages[I];FilmProgress=0;FilmDecision=0;
     if(BestSave->FormatVersion>=6){for(int32 I=0;I<BestSave->FieldItems.Num();++I)FieldInventory.items[I]=BestSave->FieldItems[I];FieldInventory.looted=static_cast<uint32>(BestSave->LootedCaches);FieldInventory.doors=static_cast<uint32>(BestSave->OpenDoors);FilmProgress=BestSave->FilmProgress;FilmDecision=BestSave->FilmDecision;}
     if(BestSave->FormatVersion>=5)Clock.Restore(BestSave->WorldElapsedSeconds,static_cast<uint32>(BestSave->WeatherSeed));else Clock.Restore(61200,731);

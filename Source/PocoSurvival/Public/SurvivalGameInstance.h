@@ -39,6 +39,10 @@ public:
     survival::CountyState County;
     survival::CampaignState MainStory;
     survival::JourneyHistory Journey;
+    bool bMaraHolding=false;
+    FVector MaraHoldLocation=FVector::ZeroVector;
+    FString MaraHoldMap;
+    uint32 SupportLoadRevision=0;
     UFUNCTION(BlueprintCallable,Category="Story") bool FinishJourneyConversation(int32 Id) { return Journey.Finish(Id); }
     UFUNCTION(BlueprintPure,Category="Story") int64 GetJourneyHeard() const { return Journey.heard; }
     UFUNCTION(BlueprintCallable,Category="Story") int32 TryMainAction(int32 Action) { return static_cast<int32>(MainStory.Apply(Action,FilmProgress,FieldInventory)); }

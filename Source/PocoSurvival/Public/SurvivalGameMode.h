@@ -15,6 +15,9 @@ private:
     void BeginCountyProof();void EndCountyMovement();void CaptureCountyProof();
     void BeginCompanionFilmProof();
     void CaptureCompanionFilmProof();
+    void BeginSupportProof();void BeginAidProof();void CaptureSupportProof();
+    FVector SupportMaraStart=FVector::ZeroVector,SupportPlayerStart=FVector::ZeroVector;
+    bool bSupportHeld=false,bSupportRequested=false;
     bool bCompanionAvailable=false,bCompanionHuman=false,bCompanionGrounded=false;
     float CompanionTravel=0,CompanionDistance=0;
     FVector CountyMovementStart=FVector::ZeroVector;

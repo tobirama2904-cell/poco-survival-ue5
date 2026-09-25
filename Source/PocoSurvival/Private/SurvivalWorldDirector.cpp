@@ -115,7 +115,8 @@ FString ASurvivalWorldDirector::Intention(USurvivalGameInstance* G)
 void ASurvivalWorldDirector::MixScore(ASurvivalCharacter* Player,float Delta){
  int32 Mode=-1;bool Threat=false,Fight=false;
  for(TActorIterator<ASurvivalInfected> It(GetWorld());It;++It)if(It->IsAlive()&&FVector::DistSquared(It->GetActorLocation(),Player->GetActorLocation())<FMath::Square(1900.f)){Threat=true;Fight|=It->State==EInfectedState::Chase||It->State==EInfectedState::Attack;}
- Player->PauseBanter((Fight||(Threat&&Player->IsJourneyConversation()))&&!Player->IsCinematicLocked());
+ bool AidBusy=false;for(TActorIterator<ASurvivalCompanion> It(GetWorld());It;++It)if(It->IsHelping())AidBusy=true;
+ Player->PauseBanter((Fight||AidBusy||(Threat&&Player->IsJourneyConversation()))&&!Player->IsCinematicLocked());
  const float Cycle=FMath::Fmod(GetWorld()->GetTimeSeconds(),160.f);if(Fight&&!Player->IsCinematicLocked())Mode=2;else if(Player->bStoryActive&&!Player->IsJourneyConversation())Mode=3;else if(Threat)Mode=1;else if(!Player->IsJourneyConversation()&&Cycle<42)Mode=0;
  if(Player->bEditingControls||!Player->IsAlive())Mode=-1;
  for(int32 I=0;I<Score.Num();++I){const float Target=I==Mode?(Player->bStoryActive?.10f:.20f):0;ScoreLevels[I]=FMath::FInterpTo(ScoreLevels[I],Target,Delta,.6f);if(Score[I])Score[I]->SetVolumeMultiplier(ScoreLevels[I]);}
@@ -131,7 +132,7 @@ void ASurvivalWorldDirector::TryJourneyConversation(ASurvivalCharacter* Player,U
  const auto& Film=survival::FilmScenes();if(Game->FilmProgress>=0&&Game->FilmProgress<static_cast<int32>(Film.size())){
   const auto& Next=Film[Game->FilmProgress];if(FVector::DistSquared2D(Player->GetActorLocation(),FVector(Next.x*100,Next.y*100,0))<FMath::Square(1800.f))return;
  }
- bool Nearby=false;for(TActorIterator<ASurvivalCompanion> It(GetWorld());It;++It)if(!It->RuthRole&&!It->IsHidden()&&FVector::DistSquared(It->GetActorLocation(),Player->GetActorLocation())<FMath::Square(800.f)){Nearby=true;break;}
+ bool Nearby=false;for(TActorIterator<ASurvivalCompanion> It(GetWorld());It;++It)if(!It->RuthRole&&!It->IsHidden()&&FVector::DistSquared(It->GetActorLocation(),Player->GetActorLocation())<FMath::Square(800.f)){if(It->IsHelping())return;Nearby=true;break;}
  if(!Nearby)return;
  // Carrying Ruth's emergency pack is not a moment for casual conversations.
  if(Game->MainStory.Has(2)&&!Game->MainStory.Has(4))return;

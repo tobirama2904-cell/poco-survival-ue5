@@ -145,5 +145,41 @@ void ASurvivalGameMode::CaptureCompanionFilmProof()
  const FString Report=FString::Printf(TEXT("{\"passed\":%s,\"diagnostic_story_state_injected\":true,\"available\":%s,\"human_mesh\":%s,\"grounded\":%s,\"walked_cm\":%.2f,\"distance_to_player_cm\":%.2f,\"cinematic_camera_active\":%s,\"full_campaign_playthrough\":false}\n"),Pass?TEXT("true"):TEXT("false"),bCompanionAvailable?TEXT("true"):TEXT("false"),bCompanionHuman?TEXT("true"):TEXT("false"),bCompanionGrounded?TEXT("true"):TEXT("false"),CompanionTravel,CompanionDistance,View?TEXT("true"):TEXT("false"));
  FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/companion-runtime.json")));
  if(PC)PC->ConsoleCommand(TEXT("HighResShot 1"));
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::BeginSupportProof,4.f,false);
+}
+
+void ASurvivalGameMode::BeginSupportProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;auto* Game=Cast<USurvivalGameInstance>(GetGameInstance());
+ if(Player&&Game){
+  Player->EndStory();Player->RestoreVitals(60,80);survival::Trauma W;W.bleeding=.3f;Player->RestoreWounds(W);Game->FieldInventory={};Game->FieldInventory.Add(survival::Supply::Bandage,2);Game->bMaraHolding=false;
+  for(TActorIterator<ASurvivalCompanion> Friend(GetWorld());Friend;++Friend)if(!Friend->RuthRole&&Friend->IsAvailable()){SupportMaraStart=Friend->GetActorLocation();Friend->ToggleHold(Player);break;}
+  SupportPlayerStart=Player->GetActorLocation();PC->InputKey(FInputKeyEventArgs(nullptr,FInputDeviceId::CreateFromInternalId(0),EKeys::W,IE_Pressed));
+ }
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::BeginAidProof,1.2f,false);
+}
+void ASurvivalGameMode::BeginAidProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
+ if(PC)PC->InputKey(FInputKeyEventArgs(nullptr,FInputDeviceId::CreateFromInternalId(0),EKeys::W,IE_Released));
+ if(Player){
+  Player->GetCharacterMovement()->StopMovementImmediately();
+  for(TActorIterator<ASurvivalCompanion> Friend(GetWorld());Friend;++Friend)if(!Friend->RuthRole&&Friend->IsAvailable()){
+   bSupportHeld=FVector::Dist2D(SupportMaraStart,Friend->GetActorLocation())<25&&FVector::Dist2D(SupportPlayerStart,Player->GetActorLocation())>100;
+   bSupportRequested=Friend->RequestAid(Player);break;
+  }
+ }
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::CaptureSupportProof,10.5f,false);
+}
+void ASurvivalGameMode::CaptureSupportProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;auto* Game=Cast<USurvivalGameInstance>(GetGameInstance());
+ const bool Healed=Player&&Player->GetHealth()>=80&&Player->Wounds().bleeding==0;
+ const bool OneSpent=Game&&Game->FieldInventory.Get(survival::Supply::Bandage)==1;
+ const bool Passed=bSupportHeld&&bSupportRequested&&Healed&&OneSpent;
+ const FString Report=FString::Printf(TEXT("{\"passed\":%s,\"diagnostic_setup\":true,\"hold_during_player_movement\":%s,\"aid_requested\":%s,\"healed_and_bleeding_stopped\":%s,\"exactly_one_bandage_spent\":%s,\"touch_controls_verified\":false,\"healing_animation_verified\":false,\"physical_device_tested\":false}\n"),Passed?TEXT("true"):TEXT("false"),bSupportHeld?TEXT("true"):TEXT("false"),bSupportRequested?TEXT("true"):TEXT("false"),Healed?TEXT("true"):TEXT("false"),OneSpent?TEXT("true"):TEXT("false"));
+ FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/companion-support.json")));
+ if(Player){Player->bCompanionPanel=true;if(!Player->bJournalOpen)Player->ToggleJournal();}
+ if(PC)PC->ConsoleCommand(TEXT("HighResShot 1"));
  FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,4.f,false);
 }

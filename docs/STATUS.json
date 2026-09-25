@@ -347,5 +347,27 @@
     "source_commit": "d9cc508d0bc98384ebdd0d15d725bb14dbebd245",
     "ue_scene_run": 36160687330,
     "corrected_base_scene_run": 36160065706
+  },
+  "companion_support_stage": {
+    "branch": "gameplay/companion-support",
+    "orders": [
+      "hold_crouched",
+      "follow",
+      "assisted_bandage"
+    ],
+    "bandage_cost": 1,
+    "heal_amount_max": 32,
+    "contact_seconds": 2.5,
+    "approach_timeout_seconds": 12,
+    "holding_state_persisted_in_source": true,
+    "ordinary_dialogue_backpack_fix": true,
+    "crouched_probe_fix": true,
+    "portable_suites_passed": 10,
+    "python_tests_passed": 64,
+    "python_tests_skipped": 1,
+    "unreal_actor_verification": false,
+    "new_healing_animation": false,
+    "physical_device_tested": false,
+    "final_game": false
   }
 }

@@ -207,7 +207,24 @@ broken=unreal.GameplayStatics.load_game_from_slot('Survival_A',0)
 broken.set_editor_property('save_generation',999);broken.set_editor_property('journey_heard',4096)
 assert unreal.GameplayStatics.save_game_to_slot(broken,'Survival_B',0)
 j3=instance();assert j3.load_progress();assert j3.get_journey_heard()==2049
-report={'phase' :'unreal-headless-native-integration','journey_history_serialization_and_fallback_tested':True,'native_classes_loaded':4,
+# Persist a safe hold command; active medical assistance is transient, never
+# restored as a completed heal. Use a valid main-part-II state for this fixture.
+for slot in ['Survival_A','Survival_B']:unreal.GameplayStatics.delete_game_in_slot(slot,0)
+hold=unreal.GameplayStatics.create_save_game_object(save_cls)
+hold.set_editor_property('film_progress',18);hold.set_editor_property('film_decision',2)
+hold.set_editor_property('field_items',[0]*9);hold.set_editor_property('save_generation',100)
+hold.set_editor_property('mara_holding',True);hold.set_editor_property('mara_hold_map','CanalDistrict');hold.set_editor_property('mara_hold_location',unreal.Vector(100,200,300))
+assert unreal.GameplayStatics.save_game_to_slot(hold,'Survival_A',0)
+h=instance();assert h.load_progress();assert h.save_progress()
+held=unreal.GameplayStatics.load_game_from_slot('Survival_B',0)
+assert held.get_editor_property('mara_holding') and held.get_editor_property('mara_hold_location').x==100
+for prop,value in [('mara_hold_map',''),('mara_hold_location',unreal.Vector(1000001,0,0)),('film_progress',0)]:
+ broken=unreal.GameplayStatics.load_game_from_slot('Survival_B',0);broken.set_editor_property('save_generation',200);broken.set_editor_property(prop,value)
+ if prop=='film_progress':broken.set_editor_property('film_decision',0)
+ assert unreal.GameplayStatics.save_game_to_slot(broken,'Survival_A',0)
+ fallback=instance();assert fallback.load_progress();assert fallback.save_progress()
+ recovered=unreal.GameplayStatics.load_game_from_slot('Survival_A',0);assert recovered.get_editor_property('mara_hold_map')=='CanalDistrict'
+report={'phase' :'unreal-headless-native-integration','companion_hold_serialization_and_fallback_tested':True,'journey_history_serialization_and_fallback_tested':True,'native_classes_loaded':4,
  'version8_main_rescue_and_legacy_migration_tested':True,'version7_county_choices_and_legacy_migration_tested':True,'version6_field_and_film_serialization_fallback_tested':True,'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
  'objective_count':61,'native_inventory_and_choices_tested':True,
  'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,

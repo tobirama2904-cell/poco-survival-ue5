@@ -59,6 +59,10 @@ public:
     void BeginFilm(int32 Index,AActor* Subject);
     void BeginCountyStory(int32 Arc,int32 Beat);
     void BeginJourneyConversation(int32 Id);
+    void CompanionCommand(int32 Action);
+    bool ApplySupportResult(float Health,const survival::Trauma& Wounds);
+    bool bCompanionPanel=false;
+    float LastImpactTime=-1000;
     bool IsJourneyConversation() const { return ActiveJourney>=0; }
     void PauseBanter(bool Pause);
     bool IsBanterPaused() const { return bBanterPaused; }

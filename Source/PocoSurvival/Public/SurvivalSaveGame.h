@@ -40,6 +40,9 @@ public:
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") bool bBowEquipped=false;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FilmProgress=0;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int64 JourneyHeard=0;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") bool bMaraHolding=false;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") FVector MaraHoldLocation=FVector::ZeroVector;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") FString MaraHoldMap;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") TArray<int32> CountyStages={0,0,0,0,0,0};
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FilmDecision=0;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int64 MainStoryEvents=0;

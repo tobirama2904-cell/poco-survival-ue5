@@ -8,6 +8,7 @@
 #include "Engine/Texture2D.h"
 #include "EngineUtils.h"
 #include "SurvivalCharacter.h"
+#include "SurvivalCompanion.h"
 #include "SurvivalInteraction.h"
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
@@ -118,8 +119,19 @@ void ASurvivalHUD::DrawHUD()
         if (Player->bJournalOpen) {
             DrawRect(FLinearColor(.025,.045,.05,.97),W*.08f,H*.17f,W*.84f,H*.63f);
             const auto& K=Game->FieldInventory;using survival::Supply;
+            DrawRect(FLinearColor(.18,.24,.23,1),W*.65f,H*.18f,W*.23f,H*.06f);
+            DrawText(Player->bCompanionPanel?(Controls->bEnglishStory?TEXT("Backpack"):TEXT("Рюкзак")):(Controls->bEnglishStory?TEXT("Companion"):TEXT("Напарник")),FColor::White,W*.67f,H*.195f,GEngine->GetSmallFont(),S);
             Wrap(ASurvivalWorldDirector::Intention(Game),W*.12f,H*.247f,W*.74f,.8f*S,FColor(185,203,195));
             DrawText(TEXT("РЮКЗАК • ДЭНИЕЛ РИД"),FColor(238,217,175),W*.11f,H*.20f,GEngine->GetSmallFont(),1.25f*S);
+            if(Player->bCompanionPanel){
+                bool Ready=false;for(TActorIterator<ASurvivalCompanion> Friend(GetWorld());Friend;++Friend)if(!Friend->RuthRole&&Friend->IsAvailable()){Ready=true;break;}
+                DrawText(Ready?(Controls->bEnglishStory?TEXT("Mara Ellis"):TEXT("Мара Эллис")):(Controls->bEnglishStory?TEXT("Mara is not accompanying you yet"):TEXT("Мара ещё не сопровождает тебя")),FColor(223,207,179),W*.12f,H*.29f,GEngine->GetSmallFont(),S);
+                DrawRect(FLinearColor(.15,.22,.20,.9),W*.12f,H*.36f,W*.76f,H*.09f);
+                DrawText(Game->bMaraHolding?(Controls->bEnglishStory?TEXT("Come with me"):TEXT("Идём со мной")):(Controls->bEnglishStory?TEXT("Crouch and wait here"):TEXT("Пригнись и жди здесь")),Ready?FColor::White:FColor(130,130,130),W*.14f,H*.39f,GEngine->GetSmallFont(),S);
+                DrawRect(FLinearColor(.15,.22,.20,.9),W*.12f,H*.49f,W*.76f,H*.09f);
+                DrawText(Controls->bEnglishStory?TEXT("Help me bandage — 1 dressing"):TEXT("Помоги перевязаться — 1 бинт"),Ready?FColor::White:FColor(130,130,130),W*.14f,H*.52f,GEngine->GetSmallFont(),S);
+                Wrap(Controls->bEnglishStory?TEXT("Needs a clear, safe place. Stand still near Mara. Interrupted help consumes no dressing. A waiting companion can be recalled here."):TEXT("Нужно безопасное место и свободный путь. Стой рядом с Марой. При прерывании бинт не тратится. Ожидающую Мару можно позвать отсюда."),W*.12f,H*.63f,W*.73f,.9f*S,FColor(183,200,191));
+            }else{
             Wrap(FString::Printf(TEXT("Ткань %d   Спирт %d   Дерево %d   Детали %d"),K.Get(Supply::Cloth),K.Get(Supply::Alcohol),K.Get(Supply::Wood),K.Get(Supply::Scrap)),W*.12f,H*.29f,W*.74f,S,FColor::White);
             Wrap(FString::Printf(TEXT("Стрелы %d   Бинты %d   Шины %d   Груз %.1f кг"),K.Get(Supply::Arrows),K.Get(Supply::Bandage),K.Get(Supply::Splint),K.Weight()/1000.f+Game->GetCarriedWeightKg()),W*.12f,H*.36f,W*.74f,S,FColor::White);
             Wrap(FString::Printf(TEXT("Кровопотеря %.1f/с • Рука %.0f%% • Нога %.0f%%"),Player->Wounds().bleeding,Player->Wounds().arm*100,Player->Wounds().leg*100),W*.12f,H*.43f,W*.74f,S,FColor(224,153,139));
@@ -127,6 +139,7 @@ void ASurvivalHUD::DrawHUD()
             if(Game->MainStory.Has(2)&&!Game->MainStory.Has(4))DrawText(Controls->bEnglishStory?TEXT("Ruth's medical pack • protected story item"):TEXT("Комплект для Рут • хранится отдельно от обычных бинтов"),FColor(223,207,179),W*.12f,H*.49f,GEngine->GetSmallFont(),.9f*S);
             const TCHAR* Recipes[]={TEXT("Перевязка: ткань + спирт"),TEXT("Шина: ткань + 2 дерева"),TEXT("3 стрелы: дерево + деталь"),TEXT("Использовать перевязку [H]"),TEXT("Наложить шину")};
             for(int32 I=0;I<5;++I){DrawRect(FLinearColor(.15,.18,.17,.8),W*.12f,H*(.53f+I*.05f),W*.76f,H*.044f);DrawText(Recipes[I],FColor(237,229,203),W*.14f,H*(.54f+I*.05f),GEngine->GetSmallFont(),S);}
+            }
             DrawText(Controls->bEnglishStory?TEXT("Story subtitles: English — нажать для русского"):TEXT("Субтитры истории: русский — press for English"),FColor(223,207,179),W*.14f,H*.81f,GEngine->GetSmallFont(),S);
 
         }

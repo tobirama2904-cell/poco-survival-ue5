@@ -9,6 +9,7 @@
 #include "Camera/CameraActor.h"
 #include "Core/CityContent.h"
 #include "SurvivalGameInstance.h"
+#include "SurvivalCompanion.h"
 #include "SurvivalInteraction.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -199,7 +200,7 @@ float ASurvivalCharacter::TakeDamage(float Amount,const FDamageEvent& Event,ACon
         const FString Bone=Hit.BoneName.ToString().ToLower();Zone=Bone.Contains(TEXT("head"))||Local.Z>55?survival::WoundZone::Head:Local.Z<-30?survival::WoundZone::Leg:FMath::Abs(Local.Y)>27?survival::WoundZone::Arm:survival::WoundZone::Torso;
     }
     const float Applied=Stats.Damage(Trauma.Hit(Amount,Zone));
-    if (Applied>0) Super::TakeDamage(Applied,Event,Instigator,Causer);
+    if (Applied>0){LastImpactTime=GetWorld()->GetTimeSeconds();Super::TakeDamage(Applied,Event,Instigator,Causer);}
     if (Applied>0 && !Stats.Alive()) { EndStory();GetCharacterMovement()->DisableMovement();
         if (!bHumanAvatar) if (auto* Death=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01.MM_Death_Front_01"))) GetMesh()->PlayAnimation(Death,false);
         StatusMessage=TEXT("Вы погибли. F9 / Загрузить — вернуться к сохранению."); }
@@ -230,6 +231,12 @@ void ASurvivalCharacter::TouchPressed(ETouchIndex::Type Finger,FVector Position)
         if(Hit==static_cast<int32>(survival::Control::Load)){Load();return;}
         if(Hit==static_cast<int32>(survival::Control::Settings)){ToggleControlEditor();return;}
         if(P.X>=.12f&&P.X<=.88f&&P.Y>=.79f&&P.Y<.86f){Settings->bEnglishStory=!Settings->bEnglishStory;Settings->Store();return;}
+        if(P.X>=.65f&&P.X<=.88f&&P.Y>=.18f&&P.Y<.24f){bCompanionPanel=!bCompanionPanel;return;}
+        if(bCompanionPanel){
+            if(P.X>=.12f&&P.X<=.88f&&P.Y>=.36f&&P.Y<.45f)CompanionCommand(0);
+            else if(P.X>=.12f&&P.X<=.88f&&P.Y>=.49f&&P.Y<.58f)CompanionCommand(1);
+            return;
+        }
         if(P.X>=.12f&&P.X<=.88f&&P.Y>=.53f&&P.Y<.78f)FieldAction(FMath::Clamp(FMath::FloorToInt((P.Y-.53f)/.05f),0,4));return;
     }
     if(bEditingControls) {
@@ -287,7 +294,7 @@ void ASurvivalCharacter::FellOutOfWorld(const UDamageType& DamageType)
     Super::FellOutOfWorld(DamageType);
 }
 
-void ASurvivalCharacter::ToggleJournal() { if (!bStoryActive && !bEditingControls){bJournalOpen=!bJournalOpen;Bow.Cancel();if(auto* PC=Cast<APlayerController>(Controller)){PC->bShowMouseCursor=bJournalOpen;if(bJournalOpen){FInputModeGameAndUI Mode;Mode.SetHideCursorDuringCapture(false);PC->SetInputMode(Mode);}else PC->SetInputMode(FInputModeGameOnly());}} }
+void ASurvivalCharacter::ToggleJournal() { if (!IsCinematicLocked() && !bEditingControls){bJournalOpen=!bJournalOpen;Bow.Cancel();if(auto* PC=Cast<APlayerController>(Controller)){PC->bShowMouseCursor=bJournalOpen;if(bJournalOpen){FInputModeGameAndUI Mode;Mode.SetHideCursorDuringCapture(false);PC->SetInputMode(Mode);}else PC->SetInputMode(FInputModeGameOnly());}} }
 void ASurvivalCharacter::BeginStory(FName Id,AActor* Subject,bool Cinematic)
 {
     const auto* Site=survival::FindCitySite(TCHAR_TO_UTF8(*Id.ToString()));
@@ -498,4 +505,21 @@ void ASurvivalCharacter::BeginJourneyConversation(int32 Id)
  const auto& Scene=Scenes[Id];CurrentStory=FName(UTF8_TO_TCHAR(Scene.id.c_str()));
  for(const auto& Line:USurvivalControlSettings::Get()->bEnglishStory?Scene.en:Scene.ru)StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
  SpeakStoryLine();
+}
+
+bool ASurvivalCharacter::ApplySupportResult(float Health,const survival::Trauma& Wounds)
+{
+ if(!IsAlive()||!FMath::IsFinite(Health)||Health<Stats.health||Health>100||!Wounds.Valid())return false;
+ Stats.health=Health;Trauma=Wounds;return true;
+}
+void ASurvivalCharacter::CompanionCommand(int32 Action)
+{
+ if(!IsAlive()||IsCinematicLocked()||bEditingControls)return;
+ for(TActorIterator<ASurvivalCompanion> Friend(GetWorld());Friend;++Friend)if(!Friend->RuthRole&&Friend->IsAvailable()){
+  if(bJournalOpen)ToggleJournal();
+  const bool OK=Action==0?Friend->ToggleHold(this):Action==1?Friend->RequestAid(this):false;
+  if(!OK)StatusMessage=TEXT("Мара не может выполнить приказ: подойди ближе; для помощи нужен обычный бинт и безопасное место.");
+  return;
+ }
+ StatusMessage=TEXT("Мара ещё не сопровождает тебя.");
 }
