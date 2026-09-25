@@ -343,6 +343,9 @@
     "python_tests_passed": 58,
     "python_tests_skipped": 1,
     "campaign_measured_hours": null,
-    "full_acceptance": false
+    "full_acceptance": false,
+    "source_commit": "d9cc508d0bc98384ebdd0d15d725bb14dbebd245",
+    "ue_scene_run": 36160687330,
+    "corrected_base_scene_run": 36160065706
   }
 }

@@ -27,3 +27,5 @@ Base adopted from existing remote gameplay/main-campaign 864251e, not rewritten 
 Read the full substantive GameSpot developer interview, including relationship-driven level planning, contrast, companion autonomy and development tradeoffs. Applied general design principles through original material. This is not a claim of personally replaying the entire reference game. Source: https://www.gamespot.com/articles/bonds-forged-in-difficult-times-the-making-of-the-last-of-us/1100-6412499/ .
 
 Final local source checks: 58 Python tests passed, with one absent cached nature-archive check skipped. New audio archive was independently restored and verified against its per-file hashes. Recorded duration is not gameplay duration.
+
+New journey source: d9cc508d0bc98384ebdd0d15d725bb14dbebd245. UE verification run 36160687330 on gameplay/journey-dialogue. Corrected base-main verification run 36160065706 on gameplay/main-campaign / 0450c41. Both dispatched; no new Android build or physical-device result is implied.
