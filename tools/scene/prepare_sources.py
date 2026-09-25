@@ -19,3 +19,5 @@ stage=cache/'template-character'
 subprocess.run(['python3',str(root/'tools/android/engine_deps.py'),'--mode','character','--manifest',str(manifest),'--engine-root',str(stage),'--report',str(root/'artifacts/gameplay-scene/character-dependencies.json')],check=True)
 shutil.copytree(stage/'Templates/TemplateResources/High/Characters/Content',root/'Content/Characters',dirs_exist_ok=True)
 print('SCENE_SOURCES_READY licensed template characters are internal test art, not final characters',flush=True)
+
+subprocess.run(['python3',str(root/'tools/characters/fetch_conditioned.py')],check=True)

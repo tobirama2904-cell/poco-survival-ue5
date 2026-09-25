@@ -22,7 +22,7 @@ class POCOSURVIVAL_API USurvivalSaveGame : public USaveGame
 {
     GENERATED_BODY()
 public:
-    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FormatVersion = 3;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FormatVersion = 4;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") FString CampaignVersion = TEXT("city-1");
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int64 SaveGeneration = 0;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") bool bHasPlayerState = false;
@@ -33,6 +33,10 @@ public:
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") TArray<FSurvivalInfectedSnapshot> InfectedStates;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") float Health = 100;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") float Stamina = 100;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 LoadedRounds=0;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 RoundsSpent=0;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 BottlesUsed=0;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") bool bPistolEquipped=false;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int64 StateRevision = 0;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") TArray<FString> ActionJournal;
 };

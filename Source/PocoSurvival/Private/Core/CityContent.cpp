@@ -14,6 +14,8 @@ w.items["alcohol"]={180,10};
 w.items["medkit"]={280,8};
 w.items["letter"]={10,1};
 w.items["tools"]={650,1};
+w.items["ammo_pack"]={100,16};
+w.items["bottle_pack"]={120,16};
 w.districts.insert("depot");
 w.districts.insert("residential");
 w.districts.insert("clinic");
@@ -37,6 +39,8 @@ w.flags.insert("evidence_found");
 w.flags.insert("filter_found");
 w.flags.insert("filter_route");
 w.flags.insert("guard_confessed");
+w.flags.insert("has_pipe");
+w.flags.insert("has_pistol");
 w.flags.insert("key_found");
 w.flags.insert("letter_delivered");
 w.flags.insert("letter_found");
@@ -98,6 +102,12 @@ w.actions.push_back({"craft_medkit_2","residential","Собрать перевя
 w.actions.push_back({"use_medkit_2","residential","Перевязать раны",{},{},{{"medkit",1}},{},{}});
 w.actions.push_back({"craft_medkit_3","pumpworks","Собрать перевязочный комплект",{},{},{{"alcohol",1},{"cloth",2}},{{"medkit",1}},{}});
 w.actions.push_back({"use_medkit_3","pumpworks","Перевязать раны",{},{},{{"medkit",1}},{},{}});
+w.actions.push_back({"take_pistol","depot","Пистолет охраны",{},{},{},{{"ammo_pack",2}},{"has_pistol"}});
+w.actions.push_back({"take_pipe","depot","Монтажная труба",{},{},{},{},{"has_pipe"}});
+w.actions.push_back({"bottles_depot","depot","Пустые бутылки",{},{},{},{{"bottle_pack",4}},{}});
+w.actions.push_back({"combat_cache_0","market","Запас охраны",{},{},{},{{"ammo_pack",2},{"bottle_pack",2}},{}});
+w.actions.push_back({"combat_cache_1","residential","Запас охраны",{},{},{},{{"ammo_pack",2},{"bottle_pack",2}},{}});
+w.actions.push_back({"combat_cache_2","pumpworks","Запас охраны",{},{},{},{{"ammo_pack",2},{"bottle_pack",2}},{}});
 return w; }
 const std::vector<StorySite>& CitySites() { static const std::vector<StorySite> sites={
 {"search_depot","depot","Катушка стартера","terminal","Арсен",-16.0f,-3.0f,0.0f,false,{}},
@@ -155,6 +165,12 @@ const std::vector<StorySite>& CitySites() { static const std::vector<StorySite> 
 {"use_medkit_2","residential","Перевязать раны","heal","Арсен",-175.0f,-146.0f,0.0f,true,{"Арсен: Можно идти дальше."}},
 {"craft_medkit_3","pumpworks","Собрать перевязочный комплект","craft","Арсен",188.0f,-155.0f,0.0f,true,{"Арсен: Чистая ткань и антисептик. Пригодится до следующего лазарета."}},
 {"use_medkit_3","pumpworks","Перевязать раны","heal","Арсен",190.0f,-155.0f,0.0f,true,{"Арсен: Можно идти дальше."}},
+{"take_pistol","depot","Пистолет охраны","loot","Лейла",-9.0f,15.0f,0.0f,true,{"Это оружие оставила охрана. Патронов мало. Выстрел услышит весь двор."}},
+{"take_pipe","depot","Монтажная труба","loot","Арсен",-11.0f,15.0f,0.0f,true,{"Тяжёлая, зато не подведёт. Вплотную лучше ударить и отступить."}},
+{"bottles_depot","depot","Пустые бутылки","loot","Лейла",12.0f,15.0f,0.0f,true,{"Бросай в сторону от дороги. Заражённые проверят шум, если ещё не увидели тебя."}},
+{"combat_cache_0","market","Запас охраны","loot","Арсен",26.0f,218.0f,0.0f,true,{"Небольшой запас. Шумная перестрелка — не единственный путь."}},
+{"combat_cache_1","residential","Запас охраны","loot","Арсен",-203.0f,-150.0f,0.0f,true,{"Небольшой запас. Шумная перестрелка — не единственный путь."}},
+{"combat_cache_2","pumpworks","Запас охраны","loot","Арсен",211.0f,-159.0f,0.0f,true,{"Небольшой запас. Шумная перестрелка — не единственный путь."}},
 }; return sites; }
 const StorySite* FindCitySite(const std::string& id) { for(const auto& site:CitySites()) if(site.id==id) return &site; return nullptr; }
 }

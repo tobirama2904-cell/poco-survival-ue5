@@ -2,12 +2,15 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Core/Vitals.h"
+#include "Core/Combat.h"
 #include "SurvivalCharacter.generated.h"
 class USpringArmComponent;
 class UCameraComponent;
 class ASurvivalInteraction;
 class UAnimSequence;
 class ACameraActor;
+class UStaticMeshComponent;
+class UAudioComponent;
 UCLASS()
 class POCOSURVIVAL_API ASurvivalCharacter : public ACharacter
 {
@@ -33,6 +36,17 @@ public:
     UFUNCTION(BlueprintCallable,Category="Actions") void Save();
     UFUNCTION(BlueprintCallable,Category="Actions") void Load();
     UFUNCTION(BlueprintPure,Category="Actions") ASurvivalInteraction* GetFocusedInteraction() const;
+    UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Appearance") FName AvatarRole=TEXT("Arsen");
+    UFUNCTION(BlueprintPure,Category="Appearance") bool HasHumanAvatar() const { return bHumanAvatar; }
+    UFUNCTION(BlueprintCallable,Category="Combat") void ReloadWeapon();
+    UFUNCTION(BlueprintCallable,Category="Combat") void SwitchWeapon();
+    UFUNCTION(BlueprintCallable,Category="Combat") void ThrowBottle();
+    int32 EarnedRounds() const;
+    int32 EarnedBottles() const;
+    const survival::CombatSnapshot& CombatState() const { return Equipment.state; }
+    bool RestoreCombat(const survival::CombatSnapshot& State);
+    bool IsReloading() const { return Equipment.reloading>0; }
+    void SyncEquipment() { RefreshWeapon(); }
     void BeginStory(FName Id,AActor* Subject);
     void AdvanceStory();
     void EndStory();
@@ -44,6 +58,19 @@ public:
     int32 StoryLine=0;
 private:
     UPROPERTY() TObjectPtr<ACameraActor> StoryCamera;
+    UPROPERTY() TObjectPtr<UAudioComponent> StoryAudio;
+    UPROPERTY() TObjectPtr<UStaticMeshComponent> WeaponMesh;
+    UPROPERTY() TMap<FName,TObjectPtr<UAnimSequence>> HumanAnimations;
+    UPROPERTY() TObjectPtr<UAnimSequence> PlayingHumanAnimation;
+    survival::Combat Equipment;
+    bool bHumanAvatar=false;
+    float FootstepDelay=0;
+    FName CurrentStory;
+    void ConfigureHuman();
+    void UpdateHuman();
+    void RefreshWeapon();
+    void Shoot();
+    void SpeakStoryLine();
     survival::Vitals Stats;
     bool bSprintRequested=false;
     float AttackCooldown=0;

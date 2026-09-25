@@ -12,6 +12,7 @@ class POCOSURVIVAL_API ASurvivalInfected : public ASurvivalCharacter
     GENERATED_BODY()
 public:
     ASurvivalInfected();
+    UFUNCTION(BlueprintCallable,Category="AI") void HearNoise(FVector Origin,float Radius);
     virtual void BeginPlay() override;
     virtual void Tick(float Delta) override;
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Save") FName PersistentId;

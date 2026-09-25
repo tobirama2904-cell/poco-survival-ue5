@@ -6,7 +6,7 @@ using namespace survival;
 #define CHECK(x) do { if(!(x)) { std::cerr<<"CITY FAIL "<<__LINE__<<" "<<#x<<"\n";std::exit(1); } } while(false)
 void Apply(Runtime& r,const char* id){CHECK(r.TryAction(id)==Error::None);}
 int main(){
- auto w=MakeCityCampaign();CHECK(ValidateWorld(w)==Error::None);CHECK(w.actions.size()==55);CHECK(CitySites().size()==55);
+ auto w=MakeCityCampaign();CHECK(ValidateWorld(w)==Error::None);CHECK(w.actions.size()==61);CHECK(CitySites().size()==61);
  for(const auto& a:w.actions)CHECK(FindCitySite(a.id)!=nullptr);
  for(bool clinic:{false,true})for(bool stay:{false,true})for(bool truth:{false,true}){
   Runtime r(w);for(int i=0;i<6;++i)CHECK(r.TryAction("supply_"+std::to_string(i))==Error::None);
@@ -25,5 +25,5 @@ int main(){
  Runtime legacy;for(auto a:{"search_depot","recover_fuel","repair_generator","power_clinic"})Apply(legacy,a);
  Runtime migrated(w);CHECK(migrated.Restore(legacy.State())==Error::None);
  std::mt19937 gen(410);for(int run=0;run<40;++run){Runtime r(w);for(int step=0;step<180;++step){auto old=r.State();auto a=w.actions[gen()%w.actions.size()].id;auto e=r.TryAction(a);if(e!=Error::None)CHECK(r.State()==old);Runtime c(w);CHECK(c.Restore(r.State())==Error::None);}}
- std::cout<<"CITY_TEST_PASS actions=55 sites=55 tested_branch_combinations=8 replay_and_optional_postgame=true duration_not_measured=true\n";
+ std::cout<<"CITY_TEST_PASS actions=61 sites=61 tested_branch_combinations=8 replay_and_optional_postgame=true duration_not_measured=true\n";
 }

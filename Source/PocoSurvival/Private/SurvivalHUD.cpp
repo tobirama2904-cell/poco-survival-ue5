@@ -1,9 +1,9 @@
+#include "SurvivalHUD.h"
 #include "GameFramework/PlayerController.h"
 #include "SurvivalGameInstance.h"
 #include "Core/CityContent.h"
 #include "Engine/Texture2D.h"
 #include "EngineUtils.h"
-#include "SurvivalHUD.h"
 #include "SurvivalCharacter.h"
 #include "SurvivalInteraction.h"
 #include "Engine/Canvas.h"
@@ -27,8 +27,10 @@ void ASurvivalHUD::DrawHUD()
     DrawLine(W/2,H/2-5*S,W/2,H/2+5*S,FLinearColor::White,1);
     if (Player->GetFocusedInteraction()) DrawText(TEXT("E / ДЕЙСТВИЕ"),FColor(233,197,128),W/2-50*S,H/2+24*S,GEngine->GetSmallFont(),S);
     auto Button=[&](const TCHAR* Label,float X,float Y){DrawRect(FLinearColor(0.04f,0.06f,0.08f,0.75f),W*X-44*S,H*Y-28*S,88*S,56*S);DrawText(Label,FColor::White,W*X-35*S,H*Y-9*S,GEngine->GetSmallFont(),S);};
+    Button(TEXT("Магазин"),0.91f,0.39f);Button(TEXT("Бутылка"),0.91f,0.23f);Button(TEXT("Оружие"),0.75f,0.23f);
+    DrawText(FString::Printf(TEXT("%s  %d / %d  •  Бутылки %d"),Player->IsReloading()?TEXT("Перезарядка"):Player->CombatState().pistol?TEXT("Пистолет"):TEXT("Ближний бой"),Player->CombatState().loaded,Player->EarnedRounds()-Player->CombatState().spent-Player->CombatState().loaded,Player->EarnedBottles()-Player->CombatState().bottlesUsed),FColor(231,207,151),W*.30f,H-90*S,GEngine->GetSmallFont(),S);
     Button(TEXT("Журнал"),0.55f,0.08f);
-    Button(TEXT("Действие"),0.91f,0.80f);Button(TEXT("Удар"),0.91f,0.59f);Button(TEXT("Бег"),0.75f,0.80f);Button(TEXT("Загрузить"),0.91f,0.08f);
+    Button(TEXT("Действие"),0.91f,0.80f);Button(Player->CombatState().pistol?TEXT("Выстрел"):TEXT("Удар"),0.91f,0.59f);Button(TEXT("Бег"),0.75f,0.80f);Button(TEXT("Загрузить"),0.91f,0.08f);
     Button(TEXT("Прыжок"),0.75f,0.59f);Button(TEXT("Тише"),0.75f,0.39f);Button(TEXT("Сохранить"),0.75f,0.08f);
     auto Wrap=[&](const FString& Text,float X,float Y,float Width,float Scale,FColor Color) {
         TArray<FString> Words;Text.ParseIntoArray(Words,TEXT(" "),true);FString Line;
@@ -91,5 +93,5 @@ void ASurvivalHUD::DrawHUD()
         Wrap(Player->StoryLines[Player->StoryLine],X,H*.72f,W*.76f-X,1.15f*S,FColor(235,237,231));
         DrawText(FString::Printf(TEXT("%d / %d     E / Действие — дальше"),Player->StoryLine+1,Player->StoryLines.Num()),FColor(166,185,184),X,H*.89f,GEngine->GetSmallFont(),S);
     }
-    DrawText(TEXT("В разработке • модели персонажей временные"),FColor(125,140,141),20*S,H-17*S,GEngine->GetSmallFont(),.8f*S);
+    DrawText(TEXT("В разработке • персонажи: Microsoft / MIT"),FColor(125,140,141),20*S,H-17*S,GEngine->GetSmallFont(),.8f*S);
 }

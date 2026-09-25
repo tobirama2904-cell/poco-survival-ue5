@@ -130,6 +130,14 @@
     "tools": [
       650,
       1
+    ],
+    "ammo_pack": [
+      100,
+      16
+    ],
+    "bottle_pack": [
+      120,
+      16
     ]
   },
   "actions": [
@@ -803,6 +811,83 @@
       },
       "grants": {},
       "forbids": []
+    },
+    {
+      "id": "take_pistol",
+      "district": "depot",
+      "title": "Пистолет охраны",
+      "required": [],
+      "forbids": [],
+      "consumes": {},
+      "grants": {
+        "ammo_pack": 2
+      },
+      "sets": [
+        "has_pistol"
+      ]
+    },
+    {
+      "id": "take_pipe",
+      "district": "depot",
+      "title": "Монтажная труба",
+      "required": [],
+      "forbids": [],
+      "consumes": {},
+      "grants": {},
+      "sets": [
+        "has_pipe"
+      ]
+    },
+    {
+      "id": "bottles_depot",
+      "district": "depot",
+      "title": "Пустые бутылки",
+      "required": [],
+      "forbids": [],
+      "consumes": {},
+      "grants": {
+        "bottle_pack": 4
+      },
+      "sets": []
+    },
+    {
+      "id": "combat_cache_0",
+      "district": "market",
+      "title": "Запас охраны",
+      "required": [],
+      "forbids": [],
+      "consumes": {},
+      "grants": {
+        "ammo_pack": 2,
+        "bottle_pack": 2
+      },
+      "sets": []
+    },
+    {
+      "id": "combat_cache_1",
+      "district": "residential",
+      "title": "Запас охраны",
+      "required": [],
+      "forbids": [],
+      "consumes": {},
+      "grants": {
+        "ammo_pack": 2,
+        "bottle_pack": 2
+      },
+      "sets": []
+    },
+    {
+      "id": "combat_cache_2",
+      "district": "pumpworks",
+      "title": "Запас охраны",
+      "required": [],
+      "forbids": [],
+      "consumes": {},
+      "grants": {
+        "ammo_pack": 2,
+        "bottle_pack": 2
+      },
+      "sets": []
     }
   ],
   "sites": [
@@ -1714,6 +1799,102 @@
       "speaker": "Арсен",
       "lines": [
         "Арсен: Можно идти дальше."
+      ],
+      "optional": true
+    },
+    {
+      "id": "take_pistol",
+      "district": "depot",
+      "position": [
+        -9,
+        15,
+        0
+      ],
+      "title": "Пистолет охраны",
+      "kind": "loot",
+      "speaker": "Лейла",
+      "lines": [
+        "Это оружие оставила охрана. Патронов мало. Выстрел услышит весь двор."
+      ],
+      "optional": true
+    },
+    {
+      "id": "take_pipe",
+      "district": "depot",
+      "position": [
+        -11,
+        15,
+        0
+      ],
+      "title": "Монтажная труба",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Тяжёлая, зато не подведёт. Вплотную лучше ударить и отступить."
+      ],
+      "optional": true
+    },
+    {
+      "id": "bottles_depot",
+      "district": "depot",
+      "position": [
+        12,
+        15,
+        0
+      ],
+      "title": "Пустые бутылки",
+      "kind": "loot",
+      "speaker": "Лейла",
+      "lines": [
+        "Бросай в сторону от дороги. Заражённые проверят шум, если ещё не увидели тебя."
+      ],
+      "optional": true
+    },
+    {
+      "id": "combat_cache_0",
+      "district": "market",
+      "position": [
+        26,
+        218,
+        0
+      ],
+      "title": "Запас охраны",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Небольшой запас. Шумная перестрелка — не единственный путь."
+      ],
+      "optional": true
+    },
+    {
+      "id": "combat_cache_1",
+      "district": "residential",
+      "position": [
+        -203,
+        -150,
+        0
+      ],
+      "title": "Запас охраны",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Небольшой запас. Шумная перестрелка — не единственный путь."
+      ],
+      "optional": true
+    },
+    {
+      "id": "combat_cache_2",
+      "district": "pumpworks",
+      "position": [
+        211,
+        -159,
+        0
+      ],
+      "title": "Запас охраны",
+      "kind": "loot",
+      "speaker": "Арсен",
+      "lines": [
+        "Небольшой запас. Шумная перестрелка — не единственный путь."
       ],
       "optional": true
     }

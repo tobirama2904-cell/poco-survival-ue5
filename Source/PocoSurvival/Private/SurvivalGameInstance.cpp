@@ -65,6 +65,7 @@ bool USurvivalGameInstance::SaveProgress()
         Save->PlayerLocation=Player->GetActorLocation();Save->PlayerRotation=Player->GetActorRotation();
         Save->ViewRotation=Player->GetController() ? Player->GetController()->GetControlRotation() : Save->PlayerRotation;
         Save->Health=Player->GetHealth();Save->Stamina=Player->GetStamina();
+        const auto& Combat=Player->CombatState();Save->LoadedRounds=Combat.loaded;Save->RoundsSpent=Combat.spent;Save->BottlesUsed=Combat.bottlesUsed;Save->bPistolEquipped=Combat.pistol;
     }
     if (UWorld* World=GetWorld()) {
         const FString Map=UGameplayStatics::GetCurrentLevelName(World,true);
@@ -97,7 +98,7 @@ bool USurvivalGameInstance::LoadProgress()
     {
         if (!UGameplayStatics::DoesSaveGameExist(SlotName(Index), 0)) continue;
         auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName(Index), 0));
-        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 3) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
+        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 4) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
             Save->StateRevision < 0 || Save->StateRevision != Save->ActionJournal.Num() || Save->SaveGeneration<0) continue;
         if (Save->bHasPlayerState && (Save->MapName.IsEmpty() || Save->PlayerLocation.ContainsNaN() ||
             Save->PlayerLocation.GetAbsMax()>1000000 || Save->PlayerRotation.ContainsNaN() ||
@@ -122,6 +123,11 @@ bool USurvivalGameInstance::LoadProgress()
             if (Candidate.TryAction(std::string(TCHAR_TO_UTF8(*Id))) != survival::Error::None)
             { bValid = false; break; }
         }
+        if (bValid && Save->FormatVersion>=4) {
+            const auto& Inventory=Candidate.State().inventory;
+            const auto Count=[&](const char* Name) { const auto It=Inventory.find(Name);return It==Inventory.end()?0:It->second; };
+            bValid=survival::Combat::Valid({Save->LoadedRounds,Save->RoundsSpent,Save->BottlesUsed,Save->bPistolEquipped},Count("ammo_pack")*8,Count("bottle_pack"),Candidate.HasFlag("has_pistol"));
+        }
         const int64 Generation = Save->FormatVersion>=2 ? Save->SaveGeneration : Save->StateRevision;
         if (bValid && (!bFound || Generation > BestGeneration))
         { bFound = true; Best = Candidate.State(); BestSlot = Index; BestGeneration=Generation;BestSave=Save; }
@@ -141,7 +147,9 @@ bool USurvivalGameInstance::ApplyLoadedPlayerState(ASurvivalCharacter* Player)
     // capsule into geometry. Vitals still recover at the current safe spawn.
     Player->TeleportTo(PendingPlayerSave->PlayerLocation,PendingPlayerSave->PlayerRotation,false,false);
     if (PendingPlayerSave->FormatVersion>=3) if (auto* Controller=Player->GetController()) Controller->SetControlRotation(PendingPlayerSave->ViewRotation);
-    return Player->RestoreVitals(PendingPlayerSave->Health,PendingPlayerSave->Stamina);
+    if (!Player->RestoreVitals(PendingPlayerSave->Health,PendingPlayerSave->Stamina)) return false;
+    const survival::CombatSnapshot Combat=PendingPlayerSave->FormatVersion>=4 ? survival::CombatSnapshot{PendingPlayerSave->LoadedRounds,PendingPlayerSave->RoundsSpent,PendingPlayerSave->BottlesUsed,PendingPlayerSave->bPistolEquipped}:survival::CombatSnapshot{};
+    return Player->RestoreCombat(Combat);
 }
 
 bool USurvivalGameInstance::ApplyLoadedInfectedState(ASurvivalInfected* Infected)

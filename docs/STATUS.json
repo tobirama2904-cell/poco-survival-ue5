@@ -139,7 +139,7 @@
   "city_campaign": {
     "implementation_commit": "da0ce394",
     "branch": "gameplay/city-story",
-    "actions": 55,
+    "actions": 61,
     "districts_authored": 6,
     "dialogue_lines": 103,
     "core_test": "passed: eight branch combinations, optional postgame, save migration/replay",
@@ -149,7 +149,13 @@
     "android_native_result": "pending",
     "measured_duration_hours": null,
     "final_3d_characters": false,
-    "final_apk_available": false
+    "final_apk_available": false,
+    "previous_scene_result": "36083382140 failed overall; actual frame captured and rejected for overexposure; native 55-objective save tests passed",
+    "previous_android_native_result": "36083383766 success",
+    "human_character_foundations": 5,
+    "native_new_avatar_and_combat_verified": false,
+    "fully_voiced": false,
+    "new_external_runs": "to dispatch"
   },
   "mobile_preparation_latest_failure": {
     "run": 36082332279,

@@ -38,7 +38,7 @@ bool ASurvivalInteraction::Interact(APawn* User, FString& FailureReason)
     if (!Game->TryAction(ActionId,FailureReason)) return false;
     if (Player) {
         if (Site && Site->kind=="heal") Player->RestoreVitals(FMath::Min(100.0f,Player->GetHealth()+55),Player->GetStamina());
-        Player->BeginStory(ActionId,this);
+        Player->SyncEquipment();Player->BeginStory(ActionId,this);
     }
     return true;
 }

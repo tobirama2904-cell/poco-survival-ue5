@@ -12,18 +12,19 @@ removed=0
 for actor in actors.get_all_level_actors():
  if isinstance(actor,unreal.SkyAtmosphere):actors.destroy_actor(actor);removed+=1
 path='/Game/Environment/MobileSky/M_MobileSky'
-material=unreal.load_asset(path)
-if material is None:material=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_MobileSky','/Game/Environment/MobileSky',unreal.Material,unreal.MaterialFactoryNew())
-assert material
-material.set_editor_property('shading_model',unreal.MaterialShadingModel.MSM_UNLIT)
-material.set_editor_property('two_sided',True)
-material.set_editor_property('is_sky',True)
-unreal.MaterialEditingLibrary.delete_all_material_expressions(material)
-color=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionConstant3Vector,0,0)
-color.set_editor_property('constant',unreal.LinearColor(.12,.22,.36,1))
-unreal.MaterialEditingLibrary.connect_material_property(color,'',unreal.MaterialProperty.MP_EMISSIVE_COLOR)
-unreal.MaterialEditingLibrary.recompile_material(material)
-unreal.EditorAssetLibrary.save_loaded_asset(material)
+if unreal.EditorAssetLibrary.does_asset_exist(path):
+ material=unreal.load_asset(path)
+else:
+ material=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_MobileSky','/Game/Environment/MobileSky',unreal.Material,unreal.MaterialFactoryNew())
+ assert material
+ material.set_editor_property('shading_model',unreal.MaterialShadingModel.MSM_UNLIT)
+ material.set_editor_property('two_sided',True)
+ material.set_editor_property('is_sky',True)
+ color=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionConstant3Vector,0,0)
+ color.set_editor_property('constant',unreal.LinearColor(.12,.22,.36,1))
+ unreal.MaterialEditingLibrary.connect_material_property(color,'',unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+ unreal.MaterialEditingLibrary.recompile_material(material)
+ unreal.EditorAssetLibrary.save_loaded_asset(material)
 for actor in actors.get_all_level_actors():
  if actor.get_actor_label()=='mobile_sky_dome':actors.destroy_actor(actor)
 sky=actors.spawn_actor_from_class(unreal.StaticMeshActor,unreal.Vector(0,0,0));sky.set_actor_label('mobile_sky_dome')
@@ -33,7 +34,7 @@ sky.set_actor_scale3d(unreal.Vector(1600,1600,1600))
 for actor in actors.get_all_level_actors():
  if isinstance(actor,unreal.PostProcessVolume):
   settings=actor.get_editor_property('settings')
-  for key,value in [('override_bloom_intensity',True),('bloom_intensity',.12),('override_lens_flare_intensity',True),('lens_flare_intensity',0.0),('override_auto_exposure_bias',True),('auto_exposure_bias',-.7)]:settings.set_editor_property(key,value)
+  for key,value in [('override_bloom_intensity',True),('bloom_intensity',.12),('override_lens_flare_intensity',True),('lens_flare_intensity',0.0),('override_auto_exposure_bias',True),('auto_exposure_bias',-2.4)]:settings.set_editor_property(key,value)
   actor.set_editor_property('settings',settings)
 # Actual original ambience, not an advertised completed soundtrack.
 # PCM is deliberately explicit for this small loop; no platform codec ambiguity.

@@ -74,19 +74,19 @@ void ASurvivalGameMode::BeginMovementProof()
 }
 void ASurvivalGameMode::EndMovementProof()
 {
-    float Distance=0;bool Grounded=false;FRotator CameraRotation=FRotator::ZeroRotator;bool PlayerView=false;
+    float Distance=0;bool Grounded=false;FRotator CameraRotation=FRotator::ZeroRotator;bool PlayerView=false;bool HumanLoaded=false;
     if (auto* PC=GetWorld()->GetFirstPlayerController()) {
         PC->InputKey(FInputKeyEventArgs(nullptr,FInputDeviceId::CreateFromInternalId(0),EKeys::W,IE_Released));
         FVector CameraLocation;PC->GetPlayerViewPoint(CameraLocation,CameraRotation);
         PlayerView=PC->GetViewTarget()==PC->GetPawn();
         if (auto* Player=Cast<ASurvivalCharacter>(PC->GetPawn())) {
             Distance=FVector::Dist2D(MovementProofStart,Player->GetActorLocation());
-            Grounded=Player->GetCharacterMovement()->IsMovingOnGround();
+            Grounded=Player->GetCharacterMovement()->IsMovingOnGround();HumanLoaded=Player->HasHumanAvatar();
         }
     }
     const float CameraPitch=FRotator::NormalizeAxis(CameraRotation.Pitch);
     const bool CameraFramed=PlayerView && CameraPitch>=-60 && CameraPitch<=30;
-    const bool Passed=bMovementProofStarted && Distance>100 && Grounded && CameraFramed;
-    const FString Report=FString::Printf(TEXT("{\"phase\":\"actual-game-mode-input-and-floor-test\",\"passed\":%s,\"walk_distance_cm\":%.2f,\"grounded\":%s,\"camera_pitch_degrees\":%.2f,\"player_view_target\":%s,\"camera_framed\":%s,\"touch_device_tested\":false,\"android_tested\":false}\n"),Passed?TEXT("true"):TEXT("false"),Distance,Grounded?TEXT("true"):TEXT("false"),CameraPitch,PlayerView?TEXT("true"):TEXT("false"),CameraFramed?TEXT("true"):TEXT("false"));
+    const bool Passed=bMovementProofStarted && Distance>100 && Grounded && CameraFramed && HumanLoaded;
+    const FString Report=FString::Printf(TEXT("{\"phase\":\"actual-game-mode-input-and-floor-test\",\"passed\":%s,\"walk_distance_cm\":%.2f,\"grounded\":%s,\"camera_pitch_degrees\":%.2f,\"player_view_target\":%s,\"camera_framed\":%s,\"human_avatar_loaded\":%s,\"touch_device_tested\":false,\"android_tested\":false}\n"),Passed?TEXT("true"):TEXT("false"),Distance,Grounded?TEXT("true"):TEXT("false"),CameraPitch,PlayerView?TEXT("true"):TEXT("false"),CameraFramed?TEXT("true"):TEXT("false"),HumanLoaded?TEXT("true"):TEXT("false"));
     FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/runtime-movement.json")));
 }

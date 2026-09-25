@@ -13,3 +13,6 @@ g++ -std=c++20 -Wall -Wextra -Werror -fsanitize=address,undefined -ISource/PocoS
 
 c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public Source/PocoSurvival/Private/Core/*.cpp tests/core/test_city.cpp -o .cache/core/test_city
 .cache/core/test_city
+
+c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public tests/core/test_combat.cpp -o .cache/core/test_combat
+.cache/core/test_combat

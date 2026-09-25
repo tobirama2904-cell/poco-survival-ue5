@@ -1,6 +1,6 @@
+#include "SurvivalCharacter.h"
 #include "Camera/CameraActor.h"
 #include "Core/CityContent.h"
-#include "SurvivalCharacter.h"
 #include "SurvivalGameInstance.h"
 #include "SurvivalInteraction.h"
 #include "Camera/CameraComponent.h"
@@ -19,9 +19,18 @@
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "TimerManager.h"
+#include "SurvivalInfected.h"
+#include "SurvivalBottle.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/AudioComponent.h"
+#include "Engine/StaticMesh.h"
+#include "EngineUtils.h"
+#include "Sound/SoundBase.h"
 ASurvivalCharacter::ASurvivalCharacter()
 {
     PrimaryActorTick.bCanEverTick=true;
+    WeaponMesh=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HeldWeapon"));
+    WeaponMesh->SetupAttachment(GetMesh(),TEXT("Bip01_R_Hand"));WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     GetCapsuleComponent()->InitCapsuleSize(40.0f,96.0f);
     bUseControllerRotationYaw=false;
     auto* Move=GetCharacterMovement();
@@ -45,7 +54,7 @@ ASurvivalCharacter::ASurvivalCharacter()
 }
 void ASurvivalCharacter::BeginPlay()
 {
-    Super::BeginPlay();
+    Super::BeginPlay();ConfigureHuman();
     AttackAnimation=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_01.MM_Attack_01"));
     if (IsPlayerControlled()) if (auto* Game=Cast<USurvivalGameInstance>(GetGameInstance())) Game->ApplyLoadedPlayerState(this);
     StatusMessage=TEXT("Найдите катушку в мастерской и топливо у ворот.");
@@ -59,6 +68,13 @@ void ASurvivalCharacter::Tick(float Delta)
 {
     Super::Tick(Delta);
     AttackCooldown=FMath::Max(0.0f,AttackCooldown-Delta);
+    if (IsPlayerControlled()) Equipment.Step(Delta,EarnedRounds());
+    if (bHumanAvatar) UpdateHuman();
+    FootstepDelay-=Delta;
+    if (IsAlive() && !bStoryActive && (IsPlayerControlled() || FVector::DistSquared(GetActorLocation(),UGameplayStatics::GetPlayerPawn(this,0)?UGameplayStatics::GetPlayerPawn(this,0)->GetActorLocation():GetActorLocation())<FMath::Square(900.f)) && GetCharacterMovement()->IsMovingOnGround() && GetVelocity().SizeSquared2D()>10000 && FootstepDelay<=0) {
+        FootstepDelay=bIsCrouched?.65f:GetVelocity().Size2D()>400?.28f:.44f;
+        if (auto* Sound=LoadObject<USoundBase>(nullptr,TEXT("/Game/Story/Audio/Footstep.Footstep"))) UGameplayStatics::PlaySoundAtLocation(this,Sound,GetActorLocation(),bIsCrouched?.08f:.2f);
+    }
     const bool Sprint=bSprintRequested && GetVelocity().SizeSquared2D()>400 && !bIsCrouched && !GetCharacterMovement()->IsFalling();
     Stats.Step(Delta,Sprint);
     GetCharacterMovement()->MaxWalkSpeed=bSprintRequested && Stats.CanSprint() && !bIsCrouched ? 580 : 340;
@@ -94,6 +110,9 @@ void ASurvivalCharacter::SetupPlayerInputComponent(UInputComponent* Input)
     Input->BindAction(TEXT("Jump"),IE_Released,this,&ACharacter::StopJumping);
     Input->BindAction(TEXT("Interact"),IE_Pressed,this,&ASurvivalCharacter::Interact);
     Input->BindAction(TEXT("Attack"),IE_Pressed,this,&ASurvivalCharacter::Attack);
+    Input->BindKey(EKeys::R,IE_Pressed,this,&ASurvivalCharacter::ReloadWeapon);
+    Input->BindKey(EKeys::Q,IE_Pressed,this,&ASurvivalCharacter::SwitchWeapon);
+    Input->BindKey(EKeys::G,IE_Pressed,this,&ASurvivalCharacter::ThrowBottle);
     Input->BindKey(EKeys::Tab,IE_Pressed,this,&ASurvivalCharacter::ToggleJournal);
     Input->BindAction(TEXT("Save"),IE_Pressed,this,&ASurvivalCharacter::Save);
     Input->BindAction(TEXT("Load"),IE_Pressed,this,&ASurvivalCharacter::Load);
@@ -122,10 +141,11 @@ void ASurvivalCharacter::Interact()
 }
 void ASurvivalCharacter::Attack()
 {
+    if (IsPlayerControlled() && Equipment.state.pistol) { Shoot();return; }
     if (bStoryActive || bJournalOpen || AttackCooldown>0 || !Stats.Spend(18)) return;
     AttackCooldown=0.75f;
     if (IsPlayerControlled() && Controller) SetActorRotation(FRotator(0,Controller->GetControlRotation().Yaw,0));
-    if (auto* Anim=GetMesh()->GetAnimInstance()) if (AttackAnimation) Anim->PlaySlotAnimationAsDynamicMontage(AttackAnimation,TEXT("DefaultSlot"),0.06f,0.12f);
+    if (!bHumanAvatar) if (auto* Anim=GetMesh()->GetAnimInstance()) if (AttackAnimation) Anim->PlaySlotAnimationAsDynamicMontage(AttackAnimation,TEXT("DefaultSlot"),0.06f,0.12f);
     FTimerHandle HitTimer;GetWorldTimerManager().SetTimer(HitTimer,this,&ASurvivalCharacter::DeliverMelee,0.18f,false);
 }
 void ASurvivalCharacter::DeliverMelee()
@@ -139,10 +159,12 @@ void ASurvivalCharacter::DeliverMelee()
     for (const FHitResult& Hit:Hits)
     {
         auto* Other=Cast<ASurvivalCharacter>(Hit.GetActor());
-        if (!Other || Other==this || Damaged.Contains(Other)) continue;
+        if (!Other || Other==this || Damaged.Contains(Other) || (IsPlayerControlled() ? !Cast<ASurvivalInfected>(Other) : !Other->IsPlayerControlled())) continue;
         FHitResult Obstruction;
         if (GetWorld()->LineTraceSingleByChannel(Obstruction,Start,Other->GetActorLocation()+FVector(0,0,30),ECC_Visibility,Params) && Obstruction.GetActor()!=Other) continue;
-        Damaged.Add(Other);UGameplayStatics::ApplyDamage(Other,25,Controller,this,UDamageType::StaticClass());
+        float Damage=25;
+        if (IsPlayerControlled()) if (auto* G=Cast<USurvivalGameInstance>(GetGameInstance())) if (G->HasWorldFlag(TEXT("has_pipe"))) Damage=42;
+        Damaged.Add(Other);UGameplayStatics::ApplyDamage(Other,Damage,Controller,this,UDamageType::StaticClass());
     }
 }
 float ASurvivalCharacter::TakeDamage(float Amount,const FDamageEvent& Event,AController* Instigator,AActor* Causer)
@@ -151,17 +173,19 @@ float ASurvivalCharacter::TakeDamage(float Amount,const FDamageEvent& Event,ACon
     const float Applied=Stats.Damage(Amount);
     if (Applied>0) Super::TakeDamage(Applied,Event,Instigator,Causer);
     if (Applied>0 && !Stats.Alive()) { GetCharacterMovement()->DisableMovement();
-        if (auto* Death=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01.MM_Death_Front_01"))) GetMesh()->PlayAnimation(Death,false);
+        if (!bHumanAvatar) if (auto* Death=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01.MM_Death_Front_01"))) GetMesh()->PlayAnimation(Death,false);
         StatusMessage=TEXT("Вы погибли. F9 / Загрузить — вернуться к сохранению."); }
     return Applied;
 }
 bool ASurvivalCharacter::RestoreVitals(float Health,float Stamina)
 {
     if (!Stats.Restore(Health,Stamina)) return false;
+    if (bHumanAvatar) { GetMesh()->SetRelativeLocationAndRotation(Stats.Alive()?FVector(0,0,-96):FVector(0,0,-75),Stats.Alive()?FRotator(0,-90,0):FRotator(0,-90,85)); }
+    if (!IsPlayerControlled()) GetCapsuleComponent()->SetCollisionEnabled(Stats.Alive()?ECollisionEnabled::QueryAndPhysics:ECollisionEnabled::NoCollision);
     GetWorldTimerManager().ClearAllTimersForObject(this);AttackCooldown=0;
     if (Stats.Alive()) {
         GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-        GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+        if (!bHumanAvatar) GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
     }
     return true;
 }
@@ -172,6 +196,9 @@ void ASurvivalCharacter::TouchPressed(ETouchIndex::Type Finger,FVector Position)
     auto* PC=Cast<APlayerController>(Controller);if (!PC) return;
     int32 W=0,H=0;PC->GetViewportSize(W,H);if (!W || !H) return;
     const FVector2D P(Position.X/W,Position.Y/H);
+    if (P.X>0.83f && P.Y>0.30f && P.Y<0.45f) { ReloadWeapon();return; }
+    if (P.X>0.83f && P.Y>0.15f && P.Y<0.30f) { ThrowBottle();return; }
+    if (P.X>0.66f && P.X<0.83f && P.Y>0.15f && P.Y<0.30f) { SwitchWeapon();return; }
     if (P.X>0.48f && P.X<0.63f && P.Y<0.13f) { ToggleJournal();return; }
     if (P.X>0.83f && P.Y>0.70f && P.Y<0.90f) { Interact();return; }
     if (P.X>0.83f && P.Y>0.45f && P.Y<=0.70f) { Attack();return; }
@@ -213,11 +240,13 @@ void ASurvivalCharacter::BeginStory(FName Id,AActor* Subject)
     EndStory();bJournalOpen=false;StoryLines.Reset();StoryLine=0;
     StorySpeaker=UTF8_TO_TCHAR(Site->speaker.c_str());
     for (const auto& Line:Site->lines) StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
-    bStoryActive=true;
+    bStoryActive=true;CurrentStory=Id;SpeakStoryLine();
     if (auto* PC=Cast<APlayerController>(Controller)) {
         PC->SetIgnoreMoveInput(true);PC->SetIgnoreLookInput(true);
         if (Subject) {
-            const FVector Focus=Subject->GetActorLocation()+FVector(0,0,90);
+            TArray<AActor*> Speakers;UGameplayStatics::GetAllActorsWithTag(this,FName(UTF8_TO_TCHAR(Site->speaker.c_str())),Speakers);
+            AActor* FocusActor=Subject;for (auto* Actor:Speakers) if (FVector::DistSquared(Actor->GetActorLocation(),Subject->GetActorLocation())<FMath::Square(2500.f)) { FocusActor=Actor;break; }
+            const FVector Focus=FocusActor->GetActorLocation()+FVector(0,0,100);
             FVector View=Focus+FVector(-260,-220,100);
             FHitResult Hit;FCollisionQueryParams Params(SCENE_QUERY_STAT(StoryCamera),false,Subject);Params.AddIgnoredActor(this);
             if (GetWorld()->LineTraceSingleByChannel(Hit,Focus,View,ECC_Visibility,Params)) View=Hit.Location+(Focus-Hit.Location).GetSafeNormal()*25;
@@ -229,12 +258,89 @@ void ASurvivalCharacter::BeginStory(FName Id,AActor* Subject)
 void ASurvivalCharacter::AdvanceStory()
 {
     if (!bStoryActive) return;
-    if (++StoryLine>=StoryLines.Num()) EndStory();
+    if (++StoryLine>=StoryLines.Num()) EndStory();else SpeakStoryLine();
 }
 void ASurvivalCharacter::EndStory()
 {
     if (!bStoryActive) return;
     bStoryActive=false;
+    if (StoryAudio) { StoryAudio->Stop();StoryAudio=nullptr; }
     if (auto* PC=Cast<APlayerController>(Controller)) { PC->SetIgnoreMoveInput(false);PC->SetIgnoreLookInput(false);PC->SetViewTarget(this); }
     if (StoryCamera) { StoryCamera->Destroy();StoryCamera=nullptr; }
+}
+
+void ASurvivalCharacter::ConfigureHuman()
+{
+    const FString Base=TEXT("/Game/Story/Characters/")+AvatarRole.ToString()+TEXT("/");
+    auto* Body=LoadObject<USkeletalMesh>(nullptr,*(Base+TEXT("Body.Body")));
+    if (!Body) return;
+    GetMesh()->SetSkeletalMesh(Body);GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);bHumanAvatar=true;
+    for (const TCHAR* Name:{TEXT("Idle"),TEXT("Walk"),TEXT("Run"),TEXT("Crouch")}) {
+        const FString Clip=Base+Name+TEXT(".")+Name;
+        if (auto* Anim=LoadObject<UAnimSequence>(nullptr,*Clip)) HumanAnimations.Add(FName(Name),Anim);
+    }
+    UpdateHuman();RefreshWeapon();
+}
+void ASurvivalCharacter::UpdateHuman()
+{
+    if (!IsAlive()) { GetMesh()->bPauseAnims=true;GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-75),FRotator(0,-90,85));if (!IsPlayerControlled()) GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);return; }GetMesh()->bPauseAnims=false;
+    const float Speed=GetVelocity().Size2D();const FName Key=bIsCrouched?TEXT("Crouch"):Speed>390?TEXT("Run"):Speed>15?TEXT("Walk"):TEXT("Idle");
+    if (auto* Anim=HumanAnimations.Find(Key)) if (PlayingHumanAnimation!=*Anim) { PlayingHumanAnimation=*Anim;GetMesh()->PlayAnimation(*Anim,true); }
+    GetMesh()->SetPlayRate(Key==TEXT("Walk")?FMath::Clamp(Speed/140,.6f,2.4f):Key==TEXT("Run")?FMath::Clamp(Speed/390,.8f,1.5f):1.0f);
+}
+int32 ASurvivalCharacter::EarnedRounds() const { auto* G=Cast<USurvivalGameInstance>(GetGameInstance());return G?G->GetItemCount(TEXT("ammo_pack"))*8:0; }
+int32 ASurvivalCharacter::EarnedBottles() const { auto* G=Cast<USurvivalGameInstance>(GetGameInstance());return G?G->GetItemCount(TEXT("bottle_pack")):0; }
+bool ASurvivalCharacter::RestoreCombat(const survival::CombatSnapshot& State)
+{
+    auto* G=Cast<USurvivalGameInstance>(GetGameInstance());
+    const bool Good=Equipment.Restore(State,EarnedRounds(),EarnedBottles(),G && G->HasWorldFlag(TEXT("has_pistol")));if (Good) RefreshWeapon();return Good;
+}
+void ASurvivalCharacter::RefreshWeapon()
+{
+    const TCHAR* Path=Equipment.state.pistol?TEXT("/Game/Story/Props/Pistol.Pistol"):TEXT("/Game/Story/Props/Pipe.Pipe");
+    WeaponMesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,Path));
+    auto* G=Cast<USurvivalGameInstance>(GetGameInstance());WeaponMesh->SetVisibility(IsPlayerControlled() && (Equipment.state.pistol || (G && G->HasWorldFlag(TEXT("has_pipe")))));
+    WeaponMesh->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetNotIncludingScale,GetMesh()->DoesSocketExist(TEXT("Bip01_R_Hand"))?TEXT("Bip01_R_Hand"):TEXT("hand_r"));
+    WeaponMesh->SetRelativeRotation(FRotator(0,90,0));
+}
+void ASurvivalCharacter::SwitchWeapon()
+{
+    if (!IsAlive() || bStoryActive || bJournalOpen) return;
+    auto* G=Cast<USurvivalGameInstance>(GetGameInstance());if (!G || !G->HasWorldFlag(TEXT("has_pistol"))) { StatusMessage=TEXT("Пистолет лежит у радио в депо.");RefreshWeapon();return; }
+    Equipment.Select(!Equipment.state.pistol);RefreshWeapon();StatusMessage=Equipment.state.pistol?TEXT("Пистолет. R — перезарядить. Выстрел привлекает заражённых."):TEXT("Ближний бой. G — бросить бутылку.");
+}
+void ASurvivalCharacter::ReloadWeapon()
+{
+    if (!IsAlive() || bStoryActive || bJournalOpen) return;
+    if (Equipment.Reload(EarnedRounds())) StatusMessage=TEXT("Перезарядка...");else StatusMessage=TEXT("Нет запасных патронов или магазин полный.");
+}
+void ASurvivalCharacter::Shoot()
+{
+    if (!IsAlive() || bStoryActive || bJournalOpen) return;
+    if (!Equipment.Fire()) { if (Equipment.state.loaded==0 && Equipment.reloading==0) ReloadWeapon();return; }
+    FVector Start;FRotator Direction;if (auto* PC=Cast<APlayerController>(Controller)) PC->GetPlayerViewPoint(Start,Direction);else return;
+    FCollisionQueryParams Params(SCENE_QUERY_STAT(PistolAim),false,this);FHitResult Aim,Hit;
+    FVector End=Start+Direction.Vector()*8000;
+    if (GetWorld()->LineTraceSingleByChannel(Aim,Start,End,ECC_Visibility,Params)) End=Aim.ImpactPoint;
+    const FVector Muzzle=GetActorLocation()+FVector(0,0,40)+Direction.Vector()*40;
+    if (GetWorld()->LineTraceSingleByChannel(Hit,Muzzle,End+Direction.Vector()*4,ECC_Visibility,Params)) if (auto* Enemy=Cast<ASurvivalInfected>(Hit.GetActor())) UGameplayStatics::ApplyDamage(Enemy,45,Controller,this,UDamageType::StaticClass());
+    for (TActorIterator<ASurvivalInfected> It(GetWorld());It;++It) It->HearNoise(GetActorLocation(),4500);
+    if (auto* Sound=LoadObject<USoundBase>(nullptr,TEXT("/Game/Story/Audio/Shot.Shot"))) UGameplayStatics::PlaySoundAtLocation(this,Sound,GetActorLocation(),.7f);
+    AddControllerPitchInput(-.8f);StatusMessage=TEXT("Выстрел. Заражённые слышат тебя.");
+}
+void ASurvivalCharacter::ThrowBottle()
+{
+    if (!IsAlive() || bStoryActive || bJournalOpen || !Equipment.Throw(EarnedBottles())) return;
+    const FVector Direction=Controller?Controller->GetControlRotation().Vector():GetActorForwardVector();
+    auto* Bottle=GetWorld()->SpawnActor<ASurvivalBottle>(GetActorLocation()+FVector(0,0,65)+Direction*85,Direction.Rotation());
+    if (!Bottle) { --Equipment.state.bottlesUsed;return; }Bottle->Launch(Direction*1200+FVector(0,0,420));StatusMessage=TEXT("Бутылка отвлечёт тех, кто ещё не заметил тебя.");
+}
+void ASurvivalCharacter::SpeakStoryLine()
+{
+    if (StoryAudio) { StoryAudio->Stop();StoryAudio=nullptr; }
+    if (!StoryLines.IsValidIndex(StoryLine)) return;
+    FString& Line=StoryLines[StoryLine];int32 Colon;
+    if (Line.FindChar(TEXT(':'),Colon) && Colon>0 && Colon<18) { StorySpeaker=Line.Left(Colon);Line=Line.Mid(Colon+1).TrimStartAndEnd(); }
+    const FString Name=CurrentStory.ToString()+TEXT("_")+FString::FromInt(StoryLine);
+    if (auto* Wave=LoadObject<USoundBase>(nullptr,*(TEXT("/Game/Story/Voices/")+Name+TEXT(".")+Name))) StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);
 }

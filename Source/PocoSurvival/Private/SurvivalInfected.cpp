@@ -7,7 +7,7 @@
 #include "Animation/AnimSequence.h"
 ASurvivalInfected::ASurvivalInfected()
 {
-    GetCharacterMovement()->bRunPhysicsWithNoController=true;
+    AvatarRole=TEXT("Infected");GetCharacterMovement()->bRunPhysicsWithNoController=true;
 }
 void ASurvivalInfected::BeginPlay()
 {
@@ -72,9 +72,17 @@ bool ASurvivalInfected::RestoreEncounter(const FVector& Location,const FRotator&
     State=IsAlive() ? EInfectedState::Patrol : EInfectedState::Dead;
     if (!IsAlive()) {
         GetCharacterMovement()->DisableMovement();
-        if (auto* Death=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01.MM_Death_Front_01"))) {
+        if (!HasHumanAvatar()) if (auto* Death=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01.MM_Death_Front_01"))) {
             GetMesh()->PlayAnimation(Death,false);GetMesh()->SetPosition(Death->GetPlayLength(),false);
         }
     }
     return true;
+}
+
+void ASurvivalInfected::HearNoise(FVector Origin,float Radius)
+{
+    if (!IsAlive() || Origin.ContainsNaN() || !FMath::IsFinite(Radius) || Radius<=0 || FVector::DistSquared(Origin,GetActorLocation())>FMath::Square(Radius)) return;
+    // A visible target is more important than a bottle behind it.
+    if (State==EInfectedState::Chase || State==EInfectedState::Attack) return;
+    Destination=Origin;UnseenSeconds=1.2f;State=EInfectedState::Investigate;
 }

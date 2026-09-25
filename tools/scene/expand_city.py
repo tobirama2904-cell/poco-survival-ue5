@@ -7,9 +7,10 @@ a=unreal.get_editor_subsystem(unreal.EditorActorSubsystem);lib=unreal.EditorAsse
 assert level.load_level('/Game/Worlds/CanalDistrict')
 colors=[(.18,.21,.18),(.34,.28,.22),(.16,.19,.20),(.06,.095,.10),(.26,.20,.15),(.42,.33,.21)]
 for i,color in enumerate(colors):
- path='/Game/Story/Materials/M_City'+str(i);mat=lib.load_asset(path)
+ path='/Game/Story/Materials/M_City'+str(i)
+ if lib.does_asset_exist(path):continue
+ mat=None
  if not mat:mat=tools.create_asset('M_City'+str(i),'/Game/Story/Materials',unreal.Material,unreal.MaterialFactoryNew())
- unreal.MaterialEditingLibrary.delete_all_material_expressions(mat)
  node=unreal.MaterialEditingLibrary.create_material_expression(mat,unreal.MaterialExpressionConstant3Vector)
  node.set_editor_property('constant',unreal.LinearColor(*color,1))
  unreal.MaterialEditingLibrary.connect_material_property(node,'',unreal.MaterialProperty.MP_BASE_COLOR)
@@ -18,6 +19,8 @@ for i,color in enumerate(colors):
  unreal.MaterialEditingLibrary.recompile_material(mat);lib.save_loaded_asset(mat)
 cls=unreal.load_class(None,'/Script/PocoSurvival.SurvivalCityGeometry');assert cls
 city=a.spawn_actor_from_class(cls,unreal.Vector());city.set_actor_label('ConnectedCity_InstancedArchitecture')
+for component in city.get_components_by_class(unreal.HierarchicalInstancedStaticMeshComponent):
+ index=int(component.get_name().replace('Surface',''));component.set_material(0,lib.load_asset('/Game/Story/Materials/M_City'+str(index)))
 boxes=0
 def box(p,size,surface):
  global boxes
@@ -58,6 +61,11 @@ for s in d['sites']:
 enemy=unreal.load_class(None,'/Script/PocoSurvival.SurvivalInfected')
 for i,(x,y) in enumerate([(-148,-160),(-205,-130),(-180,-200),(-150,70),(147,-150),(210,-185),(180,65),(225,85),(35,210),(-35,240)]):
  actor=a.spawn_actor_from_class(enemy,unreal.Vector(x*100,y*100,100));actor.set_actor_label('city_encounter_'+str(i));actor.set_editor_property('persistent_id',unreal.Name('city_001_%02d'%i));actor.set_editor_property('patrol_points',[unreal.Vector(x*100,y*100,100),unreal.Vector((x+6)*100,(y+3)*100,100)])
+# Three physically present, dressed and animated story characters, not portraits on props.
+for role,speaker,pos in [('Leyla','Лейла',[-1.4,14,0]),('Nargis','Наргис',[-188.4,43,0]),('Ilyas','Ильяс',[193.6,101,0])]:
+ actor=a.spawn_actor_from_class(unreal.SkeletalMeshActor,unreal.Vector(*[v*100 for v in pos]),unreal.Rotator(pitch=0,yaw=-90,roll=0));actor.set_actor_label('story_person_'+role);actor.set_editor_property('tags',[unreal.Name(speaker)])
+ c=actor.skeletal_mesh_component;c.set_skeletal_mesh_asset(lib.load_asset('/Game/Story/Characters/'+role+'/Body'));c.set_collision_profile_name('NoCollision');c.set_animation_mode(unreal.AnimationMode.ANIMATION_SINGLE_NODE)
+ data=c.get_editor_property('animation_data');data.set_editor_property('anim_to_play',lib.load_asset('/Game/Story/Characters/'+role+'/Idle'));data.set_editor_property('saved_looping',True);data.set_editor_property('saved_playing',True);c.set_editor_property('animation_data',data)
 # AI concept portraits, explicitly not final 3D character assets.
 manager=unreal.InterchangeManager.get_interchange_manager_scripted();params=unreal.ImportAssetParameters();params.set_editor_property('is_automated',True);params.set_editor_property('replace_existing',True)
 assert manager.import_asset('/Game/Story',unreal.InterchangeManager.create_source_data(str(root/'BuildData/story/portraits.jpg')),params)
