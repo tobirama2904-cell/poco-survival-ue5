@@ -17,7 +17,7 @@ void ASurvivalInfected::BeginPlay()
 }
 void ASurvivalInfected::Tick(float Delta)
 {
-    if (auto* Player=Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(this,0))) if (Player->bStoryActive) return;
+    if (auto* Player=Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(this,0))) if (Player->IsCinematicLocked() || Player->bEditingControls) {GetCharacterMovement()->StopMovementImmediately();return;}
     Super::Tick(Delta);
     if (!IsAlive()) { State=EInfectedState::Dead;return; }
     UnseenSeconds+=Delta;AttackDelay=FMath::Max(0.0f,AttackDelay-Delta);ThinkDelay-=Delta;
@@ -32,9 +32,11 @@ void ASurvivalInfected::Think(float Delta)
     const FVector Offset=Player->GetActorLocation()-GetActorLocation();const float Distance=Offset.Size2D();
     FCollisionQueryParams Params(SCENE_QUERY_STAT(InfectedSight),false,this);FHitResult Hit;
     const bool Clear=!GetWorld()->LineTraceSingleByChannel(Hit,GetActorLocation()+FVector(0,0,60),Player->GetActorLocation()+FVector(0,0,60),ECC_Visibility,Params) || Hit.GetActor()==Player;
-    const bool Seen=Distance<1200 && Clear && (FVector::DotProduct(GetActorForwardVector(),Offset.GetSafeNormal2D())>0.20f || State==EInfectedState::Chase || Distance<160);
+    const auto* Game=Cast<USurvivalGameInstance>(GetGameInstance());const auto Climate=Game?Game->WorldClimate():survival::Climate{1,0,0,0};
+    const float VisionRadius=1200*(.55f+.45f*Climate.daylight)*(1-.3f*Climate.rain);
+    const bool Seen=Distance<VisionRadius && Clear && (FVector::DotProduct(GetActorForwardVector(),Offset.GetSafeNormal2D())>0.20f || State==EInfectedState::Chase || Distance<160);
     const float HearingRadius=Player->bIsCrouched ? 90 : (Player->GetVelocity().Size2D()>400 ? 850 : 330);
-    const bool Heard=Clear && Player->GetVelocity().Size2D()>80 && Distance<HearingRadius;
+    const bool Heard=Clear && Player->GetVelocity().Size2D()>80 && Distance<HearingRadius*(1-.3f*Climate.rain);
     if (Seen || Heard) { Destination=Player->GetActorLocation();UnseenSeconds=0;State=Seen ? EInfectedState::Chase:EInfectedState::Investigate; }
     if (Distance<155 && Clear && UnseenSeconds<1)
     {

@@ -94,8 +94,25 @@ saved=unreal.GameplayStatics.load_game_from_slot('Survival_A',0)
 assert saved.get_editor_property('view_rotation').pitch==-20
 assert not enemy.restore_encounter(enemy.get_actor_location(),enemy.get_actor_rotation(),101,50)
 actors.destroy_actor(enemy)
+# Native UObject serialization/replay of version-5 climate, including corrupt
+# newest-save fallback and legacy version-4 migration to authored arrival time.
+for slot in ['Survival_A','Survival_B']:unreal.GameplayStatics.delete_game_in_slot(slot,0)
+clock=instance();clock.step_world_clock(.5,False);assert abs(clock.world_seconds()-61212)<.01
+clock.step_world_clock(1,True);assert abs(clock.world_seconds()-61212)<.01
+assert clock.save_progress()
+restored=instance();assert restored.load_progress();assert abs(restored.world_seconds()-61212)<.01
+for bad_time,bad_seed in [(-1,731),(315360001,731),(61200,-1),(61200,4294967296)]:
+    broken=unreal.GameplayStatics.create_save_game_object(save_cls)
+    broken.set_editor_property('save_generation',999)
+    broken.set_editor_property('world_elapsed_seconds',bad_time);broken.set_editor_property('weather_seed',bad_seed)
+    assert unreal.GameplayStatics.save_game_to_slot(broken,'Survival_B',0)
+    recovered=instance();assert recovered.load_progress();assert abs(recovered.world_seconds()-61212)<.01
+legacy=unreal.GameplayStatics.create_save_game_object(save_cls);legacy.set_editor_property('format_version',4);legacy.set_editor_property('save_generation',1000)
+legacy.set_editor_property('world_elapsed_seconds',-1)
+assert unreal.GameplayStatics.save_game_to_slot(legacy,'Survival_B',0)
+migrated=instance();assert migrated.load_progress();assert migrated.world_hour()==17
 report={'phase' :'unreal-headless-native-integration','native_classes_loaded':3,
- 'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
+ 'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
  'objective_count':61,'native_inventory_and_choices_tested':True,
  'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,
  'unreal_editor_version':unreal.SystemLibrary.get_engine_version(),

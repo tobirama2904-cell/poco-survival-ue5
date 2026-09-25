@@ -11,17 +11,17 @@ assert level.load_level('/Game/Worlds/CanalDistrict')
 removed=0
 for actor in actors.get_all_level_actors():
  if isinstance(actor,unreal.SkyAtmosphere):actors.destroy_actor(actor);removed+=1
-path='/Game/Environment/MobileSky/M_MobileSky'
+path='/Game/Environment/MobileSky/M_MobileSkyDynamic'
 if unreal.EditorAssetLibrary.does_asset_exist(path):
  material=unreal.load_asset(path)
 else:
- material=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_MobileSky','/Game/Environment/MobileSky',unreal.Material,unreal.MaterialFactoryNew())
+ material=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_MobileSkyDynamic','/Game/Environment/MobileSky',unreal.Material,unreal.MaterialFactoryNew())
  assert material
  material.set_editor_property('shading_model',unreal.MaterialShadingModel.MSM_UNLIT)
  material.set_editor_property('two_sided',True)
  material.set_editor_property('is_sky',True)
- color=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionConstant3Vector,0,0)
- color.set_editor_property('constant',unreal.LinearColor(.12,.22,.36,1))
+ color=unreal.MaterialEditingLibrary.create_material_expression(material,unreal.MaterialExpressionVectorParameter,0,0)
+ color.set_editor_property('parameter_name','SkyColor');color.set_editor_property('default_value',unreal.LinearColor(.12,.22,.36,1))
  unreal.MaterialEditingLibrary.connect_material_property(color,'',unreal.MaterialProperty.MP_EMISSIVE_COLOR)
  unreal.MaterialEditingLibrary.recompile_material(material)
  unreal.EditorAssetLibrary.save_loaded_asset(material)
@@ -30,7 +30,11 @@ for actor in actors.get_all_level_actors():
 sky=actors.spawn_actor_from_class(unreal.StaticMeshActor,unreal.Vector(0,0,0));sky.set_actor_label('mobile_sky_dome')
 component=sky.static_mesh_component;component.set_static_mesh(unreal.load_asset('/Engine/BasicShapes/Sphere.Sphere'))
 component.set_material(0,material);component.set_collision_profile_name('NoCollision');component.set_editor_property('cast_shadow',False)
+component.set_mobility(unreal.ComponentMobility.MOVABLE);sky.set_editor_property('tags',[unreal.Name('environment_sky')])
 sky.set_actor_scale3d(unreal.Vector(1600,1600,1600))
+for actor in actors.get_all_level_actors():
+ if isinstance(actor,unreal.DirectionalLight) or isinstance(actor,unreal.SkyLight):
+  actor.get_component_by_class(unreal.LightComponentBase).set_mobility(unreal.ComponentMobility.MOVABLE)
 for actor in actors.get_all_level_actors():
  if isinstance(actor,unreal.PostProcessVolume):
   settings=actor.get_editor_property('settings')

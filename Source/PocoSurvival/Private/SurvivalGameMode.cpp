@@ -1,4 +1,5 @@
 #include "SurvivalGameMode.h"
+#include "SurvivalWorldDirector.h"
 #include "SurvivalGameInstance.h"
 #include "SurvivalCharacter.h"
 #include "SurvivalPlayerController.h"
@@ -35,7 +36,7 @@ void ASurvivalGameMode::StartPlay()
         UE_LOG(LogTemp,Warning,TEXT("SOFTWARE_VULKAN_IMAGE_FALLBACK: R64 buffer-only format excluded; renderer selects its R32G32 image fallback"));
     }
 #endif
-    Super::StartPlay();FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::Intro,0.3f,false);
+    Super::StartPlay();GetWorld()->SpawnActor<ASurvivalWorldDirector>();FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::Intro,0.3f,false);
     if (FParse::Param(FCommandLine::Get(),TEXT("SurvivalSmokeScreenshot"))) {
         FTimerHandle Capture,MoveStart,MoveEnd;
         GetWorldTimerManager().SetTimer(MoveStart,this,&ASurvivalGameMode::BeginMovementProof,4.7f,false);

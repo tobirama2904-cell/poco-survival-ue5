@@ -11,6 +11,7 @@ class UAnimSequence;
 class ACameraActor;
 class UStaticMeshComponent;
 class UAudioComponent;
+class USpotLightComponent;
 UCLASS()
 class POCOSURVIVAL_API ASurvivalCharacter : public ACharacter
 {
@@ -47,8 +48,12 @@ public:
     bool RestoreCombat(const survival::CombatSnapshot& State);
     bool IsReloading() const { return Equipment.reloading>0; }
     void SyncEquipment() { RefreshWeapon(); }
-    void BeginStory(FName Id,AActor* Subject);
-    void AdvanceStory();
+    void ToggleControlEditor();
+    void ToggleFlashlight();
+    bool bEditingControls=false;
+    bool IsCinematicLocked() const { return bStoryActive && bStoryLocksMovement; }
+    void BeginStory(FName Id,AActor* Subject,bool Cinematic=true);
+    UFUNCTION() void AdvanceStory();
     void EndStory();
     void ToggleJournal();
     bool bJournalOpen=false;
@@ -66,6 +71,12 @@ private:
     bool bHumanAvatar=false;
     float FootstepDelay=0;
     FName CurrentStory;
+    UPROPERTY() TObjectPtr<USpotLightComponent> Flashlight;
+    bool bStoryLocksMovement=true;
+    bool bMouseSettingsDrag=false;
+    int32 ControlDragFinger=-1,ControlDragIndex=-1;
+    void MouseSettingsPressed();
+    void MouseSettingsReleased();
     void ConfigureHuman();
     void UpdateHuman();
     void RefreshWeapon();

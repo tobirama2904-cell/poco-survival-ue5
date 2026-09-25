@@ -55,7 +55,7 @@ bool USurvivalGameInstance::SaveProgress()
     if (SaveGeneration == MAX_int64) return false;
     auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::CreateSaveGameObject(USurvivalSaveGame::StaticClass()));
     if (!Save) return false;
-    Save->SaveGeneration = SaveGeneration + 1;
+    Save->SaveGeneration = SaveGeneration + 1;Save->WorldElapsedSeconds=Clock.seconds;Save->WeatherSeed=Clock.seed;
     Save->StateRevision = static_cast<int64>(Runtime.State().revision);
     for (const auto& Id : Runtime.State().journal) Save->ActionJournal.Add(UTF8_TO_TCHAR(Id.c_str()));
     if (GetWorld()) if (auto* Player = Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(),0)))
@@ -98,13 +98,14 @@ bool USurvivalGameInstance::LoadProgress()
     {
         if (!UGameplayStatics::DoesSaveGameExist(SlotName(Index), 0)) continue;
         auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName(Index), 0));
-        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 4) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
+        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 5) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
             Save->StateRevision < 0 || Save->StateRevision != Save->ActionJournal.Num() || Save->SaveGeneration<0) continue;
         if (Save->bHasPlayerState && (Save->MapName.IsEmpty() || Save->PlayerLocation.ContainsNaN() ||
             Save->PlayerLocation.GetAbsMax()>1000000 || Save->PlayerRotation.ContainsNaN() ||
             !FMath::IsFinite(Save->Health) || Save->Health<=0 || Save->Health>100 ||
             !FMath::IsFinite(Save->Stamina) || Save->Stamina<0 || Save->Stamina>100)) continue;
         if (Save->FormatVersion>=3 && (Save->ViewRotation.ContainsNaN() || Save->InfectedStates.Num()>256)) continue;
+        if(Save->FormatVersion>=5&&(!FMath::IsFinite(Save->WorldElapsedSeconds)||Save->WorldElapsedSeconds<0||Save->WorldElapsedSeconds>315360000||Save->WeatherSeed<0||Save->WeatherSeed>MAX_uint32))continue;
         bool EncountersValid=true;TSet<FString> EncounterKeys;
         for (const auto& State:Save->InfectedStates) {
             const FString Key=State.MapName+TEXT("/")+State.PersistentId.ToString();
@@ -134,6 +135,7 @@ bool USurvivalGameInstance::LoadProgress()
     }
     if (!bFound || Runtime.Restore(Best) != survival::Error::None) return false;
     SaveGeneration=BestGeneration;PendingPlayerSave=BestSave;
+    if(BestSave->FormatVersion>=5)Clock.Restore(BestSave->WorldElapsedSeconds,static_cast<uint32>(BestSave->WeatherSeed));else Clock.Restore(61200,731);
     if (UWorld* World=GetWorld()) for (TActorIterator<ASurvivalInfected> It(World);It;++It) ApplyLoadedInfectedState(*It);
     NextSaveSlot = 1 - BestSlot;
     OnWorldStateChanged.Broadcast();

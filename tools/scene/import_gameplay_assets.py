@@ -16,6 +16,15 @@ for path in list((root/'BuildData/audio').glob('[A-Z]*.wav'))+list((root/'BuildD
  task=unreal.AssetImportTask();task.filename=str(path);task.destination_path=dest;task.destination_name=path.stem;task.automated=True;task.save=True;task.factory=unreal.SoundFactory()
  unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([task])
  wave=next((unreal.load_asset(x) for x in task.imported_object_paths if isinstance(unreal.load_asset(x),unreal.SoundWave)),None);assert wave,path.name
- wave.set_editor_property('sound_asset_compression_type',unreal.SoundAssetCompressionType.PCM);lib.save_loaded_asset(wave)
+ wave.set_editor_property('sound_asset_compression_type',unreal.SoundAssetCompressionType.PCM)
+ if path.stem=='Rain':wave.set_editor_property('looping',True)
+ lib.save_loaded_asset(wave)
+if not lib.does_asset_exist('/Game/Story/Materials/M_Rain'):
+ mat=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_Rain','/Game/Story/Materials',unreal.Material,unreal.MaterialFactoryNew())
+ mat.set_editor_property('shading_model',unreal.MaterialShadingModel.MSM_UNLIT)
+ mat.set_editor_property('blend_mode',unreal.BlendMode.BLEND_ADDITIVE)
+ node=unreal.MaterialEditingLibrary.create_material_expression(mat,unreal.MaterialExpressionConstant3Vector)
+ node.set_editor_property('constant',unreal.LinearColor(.025,.034,.04,1));unreal.MaterialEditingLibrary.connect_material_property(node,'',unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+ unreal.MaterialEditingLibrary.recompile_material(mat);lib.save_loaded_asset(mat)
 lib.save_directory('/Game/Story',False,True)
 print('GAMEPLAY_PROPS_AND_SOUNDS_IMPORTED')

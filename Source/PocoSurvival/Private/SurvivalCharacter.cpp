@@ -1,4 +1,7 @@
 #include "SurvivalCharacter.h"
+#include "SurvivalControlSettings.h"
+#include "SurvivalPlayerController.h"
+#include "Components/SpotLightComponent.h"
 #include "Camera/CameraActor.h"
 #include "Core/CityContent.h"
 #include "SurvivalGameInstance.h"
@@ -44,6 +47,7 @@ ASurvivalCharacter::ASurvivalCharacter()
     CameraArm->bEnableCameraLag=true; CameraArm->CameraLagSpeed=12;
     Camera=CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->SetupAttachment(CameraArm,USpringArmComponent::SocketName);Camera->FieldOfView=80;
+    Flashlight=CreateDefaultSubobject<USpotLightComponent>(TEXT("Flashlight"));Flashlight->SetupAttachment(Camera);Flashlight->SetIntensity(5500);Flashlight->SetAttenuationRadius(1500);Flashlight->SetInnerConeAngle(16);Flashlight->SetOuterConeAngle(32);Flashlight->SetCastShadows(false);Flashlight->SetVisibility(false);
     GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-96),FRotator(0,-90,0));
     static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Manny_Simple.SKM_Manny_Simple"));
     if (MeshAsset.Succeeded()) GetMesh()->SetSkeletalMesh(MeshAsset.Object);
@@ -67,11 +71,12 @@ void ASurvivalCharacter::PossessedBy(AController* NewController)
 void ASurvivalCharacter::Tick(float Delta)
 {
     Super::Tick(Delta);
+    if(bEditingControls&&bMouseSettingsDrag)if(auto* PC=Cast<APlayerController>(Controller)){float X,Y;if(PC->GetMousePosition(X,Y))TouchMoved(ETouchIndex::Touch10,FVector(X,Y,0));}
     AttackCooldown=FMath::Max(0.0f,AttackCooldown-Delta);
     if (IsPlayerControlled()) Equipment.Step(Delta,EarnedRounds());
     if (bHumanAvatar) UpdateHuman();
     FootstepDelay-=Delta;
-    if (IsAlive() && !bStoryActive && (IsPlayerControlled() || FVector::DistSquared(GetActorLocation(),UGameplayStatics::GetPlayerPawn(this,0)?UGameplayStatics::GetPlayerPawn(this,0)->GetActorLocation():GetActorLocation())<FMath::Square(900.f)) && GetCharacterMovement()->IsMovingOnGround() && GetVelocity().SizeSquared2D()>10000 && FootstepDelay<=0) {
+    if (IsAlive() && !IsCinematicLocked() && (IsPlayerControlled() || FVector::DistSquared(GetActorLocation(),UGameplayStatics::GetPlayerPawn(this,0)?UGameplayStatics::GetPlayerPawn(this,0)->GetActorLocation():GetActorLocation())<FMath::Square(900.f)) && GetCharacterMovement()->IsMovingOnGround() && GetVelocity().SizeSquared2D()>10000 && FootstepDelay<=0) {
         FootstepDelay=bIsCrouched?.65f:GetVelocity().Size2D()>400?.28f:.44f;
         if (auto* Sound=LoadObject<USoundBase>(nullptr,TEXT("/Game/Story/Audio/Footstep.Footstep"))) UGameplayStatics::PlaySoundAtLocation(this,Sound,GetActorLocation(),bIsCrouched?.08f:.2f);
     }
@@ -83,19 +88,19 @@ void ASurvivalCharacter::Tick(float Delta)
 }
 void ASurvivalCharacter::Forward(float Value)
 {
-    if (Controller && Stats.Alive() && !bStoryActive && !bJournalOpen) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::X),Value);
+    if (Controller && Stats.Alive() && !IsCinematicLocked() && !bJournalOpen && !bEditingControls) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::X),Value);
 }
 void ASurvivalCharacter::Right(float Value)
 {
-    if (Controller && Stats.Alive() && !bStoryActive && !bJournalOpen) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::Y),Value);
+    if (Controller && Stats.Alive() && !IsCinematicLocked() && !bJournalOpen && !bEditingControls) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::Y),Value);
 }
-void ASurvivalCharacter::Turn(float Value) { AddControllerYawInput(Value); }
-void ASurvivalCharacter::Look(float Value) { AddControllerPitchInput(Value); }
-void ASurvivalCharacter::SprintOn() { bSprintRequested=true; }
+void ASurvivalCharacter::Turn(float Value) { if(!bEditingControls)AddControllerYawInput(Value); }
+void ASurvivalCharacter::Look(float Value) { if(!bEditingControls)AddControllerPitchInput(Value); }
+void ASurvivalCharacter::SprintOn() { if(!bEditingControls && !IsCinematicLocked())bSprintRequested=true; }
 void ASurvivalCharacter::SprintOff() { bSprintRequested=false; }
-void ASurvivalCharacter::ToggleSprint() { bSprintRequested=!bSprintRequested; }
-void ASurvivalCharacter::ToggleCrouch() { if (bIsCrouched) UnCrouch(); else Crouch(); }
-void ASurvivalCharacter::JumpPressed() { if (CanJump() && Stats.Spend(14)) Jump(); }
+void ASurvivalCharacter::ToggleSprint() { if(!bEditingControls && !IsCinematicLocked())bSprintRequested=!bSprintRequested; }
+void ASurvivalCharacter::ToggleCrouch() { if(bEditingControls || IsCinematicLocked())return;if (bIsCrouched) UnCrouch(); else Crouch(); }
+void ASurvivalCharacter::JumpPressed() { if (!bEditingControls && !IsCinematicLocked() && CanJump() && Stats.Spend(14)) Jump(); }
 void ASurvivalCharacter::SetupPlayerInputComponent(UInputComponent* Input)
 {
     Super::SetupPlayerInputComponent(Input);
@@ -110,6 +115,9 @@ void ASurvivalCharacter::SetupPlayerInputComponent(UInputComponent* Input)
     Input->BindAction(TEXT("Jump"),IE_Released,this,&ACharacter::StopJumping);
     Input->BindAction(TEXT("Interact"),IE_Pressed,this,&ASurvivalCharacter::Interact);
     Input->BindAction(TEXT("Attack"),IE_Pressed,this,&ASurvivalCharacter::Attack);
+    Input->BindKey(EKeys::F10,IE_Pressed,this,&ASurvivalCharacter::ToggleControlEditor);
+    Input->BindKey(EKeys::F,IE_Pressed,this,&ASurvivalCharacter::ToggleFlashlight);
+    Input->BindAction(TEXT("Attack"),IE_Released,this,&ASurvivalCharacter::MouseSettingsReleased);
     Input->BindKey(EKeys::R,IE_Pressed,this,&ASurvivalCharacter::ReloadWeapon);
     Input->BindKey(EKeys::Q,IE_Pressed,this,&ASurvivalCharacter::SwitchWeapon);
     Input->BindKey(EKeys::G,IE_Pressed,this,&ASurvivalCharacter::ThrowBottle);
@@ -130,6 +138,7 @@ ASurvivalInteraction* ASurvivalCharacter::GetFocusedInteraction() const
 }
 void ASurvivalCharacter::Interact()
 {
+    if (bEditingControls) return;
     if (bStoryActive) { AdvanceStory();return; }
     if (!Stats.Alive()) return;
     bJournalOpen=false;
@@ -141,8 +150,9 @@ void ASurvivalCharacter::Interact()
 }
 void ASurvivalCharacter::Attack()
 {
+    if(bEditingControls){MouseSettingsPressed();return;}
     if (IsPlayerControlled() && Equipment.state.pistol) { Shoot();return; }
-    if (bStoryActive || bJournalOpen || AttackCooldown>0 || !Stats.Spend(18)) return;
+    if (IsCinematicLocked() || bEditingControls || bJournalOpen || AttackCooldown>0 || !Stats.Spend(18)) return;
     AttackCooldown=0.75f;
     if (IsPlayerControlled() && Controller) SetActorRotation(FRotator(0,Controller->GetControlRotation().Yaw,0));
     if (!bHumanAvatar) if (auto* Anim=GetMesh()->GetAnimInstance()) if (AttackAnimation) Anim->PlaySlotAnimationAsDynamicMontage(AttackAnimation,TEXT("DefaultSlot"),0.06f,0.12f);
@@ -150,7 +160,7 @@ void ASurvivalCharacter::Attack()
 }
 void ASurvivalCharacter::DeliverMelee()
 {
-    if (!Stats.Alive() || bStoryActive) return;
+    if (!Stats.Alive() || IsCinematicLocked() || bEditingControls) return;
     const FVector Start=GetActorLocation()+FVector(0,0,30);
     const FVector End=Start+GetActorForwardVector()*170;
     TArray<FHitResult> Hits;FCollisionQueryParams Params(SCENE_QUERY_STAT(Melee),false,this);
@@ -169,7 +179,7 @@ void ASurvivalCharacter::DeliverMelee()
 }
 float ASurvivalCharacter::TakeDamage(float Amount,const FDamageEvent& Event,AController* Instigator,AActor* Causer)
 {
-    if (bStoryActive) return 0;
+    if (IsCinematicLocked() || bEditingControls) return 0;
     const float Applied=Stats.Damage(Amount);
     if (Applied>0) Super::TakeDamage(Applied,Event,Instigator,Causer);
     if (Applied>0 && !Stats.Alive()) { GetCharacterMovement()->DisableMovement();
@@ -195,29 +205,47 @@ void ASurvivalCharacter::TouchPressed(ETouchIndex::Type Finger,FVector Position)
 {
     auto* PC=Cast<APlayerController>(Controller);if (!PC) return;
     int32 W=0,H=0;PC->GetViewportSize(W,H);if (!W || !H) return;
-    const FVector2D P(Position.X/W,Position.Y/H);
-    if (P.X>0.83f && P.Y>0.30f && P.Y<0.45f) { ReloadWeapon();return; }
-    if (P.X>0.83f && P.Y>0.15f && P.Y<0.30f) { ThrowBottle();return; }
-    if (P.X>0.66f && P.X<0.83f && P.Y>0.15f && P.Y<0.30f) { SwitchWeapon();return; }
-    if (P.X>0.48f && P.X<0.63f && P.Y<0.13f) { ToggleJournal();return; }
-    if (P.X>0.83f && P.Y>0.70f && P.Y<0.90f) { Interact();return; }
-    if (P.X>0.83f && P.Y>0.45f && P.Y<=0.70f) { Attack();return; }
-    if (P.X>0.66f && P.X<0.83f && P.Y>0.70f) { ToggleSprint();return; }
-    if (P.X>0.66f && P.X<0.83f && P.Y>0.48f && P.Y<0.70f) { JumpFinger=static_cast<int32>(Finger);JumpPressed();return; }
-    if (P.X>0.66f && P.X<0.83f && P.Y>0.30f && P.Y<0.48f) { ToggleCrouch();return; }
-    if (P.X>0.66f && P.X<0.83f && P.Y<0.13f) { Save();return; }
-    if (P.X>0.83f && P.Y<0.13f) { Load();return; }
-    if (P.X>0.35f && LookFinger<0) { LookFinger=static_cast<int32>(Finger);LastTouch=Position; }
+    const FVector2D P(Position.X/W,Position.Y/H);const float Aspect=static_cast<float>(W)/H;auto* Settings=USurvivalControlSettings::Get();
+    if(bEditingControls) {
+        if(P.X>=.28f&&P.X<=.67f&&P.Y>=.30f&&P.Y<=.70f) {
+            const int32 Row=FMath::Clamp(FMath::FloorToInt((P.Y-.31f)/.06f),0,5);const float Sign=P.X>.52f?1.f:-1.f;
+            if(Row==0)Settings->Sensitivity+=Sign*.1f;
+            else if(Row==1)Settings->ButtonScale+=Sign*.05f;
+            else if(Row==2)Settings->Opacity+=Sign*.05f;
+            else if(Row==3)Settings->MirrorLayout();
+            else if(Row==4){if(Sign<0)Settings->bInvertY=!Settings->bInvertY;else Settings->bPerformanceMode=!Settings->bPerformanceMode;}
+            else if(Sign<0)Settings->ResetLayout();else { ToggleControlEditor();return; }
+            Settings->Normalize();Settings->Store();return;
+        }
+        ControlDragIndex=Settings->Hit(P,Aspect,true);if(ControlDragIndex!=INDEX_NONE)ControlDragFinger=static_cast<int32>(Finger);return;
+    }
+    const int32 Hit=Settings->Hit(P,Aspect,false);
+    if(Hit!=INDEX_NONE) { switch(static_cast<survival::Control>(Hit)) {
+      case survival::Control::Interact:Interact();break;case survival::Control::Attack:Attack();break;
+      case survival::Control::Sprint:ToggleSprint();break;case survival::Control::Jump:JumpFinger=static_cast<int32>(Finger);JumpPressed();break;
+      case survival::Control::Crouch:ToggleCrouch();break;case survival::Control::Reload:ReloadWeapon();break;
+      case survival::Control::Throw:ThrowBottle();break;case survival::Control::Weapon:SwitchWeapon();break;
+      case survival::Control::Journal:ToggleJournal();break;case survival::Control::Save:Save();break;
+      case survival::Control::Load:Load();break;case survival::Control::Settings:ToggleControlEditor();break;
+      case survival::Control::Flashlight:ToggleFlashlight();break;default:break;
+    }return; }
+    const FVector2D Stick=Settings->Position(survival::Control::Move,Aspect);
+    if(!survival::ControlHit({static_cast<float>(P.X),static_cast<float>(P.Y)},{static_cast<float>(Stick.X),static_cast<float>(Stick.Y)},.18f*Settings->ButtonScale,Aspect)&&LookFinger<0){LookFinger=static_cast<int32>(Finger);LastTouch=Position;}
+
 }
 void ASurvivalCharacter::TouchReleased(ETouchIndex::Type Finger,FVector Position) {
+    if(ControlDragFinger==static_cast<int32>(Finger)){ControlDragFinger=-1;ControlDragIndex=-1;USurvivalControlSettings::Get()->Store();}
     if (LookFinger==static_cast<int32>(Finger)) LookFinger=-1;
     if (JumpFinger==static_cast<int32>(Finger)) { StopJumping();JumpFinger=-1; }
 }
 void ASurvivalCharacter::TouchMoved(ETouchIndex::Type Finger,FVector Position)
 {
+    if(bEditingControls) {
+        if(ControlDragFinger==static_cast<int32>(Finger)&&ControlDragIndex>=0)if(auto* PC=Cast<APlayerController>(Controller)){int32 W,H;PC->GetViewportSize(W,H);if(W>0&&H>0)USurvivalControlSettings::Get()->Move(ControlDragIndex,FVector2D(Position.X/W,Position.Y/H),static_cast<float>(W)/H);}return;
+    }
     if (LookFinger!=static_cast<int32>(Finger)) return;
     const FVector Delta=Position-LastTouch;LastTouch=Position;
-    AddControllerYawInput(Delta.X*0.09f);AddControllerPitchInput(Delta.Y*0.09f);
+    const auto* S=USurvivalControlSettings::Get();AddControllerYawInput(Delta.X*0.09f*S->Sensitivity);AddControllerPitchInput(Delta.Y*0.09f*S->Sensitivity*(S->bInvertY?-1:1));
 }
 
 void ASurvivalCharacter::FellOutOfWorld(const UDamageType& DamageType)
@@ -232,15 +260,16 @@ void ASurvivalCharacter::FellOutOfWorld(const UDamageType& DamageType)
     Super::FellOutOfWorld(DamageType);
 }
 
-void ASurvivalCharacter::ToggleJournal() { if (!bStoryActive) bJournalOpen=!bJournalOpen; }
-void ASurvivalCharacter::BeginStory(FName Id,AActor* Subject)
+void ASurvivalCharacter::ToggleJournal() { if (!bStoryActive && !bEditingControls) bJournalOpen=!bJournalOpen; }
+void ASurvivalCharacter::BeginStory(FName Id,AActor* Subject,bool Cinematic)
 {
     const auto* Site=survival::FindCitySite(TCHAR_TO_UTF8(*Id.ToString()));
     if (!Site || Site->lines.empty()) return;
     EndStory();bJournalOpen=false;StoryLines.Reset();StoryLine=0;
     StorySpeaker=UTF8_TO_TCHAR(Site->speaker.c_str());
     for (const auto& Line:Site->lines) StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
-    bStoryActive=true;CurrentStory=Id;SpeakStoryLine();
+    bStoryActive=true;bStoryLocksMovement=Cinematic;CurrentStory=Id;SpeakStoryLine();
+    if(!Cinematic)return;
     if (auto* PC=Cast<APlayerController>(Controller)) {
         PC->SetIgnoreMoveInput(true);PC->SetIgnoreLookInput(true);
         if (Subject) {
@@ -264,8 +293,8 @@ void ASurvivalCharacter::EndStory()
 {
     if (!bStoryActive) return;
     bStoryActive=false;
-    if (StoryAudio) { StoryAudio->Stop();StoryAudio=nullptr; }
-    if (auto* PC=Cast<APlayerController>(Controller)) { PC->SetIgnoreMoveInput(false);PC->SetIgnoreLookInput(false);PC->SetViewTarget(this); }
+    if (StoryAudio) { StoryAudio->OnAudioFinished.RemoveAll(this);StoryAudio->Stop();StoryAudio=nullptr; }
+    if (bStoryLocksMovement) if (auto* PC=Cast<APlayerController>(Controller)) { PC->SetIgnoreMoveInput(false);PC->SetIgnoreLookInput(false);PC->SetViewTarget(this); }
     if (StoryCamera) { StoryCamera->Destroy();StoryCamera=nullptr; }
 }
 
@@ -305,18 +334,18 @@ void ASurvivalCharacter::RefreshWeapon()
 }
 void ASurvivalCharacter::SwitchWeapon()
 {
-    if (!IsAlive() || bStoryActive || bJournalOpen) return;
+    if (!IsAlive() || IsCinematicLocked() || bEditingControls || bJournalOpen) return;
     auto* G=Cast<USurvivalGameInstance>(GetGameInstance());if (!G || !G->HasWorldFlag(TEXT("has_pistol"))) { StatusMessage=TEXT("Пистолет лежит у радио в депо.");RefreshWeapon();return; }
     Equipment.Select(!Equipment.state.pistol);RefreshWeapon();StatusMessage=Equipment.state.pistol?TEXT("Пистолет. R — перезарядить. Выстрел привлекает заражённых."):TEXT("Ближний бой. G — бросить бутылку.");
 }
 void ASurvivalCharacter::ReloadWeapon()
 {
-    if (!IsAlive() || bStoryActive || bJournalOpen) return;
+    if (!IsAlive() || IsCinematicLocked() || bEditingControls || bJournalOpen) return;
     if (Equipment.Reload(EarnedRounds())) StatusMessage=TEXT("Перезарядка...");else StatusMessage=TEXT("Нет запасных патронов или магазин полный.");
 }
 void ASurvivalCharacter::Shoot()
 {
-    if (!IsAlive() || bStoryActive || bJournalOpen) return;
+    if (!IsAlive() || IsCinematicLocked() || bEditingControls || bJournalOpen) return;
     if (!Equipment.Fire()) { if (Equipment.state.loaded==0 && Equipment.reloading==0) ReloadWeapon();return; }
     FVector Start;FRotator Direction;if (auto* PC=Cast<APlayerController>(Controller)) PC->GetPlayerViewPoint(Start,Direction);else return;
     FCollisionQueryParams Params(SCENE_QUERY_STAT(PistolAim),false,this);FHitResult Aim,Hit;
@@ -330,17 +359,27 @@ void ASurvivalCharacter::Shoot()
 }
 void ASurvivalCharacter::ThrowBottle()
 {
-    if (!IsAlive() || bStoryActive || bJournalOpen || !Equipment.Throw(EarnedBottles())) return;
+    if (!IsAlive() || IsCinematicLocked() || bEditingControls || bJournalOpen || !Equipment.Throw(EarnedBottles())) return;
     const FVector Direction=Controller?Controller->GetControlRotation().Vector():GetActorForwardVector();
     auto* Bottle=GetWorld()->SpawnActor<ASurvivalBottle>(GetActorLocation()+FVector(0,0,65)+Direction*85,Direction.Rotation());
     if (!Bottle) { --Equipment.state.bottlesUsed;return; }Bottle->Launch(Direction*1200+FVector(0,0,420));StatusMessage=TEXT("Бутылка отвлечёт тех, кто ещё не заметил тебя.");
 }
 void ASurvivalCharacter::SpeakStoryLine()
 {
-    if (StoryAudio) { StoryAudio->Stop();StoryAudio=nullptr; }
+    if (StoryAudio) { StoryAudio->OnAudioFinished.RemoveAll(this);StoryAudio->Stop();StoryAudio=nullptr; }
     if (!StoryLines.IsValidIndex(StoryLine)) return;
     FString& Line=StoryLines[StoryLine];int32 Colon;
     if (Line.FindChar(TEXT(':'),Colon) && Colon>0 && Colon<18) { StorySpeaker=Line.Left(Colon);Line=Line.Mid(Colon+1).TrimStartAndEnd(); }
     const FString Name=CurrentStory.ToString()+TEXT("_")+FString::FromInt(StoryLine);
-    if (auto* Wave=LoadObject<USoundBase>(nullptr,*(TEXT("/Game/Story/Voices/")+Name+TEXT(".")+Name))) StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);
+    if (auto* Wave=LoadObject<USoundBase>(nullptr,*(TEXT("/Game/Story/Voices/")+Name+TEXT(".")+Name))) { StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);if(StoryAudio)StoryAudio->OnAudioFinished.AddDynamic(this,&ASurvivalCharacter::AdvanceStory); }
 }
+
+void ASurvivalCharacter::ToggleControlEditor()
+{
+ if(IsCinematicLocked())return;bEditingControls=!bEditingControls;bJournalOpen=false;LookFinger=-1;ControlDragFinger=-1;ControlDragIndex=-1;bSprintRequested=false;
+ if(auto* PC=Cast<ASurvivalPlayerController>(Controller)){PC->bShowMouseCursor=bEditingControls;if(bEditingControls){FInputModeGameAndUI Mode;Mode.SetHideCursorDuringCapture(false);Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);PC->SetInputMode(Mode);GetCharacterMovement()->StopMovementImmediately();}else PC->SetInputMode(FInputModeGameOnly());PC->RefreshTouchLayout(!bEditingControls);}
+ if(!bEditingControls)USurvivalControlSettings::Get()->Store();
+}
+void ASurvivalCharacter::ToggleFlashlight() { if(IsAlive()&&!bEditingControls)Flashlight->SetVisibility(!Flashlight->IsVisible()); }
+void ASurvivalCharacter::MouseSettingsPressed() { if(!bEditingControls)return;if(auto* PC=Cast<APlayerController>(Controller)){float X,Y;if(PC->GetMousePosition(X,Y)){bMouseSettingsDrag=true;TouchPressed(ETouchIndex::Touch10,FVector(X,Y,0));}} }
+void ASurvivalCharacter::MouseSettingsReleased() { if(bMouseSettingsDrag){bMouseSettingsDrag=false;TouchReleased(ETouchIndex::Touch10,FVector::ZeroVector);} }

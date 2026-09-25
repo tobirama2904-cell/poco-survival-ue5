@@ -3,6 +3,7 @@
 #include "Engine/GameInstance.h"
 #include "Core/SurvivalCore.h"
 #include "Core/CityContent.h"
+#include "Core/Experience.h"
 #include "SurvivalGameInstance.generated.h"
 
 class ASurvivalCharacter;
@@ -28,6 +29,10 @@ class POCOSURVIVAL_API USurvivalGameInstance : public UGameInstance
     GENERATED_BODY()
 public:
     virtual void Init() override;
+    UFUNCTION(BlueprintCallable,Category="World") void StepWorldClock(float Delta,bool Paused) { Clock.Step(Delta,Paused); }
+    UFUNCTION(BlueprintPure,Category="World") float WorldHour() const { return Clock.Hour(); }
+    UFUNCTION(BlueprintPure,Category="World") double WorldSeconds() const { return Clock.seconds; }
+    survival::Climate WorldClimate() const { return Clock.Sample(); }
     UPROPERTY(BlueprintAssignable, Category="Survival") FSurvivalStateChanged OnWorldStateChanged;
     UFUNCTION(BlueprintCallable, Category="Survival") bool TryAction(FName ActionId, FString& FailureReason);
     UFUNCTION(BlueprintPure, Category="Survival") bool HasWorldFlag(FName Flag) const;
@@ -42,6 +47,7 @@ public:
 private:
     UPROPERTY() TObjectPtr<USurvivalSaveGame> PendingPlayerSave;
     int64 SaveGeneration = 0;
+    survival::WorldClock Clock;
     survival::Runtime Runtime{survival::MakeCityCampaign()};
     int32 NextSaveSlot = 0;
 };

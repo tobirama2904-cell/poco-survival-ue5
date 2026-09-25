@@ -14,7 +14,9 @@ for i,color in enumerate(colors):
  node=unreal.MaterialEditingLibrary.create_material_expression(mat,unreal.MaterialExpressionConstant3Vector)
  node.set_editor_property('constant',unreal.LinearColor(*color,1))
  unreal.MaterialEditingLibrary.connect_material_property(node,'',unreal.MaterialProperty.MP_BASE_COLOR)
- rough=unreal.MaterialEditingLibrary.create_material_expression(mat,unreal.MaterialExpressionConstant);rough.set_editor_property('r',.9)
+ wet=unreal.MaterialEditingLibrary.create_material_expression(mat,unreal.MaterialExpressionScalarParameter);wet.set_editor_property('parameter_name','Wetness');wet.set_editor_property('default_value',0)
+ rough=unreal.MaterialEditingLibrary.create_material_expression(mat,unreal.MaterialExpressionLinearInterpolate);rough.set_editor_property('const_a',.9);rough.set_editor_property('const_b',.22)
+ unreal.MaterialEditingLibrary.connect_material_expressions(wet,'',rough,'Alpha')
  unreal.MaterialEditingLibrary.connect_material_property(rough,'',unreal.MaterialProperty.MP_ROUGHNESS)
  unreal.MaterialEditingLibrary.recompile_material(mat);lib.save_loaded_asset(mat)
 cls=unreal.load_class(None,'/Script/PocoSurvival.SurvivalCityGeometry');assert cls
