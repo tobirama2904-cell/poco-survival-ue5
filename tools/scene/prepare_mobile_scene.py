@@ -36,7 +36,9 @@ for actor in actors.get_all_level_actors():
   for key,value in [('override_bloom_intensity',True),('bloom_intensity',.12),('override_lens_flare_intensity',True),('lens_flare_intensity',0.0),('override_auto_exposure_bias',True),('auto_exposure_bias',-.7)]:settings.set_editor_property(key,value)
   actor.set_editor_property('settings',settings)
 # Actual original ambience, not an advertised completed soundtrack.
-wind_path='/Game/Audio/Ambience/wind-loop'
+# PCM is deliberately explicit for this small loop; no platform codec ambiguity.
+unreal.get_default_object(unreal.AudioSettings).set_editor_property('default_audio_compression_type',unreal.DefaultAudioCompressionType.PCM)
+wind_path='/Game/Audio/Ambience/WindLoop'
 wind=unreal.load_asset(wind_path)
 if wind is None:
  task=unreal.AssetImportTask();task.filename='/project/BuildData/audio/wind-loop.wav';task.destination_path='/Game/Audio/Ambience';task.destination_name='WindLoop';task.automated=True;task.save=True
@@ -44,11 +46,12 @@ if wind is None:
  unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([task])
  wind=next((unreal.load_asset(p) for p in task.imported_object_paths if isinstance(unreal.load_asset(p),unreal.SoundWave)),None)
 assert isinstance(wind,unreal.SoundWave),'Original wind SoundWave import failed'
+wind.set_editor_property('sound_asset_compression_type',unreal.SoundAssetCompressionType.PCM)
 wind.set_editor_property('looping',True);unreal.EditorAssetLibrary.save_loaded_asset(wind)
 for actor in actors.get_all_level_actors():
  if actor.get_actor_label()=='courtyard_wind':actors.destroy_actor(actor)
 ambience=actors.spawn_actor_from_class(unreal.AmbientSound,unreal.Vector(0,0,200));ambience.set_actor_label('courtyard_wind')
-ambience.audio_component.set_sound(wind);ambience.audio_component.set_volume_multiplier(.22);ambience.audio_component.set_auto_activate(True)
+ambience.audio_component.set_sound(wind);ambience.audio_component.set_volume_multiplier(.22);ambience.audio_component.set_editor_property('auto_activate',True)
 assert level.save_current_level()
 r={'phase':'mobile-scene-correction','removed_sky_atmospheres':removed,'actual_sky_mesh':sky.get_path_name(),'unlit_sky_material':material.get_path_name(),'ambient_sound':wind.get_path_name(),'mobile_render_verified':False,'final_art':False}
 Path('/project/artifacts/android-build/mobile-scene-correction.json').write_text(json.dumps(r,indent=2)+'\n')

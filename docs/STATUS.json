@@ -126,5 +126,10 @@
     "SkyAtmosphere requires mobile sky mesh"
   ],
   "android_latest_native_run": 36042319324,
-  "android_latest_native_success": true
+  "android_latest_native_success": true,
+  "android_mobile_correction_cook_run": 36081210149,
+  "android_mobile_correction_cook_status": "in_progress",
+  "android_mobile_correction_cook_source": "414a13c",
+  "android_automatic_chain": "successful cook -> source-compatible package -> emulator visible-frame tests; not a final-game delivery",
+  "signing_generation": 2
 }

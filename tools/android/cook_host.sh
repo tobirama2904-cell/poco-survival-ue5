@@ -27,9 +27,10 @@ set -e
 cp "$ENGINE/Engine/Programs/UnrealBuildTool/Log.txt" artifacts/android-build/host-ubt-detailed.log || true
 [[ "$RESULT" -eq 0 ]] || exit "$RESULT"
 python3 tools/engine_inventory.py
+export SDL_AUDIODRIVER=dummy
 timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
  /project/PocoSurvival.uproject -run=pythonscript -script=/project/tools/scene/prepare_mobile_scene.py \
- -unattended -nop4 -NullRHI -stdout -FullStdOutLogOutput \
+ -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \
  > artifacts/android-build/mobile-scene-prepare.log 2>&1
 set +e
 timeout --foreground 65m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \

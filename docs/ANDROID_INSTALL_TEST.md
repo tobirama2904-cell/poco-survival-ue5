@@ -46,3 +46,12 @@ looping wind SoundWave/AmbientSound. It requires a new cook/package and visual
 check. The prior latest save-format-3 cook timed out at 40 minutes with 7,218
 shaders complete and a remaining shader queue, not missing native code. The
 bounded cook limit is now 65 minutes; only successful exit plus actual map counts.
+
+Run 36081210149 successfully created/saved the mobile sky mesh, restrained
+postprocess, original WindLoop SoundWave and AmbientSound, but the commandlet
+returned failure because audio-device initialization was disabled: SoundFactory
+raised a missing runtime decoder ensure during import. BINKA compression itself
+worked; this was not evidence of a missing encoder. The next preparation enables
+commandlet audio with SDL's dummy output and pins this small loop to PCM. Its
+endpoints now fade over 10 ms to avoid the measured import endpoint warning.
+No cook/package success is inferred from the saved map alone.
