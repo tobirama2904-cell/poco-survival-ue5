@@ -5,10 +5,13 @@ root=Path('/project');a=unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 assert level.load_level('/Game/Worlds/CanalDistrict')
 for actor in a.get_all_level_actors():
  if actor.get_actor_label().startswith(('field_cache_','field_door_','film_cast_','film_gate_')):a.destroy_actor(actor)
-cls=unreal.load_class(None,'/Script/PocoSurvival.SurvivalInteraction');mesh_tools=unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem)
+cls=unreal.load_class(None,'/Script/PocoSurvival.SurvivalInteraction')
 for prop in ['SupplyCrate','Door']:
  mesh=lib.load_asset('/Game/Story/Props/'+prop);assert mesh
- mesh_tools.remove_collisions(mesh);mesh_tools.add_simple_collisions(mesh,unreal.ScriptingCollisionShapeType.BOX);lib.save_loaded_asset(mesh)
+ # StaticMeshEditorSubsystem is intentionally absent in the headless commandlet.
+ # Same verified BodySetup path as courtyard import. No simulated rigid-body door.
+ body=mesh.get_editor_property('body_setup');assert body,prop
+ body.set_editor_property('collision_trace_flag',unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE);lib.save_loaded_asset(mesh)
 positions=[(2,13),(13,31),(-115,42),(-185,46),(-148,103),(-210,110),(0,205),(20,236),(159,-182),(4,211),(-6,209),(195,-153),(208,46),(215,100),(185,105),(170,-123),(-118,44),(25,242),(-255,-60),(255,-60),(-240,205),(240,205),(-230,-215),(230,-215)]
 def prop(label,id,name,pos,scale=1):
  obj=a.spawn_actor_from_class(cls,unreal.Vector(pos[0]*100,pos[1]*100,15));obj.set_actor_label(label);obj.set_editor_property('action_id',unreal.Name(id));m=obj.get_editor_property('mesh');m.set_static_mesh(lib.load_asset('/Game/Story/Props/'+name));m.set_world_scale3d(unreal.Vector(scale,scale,scale));obj.get_editor_property('focus_volume').set_relative_location(unreal.Vector(0,0,70));return obj

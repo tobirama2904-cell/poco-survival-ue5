@@ -55,3 +55,12 @@ These are separate from the older private Android cook **36123702654**.
 No automatic Low Water packaging approval before reviewing its actual frame.
 The local expanded diagnostics are cached; the verified archive is
 `/home/user/city-build-evidence-2026-09-25.zip`.
+
+Measured first UE failure: Clang indentation error in film-camera code; corrected
+by `1cdc496`. **Attempt 2 compiled and passed actual native save-6/fallback tests**,
+imported PBR surfaces, built 57 ground-floor building shells / 2631 instances,
+and imported new props/audio. It then failed because StaticMeshEditorSubsystem
+is absent in headless mode. Corrected to the already-tested BodySetup collision
+path; retry required. Character/audio imports are not final visual approval.
+Corrected Android run **36126987127** is queued behind the old-source native
+run; no source-mismatched packaging is approved.

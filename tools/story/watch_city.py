@@ -24,7 +24,7 @@ def evidence(run):
    for x in z.infolist():
     path=Path(x.filename);assert not path.is_absolute() and '..' not in path.parts
     if not x.is_dir() and path.suffix in ['.png','.jpg','.json','.log','.txt']:
-     dest=args.output/str(run)/path;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(z.read(x))
+     dest=args.output/str(run)/a['name']/path;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(z.read(x))
   state['artifacts'].append(a['id']);save();print('EVIDENCE_READY',run,a['name'],flush=True)
 last={};deadline=time.monotonic()+6*3600
 while time.monotonic()<deadline:
