@@ -22,7 +22,7 @@ class POCOSURVIVAL_API USurvivalSaveGame : public USaveGame
 {
     GENERATED_BODY()
 public:
-    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FormatVersion = 6;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FormatVersion = 7;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") FString CampaignVersion = TEXT("city-1");
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int64 SaveGeneration = 0;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") bool bHasPlayerState = false;
@@ -39,6 +39,7 @@ public:
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") FVector4 WoundState=FVector4(0,0,0,0);
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") bool bBowEquipped=false;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FilmProgress=0;
+    UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") TArray<int32> CountyStages={0,0,0,0,0,0};
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int32 FilmDecision=0;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") double WorldElapsedSeconds=61200;
     UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite, Category="Save") int64 WeatherSeed=731;

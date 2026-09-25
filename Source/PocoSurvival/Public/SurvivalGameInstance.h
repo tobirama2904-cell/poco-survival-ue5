@@ -5,6 +5,7 @@
 #include "Core/CityContent.h"
 #include "Core/Experience.h"
 #include "Core/FieldSurvival.h"
+#include "Core/CountyStories.h"
 #include "SurvivalGameInstance.generated.h"
 
 class USoundAttenuation;
@@ -33,6 +34,9 @@ public:
     virtual void Init() override;
     USoundAttenuation* SpatialSound();
     survival::FieldKit FieldInventory;
+    survival::CountyState County;
+    UFUNCTION(BlueprintCallable,Category="County") int32 TryCountyAction(int32 Arc,int32 Action) { return static_cast<int32>(County.Apply(Arc,Action,FieldInventory)); }
+    UFUNCTION(BlueprintPure,Category="County") int32 GetCountyStage(int32 Arc) const { return Arc>=0&&Arc<survival::CountyState::Count?County.stages[Arc]:-1; }
     int32 FilmProgress=0,FilmDecision=0;
     UFUNCTION(BlueprintCallable,Category="World") void StepWorldClock(float Delta,bool Paused) { Clock.Step(Delta,Paused); }
     UFUNCTION(BlueprintPure,Category="World") float WorldHour() const { return Clock.Hour(); }

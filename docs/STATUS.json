@@ -238,6 +238,34 @@
     "repair_render_cook_status": "in progress; reuses exact retained map, repairs materials, requires two new frames and runtime proof before cook",
     "cancelled_wrong_source_cook": 36137090619,
     "local_python_tests_note": "passed; one local cached art-pack test skipped because excluded cache is not persisted",
-    "delivery_scope_warning": "Even a successful current APK is unfinished development content, not the requested complete photoreal 12–24 hour game. No final-quality acceptance."
+    "delivery_scope_warning": "Even a successful current APK is unfinished development content, not the requested complete photoreal 12–24 hour game. No final-quality acceptance.",
+    "stable_delivery_branch": "gameplay/low-water",
+    "stable_delivery_native_run": 36133757073,
+    "stable_delivery_native_result": "completed success",
+    "stable_delivery_repair_cook_run": 36140764253
+  },
+  "content_stage": {
+    "branch": "gameplay/county-stories",
+    "written_new_arcs": 6,
+    "written_new_dialogue_blocks": 24,
+    "written_new_lines_per_language": 144,
+    "new_russian_clips": 144,
+    "new_russian_audio_seconds": 545.0912083333333,
+    "new_clip_alignment_flags": 0,
+    "new_speech_in_game_verified": false,
+    "save_version": 7,
+    "choice_combinations_portable_tested": 64,
+    "python_tests_passed": 44,
+    "python_tests_skipped": 1,
+    "new_native_unreal_verified": false,
+    "new_native_android_verified": false,
+    "measured_campaign_hours": null,
+    "final_game": false,
+    "new_prop_meshes": [
+      "FieldRadio",
+      "EvidenceFolder",
+      "SignalSwitch"
+    ],
+    "mocap_source_found": "CMU subject 13 trials 17/18; not yet retargeted"
   }
 }

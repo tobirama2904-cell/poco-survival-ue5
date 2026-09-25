@@ -315,7 +315,7 @@ void ASurvivalCharacter::AdvanceStory()
 void ASurvivalCharacter::EndStory()
 {
     if (!bStoryActive) return;
-    bStoryActive=false;GetWorldTimerManager().ClearTimer(FilmLineTimer);ActiveFilm=-1;
+    bStoryActive=false;GetWorldTimerManager().ClearTimer(FilmLineTimer);ActiveFilm=-1;bCountyStory=false;
     if (StoryAudio) { StoryAudio->OnAudioFinished.RemoveAll(this);StoryAudio->Stop();StoryAudio=nullptr; }
     if (bStoryLocksMovement) if (auto* PC=Cast<APlayerController>(Controller)) { PC->SetIgnoreMoveInput(false);PC->SetIgnoreLookInput(false);PC->SetViewTarget(this); }
     if (StoryCamera) { StoryCamera->Destroy();StoryCamera=nullptr; }
@@ -402,6 +402,11 @@ void ASurvivalCharacter::SpeakStoryLine()
         if(ClipLine>=0&&FPackageName::DoesPackageExist(Package))if(auto* Wave=LoadObject<USoundBase>(nullptr,*(Package+TEXT(".")+Name))){StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);if(StoryAudio){StoryAudio->OnAudioFinished.AddDynamic(this,&ASurvivalCharacter::AdvanceStory);return;}}
         GetWorldTimerManager().SetTimer(FilmLineTimer,this,&ASurvivalCharacter::AdvanceStory,FMath::Clamp(StoryLines[StoryLine].Len()*.065f,3.0f,11.0f),false);return;
     }
+    if(bCountyStory){
+        const FString Name=CurrentStory.ToString()+TEXT("_")+FString::FromInt(StoryLine);const FString Package=TEXT("/Game/Story/CountyVoices/")+Name;
+        if(FPackageName::DoesPackageExist(Package))if(auto* Wave=LoadObject<USoundBase>(nullptr,*(Package+TEXT(".")+Name))){StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);if(StoryAudio){StoryAudio->OnAudioFinished.AddDynamic(this,&ASurvivalCharacter::AdvanceStory);return;}}
+        GetWorldTimerManager().SetTimer(FilmLineTimer,this,&ASurvivalCharacter::AdvanceStory,FMath::Clamp(Line.Len()*.065f,4.f,14.f),false);return;
+    }
     const FString Name=CurrentStory.ToString()+TEXT("_")+FString::FromInt(StoryLine);
     if (auto* Wave=LoadObject<USoundBase>(nullptr,*(TEXT("/Game/Story/Voices/")+Name+TEXT(".")+Name))) { StoryAudio=UGameplayStatics::SpawnSound2D(this,Wave);if(StoryAudio)StoryAudio->OnAudioFinished.AddDynamic(this,&ASurvivalCharacter::AdvanceStory); }
 }
@@ -443,6 +448,10 @@ void ASurvivalCharacter::BeginFilm(int32 Index,AActor* Subject){
  EndStory();Bow.Cancel();const auto& Scene=Scenes[Index];ActiveFilm=Index;bStoryActive=true;bStoryLocksMovement=Scene.cinematic;bJournalOpen=false;StoryLine=0;StorySpeaker=TEXT("");StoryLines.Reset();
  for(const auto& Line:USurvivalControlSettings::Get()->bEnglishStory?Scene.en:Scene.ru)StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
  if(Index==14)if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))StoryLines.Insert(USurvivalControlSettings::Get()->bEnglishStory?(G->FilmDecision==1?TEXT("Water enters the lower quarter. Homes must be abandoned; the tunnel is open."):TEXT("The gate holds. Homes stay dry; Hart dismantles his crossing and loses its supplies.")):(G->FilmDecision==1?TEXT("В канале появилась вода. Низкие дома придётся оставить; тоннель к переправе открыт."):TEXT("Шлюз удержан. Дома остались сухими; Харт разбирает переправу на понтон и теряет запасы.")),0);
+ if(Index==17)if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))if(G->County.Complete()>0){
+  int32 Lit=0;for(int32 Stage:G->County.stages)if(Stage==3)++Lit;
+  StoryLines.Add(USurvivalControlSettings::Get()->bEnglishStory?(Lit>0?TEXT("Ruth: Some lights are back along the road. They do not promise safety. They tell people someone might answer."):TEXT("Owen: The addresses stayed off the air. I will carry the copies myself. We still owe people an answer.")):(Lit>0?TEXT("Рут: На дороге снова есть огни. Они не обещают безопасности. Они говорят, что кто-то может ответить."):TEXT("Оуэн: Адреса не ушли в эфир. Копии я отнесу сам. Мы всё ещё должны людям ответ.")));
+ }
  if(bStoryLocksMovement){
   if(auto* PC=Cast<APlayerController>(Controller)){
   PC->SetIgnoreMoveInput(true);PC->SetIgnoreLookInput(true);GetCharacterMovement()->StopMovementImmediately();const FVector Focus=Subject?Subject->GetActorLocation()+FVector(0,0,155):GetActorLocation()+FVector(0,0,60);
@@ -451,5 +460,14 @@ void ASurvivalCharacter::BeginFilm(int32 Index,AActor* Subject){
   StoryCamera=GetWorld()->SpawnActor<ACameraActor>(View,(Focus-View).Rotation());if(StoryCamera)PC->SetViewTargetWithBlend(StoryCamera,.7f);
   }
  }
+ SpeakStoryLine();
+}
+
+void ASurvivalCharacter::BeginCountyStory(int32 Arc,int32 Beat)
+{
+ const auto& Arcs=survival::CountyArcs();if(Arc<0||Arc>=static_cast<int32>(Arcs.size())||Beat<0||Beat>=4)return;
+ EndStory();Bow.Cancel();bCountyStory=true;bStoryActive=true;bStoryLocksMovement=false;bJournalOpen=false;StoryLines.Reset();StoryLine=0;StorySpeaker=TEXT("");
+ const auto& A=Arcs[Arc];CurrentStory=FName(*(FString(UTF8_TO_TCHAR(A.id.c_str()))+TEXT("_")+FString::FromInt(Beat)));
+ for(const auto& Line:USurvivalControlSettings::Get()->bEnglishStory?A.beats[Beat].en:A.beats[Beat].ru)StoryLines.Add(UTF8_TO_TCHAR(Line.c_str()));
  SpeakStoryLine();
 }

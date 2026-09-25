@@ -57,6 +57,7 @@ public:
     void ToggleAim();
     void FieldAction(int32 Action);
     void BeginFilm(int32 Index,AActor* Subject);
+    void BeginCountyStory(int32 Arc,int32 Beat);
     void ToggleControlEditor();
     void ToggleFlashlight();
     bool bEditingControls=false;
@@ -82,6 +83,7 @@ private:
     int32 AttackFinger=-1;
     FTimerHandle FilmLineTimer;
     int32 ActiveFilm=-1;
+    bool bCountyStory=false;
     bool bHumanAvatar=false;
     float FootstepDelay=0;
     FName CurrentStory;

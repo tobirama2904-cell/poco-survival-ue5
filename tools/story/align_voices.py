@@ -3,14 +3,14 @@
 Reject ambiguous coverage rather than silently shipping misassigned dialogue.
 Requires faster-whisper==1.2.1 and soundfile==0.13.1; models cached, not vendored.
 """
-import json,re,difflib,subprocess,hashlib,shutil,argparse
+import json,re,difflib,subprocess,hashlib,shutil,argparse,math
 from urllib.request import urlopen
 from pathlib import Path
 import numpy as np
 import soundfile as sf
 from faster_whisper import WhisperModel
 from huggingface_hub import snapshot_download
-parser=argparse.ArgumentParser();parser.add_argument('--corpus',choices=['voices','filmvoices'],default='voices');args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--corpus',choices=['voices','filmvoices','countyvoices'],default='voices');args=parser.parse_args()
 root=Path(__file__).resolve().parents[2];out=root/'BuildData'/args.corpus;plan=json.loads((out/'voice-plan.json').read_text());cache=root/'.cache'/('batches-'+args.corpus);cache.mkdir(parents=True,exist_ok=True);model=None;reports=[];issues=[]
 def source(entry):
  path=root/entry.get('source_file',entry.get('file',''))
@@ -21,12 +21,21 @@ def source(entry):
   assert hashlib.sha256(data).hexdigest()==entry['sha256'];path.write_bytes(data)
  if entry.get('sha256'):assert hashlib.sha256(path.read_bytes()).hexdigest()==entry['sha256']
  return path
+def to_pcm(src,dst):
+ if shutil.which('ffmpeg'):
+  subprocess.run(['ffmpeg','-v','error','-y','-i',str(src),'-ac','1','-ar','24000','-c:a','pcm_s16le',str(dst)],check=True)
+ else:
+  from scipy.signal import resample_poly
+  data,rate=sf.read(src,always_2d=True);data=data.mean(axis=1)
+  if rate!=24000:
+   g=math.gcd(rate,24000);data=resample_poly(data,24000//g,rate//g)
+  sf.write(dst,data,24000,subtype='PCM_16')
 def tokens(s):
  words=re.findall(r'[а-яёa-z0-9]+',s.lower().replace('ё','е'))
  return [{'наргиз':'наргис','илья':'ильяс'}.get(w,w) for w in words]
 for i,batch in enumerate(plan['batches']):
  pcm=cache/f'pcm{i}.wav'
- subprocess.run(['ffmpeg','-v','error','-y','-i',str(source(batch)),'-ac','1','-ar','24000','-c:a','pcm_s16le',str(pcm)],check=True)
+ to_pcm(source(batch),pcm)
  audio,rate=sf.read(pcm);assert rate==24000
  transcript=cache/('small-'+hashlib.sha256(pcm.read_bytes()).hexdigest()[:16]+'.json')
  if transcript.exists():words=json.loads(transcript.read_text())
@@ -35,7 +44,7 @@ for i,batch in enumerate(plan['batches']):
    pin=json.loads((root/'BuildData/voices/asr-model.lock.json').read_text())
    folder=snapshot_download(pin['repository'],revision=pin['revision'],allow_patterns=['config.json','model.bin','tokenizer.json','vocabulary.json'],cache_dir=str(root/'.cache/whisper'))
    model=WhisperModel(folder,device='cpu',compute_type='int8',cpu_threads=2)
-  segments,info=model.transcribe(str(pcm),language='ru',word_timestamps=True,beam_size=5,condition_on_previous_text=False,initial_prompt=('Дэниел Рид, Мара Эллис, Оуэн Харт, Рут. Беллуэзер, шлюз, водомерный пост.' if args.corpus=='filmvoices' else 'Арсен, Лейла, Наргис, Тимур, Ильяс. Лазарет, насосная, шлюз.'))
+  segments,info=model.transcribe(str(pcm),language='ru',word_timestamps=True,beam_size=5,condition_on_previous_text=False,initial_prompt=('Дэниел Рид, Мара Эллис, Оуэн Харт, Рут. Беллуэзер, шлюз, водомерный пост.' if args.corpus in ('filmvoices','countyvoices') else 'Арсен, Лейла, Наргис, Тимур, Ильяс. Лазарет, насосная, шлюз.'))
   words=[{'text':w.word,'start':w.start,'end':w.end} for seg in segments for w in (seg.words or [])];transcript.write_text(json.dumps(words,ensure_ascii=False,indent=2))
  expected=[];ranges=[]
  for line in batch['lines']:
@@ -81,7 +90,7 @@ for alias,source in plan.get('aliases',{}).items():
   shutil.copyfile(path,out/(alias+'.wav'));original=next(r for r in reports if r['id']==source);reports.append(dict(original,id=alias,reuses_line=source))
  else:issues.append({'id':alias,'error':'missing source for shared line'})
 for id,override in plan.get('direct_overrides',{}).items():
- dest=out/(id+'.wav');subprocess.run(['ffmpeg','-v','error','-y','-i',str(source(override)),'-ar','24000','-ac','1','-c:a','pcm_s16le',str(dest)],check=True)
+ dest=out/(id+'.wav');to_pcm(source(override),dest)
  report_clip=next(r for r in reports if r['id']==id);report_clip['replacement']='fresh exact-line synthesis; not a batch cut';report_clip['original_alignment_flag']=[q for q in issues if q['id']==id]
  issues=[q for q in issues if q['id']!=id]
 report={'lines_expected'  :plan['full_corpus_lines'],'lines_written':len(reports),'voice_count':len(plan['voices']),'issues':issues,'clips':reports,'in_game_audio_verified':False}

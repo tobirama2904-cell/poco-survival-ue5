@@ -59,6 +59,7 @@ bool USurvivalGameInstance::SaveProgress()
     if (!Save) return false;
     Save->SaveGeneration = SaveGeneration + 1;Save->WorldElapsedSeconds=Clock.seconds;Save->WeatherSeed=Clock.seed;
     Save->FilmProgress=FilmProgress;Save->FilmDecision=FilmDecision;Save->LootedCaches=FieldInventory.looted;Save->OpenDoors=FieldInventory.doors;for(int32 N:FieldInventory.items)Save->FieldItems.Add(N);
+    Save->CountyStages.Reset();for(int32 Stage:County.stages)Save->CountyStages.Add(Stage);
     Save->StateRevision = static_cast<int64>(Runtime.State().revision);
     for (const auto& Id : Runtime.State().journal) Save->ActionJournal.Add(UTF8_TO_TCHAR(Id.c_str()));
     if (GetWorld()) if (auto* Player = Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(),0)))
@@ -102,7 +103,7 @@ bool USurvivalGameInstance::LoadProgress()
     {
         if (!UGameplayStatics::DoesSaveGameExist(SlotName(Index), 0)) continue;
         auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName(Index), 0));
-        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 6) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
+        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 7) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
             Save->StateRevision < 0 || Save->StateRevision != Save->ActionJournal.Num() || Save->SaveGeneration<0) continue;
         if (Save->bHasPlayerState && (Save->MapName.IsEmpty() || Save->PlayerLocation.ContainsNaN() ||
             Save->PlayerLocation.GetAbsMax()>1000000 || Save->PlayerRotation.ContainsNaN() ||
@@ -110,6 +111,11 @@ bool USurvivalGameInstance::LoadProgress()
             !FMath::IsFinite(Save->Stamina) || Save->Stamina<0 || Save->Stamina>100)) continue;
         if (Save->FormatVersion>=3 && (Save->ViewRotation.ContainsNaN() || Save->InfectedStates.Num()>256)) continue;
         if(Save->FormatVersion>=5&&(!FMath::IsFinite(Save->WorldElapsedSeconds)||Save->WorldElapsedSeconds<0||Save->WorldElapsedSeconds>315360000||Save->WeatherSeed<0||Save->WeatherSeed>MAX_uint32))continue;
+        if(Save->FormatVersion>=7){
+            if(Save->CountyStages.Num()!=survival::CountyState::Count)continue;
+            survival::CountyState Check;for(int32 I=0;I<survival::CountyState::Count;++I)Check.stages[I]=Save->CountyStages[I];
+            if(!Check.Valid())continue;
+        }
         survival::FieldKit Field;
         if(Save->FormatVersion>=6){
             if(Save->FieldItems.Num()!=static_cast<int32>(survival::Supply::Count)||Save->LootedCaches<0||Save->LootedCaches>=(1ll<<24)||Save->OpenDoors<0||Save->OpenDoors>=(1ll<<24)||Save->FilmProgress<0||Save->FilmProgress>18||Save->FilmDecision<0||Save->FilmDecision>2||(Save->FilmProgress>=15&&Save->FilmDecision==0)||(Save->FilmProgress<14&&Save->FilmDecision!=0))continue;
@@ -145,7 +151,7 @@ bool USurvivalGameInstance::LoadProgress()
         { bFound = true; Best = Candidate.State(); BestSlot = Index; BestGeneration=Generation;BestSave=Save; }
     }
     if (!bFound || Runtime.Restore(Best) != survival::Error::None) return false;
-    SaveGeneration=BestGeneration;PendingPlayerSave=BestSave;FieldInventory={};FilmProgress=0;FilmDecision=0;
+    SaveGeneration=BestGeneration;PendingPlayerSave=BestSave;FieldInventory={};County={};if(BestSave->FormatVersion>=7)for(int32 I=0;I<survival::CountyState::Count;++I)County.stages[I]=BestSave->CountyStages[I];FilmProgress=0;FilmDecision=0;
     if(BestSave->FormatVersion>=6){for(int32 I=0;I<BestSave->FieldItems.Num();++I)FieldInventory.items[I]=BestSave->FieldItems[I];FieldInventory.looted=static_cast<uint32>(BestSave->LootedCaches);FieldInventory.doors=static_cast<uint32>(BestSave->OpenDoors);FilmProgress=BestSave->FilmProgress;FilmDecision=BestSave->FilmDecision;}
     if(BestSave->FormatVersion>=5)Clock.Restore(BestSave->WorldElapsedSeconds,static_cast<uint32>(BestSave->WeatherSeed));else Clock.Restore(61200,731);
     if (UWorld* World=GetWorld()) for (TActorIterator<ASurvivalInfected> It(World);It;++It) ApplyLoadedInfectedState(*It);

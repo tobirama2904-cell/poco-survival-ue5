@@ -23,3 +23,5 @@ print('SCENE_SOURCES_READY licensed template characters are internal test art, n
 subprocess.run(['python3',str(root/'tools/characters/fetch_conditioned.py')],check=True)
 
 subprocess.run(['python3',str(root/'tools/scene/fetch_county.py')],check=True)
+
+subprocess.run(['python3',str(root/'tools/story/fetch_county_voices.py')],check=True)

@@ -22,3 +22,6 @@ c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISo
 
 c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public tests/core/test_field.cpp -o .cache/core/test_field
 .cache/core/test_field
+
+c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public Source/PocoSurvival/Private/Core/CountyStories.cpp tests/core/test_county_stories.cpp -o .cache/core/test_county_stories
+.cache/core/test_county_stories

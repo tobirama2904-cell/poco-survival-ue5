@@ -13,6 +13,7 @@
 #include "Engine/ExponentialHeightFog.h"
 #include "Engine/StaticMesh.h"
 #include "Components/DirectionalLightComponent.h"
+#include "Components/PointLightComponent.h"
 #include "Components/SkyLightComponent.h"
 #include "Components/ExponentialHeightFogComponent.h"
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
@@ -53,6 +54,9 @@ void ASurvivalWorldDirector::Tick(float Delta)
  const bool Paused=Player->IsCinematicLocked()||Player->bEditingControls;Game->StepWorldClock(Delta,Paused);
  if(Paused)return;const auto Climate=Game->WorldClimate();EnvironmentTimer-=Delta;StoryTimer-=Delta;
  if(EnvironmentTimer<=0){EnvironmentTimer=1;
+  for(TActorIterator<AActor> It(GetWorld());It;++It)if(It->ActorHasTag(TEXT("county_story_lamp"))){
+   for(int32 I=0;I<survival::CountyState::Count;++I)if(It->ActorHasTag(FName(*FString::Printf(TEXT("county_arc_%d"),I))))if(auto* Light=It->FindComponentByClass<UPointLightComponent>())Light->SetVisibility(Game->County.stages[I]==3);
+  }
   const float Day=Climate.daylight;
   if(Sun){Sun->SetActorRotation(FRotator(-FMath::Max(12.f,Day*72),Game->WorldHour()*15-90,0));auto* Light=Cast<UDirectionalLightComponent>(Sun->GetLightComponent());if(Light){Light->SetIntensity((.16f+FMath::Sqrt(Day)*2.65f)*(1-Climate.cloud*.60f));Light->SetLightColor(FLinearColor::LerpUsingHSV(FLinearColor(.40,.55,.95),FLinearColor(1,.87,.69),FMath::Min(1.f,Day*3)));}}
   if(Fill)Fill->GetLightComponent()->SetIntensity(.55f+FMath::Sqrt(Day)*2.15f);

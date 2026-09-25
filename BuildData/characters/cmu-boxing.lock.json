@@ -1,0 +1,28 @@
+{
+  "source": "https://mocap.cs.cmu.edu/",
+  "license_statement": "May be included in commercially sold products; do not resell motion data directly, including converted form.",
+  "attribution": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.",
+  "motion": "Subject 13, trials 17 and 18: boxing",
+  "files": [
+    {
+      "url": "http://mocap.cs.cmu.edu/subjects/13/13.asf",
+      "file": "13.asf",
+      "bytes": 7264,
+      "sha256": "eb33390bcbccb739d7622bd583fd9be55020868f68689aa6f2060ad688df10dc"
+    },
+    {
+      "url": "http://mocap.cs.cmu.edu/subjects/13/13_17.amc",
+      "file": "13_17.amc",
+      "bytes": 3848500,
+      "sha256": "f024bfe30728fb01debc868c011df16be5d8cca95e8a734dfe00c59722c4cfd1"
+    },
+    {
+      "url": "http://mocap.cs.cmu.edu/subjects/13/13_18.amc",
+      "file": "13_18.amc",
+      "bytes": 2388498,
+      "sha256": "46f4cddbc8e7a3585d4e887bec6ccc5dc7e71382ad41e28607ff4ebd9b115cb8"
+    }
+  ],
+  "retargeted": false,
+  "in_game_verified": false
+}

@@ -130,8 +130,36 @@ for prop,value in [('field_items',[-1]*9),('looted_caches',1<<24),('open_doors',
     assert unreal.GameplayStatics.save_game_to_slot(broken,'Survival_B',0)
     recovery=instance();assert recovery.load_progress();assert recovery.save_progress()
     fixed=unreal.GameplayStatics.load_game_from_slot('Survival_B',0);assert fixed.get_editor_property('film_progress')==14
+# Version 7: real UObject county choice replay, transactional repair and save
+# recovery. Physical props/audio/cinematics require separate rendered tests.
+for slot in ['Survival_A','Survival_B']:unreal.GameplayStatics.delete_game_in_slot(slot,0)
+county_save=unreal.GameplayStatics.create_save_game_object(save_cls)
+county_save.set_editor_property('format_version',7);county_save.set_editor_property('save_generation',50)
+county_save.set_editor_property('field_items',[0,0,6,6,0,0,0,0,0]);county_save.set_editor_property('county_stages',[0]*6)
+assert unreal.GameplayStatics.save_game_to_slot(county_save,'Survival_A',0)
+county_game=instance();assert county_game.load_progress()
+for arc in range(6):
+ assert county_game.try_county_action(arc,2)==3
+ assert county_game.try_county_action(arc,0)==0
+ assert county_game.try_county_action(arc,1)==0
+ assert county_game.try_county_action(arc,1)==1
+ choice=2 if arc%2==0 else 3
+ assert county_game.try_county_action(arc,choice)==0
+ assert county_game.try_county_action(arc,choice)==1
+ assert county_game.try_county_action(arc,3 if choice==2 else 2)==3
+assert county_game.save_progress()
+county_roundtrip=unreal.GameplayStatics.load_game_from_slot('Survival_B',0)
+assert list(county_roundtrip.get_editor_property('county_stages'))==[3,4,3,4,3,4]
+assert list(county_roundtrip.get_editor_property('field_items'))==[0,0,0,0,0,3,0,0,0]
+for bad in [[0]*5,[5,0,0,0,0,0],[-1,0,0,0,0,0]]:
+ broken=unreal.GameplayStatics.load_game_from_slot('Survival_B',0);broken.set_editor_property('save_generation',100);broken.set_editor_property('county_stages',bad)
+ assert unreal.GameplayStatics.save_game_to_slot(broken,'Survival_A',0)
+ good=instance();assert good.load_progress();assert good.get_county_stage(0)==3 and good.get_county_stage(1)==4
+county_save.set_editor_property('format_version',6);county_save.set_editor_property('save_generation',101);county_save.set_editor_property('county_stages',[-1]*6)
+assert unreal.GameplayStatics.save_game_to_slot(county_save,'Survival_A',0)
+legacy_county=instance();assert legacy_county.load_progress();assert all(legacy_county.get_county_stage(i)==0 for i in range(6))
 report={'phase' :'unreal-headless-native-integration','native_classes_loaded':3,
- 'version6_field_and_film_serialization_fallback_tested':True,'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
+ 'version7_county_choices_and_legacy_migration_tested':True,'version6_field_and_film_serialization_fallback_tested':True,'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
  'objective_count':61,'native_inventory_and_choices_tested':True,
  'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,
  'unreal_editor_version':unreal.SystemLibrary.get_engine_version(),
