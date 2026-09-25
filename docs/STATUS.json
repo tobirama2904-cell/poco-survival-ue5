@@ -11,7 +11,7 @@
   "playable_map_exists": true,
   "android_apk_exists": true,
   "epic_source_api_last_status": 200,
-  "next_gate": "Compile/render county and compact HUD revision; require six rural collision checks and second walking/frame proof. Native Android queued separately; no final release.",
+  "next_gate": "Review corrected repair/cook actual frames, native completion, then signed matching APK and Android screenshots/save evidence; full game acceptance remains unfulfilled.",
   "never_claim": "The art collection or native logic tests are not a playable or device-tested game.",
   "engine_installation_scope": "Verified on ephemeral GitHub-hosted runner, not installed in the chat workspace",
   "epic_membership": "active",
@@ -178,7 +178,7 @@
   },
   "current_work": {
     "branch": "gameplay/low-water",
-    "compile_status": "Previous 64dc5cc Low Water scene compiled and rendered successfully; new county/HUD C++ verification pending.",
+    "compile_status": "County native Linux UE compiled; six rural collision points and 545.77 cm grounded walking passed",
     "preceding_world_experience_run": 36120680424,
     "preceding_result": "UHT/UBT/native clock save/render succeeded; actual frame reviewed too dark, not final quality",
     "implemented_source": [
@@ -199,9 +199,9 @@
     "android_native_run": 36133757073,
     "core_run": 36126920354,
     "core_result": "success",
-    "scene_status": "county/HUD scene verification in progress",
-    "android_status": "matching county/HUD native build in progress; superseded 1cdc496 run cancelled before compilation",
-    "local_python_tests": 27,
+    "scene_status": "36133754596 completed success for native/construction/movement but manual image review REJECTED sky shader and HISM material fallbacks",
+    "android_status": "matching 2c09ef3 native 36133757073 in progress; no current-story APK verified",
+    "local_python_tests": 38,
     "native_cpp_correction": "1cdc496",
     "native_linux_result": "compiled and passed native save6/recovery tests during scene attempt2; later map population failures separately measured",
     "old_internal_package": 36128395326,
@@ -216,8 +216,8 @@
       "public_art_pack": "county-art-002",
       "source_python_tests": 33,
       "source_portable_tests": "passed; new layout assertions also passed",
-      "new_unreal_compile_verified": false,
-      "new_unreal_render_reviewed": false,
+      "new_unreal_compile_verified": true,
+      "new_unreal_render_reviewed": true,
       "new_android_apk_available": false,
       "full_user_acceptance_complete": false,
       "scene_run": 36133754596,
@@ -227,7 +227,17 @@
         "result": "failed: known pre-1cdc496 misleading indentation; private checkpoint retained",
         "engine_actions": 712,
         "build_seconds": 3751.98
-      }
-    }
+      },
+      "new_unreal_render_accepted": false,
+      "six_rural_collision_points_passed": true,
+      "native_county_walk_cm": 545.77,
+      "shader_repair_verification_pending": true
+    },
+    "repair_render_cook_run": 36137142659,
+    "repair_render_cook_source": "3ce536516ea9224fccc14446ee2836e5763f9d5b",
+    "repair_render_cook_status": "in progress; reuses exact retained map, repairs materials, requires two new frames and runtime proof before cook",
+    "cancelled_wrong_source_cook": 36137090619,
+    "local_python_tests_note": "passed; one local cached art-pack test skipped because excluded cache is not persisted",
+    "delivery_scope_warning": "Even a successful current APK is unfinished development content, not the requested complete photoreal 12–24 hour game. No final-quality acceptance."
   }
 }

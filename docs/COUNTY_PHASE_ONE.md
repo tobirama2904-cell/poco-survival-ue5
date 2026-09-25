@@ -28,3 +28,11 @@ This is a work stage, not a promise that three chat messages equal a finished AA
 - Optional co-op/networking/mod support, final optimization, physical POCO F4 testing and finished signed APK delivery.
 
 Subsequent work should improve actual gameplay and story integration, then verify/package matching assets and native code. A green build, asset count, map dimensions or three stages do not independently satisfy these requirements.
+
+## 2026-09-25 follow-up: actual image rejection and repair
+
+Run 36133754596 compiled and built the county, passed 6/6 rural collision rays and 545.77 cm grounded input movement. Both actual images were opened and rejected: `(Node Saturate) Missing Saturate input` broke the photographic sky; missing `bUsedWithInstancedStaticMeshes` flags caused default-material fallback. This is a measured failure, not final art approval.
+
+Source 3ce5365 uses the unnamed Saturate pin with checked connections, a fresh sky-material asset and saved material-usage flags. `render_health.py` now rejects these actual log failures even if movement/pixel checks pass. Android cook 36137142659 reuses private scene 36133754596, repairs it, renders/tests the exact content again, then cooks it; successful matching native 36133757073 is required by downstream packaging. The native C++ and Config remain 2c09ef3-compatible. A mistaken old-source dispatch 36137090619 was cancelled before cooking, after discovering that excluded git configuration/askpass executable permissions had not persisted. Remote identity and push were restored and verified before the corrected dispatch.
+
+3619210 updates Android tests to open the current backpack before Save and collect actual app-owned GVAS files without claiming save-state equality or verified movement merely from injected touches. 38 Python tests pass, with the cached art-pack test skipped when the excluded cache is absent. Corrected render/cook, APK, mobile image and physical-device verification remain separate gates.
