@@ -1,0 +1,5 @@
+{
+  "repository": "lorneluo/whisper-small-ct2-int8",
+  "revision": "ac6d1ecb4f5a8f349f44ff9ee07dccce146792e4",
+  "purpose": "local dialogue segmentation QA only; not shipped or used by the game"
+}

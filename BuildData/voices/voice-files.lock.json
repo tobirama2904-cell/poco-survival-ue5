@@ -1,0 +1,553 @@
+{
+  "format": "mono 24kHz PCM16 WAV",
+  "clips": [
+    {
+      "id": "repair_generator_0",
+      "seconds": 3.89,
+      "sha256": "ea68b780a953700ac35e6c0f640134ea6ba7ece6b1ee7f481b8edd28e2d74c9e"
+    },
+    {
+      "id": "repair_generator_1",
+      "seconds": 4.75,
+      "sha256": "43ba9dabbad7c01179dc3ee49dcf81176ab23454901fb0f09380d2ff27bd1d69"
+    },
+    {
+      "id": "power_clinic_0",
+      "seconds": 2.77,
+      "sha256": "7b11026d809b050dc2263917015bacf636a2386e43cdfde877e31379c5cb94a0"
+    },
+    {
+      "id": "power_clinic_1",
+      "seconds": 4.16,
+      "sha256": "823639fd7c2ee7f9e3da3f2ad500fbc8ec2b9a855420fdb047a2a1654ac2751f"
+    },
+    {
+      "id": "power_pumps_0",
+      "seconds": 2.2,
+      "sha256": "c57c36a73c2643b8d95753aeab64168a4f9da5852ed1033a547c7868a705ec5d"
+    },
+    {
+      "id": "power_pumps_1",
+      "seconds": 4.96,
+      "sha256": "4a3aa79cd6533086fd48e6fcdd9638b8e6740c9967318e4ff9f00c372f85515e"
+    },
+    {
+      "id": "connect_local_network_0",
+      "seconds": 6.86,
+      "sha256": "494132ab3600390359b524f8c22de5d161cd51daab3e4ae7619dc607d6c1f3ef"
+    },
+    {
+      "id": "send_evacuation_beacon_0",
+      "seconds": 7.01,
+      "sha256": "2f46f0f945aef49012387470268e32b0e4339efff410e474664e8ad50b813a3b"
+    },
+    {
+      "id": "meet_dispatch_0",
+      "seconds": 4.48,
+      "sha256": "ca26e24ec65de5b46d69e1c1321c7a8ff0d42ed498e34a7e8496ffc5e2a5cc46"
+    },
+    {
+      "id": "meet_dispatch_1",
+      "seconds": 5.2,
+      "sha256": "c70dcc35ceee518d0883fe0b4601309ffc49b02638bbd07fa5ea7acaa5fb97e4"
+    },
+    {
+      "id": "meet_dispatch_2",
+      "seconds": 6.46,
+      "sha256": "bcabb1a881a6e0c198ad992fdd2325b076fccc8cd73dd9a95147b2319cb59967"
+    },
+    {
+      "id": "meet_dispatch_3",
+      "seconds": 5.88,
+      "sha256": "85d66f532ed57807fae6b111ab0f2ec8ecb16a6dfa5816a79932ab12ee8cf926"
+    },
+    {
+      "id": "inspect_break_0",
+      "seconds": 5.58,
+      "sha256": "fe26158080c80faab9920ac69a23a93e25992413be54666af09261edfe881982"
+    },
+    {
+      "id": "inspect_break_1",
+      "seconds": 5.37,
+      "sha256": "f9990259a5794e39157062bebbd5c3eace080aaf6bbdc8ce8e18e4e8af94dbc6"
+    },
+    {
+      "id": "read_orders_0",
+      "seconds": 6.31,
+      "sha256": "2257f55e33397c66c8b6eb937d0a5e4207f89e9b34709ab340290f259cee1984"
+    },
+    {
+      "id": "read_orders_1",
+      "seconds": 8.29,
+      "sha256": "eed2d154c7a407ce3806a7e54b74d8ccc1b1c8b193310998cbb0783d20f3588f"
+    },
+    {
+      "id": "read_orders_2",
+      "seconds": 2.73,
+      "sha256": "3dcb0b9955da52fcc9acdb63dc88a71d3649a9d1e887c4c8046556492f367061"
+    },
+    {
+      "id": "read_orders_3",
+      "seconds": 7.68,
+      "sha256": "33afd7fe3737ce4675317e1deaf4a5cf3102334213ee9768c9b7d5060e476579"
+    },
+    {
+      "id": "collect_clinic_key_0",
+      "seconds": 4.79,
+      "sha256": "ae9c18a2390166b5572082d5526c2bcca1509a8993d718cb7e5111e6b8401df3"
+    },
+    {
+      "id": "collect_clinic_key_1",
+      "seconds": 2.47,
+      "sha256": "4f81247dcaf838ae687253d1605bc7eb59e3556c6f4f5974ad99f3b7f28f8c86"
+    },
+    {
+      "id": "unlock_clinic_0",
+      "seconds": 4.06,
+      "sha256": "1f3df6ce71841bc994e3a1482914ed072a45067c4f12ccec35bc0da1eb664d15"
+    },
+    {
+      "id": "unlock_clinic_1",
+      "seconds": 1.26,
+      "sha256": "f279912b8e40b61c615d89baf24f8c01f564743d807ea6cb8468f89542db056a"
+    },
+    {
+      "id": "unlock_clinic_2",
+      "seconds": 7.7,
+      "sha256": "8037e1fea1df767e2dd837097d8cf4a033522163772fbd3bbaa1ed579b9d2516"
+    },
+    {
+      "id": "meet_doctor_0",
+      "seconds": 6.13,
+      "sha256": "9fe0407ee74e9b6d8e1e5295e765c3b85098c35058e695062be2ced10fda35af"
+    },
+    {
+      "id": "meet_doctor_1",
+      "seconds": 3.62,
+      "sha256": "dc4ab9546db5f55196cfc4e6b98218906d85172bedae2f78ffa7d560f738d3dc"
+    },
+    {
+      "id": "meet_doctor_2",
+      "seconds": 6.22,
+      "sha256": "ae1813a37acf136d04e7e7d76bda5c9967f91039635b5a9929510b8e7a741555"
+    },
+    {
+      "id": "find_antibiotics_0",
+      "seconds": 4.53,
+      "sha256": "82aa1dbe60e5cea261d3d8eedabd60dd9b3fdbd0ae6e077c60a920a3ffa2113e"
+    },
+    {
+      "id": "find_antibiotics_1",
+      "seconds": 3.27,
+      "sha256": "fe4d4de2671d4a1e7fea899f4f8cc7b411f579f202a697579644815e7713a9ed"
+    },
+    {
+      "id": "deliver_antibiotics_0",
+      "seconds": 4.39,
+      "sha256": "d5753dd217947bf541f568a9f38edc4da37d28dea43049c7cefcf383c0933791"
+    },
+    {
+      "id": "deliver_antibiotics_1",
+      "seconds": 1.94,
+      "sha256": "00f501b2cc1154612c6fd790c1c1a4e5eaf7f098a7cc4954d8f96fb6d836e10a"
+    },
+    {
+      "id": "deliver_antibiotics_2",
+      "seconds": 6.81,
+      "sha256": "e4c32301939a8ed7fe5edbe0f74c3edc0831e4ee25c1a0d1e1fb62f3ea9e837f"
+    },
+    {
+      "id": "check_reservoir_0",
+      "seconds": 4.17,
+      "sha256": "e421b4269d6298d1a68711940ba72c6aeb1a600acc49767fca5af36d01d8ebdd"
+    },
+    {
+      "id": "check_reservoir_1",
+      "seconds": 3.74,
+      "sha256": "602ca679841e2fb96a9518ac3cb235466b64ae4eb60cf8fa7f2c435b78c85c58"
+    },
+    {
+      "id": "check_reservoir_2",
+      "seconds": 4.98,
+      "sha256": "ff38adce52802eb8b69bc4c408029c55abb3ec1525fe00f35c58dc395a5f028a"
+    },
+    {
+      "id": "sample_water_0",
+      "seconds": 4.71,
+      "sha256": "4aac8084a4a8136c25218bffbfef27f3e4e294bbd184638069f35d6710bb1fd5"
+    },
+    {
+      "id": "analyze_sample_0",
+      "seconds": 5.22,
+      "sha256": "fa1286f78ffc42b88a70f7d974e1a0c2e35b83c6eba991e8957be7977955ab21"
+    },
+    {
+      "id": "analyze_sample_1",
+      "seconds": 3.59,
+      "sha256": "8bc5483ea8de6703798d3c120bb435659ff7e2daedf7aa0da7ddb6086f8d9472"
+    },
+    {
+      "id": "analyze_sample_2",
+      "seconds": 7.0,
+      "sha256": "02e1a933770391d843f5adecebecbd1a9569bc5e9d9afe30b69b28f8e50aa4fa"
+    },
+    {
+      "id": "speak_guard_0",
+      "seconds": 5.61,
+      "sha256": "03d9ccb1f6721aebbbb75086ac8a71c8fc4d41b8a4c899c34b96fe6a2d1a4c0f"
+    },
+    {
+      "id": "speak_guard_1",
+      "seconds": 2.03,
+      "sha256": "4dcafa96c55d2a08be898af9162e44f38c462bfc8576e81bfb80e42964d27520"
+    },
+    {
+      "id": "speak_guard_2",
+      "seconds": 11.35,
+      "sha256": "0d7917efe0a398e1803a347cd076a1e43f1f057a741455b1ae38db170a173d8d"
+    },
+    {
+      "id": "speak_guard_3",
+      "seconds": 4.28,
+      "sha256": "4791e9c63b2e224efaf3987e9fe5c84a25337af812f8545d991f76d5a5198696"
+    },
+    {
+      "id": "find_logbook_0",
+      "seconds": 5.08,
+      "sha256": "92aedc82b28f077e7c524dd2bbf54dee1fbb4d3138907d03b7dff9342e802933"
+    },
+    {
+      "id": "find_logbook_1",
+      "seconds": 4.88,
+      "sha256": "392eed3221d77b7e14f3a5a6765871d9329d57108e123615e94b21cd2e36a4b1"
+    },
+    {
+      "id": "trace_pipeline_0",
+      "seconds": 5.59,
+      "sha256": "a101d8a7131da987487296b2a647c095bd0edfab7cc8a122901a6ac825142992"
+    },
+    {
+      "id": "trace_pipeline_1",
+      "seconds": 3.08,
+      "sha256": "f662bcf31348ae0ca3b73a6c60c7327fab2f220552bbd51b91e01b0b3f30e153"
+    },
+    {
+      "id": "retrieve_filter_0",
+      "seconds": 3.49,
+      "sha256": "1a184ef9186e06b7e88c15de7e4f66d9620469938b95feb904d0084b86805606"
+    },
+    {
+      "id": "retrieve_filter_1",
+      "seconds": 4.5,
+      "sha256": "2228e7e715572ebc76a3225e360570ea3cbde39cf80b5d95a40d071ac4aefea8"
+    },
+    {
+      "id": "install_filter_0",
+      "seconds": 4.5,
+      "sha256": "af81ba82356c1fbbe8133144621fda22b907e594f47516bbf70fe157ee74d1be"
+    },
+    {
+      "id": "install_filter_1",
+      "seconds": 7.1,
+      "sha256": "d904f8b6adebcd7d3c531900696f6a81982c81720ec021a4c9fd38663c08ea16"
+    },
+    {
+      "id": "install_filter_2",
+      "seconds": 2.682,
+      "sha256": "07e4a2cb65c5501d2dd09edaae6eb62847ad439abe796aa6ed9e9a08be8405f5"
+    },
+    {
+      "id": "radio_brother_0",
+      "seconds": 2.72,
+      "sha256": "ea969a44d16f78905cea856cbe8351ce352673355f06d5eee8f68e1e32ef0923"
+    },
+    {
+      "id": "radio_brother_1",
+      "seconds": 2.07,
+      "sha256": "98c0e25c2983e17ebf5a2061da445858a69308cc4faa9bfcb5ea8da525627d7f"
+    },
+    {
+      "id": "radio_brother_2",
+      "seconds": 7.09,
+      "sha256": "82abf42d88edb984444c7c0800fd0c77041ba26810bdb5f9c7c58b32ab08c40d"
+    },
+    {
+      "id": "radio_brother_3",
+      "seconds": 2.67,
+      "sha256": "0492d4f382d68ac3a23850e5ebdc00d758a56f8473f67e254dec15ba4bbddc1d"
+    },
+    {
+      "id": "find_rooftop_key_0",
+      "seconds": 4.79,
+      "sha256": "48b0841d6aca7818322149c7b8c48bc719529e667db03207d5583144a09a356d"
+    },
+    {
+      "id": "rescue_brother_0",
+      "seconds": 6.7,
+      "sha256": "f59a8fa1feef745d246a27c291b2b6fe68a1fa59fab275a90995b364a2f800e1"
+    },
+    {
+      "id": "rescue_brother_1",
+      "seconds": 1.9,
+      "sha256": "5276dc3d6eb61b8cb758232127a49ed013dc4b5ba11d394e3cf947adcd536e3d"
+    },
+    {
+      "id": "rescue_brother_2",
+      "seconds": 2.23,
+      "sha256": "ebd038e400970bdcc182b6cca621749ea862db1296df36d4b59aeda0d9a75d96"
+    },
+    {
+      "id": "rescue_brother_3",
+      "seconds": 3.69,
+      "sha256": "3ef5e940db802a00fabd986c64af885ad134d28017b6db90069e5180f592896e"
+    },
+    {
+      "id": "assemble_receiver_0",
+      "seconds": 5.49,
+      "sha256": "14b0cbbb4355d377d7d4402f8de63f2fa59b7dcba374ef1b72537f5c043f25a9"
+    },
+    {
+      "id": "assemble_receiver_1",
+      "seconds": 2.39,
+      "sha256": "7e4af38978fd1343ca4cf8a53c256e7e9a8df43d820e0383a97e07da9c3defe1"
+    },
+    {
+      "id": "assemble_receiver_2",
+      "seconds": 4.06,
+      "sha256": "cd762dcdb91d90d3b00c7f79d98755c0fe9e5f39c4a2bd0a608ffd4680c6eea2"
+    },
+    {
+      "id": "broadcast_truth_0",
+      "seconds": 7.051,
+      "sha256": "a25afc96b221abc49cf914199bc1da74c96ea56e23d3fc3697eb3190976b4082"
+    },
+    {
+      "id": "broadcast_truth_1",
+      "seconds": 1.9,
+      "sha256": "34dbdd4f62a6965477fc2c7ff79c742e1de7e1807642daedeadd69d6fb64655c"
+    },
+    {
+      "id": "broadcast_truth_2",
+      "seconds": 3.18,
+      "sha256": "baffd523dd8d7666adf545b8a4065024151d0f03f161dd9b0d632e8753254b0e"
+    },
+    {
+      "id": "seal_records_0",
+      "seconds": 4.89,
+      "sha256": "728b4ae6d73caa2eb99d31dc46ad68355b3ab0f77c37229aac91fdb1c744d093"
+    },
+    {
+      "id": "seal_records_1",
+      "seconds": 3.51,
+      "sha256": "c2c2add183a78e041027b747a93ad4cd4c2f765a6a7645692237e3bd494276b1"
+    },
+    {
+      "id": "seal_records_2",
+      "seconds": 2.14,
+      "sha256": "2cb00b7cb3633b8ce51d7887eecc0276b7254a851f45b63d4a71eb5193ab6e97"
+    },
+    {
+      "id": "open_shelter_0",
+      "seconds": 6.04,
+      "sha256": "d89e536b182d52e1bbe08ccd69297456e10374fd936e14d946a956d5448cd6d2"
+    },
+    {
+      "id": "open_shelter_1",
+      "seconds": 4.07,
+      "sha256": "1bb3021c84469dcc3a7c0a85da8c39e90c11fe88add58ea66e6d54b56cd239d8"
+    },
+    {
+      "id": "repair_lift_0",
+      "seconds": 4.4,
+      "sha256": "4b3e774bbbca94f8f1924fab00c3de78b5dde0a9dfd94334958665782477863e"
+    },
+    {
+      "id": "repair_lift_1",
+      "seconds": 4.5,
+      "sha256": "35214c9ff13b9ef115a807ceefccb4f4eeb6b0b623e80ed2f68b71e5e5a96c38"
+    },
+    {
+      "id": "settle_districts_0",
+      "seconds": 4.381,
+      "sha256": "f10abc060ff105a7be66d09d042bcd5b02decf6df206f41809aba1a0e2daa4db"
+    },
+    {
+      "id": "settle_districts_1",
+      "seconds": 1.14,
+      "sha256": "bf77e260c4d247a02590db60de899fc73240d1f4b197f9db1214263825bd6f6f"
+    },
+    {
+      "id": "settle_districts_2",
+      "seconds": 4.45,
+      "sha256": "70ddaf37f06963888d27ad474385b10671b7e4900f2f526bcec49ff3aca22feb"
+    },
+    {
+      "id": "settle_districts_3",
+      "seconds": 3.43,
+      "sha256": "7735c326eb4df1d8c374656184c8481691db79114ad40fa818a64cbec442417e"
+    },
+    {
+      "id": "settle_districts_4",
+      "seconds": 6.1,
+      "sha256": "fd466bf83a6557a759041d018d9224aed811a97cce1b52c6c0910d612f265105"
+    },
+    {
+      "id": "lead_evacuation_0",
+      "seconds": 3.73,
+      "sha256": "5e0563aaec22c44f583d17c6a09ad511eeeba209531c67c382f865f75ba977f6"
+    },
+    {
+      "id": "lead_evacuation_1",
+      "seconds": 2.891,
+      "sha256": "9eb3d1e1f9062ed8c84ab71be9a1680632c3f8feaf525898116f6b569cbdc0bd"
+    },
+    {
+      "id": "lead_evacuation_2",
+      "seconds": 1.541,
+      "sha256": "e47644c4c8d7914f597b31e862d0b075833717a44161f1fb39d371148b05a519"
+    },
+    {
+      "id": "lead_evacuation_3",
+      "seconds": 4.48,
+      "sha256": "40299da97f25154771ab58d368863a89e46ce550f465333ef4c95a0d5560a3f6"
+    },
+    {
+      "id": "lead_evacuation_4",
+      "seconds": 6.05,
+      "sha256": "e0ef4cc4db1cb390410636d44f882c5d6428da618219649af2cc1799c3d58762"
+    },
+    {
+      "id": "find_mina_letter_0",
+      "seconds": 4.55,
+      "sha256": "73e85218583999e082fee5f7c81ebe5c178c435b09393913f98ada07059e1be8"
+    },
+    {
+      "id": "deliver_mina_letter_0",
+      "seconds": 4.064,
+      "sha256": "205b9a7665c0487477d8f3889e0a9bc19d49d5511aafae6a9ad942677c2491bc"
+    },
+    {
+      "id": "deliver_mina_letter_1",
+      "seconds": 2.93,
+      "sha256": "5a4e9e214f0f793f4c83cfa67c65dfc968e4510ea62f925a4c0d22c2aca2e8ec"
+    },
+    {
+      "id": "find_tools_0",
+      "seconds": 3.43,
+      "sha256": "74d364e5e0aaee35b6bb6aff277e387ec344ae26263f9bafa67e7b041b3d76b4"
+    },
+    {
+      "id": "repair_bridge_0",
+      "seconds": 3.61,
+      "sha256": "add20e21a31631ce4bec4e5e24f79d2c685827161155179d5074ca8e58577c81"
+    },
+    {
+      "id": "repair_bridge_1",
+      "seconds": 3.76,
+      "sha256": "79549cc25eb1d6541082e82b41e511a75729f1b76cc4e5fd4c7740de15963397"
+    },
+    {
+      "id": "supply_0_0",
+      "seconds": 3.91,
+      "sha256": "27c5571a78b25d4158ecacc702a22edd967c05765f2a37336bad924139b23aa2"
+    },
+    {
+      "id": "supply_1_0",
+      "seconds": 3.91,
+      "sha256": "27c5571a78b25d4158ecacc702a22edd967c05765f2a37336bad924139b23aa2"
+    },
+    {
+      "id": "supply_2_0",
+      "seconds": 3.91,
+      "sha256": "27c5571a78b25d4158ecacc702a22edd967c05765f2a37336bad924139b23aa2"
+    },
+    {
+      "id": "supply_3_0",
+      "seconds": 3.91,
+      "sha256": "27c5571a78b25d4158ecacc702a22edd967c05765f2a37336bad924139b23aa2"
+    },
+    {
+      "id": "supply_4_0",
+      "seconds": 3.91,
+      "sha256": "27c5571a78b25d4158ecacc702a22edd967c05765f2a37336bad924139b23aa2"
+    },
+    {
+      "id": "supply_5_0",
+      "seconds": 3.91,
+      "sha256": "27c5571a78b25d4158ecacc702a22edd967c05765f2a37336bad924139b23aa2"
+    },
+    {
+      "id": "craft_medkit_0_0",
+      "seconds": 5.06,
+      "sha256": "d6653f62f3a46c32bf3fc508da25dfe2bda817430ba66bf5512c668af1301328"
+    },
+    {
+      "id": "use_medkit_0_0",
+      "seconds": 1.52,
+      "sha256": "925160e62d103e90c3006f5ef7afc79c3f789ee86f6a16a1d61cebe64997d89f"
+    },
+    {
+      "id": "craft_medkit_1_0",
+      "seconds": 5.06,
+      "sha256": "d6653f62f3a46c32bf3fc508da25dfe2bda817430ba66bf5512c668af1301328"
+    },
+    {
+      "id": "use_medkit_1_0",
+      "seconds": 1.52,
+      "sha256": "925160e62d103e90c3006f5ef7afc79c3f789ee86f6a16a1d61cebe64997d89f"
+    },
+    {
+      "id": "craft_medkit_2_0",
+      "seconds": 5.06,
+      "sha256": "d6653f62f3a46c32bf3fc508da25dfe2bda817430ba66bf5512c668af1301328"
+    },
+    {
+      "id": "use_medkit_2_0",
+      "seconds": 1.52,
+      "sha256": "925160e62d103e90c3006f5ef7afc79c3f789ee86f6a16a1d61cebe64997d89f"
+    },
+    {
+      "id": "craft_medkit_3_0",
+      "seconds": 5.06,
+      "sha256": "d6653f62f3a46c32bf3fc508da25dfe2bda817430ba66bf5512c668af1301328"
+    },
+    {
+      "id": "use_medkit_3_0",
+      "seconds": 1.52,
+      "sha256": "925160e62d103e90c3006f5ef7afc79c3f789ee86f6a16a1d61cebe64997d89f"
+    },
+    {
+      "id": "take_pistol_0",
+      "seconds": 4.43,
+      "sha256": "756940b24b49bcad039b812f217fa94adb6557bee7e6f607c30d49b95da918e5"
+    },
+    {
+      "id": "take_pipe_0",
+      "seconds": 5.17,
+      "sha256": "b0b8a51f5fa3e7da2b15829b9726e5bf60e68d231a19be86a4b09508b6ed88df"
+    },
+    {
+      "id": "bottles_depot_0",
+      "seconds": 4.514,
+      "sha256": "48d6169d630c45ea6c36191a08e5607964ca3e57286eebce28dc2ff7275449ab"
+    },
+    {
+      "id": "combat_cache_0_0",
+      "seconds": 4.453,
+      "sha256": "5794c800857ca8226ba2e043e71d258ed4f62c843fed66b217928b9fd28ea61f"
+    },
+    {
+      "id": "combat_cache_1_0",
+      "seconds": 4.453,
+      "sha256": "5794c800857ca8226ba2e043e71d258ed4f62c843fed66b217928b9fd28ea61f"
+    },
+    {
+      "id": "combat_cache_2_0",
+      "seconds": 4.453,
+      "sha256": "5794c800857ca8226ba2e043e71d258ed4f62c843fed66b217928b9fd28ea61f"
+    }
+  ],
+  "total_seconds": 474.623,
+  "selected_character_voices": 5,
+  "hardware_playback_verified": false
+}

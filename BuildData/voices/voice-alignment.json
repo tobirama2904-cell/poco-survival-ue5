@@ -1,0 +1,1023 @@
+{
+  "lines_expected": 109,
+  "lines_written": 109,
+  "voice_count": 5,
+  "issues": [],
+  "clips": [
+    {
+      "id": "repair_generator_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 0.0,
+      "end_seconds": 3.89,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "meet_dispatch_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 3.89,
+      "end_seconds": 9.09,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "meet_dispatch_3",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 9.09,
+      "end_seconds": 14.97,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "inspect_break_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 14.97,
+      "end_seconds": 20.55,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "read_orders_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 20.55,
+      "end_seconds": 26.86,
+      "lexical_coverage": 0.8
+    },
+    {
+      "id": "read_orders_2",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 26.86,
+      "end_seconds": 29.59,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "collect_clinic_key_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 29.59,
+      "end_seconds": 32.06,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "unlock_clinic_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 32.06,
+      "end_seconds": 33.32,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "meet_doctor_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 33.32,
+      "end_seconds": 36.94,
+      "lexical_coverage": 0.889
+    },
+    {
+      "id": "find_antibiotics_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 36.94,
+      "end_seconds": 41.47,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "deliver_antibiotics_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 41.47,
+      "end_seconds": 43.41,
+      "lexical_coverage": 0.667
+    },
+    {
+      "id": "check_reservoir_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 43.41,
+      "end_seconds": 47.58,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "check_reservoir_2",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 47.58,
+      "end_seconds": 52.56,
+      "lexical_coverage": 0.933
+    },
+    {
+      "id": "sample_water_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 52.56,
+      "end_seconds": 57.27,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "analyze_sample_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 57.27,
+      "end_seconds": 60.86,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "speak_guard_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 60.86,
+      "end_seconds": 62.89,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "speak_guard_3",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 62.89,
+      "end_seconds": 67.17,
+      "lexical_coverage": 0.875
+    },
+    {
+      "id": "find_logbook_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 67.17,
+      "end_seconds": 72.25,
+      "lexical_coverage": 0.875
+    },
+    {
+      "id": "trace_pipeline_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 72.25,
+      "end_seconds": 77.84,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "retrieve_filter_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 77.84,
+      "end_seconds": 81.33,
+      "lexical_coverage": 0.8
+    },
+    {
+      "id": "install_filter_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 81.33,
+      "end_seconds": 85.83,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "install_filter_2",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 85.83,
+      "end_seconds": 88.19,
+      "lexical_coverage": 0.5,
+      "replacement": "fresh exact-line synthesis; not a batch cut",
+      "original_alignment_flag": [
+        {
+          "id": "install_filter_2",
+          "error": "low lexical coverage",
+          "coverage": 0.5,
+          "expected": "Это начало. Не чудо.",
+          "heard": "это начало"
+        }
+      ]
+    },
+    {
+      "id": "radio_brother_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 88.19,
+      "end_seconds": 90.26,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "radio_brother_3",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 90.26,
+      "end_seconds": 92.93,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rescue_brother_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 92.93,
+      "end_seconds": 94.83,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "rescue_brother_3",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 94.83,
+      "end_seconds": 98.52,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "assemble_receiver_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 98.52,
+      "end_seconds": 100.91,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "broadcast_truth_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 0,
+      "start_seconds": 100.91,
+      "end_seconds": 107.961,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "seal_records_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 0.0,
+      "end_seconds": 4.89,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "repair_lift_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 4.89,
+      "end_seconds": 9.39,
+      "lexical_coverage": 0.833
+    },
+    {
+      "id": "settle_districts_2",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 9.39,
+      "end_seconds": 13.84,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "lead_evacuation_3",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 13.84,
+      "end_seconds": 18.32,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "find_mina_letter_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 18.32,
+      "end_seconds": 22.87,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "deliver_mina_letter_1",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 22.87,
+      "end_seconds": 25.8,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "find_tools_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 25.8,
+      "end_seconds": 29.23,
+      "lexical_coverage": 0.857
+    },
+    {
+      "id": "repair_bridge_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 29.23,
+      "end_seconds": 32.84,
+      "lexical_coverage": 0.714
+    },
+    {
+      "id": "supply_0_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 32.84,
+      "end_seconds": 36.75,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "craft_medkit_0_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 36.75,
+      "end_seconds": 41.81,
+      "lexical_coverage": 0.875
+    },
+    {
+      "id": "use_medkit_0_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 41.81,
+      "end_seconds": 43.33,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "take_pipe_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 43.33,
+      "end_seconds": 48.5,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "combat_cache_0_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 48.5,
+      "end_seconds": 52.953,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "repair_generator_1",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 0.0,
+      "end_seconds": 4.75,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "power_clinic_1",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 4.75,
+      "end_seconds": 8.91,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "power_pumps_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 8.91,
+      "end_seconds": 11.11,
+      "lexical_coverage": 0.75
+    },
+    {
+      "id": "connect_local_network_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 11.11,
+      "end_seconds": 17.97,
+      "lexical_coverage": 0.929
+    },
+    {
+      "id": "send_evacuation_beacon_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 17.97,
+      "end_seconds": 24.98,
+      "lexical_coverage": 0.929
+    },
+    {
+      "id": "meet_dispatch_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 24.98,
+      "end_seconds": 29.46,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "meet_dispatch_2",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 29.46,
+      "end_seconds": 35.92,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "inspect_break_1",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 35.92,
+      "end_seconds": 41.29,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "collect_clinic_key_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 41.29,
+      "end_seconds": 46.08,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "check_reservoir_1",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 46.08,
+      "end_seconds": 49.82,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "find_logbook_1",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 49.82,
+      "end_seconds": 54.7,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "trace_pipeline_1",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 54.7,
+      "end_seconds": 57.78,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "install_filter_1",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 57.78,
+      "end_seconds": 64.88,
+      "lexical_coverage": 0.923
+    },
+    {
+      "id": "find_rooftop_key_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 64.88,
+      "end_seconds": 69.67,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "assemble_receiver_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 69.67,
+      "end_seconds": 75.16,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "assemble_receiver_2",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 75.16,
+      "end_seconds": 79.22,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "broadcast_truth_2",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 79.22,
+      "end_seconds": 82.4,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "seal_records_2",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 82.4,
+      "end_seconds": 84.54,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "settle_districts_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 2,
+      "start_seconds": 84.54,
+      "end_seconds": 88.921,
+      "lexical_coverage": 0.889
+    },
+    {
+      "id": "settle_districts_4",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 3,
+      "start_seconds": 0.0,
+      "end_seconds": 6.1,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "lead_evacuation_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 3,
+      "start_seconds": 6.1,
+      "end_seconds": 9.83,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "lead_evacuation_4",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 3,
+      "start_seconds": 9.83,
+      "end_seconds": 15.88,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "repair_bridge_1",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 3,
+      "start_seconds": 15.88,
+      "end_seconds": 19.64,
+      "lexical_coverage": 0.9
+    },
+    {
+      "id": "take_pistol_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 3,
+      "start_seconds": 19.64,
+      "end_seconds": 24.07,
+      "lexical_coverage": 0.9
+    },
+    {
+      "id": "bottles_depot_0",
+      "speaker": "Лейла",
+      "voice_id": "voice-00",
+      "batch": 3,
+      "start_seconds": 24.07,
+      "end_seconds": 28.584,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "power_clinic_0",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 0.0,
+      "end_seconds": 2.77,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "power_pumps_1",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 2.77,
+      "end_seconds": 7.73,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "unlock_clinic_0",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 7.73,
+      "end_seconds": 11.79,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "unlock_clinic_2",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 11.79,
+      "end_seconds": 19.49,
+      "lexical_coverage": 0.786
+    },
+    {
+      "id": "meet_doctor_0",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 19.49,
+      "end_seconds": 25.62,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "meet_doctor_2",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 25.62,
+      "end_seconds": 31.84,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "find_antibiotics_1",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 31.84,
+      "end_seconds": 35.11,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "deliver_antibiotics_0",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 35.11,
+      "end_seconds": 39.5,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "deliver_antibiotics_2",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 39.5,
+      "end_seconds": 46.31,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "analyze_sample_0",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 46.31,
+      "end_seconds": 51.53,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "analyze_sample_2",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 51.53,
+      "end_seconds": 58.53,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "retrieve_filter_1",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 58.53,
+      "end_seconds": 63.03,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "seal_records_1",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 63.03,
+      "end_seconds": 66.54,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "open_shelter_0",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 66.54,
+      "end_seconds": 72.58,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "settle_districts_3",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 72.58,
+      "end_seconds": 76.01,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "deliver_mina_letter_0",
+      "speaker": "Наргис",
+      "voice_id": "voice-01",
+      "batch": 4,
+      "start_seconds": 76.01,
+      "end_seconds": 80.074,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "read_orders_1",
+      "speaker": "Тимур",
+      "voice_id": "voice-03",
+      "batch": 5,
+      "start_seconds": 0.0,
+      "end_seconds": 8.29,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "read_orders_3",
+      "speaker": "Тимур",
+      "voice_id": "voice-03",
+      "batch": 5,
+      "start_seconds": 8.29,
+      "end_seconds": 15.97,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "speak_guard_0",
+      "speaker": "Тимур",
+      "voice_id": "voice-03",
+      "batch": 5,
+      "start_seconds": 15.97,
+      "end_seconds": 21.58,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "speak_guard_2",
+      "speaker": "Тимур",
+      "voice_id": "voice-03",
+      "batch": 5,
+      "start_seconds": 21.58,
+      "end_seconds": 32.93,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "broadcast_truth_1",
+      "speaker": "Тимур",
+      "voice_id": "voice-03",
+      "batch": 5,
+      "start_seconds": 32.93,
+      "end_seconds": 34.83,
+      "lexical_coverage": 0.667
+    },
+    {
+      "id": "open_shelter_1",
+      "speaker": "Тимур",
+      "voice_id": "voice-03",
+      "batch": 5,
+      "start_seconds": 34.83,
+      "end_seconds": 38.9,
+      "lexical_coverage": 0.857
+    },
+    {
+      "id": "lead_evacuation_1",
+      "speaker": "Тимур",
+      "voice_id": "voice-03",
+      "batch": 5,
+      "start_seconds": 38.9,
+      "end_seconds": 42.939,
+      "lexical_coverage": 0.6,
+      "replacement": "fresh exact-line synthesis; not a batch cut",
+      "original_alignment_flag": [
+        {
+          "id": "lead_evacuation_1",
+          "error": "low lexical coverage",
+          "coverage": 0.6,
+          "expected": "Сперва раненые. Я пойду последним.",
+          "heard": "я пойду последним"
+        }
+      ]
+    },
+    {
+      "id": "radio_brother_0",
+      "speaker": "Ильяс",
+      "voice_id": "voice-04",
+      "batch": 6,
+      "start_seconds": 0.0,
+      "end_seconds": 2.72,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "radio_brother_2",
+      "speaker": "Ильяс",
+      "voice_id": "voice-04",
+      "batch": 6,
+      "start_seconds": 2.72,
+      "end_seconds": 9.81,
+      "lexical_coverage": 0.909
+    },
+    {
+      "id": "rescue_brother_0",
+      "speaker": "Ильяс",
+      "voice_id": "voice-04",
+      "batch": 6,
+      "start_seconds": 9.81,
+      "end_seconds": 16.51,
+      "lexical_coverage": 0.917
+    },
+    {
+      "id": "rescue_brother_2",
+      "speaker": "Ильяс",
+      "voice_id": "voice-04",
+      "batch": 6,
+      "start_seconds": 16.51,
+      "end_seconds": 18.74,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "repair_lift_0",
+      "speaker": "Ильяс",
+      "voice_id": "voice-04",
+      "batch": 6,
+      "start_seconds": 18.74,
+      "end_seconds": 23.14,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "settle_districts_1",
+      "speaker": "Ильяс",
+      "voice_id": "voice-04",
+      "batch": 6,
+      "start_seconds": 23.14,
+      "end_seconds": 24.28,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "lead_evacuation_2",
+      "speaker": "Ильяс",
+      "voice_id": "voice-04",
+      "batch": 6,
+      "start_seconds": 24.28,
+      "end_seconds": 25.821,
+      "lexical_coverage": 1.0
+    },
+    {
+      "id": "supply_1_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 32.84,
+      "end_seconds": 36.75,
+      "lexical_coverage": 1.0,
+      "reuses_line": "supply_0_0"
+    },
+    {
+      "id": "supply_2_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 32.84,
+      "end_seconds": 36.75,
+      "lexical_coverage": 1.0,
+      "reuses_line": "supply_0_0"
+    },
+    {
+      "id": "supply_3_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 32.84,
+      "end_seconds": 36.75,
+      "lexical_coverage": 1.0,
+      "reuses_line": "supply_0_0"
+    },
+    {
+      "id": "supply_4_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 32.84,
+      "end_seconds": 36.75,
+      "lexical_coverage": 1.0,
+      "reuses_line": "supply_0_0"
+    },
+    {
+      "id": "supply_5_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 32.84,
+      "end_seconds": 36.75,
+      "lexical_coverage": 1.0,
+      "reuses_line": "supply_0_0"
+    },
+    {
+      "id": "craft_medkit_1_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 36.75,
+      "end_seconds": 41.81,
+      "lexical_coverage": 0.875,
+      "reuses_line": "craft_medkit_0_0"
+    },
+    {
+      "id": "use_medkit_1_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 41.81,
+      "end_seconds": 43.33,
+      "lexical_coverage": 1.0,
+      "reuses_line": "use_medkit_0_0"
+    },
+    {
+      "id": "craft_medkit_2_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 36.75,
+      "end_seconds": 41.81,
+      "lexical_coverage": 0.875,
+      "reuses_line": "craft_medkit_0_0"
+    },
+    {
+      "id": "use_medkit_2_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 41.81,
+      "end_seconds": 43.33,
+      "lexical_coverage": 1.0,
+      "reuses_line": "use_medkit_0_0"
+    },
+    {
+      "id": "craft_medkit_3_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 36.75,
+      "end_seconds": 41.81,
+      "lexical_coverage": 0.875,
+      "reuses_line": "craft_medkit_0_0"
+    },
+    {
+      "id": "use_medkit_3_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 41.81,
+      "end_seconds": 43.33,
+      "lexical_coverage": 1.0,
+      "reuses_line": "use_medkit_0_0"
+    },
+    {
+      "id": "combat_cache_1_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 48.5,
+      "end_seconds": 52.953,
+      "lexical_coverage": 1.0,
+      "reuses_line": "combat_cache_0_0"
+    },
+    {
+      "id": "combat_cache_2_0",
+      "speaker": "Арсен",
+      "voice_id": "voice-02",
+      "batch": 1,
+      "start_seconds": 48.5,
+      "end_seconds": 52.953,
+      "lexical_coverage": 1.0,
+      "reuses_line": "combat_cache_0_0"
+    }
+  ],
+  "in_game_audio_verified": false
+}
