@@ -32,3 +32,5 @@ Merged guards preserve **five required game images**, melee timing/impact/recove
 - New immutable source-art release **forest-cell-art-001**, separate from the existing county-art-004; 18 files, 36,190,716 bytes, SHA256 ee45bd01d656c300dc41f46c33ca10053df9a938fc556667cadfdd7c8c2f3b68. Independent restore passed.
 - Rebuild from pinned county-base-003 using bake_pine_lod.py → pack_pine_lod_atlas.py → author_pine_lods.py. No paid services or engine assets are in the public art archive.
 - Actual new UE rendering, shader cost, melee impacts, mobile cook/installation and POCO performance remain unverified. Combat art/wardrobe, weapon-specific choreography, ragdolls and full tactical AI are still separate work.
+
+Combined candidate source 495ba22fa9c073d77fa39bd62e19d47a0d532853: strict UE scene/forest/companion/melee verification **36236371819**, matching ARM64 native compilation **36236372900**. Both dispatched; this is not a claim of completed new rendering, APK or physical-device testing.

@@ -459,6 +459,9 @@
     "source_art_release": "forest-cell-art-001",
     "required_runtime_images": 5,
     "measured_phone_fps": null,
-    "final_game": false
+    "final_game": false,
+    "source_commit": "495ba22fa9c073d77fa39bd62e19d47a0d532853",
+    "ue_scene_run": 36236371819,
+    "android_native_run": 36236372900
   }
 }
