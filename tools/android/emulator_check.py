@@ -106,9 +106,23 @@ try:
     report['journal_close_touch_diagnostic']=probe.journal_close_by_touch() # diagnostic only; not gate evidence
     before=probe.save('before')
     # Actual touchscreen gesture; no diagnostic teleport or game-state injection.
-    adb('shell','input','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'1500')
+    # Unlike discrete press events, virtual-stick analog values are emitted on
+    # Slate ticks. A 1.5 s sweep may finish before a frame on this slow emulator.
+    # Keep the real contact across several presentation opportunities and retain
+    # a picture while it is held. Do not weaken the saved-displacement gate.
+    time.sleep(8)
+    report['joystick_gesture_ms']=8000
+    gesture=subprocess.Popen([ADB,'shell','input','touchscreen','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'8000'],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    try:
+        time.sleep(4);report['screenshots'].append(screenshot('android-stick-held.png'))
+        result=gesture.communicate(timeout=30)
+        if gesture.returncode:raise RuntimeError('Android joystick gesture command failed')
+    finally:
+        if gesture.poll() is None:gesture.kill();gesture.communicate()
+
     time.sleep(8);report['screenshots'].append(wait_visible_frame('android-after-input.png'))
     moved=probe.save('after-move',before['generation'])
+    (ROOT/'android-touch-before-restart.log').write_text(text('logcat','-d',timeout=60))
     stop_video()
     adb('shell','am','force-stop',PACKAGE);adb('logcat','-c');launch()
     # Wait for the actual map, not a fixed 90-second interval during which a
@@ -159,7 +173,7 @@ finally:
         routing_logs=text('logcat','-d',timeout=30,check=False)
         (ROOT/'final-logcat.log').write_text(routing_logs)
         from touch_route_report import analyze_touch_route
-        (ROOT/'touch-routing.json').write_text(json.dumps(analyze_touch_route(routing_logs),indent=2))
+        (ROOT/'touch-routing.json').write_text(json.dumps(analyze_touch_route(((ROOT/'android-touch-before-restart.log').read_text() if (ROOT/'android-touch-before-restart.log').exists() else '')+'\n'+routing_logs),indent=2))
     except Exception as routing_error:report['touch_routing_capture_error']=str(routing_error)
     (ROOT/'install-verification.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)
     if process is not None:
