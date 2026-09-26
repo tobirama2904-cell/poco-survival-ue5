@@ -4,6 +4,7 @@
 #include "SurvivalGameInstance.h"
 #include "SurvivalCharacter.h"
 #include "SurvivalCompanion.h"
+#include "SurvivalInfected.h"
 #include "SurvivalPlayerController.h"
 #include "SurvivalHUD.h"
 #include "GameFramework/PlayerController.h"
@@ -123,9 +124,9 @@ void ASurvivalGameMode::EndCountyMovement()
 }
 void ASurvivalGameMode::CaptureCountyProof()
 {
- int32 Levels[4]={0,0,0,0};
- for(TActorIterator<ASurvivalSceneryCluster> It(GetWorld());It;++It){const int32 L=It->GetVisualLOD();if(L>=0&&L<4)++Levels[L];}
- const bool ForestPass=Levels[0]>0&&Levels[1]>0&&Levels[2]>0&&Levels[3]>0;
+ int32 Levels[4]={0,0,0,0};int32 ExpectedForestCells=0;
+ for(TActorIterator<ASurvivalSceneryCluster> It(GetWorld());It;++It){if(It->UsesDistanceLevels())++ExpectedForestCells;const int32 L=It->GetVisualLOD();if(L>=0&&L<4)++Levels[L];}
+ const bool ForestPass=ExpectedForestCells>0&&Levels[0]+Levels[1]+Levels[2]+Levels[3]==ExpectedForestCells&&Levels[0]>0&&Levels[1]>0&&Levels[2]>0&&Levels[3]>0;
  const FString Forest=FString::Printf(TEXT("{\"passed\":%s,\"near_cells\":%d,\"middle_cells\":%d,\"far_cells\":%d,\"hidden_cells\":%d,\"per_instance_continuous_lod\":false,\"physical_device_fps_measured\":false}\n"),ForestPass?TEXT("true"):TEXT("false"),Levels[0],Levels[1],Levels[2],Levels[3]);
  FFileHelper::SaveStringToFile(Forest,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/forest-runtime.json")));
 
@@ -188,5 +189,35 @@ void ASurvivalGameMode::CaptureSupportProof()
  FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/companion-support.json")));
  if(Player){Player->bCompanionPanel=true;if(!Player->bJournalOpen)Player->ToggleJournal();}
  if(PC)PC->ConsoleCommand(TEXT("HighResShot 1"));
- FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,4.f,false);
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::BeginMeleeProof,4.f,false);
+}
+
+void ASurvivalGameMode::BeginMeleeProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
+ if(Player){
+  Player->EndStory();if(Player->bJournalOpen)Player->ToggleJournal();Player->GetCharacterMovement()->StopMovementImmediately();PC->SetControlRotation(FRotator(-8,-127,0));Player->SetActorRotation(FRotator(0,-127,0));
+  FActorSpawnParameters Params;Params.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+  MeleeDummy=GetWorld()->SpawnActor<ASurvivalInfected>(Player->GetActorLocation()+Player->GetActorForwardVector()*115,FRotator(0,53,0),Params);
+  if(MeleeDummy){MeleeDummy->SetActorTickEnabled(false);MeleeDummy->GetCharacterMovement()->StopMovementImmediately();}
+  const FVector Focus=Player->GetActorLocation()+Player->GetActorForwardVector()*60+FVector(0,0,30),View=Player->GetActorLocation()+Player->GetActorRightVector()*370+Player->GetActorForwardVector()*45+FVector(0,0,105);
+  if(auto* Camera=GetWorld()->SpawnActor<ACameraActor>(View,(Focus-View).Rotation()))PC->SetViewTarget(Camera);
+  MeleeBefore=Player->MeleeImpactEvents;const float Stamina=Player->GetStamina();Player->Attack();Player->Attack();bMeleeInputDebounced=FMath::IsNearlyEqual(Stamina-Player->GetStamina(),18.f,.01f);
+ }
+ FTimerHandle Pose,Finish;GetWorldTimerManager().SetTimer(Pose,this,&ASurvivalGameMode::CaptureMeleePose,.38f,false);GetWorldTimerManager().SetTimer(Finish,this,&ASurvivalGameMode::FinishMeleeProof,1.25f,false);
+}
+void ASurvivalGameMode::CaptureMeleePose()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
+ bMeleePoseVerified=Player&&Player->HasMeleeMotion()&&Player->IsMeleePosePlaying()&&!Player->RightHandBone().IsNone();
+ if(PC)PC->ConsoleCommand(TEXT("HighResShot 1"));
+}
+void ASurvivalGameMode::FinishMeleeProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
+ const bool Once=Player&&Player->MeleeImpactEvents-MeleeBefore==1;const bool Damage=MeleeDummy&&FMath::IsNearlyEqual(MeleeDummy->GetHealth(),75.f,.01f);const bool Recovered=Player&&!Player->IsMeleeActive()&&!Player->IsMeleePosePlaying();
+ const bool Passed=bMeleePoseVerified&&bMeleeInputDebounced&&Once&&Damage&&Recovered;
+ const FString Report=FString::Printf(TEXT("{\"passed\":%s,\"diagnostic_setup\":true,\"human_action_pose\":%s,\"duplicate_input_rejected\":%s,\"single_impact\":%s,\"target_damage_once\":%s,\"returned_to_locomotion\":%s,\"touch_tested\":false,\"final_animation_quality\":false}\n"),Passed?TEXT("true"):TEXT("false"),bMeleePoseVerified?TEXT("true"):TEXT("false"),bMeleeInputDebounced?TEXT("true"):TEXT("false"),Once?TEXT("true"):TEXT("false"),Damage?TEXT("true"):TEXT("false"),Recovered?TEXT("true"):TEXT("false"));
+ FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/melee-runtime.json")));
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,3.f,false);
 }

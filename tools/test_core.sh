@@ -37,3 +37,6 @@ c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISo
 
 c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public tests/core/test_scenery_lod.cpp -o .cache/core/test_scenery_lod
 .cache/core/test_scenery_lod
+
+c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public tests/core/test_melee_action.cpp -o .cache/core/test_melee_action
+.cache/core/test_melee_action

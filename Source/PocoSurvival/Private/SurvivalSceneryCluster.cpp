@@ -48,7 +48,9 @@ void ASurvivalSceneryCluster::UpdateDistanceLOD()
  auto* Player=UGameplayStatics::GetPlayerPawn(this,0);if(!Player||DistanceMeshes.Num()!=3)return;
  survival::SceneryLODPolicy Policy;Policy.endRange=EndRange;
  const int32 LOD=Policy.Choose(FVector::Dist2D(GetActorLocation(),Player->GetActorLocation()),CurrentLOD);
- if(LOD==CurrentLOD)return;CurrentLOD=LOD;
- if(LOD==3){Visuals->SetVisibility(false);return;}
- Visuals->SetStaticMesh(DistanceMeshes[LOD]);Visuals->SetCastShadow(LOD==0);Visuals->SetVisibility(true);
+ if(LOD==CurrentLOD)return;
+ if(LOD==3){CurrentLOD=LOD;Visuals->SetVisibility(false);return;}
+ UStaticMesh* Desired=DistanceMeshes[LOD].Get();
+ if(Visuals->GetStaticMesh()!=Desired&&!Visuals->SetStaticMesh(Desired)){UE_LOG(LogTemp,Error,TEXT("FOREST_LOD_SWAP_FAILED"));return;}
+ CurrentLOD=LOD;Visuals->SetCastShadow(LOD==0);Visuals->SetVisibility(true);
 }

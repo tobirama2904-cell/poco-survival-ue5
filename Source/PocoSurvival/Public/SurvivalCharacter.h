@@ -3,6 +3,7 @@
 #include "GameFramework/Character.h"
 #include "Core/Vitals.h"
 #include "Core/Combat.h"
+#include "Core/MeleeAction.h"
 #include "Core/FieldSurvival.h"
 #include "SurvivalCharacter.generated.h"
 class USpringArmComponent;
@@ -34,6 +35,12 @@ public:
     UFUNCTION(BlueprintCallable,Category="Vitals") bool RestoreVitals(float Health,float Stamina);
     UFUNCTION(BlueprintCallable,Category="Actions") void Interact();
     UFUNCTION(BlueprintCallable,Category="Actions") void Attack();
+    bool IsMeleeActive() const { return Melee.active; }
+    void CancelMelee() { Melee.Cancel();bMeleeImpactFrame=false;if(bHumanAvatar)UpdateHuman(); }
+    bool HasMeleeMotion() const;
+    bool IsMeleePosePlaying() const;
+    uint32 MeleeImpactEvents=0;
+    FName RightHandBone() const;
     UFUNCTION(BlueprintCallable,Category="Actions") void ToggleSprint();
     UFUNCTION(BlueprintCallable,Category="Actions") void Save();
     UFUNCTION(BlueprintCallable,Category="Actions") void Load();
@@ -110,6 +117,8 @@ private:
     survival::Vitals Stats;
     bool bSprintRequested=false;
     float AttackCooldown=0;
+    survival::MeleeAction Melee;
+    bool bMeleeCrouched=false,bMeleeImpactFrame=false;
     int32 LookFinger=-1;
     int32 JumpFinger=-1;
     FVector LastTouch=FVector::ZeroVector;

@@ -130,7 +130,7 @@ bool ASurvivalCompanion::RequestAid(ASurvivalCharacter* Player)
 void ASurvivalCompanion::UpdateAid(float Delta,ASurvivalCharacter* Player,USurvivalGameInstance* Game)
 {
  if(!Aid.Active())return;
- survival::AidContext Context;Context.near=FVector::DistSquared(GetActorLocation(),Player->GetActorLocation())<FMath::Square(180.f);Context.still=Player->GetVelocity().Size2D()<40&&GetVelocity().Size2D()<40;Context.allowed=!Player->IsCinematicLocked()&&!Player->bJournalOpen&&!Player->bEditingControls;Context.safe=Player->LastImpactTime<=AidStarted;
+ survival::AidContext Context;Context.near=FVector::DistSquared(GetActorLocation(),Player->GetActorLocation())<FMath::Square(180.f);Context.still=Player->GetVelocity().Size2D()<40&&GetVelocity().Size2D()<40;Context.allowed=!Player->IsCinematicLocked()&&!Player->IsMeleeActive()&&!Player->bJournalOpen&&!Player->bEditingControls;Context.safe=Player->LastImpactTime<=AidStarted;
  for(TActorIterator<ASurvivalInfected> It(GetWorld());It;++It)if(It->IsAlive()&&FVector::DistSquared(It->GetActorLocation(),Player->GetActorLocation())<FMath::Square(1500.f))Context.safe=false;
  FCollisionQueryParams Params(SCENE_QUERY_STAT(CompanionAidSight),false,this);Params.AddIgnoredActor(Player);FHitResult Hit;
  Context.clear=!GetWorld()->LineTraceSingleByChannel(Hit,GetActorLocation()+FVector(0,0,35),Player->GetActorLocation()+FVector(0,0,35),ECC_Visibility,Params);

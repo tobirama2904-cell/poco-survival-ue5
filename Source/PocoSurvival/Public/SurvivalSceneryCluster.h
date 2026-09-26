@@ -13,6 +13,7 @@ public:
  virtual void BeginPlay() override;
  virtual void Tick(float Delta) override;
  UFUNCTION(BlueprintCallable,Category="County") void ConfigureDistanceLevels(UStaticMesh* NearMesh,UStaticMesh* MidMesh,UStaticMesh* FarMesh);
+ UFUNCTION(BlueprintPure,Category="County") bool UsesDistanceLevels() const { return bDistanceLODs; }
  UFUNCTION(BlueprintPure,Category="County") int32 GetVisualLOD() const { return CurrentLOD; }
  UFUNCTION(BlueprintCallable,Category="County") void Configure(UStaticMesh* Mesh,float CullDistance,bool TreeTrunks,bool SolidObjects=false);
  UFUNCTION(BlueprintCallable,Category="County") void AddScenery(FVector Position,float Yaw,float Scale);

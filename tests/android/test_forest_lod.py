@@ -12,7 +12,7 @@ class ForestLodTests(unittest.TestCase):
   self.assertGreater(len(cells),100)
   self.assertEqual(sum(len(v) for v in cells.values()),sum(p['mesh']=='Pine' for p in layout.placements()))
  def test_collision_not_swapped_with_visual_lod(self):
-  s=(ROOT/'Source/PocoSurvival/Private/SurvivalSceneryCluster.cpp').read_text();s=s[s.index('void ASurvivalSceneryCluster::UpdateDistanceLOD'):];self.assertNotIn('Trunks->',s);self.assertIn('Visuals->SetStaticMesh(DistanceMeshes[LOD])',s);self.assertIn('Visuals->SetVisibility(false)',s)
+  s=(ROOT/'Source/PocoSurvival/Private/SurvivalSceneryCluster.cpp').read_text();s=s[s.index('void ASurvivalSceneryCluster::UpdateDistanceLOD'):];self.assertNotIn('Trunks->',s);self.assertIn('Visuals->SetStaticMesh(Desired)',s);self.assertIn('FOREST_LOD_SWAP_FAILED',s);self.assertIn('Visuals->SetVisibility(false)',s)
  def test_simple_material_and_shared_atlas_are_explicit(self):
   s=(ROOT/'tools/scene/populate_county.py').read_text();self.assertIn('M_PineMobileLOD1',s);self.assertIn('MP_OPACITY_MASK',s);self.assertIn('configure_distance_levels',s)
  def test_exact_distance_asset_budgets_if_local(self):

@@ -18,10 +18,11 @@ void ASurvivalInfected::BeginPlay()
 }
 void ASurvivalInfected::Tick(float Delta)
 {
-    if (auto* Player=Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(this,0))) if (Player->IsCinematicLocked() || Player->bEditingControls) {GetCharacterMovement()->StopMovementImmediately();return;}
+    if (auto* Player=Cast<ASurvivalCharacter>(UGameplayStatics::GetPlayerPawn(this,0))) if (Player->IsCinematicLocked() || Player->bEditingControls) {GetCharacterMovement()->StopMovementImmediately();CancelMelee();return;}
     Super::Tick(Delta);
     if (!IsAlive()) { State=EInfectedState::Dead;return; }
     AlertDelay=FMath::Max(0.f,AlertDelay-Delta);UnseenSeconds+=Delta;AttackDelay=FMath::Max(0.0f,AttackDelay-Delta);ThinkDelay-=Delta;
+    if(IsMeleeActive()){GetCharacterMovement()->StopMovementImmediately();return;}
     if (ThinkDelay<=0) { Think(0.2f);ThinkDelay=0.2f; }
     GetCharacterMovement()->MaxWalkSpeed=(State==EInfectedState::Chase ? (Archetype==1?400:Archetype==2?230:290) : 135)*Wounds().WalkScale();
     AddMovementInput(Direction,1,true);

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import json,hashlib,urllib.request
+import json,hashlib,urllib.request,argparse
 from pathlib import Path
-root=Path(__file__).resolve().parents[2];lock=json.loads((root/'BuildData/characters/conditioned.lock.json').read_text());out=root/'.cache/characters';out.mkdir(parents=True,exist_ok=True)
+root=Path(__file__).resolve().parents[2];parser=argparse.ArgumentParser();parser.add_argument('--lock',type=Path,default=root/'BuildData/characters/conditioned.lock.json');args=parser.parse_args();lock=json.loads(args.lock.read_text());out=root/'.cache/characters';out.mkdir(parents=True,exist_ok=True)
 for f in lock['files']:
  p=out/f['name']
  if p.exists() and hashlib.sha256(p.read_bytes()).hexdigest()==f['sha256']:continue
