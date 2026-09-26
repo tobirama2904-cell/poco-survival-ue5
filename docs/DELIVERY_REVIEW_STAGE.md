@@ -22,3 +22,10 @@ Current cook/render job **36241745942** was dispatched on gameplay/delivery-revi
 The install report now records the exact installed APK SHA256 and package-run ID after rechecking the signed/structurally verified file. Signature verification and source-provenance reports also retain that package-run ID. check_delivery.py joins actual reports and reviewed image hashes; it rejects stale files/reports, unconfirmed movement/restore, mismatched source/signing identity and final-game labels. It is an evidence consistency checker, not a substitute for apksigner, actual device execution or human image review. No approval file is fabricated in advance.
 
 These are tooling-only changes; Source, Config and PocoSurvival.uproject still match f53e298 exactly. 94 Python tests: 88 passed and 6 absent-cache checks skipped. The new delivery-binding tests use explicit synthetic records, not a real APK. Current cook/native jobs remain the same, without restarting or changing their game code.
+
+## Save/menu probe review before installation
+Found two concrete false-positive risks in the test harness: its title search matched the ordinary HUD phrase containing «рюкзаке», and its save check could accept an already existing initial/restart autosave. The test now requires the full backpack title and a generation newer than the pre-touch snapshot, not merely newer than a previous phase.
+
+Ran the actual OCR command against the real courtyard and backpack images from 36239195212: courtyard rejected, backpack title recognized. These are real UE images, not Android input proof. On restart, the probe now waits for the actual map log and opens the real backpack to pause ordinary dialogue before comparison, rather than waiting an unconditional 90 seconds while story progress can advance. No game-state injection or teleport was added; movement/restore thresholds remain unchanged. Restore mismatch fields and displacement are recorded for diagnosis.
+
+100 Python checks: 94 passed, 6 absent-cache cases skipped. New probe tests are explicitly synthetic; native source/config/project trees remain identical to f53e298, so the active compilation/cook inputs are not invalidated.

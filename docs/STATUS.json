@@ -501,10 +501,12 @@
     "matching_native_run": 36239480748,
     "cook_run": 36241745942,
     "automatic_internal_packaging_after_success": true,
-    "python_tests_total": 87,
-    "python_tests_passed": 85,
-    "python_tests_skipped": 2,
+    "python_tests_total": 100,
+    "python_tests_passed": 94,
+    "python_tests_skipped": 6,
     "physical_poco_verified": false,
-    "requested_full_game_complete": false
+    "requested_full_game_complete": false,
+    "matching_native_status": "completed success",
+    "real_ue_title_ocr_checked": true
   }
 }

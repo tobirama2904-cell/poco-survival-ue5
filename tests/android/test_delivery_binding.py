@@ -7,7 +7,7 @@ class DeliveryBindingTests(unittest.TestCase):
   sha='a'*64;cert='b'*64;images={x+'.png':str(i)*64 for i,x in enumerate(['start','move','restart'],1)}
   apk=dict(package_run='123',sha256=sha,bytes=100,signature_verified=True,arm64_library_verified=True,certificate_sha256=cert,embedded_game_archives=['assets/game.pak'])
   install=dict(apk_sha256=sha,apk_package_run='123',screenshots=[{'file':x} for x in images])
-  for k in ['installed','launch_survived','restart_survived','visible_frames_verified','touch_movement_verified','player_position_inventory_progress_restore_verified']:install[k]=True
+  for k in ['installed','launch_survived','restart_survived','visible_frames_verified','touch_movement_verified','player_position_inventory_progress_restore_verified','journal_touch_confirmed','fresh_save_after_touch_verified']:install[k]=True
   identity=dict(source_tree='tree',engine_lock='engine',project_descriptor='project',configuration_tree='config');source=dict(package_run='123',matching_game_source_verified=True,native=identity.copy(),cooked=identity.copy(),packaging=identity.copy())
   review=dict(apk_sha256=sha,package_run=123,verdict='development-only',images=images.copy())
   return [sha,100,apk,install,source,review,cert,images]

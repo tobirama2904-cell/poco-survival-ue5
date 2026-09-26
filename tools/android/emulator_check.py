@@ -84,7 +84,18 @@ try:
     adb('shell','input','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'1500')
     time.sleep(8);report['screenshots'].append(wait_visible_frame('android-after-input.png'))
     moved=probe.save('after-move',before['generation'])
-    adb('shell','am','force-stop',PACKAGE);adb('logcat','-c');launch();time.sleep(90)
+    adb('shell','am','force-stop',PACKAGE);adb('logcat','-c');launch()
+    # Wait for the actual map, not a fixed 90-second interval during which a
+    # correctly restored story could naturally progress and confuse comparison.
+    deadline=time.monotonic()+600
+    while time.monotonic()<deadline:
+        restart_logs=text('logcat','-d',timeout=60)
+        if 'CanalDistrict' in restart_logs and 'Bringing World' in restart_logs:break
+        if not text('shell','pidof',PACKAGE,check=False):raise RuntimeError('Game died during restart load')
+        time.sleep(5)
+    else:raise TimeoutError('No real map-load evidence after restart')
+    probe.journal(True) # Real UI pauses ordinary story dialogue before sampling.
+
     report['pid_after_restart']=text('shell','pidof',PACKAGE,check=False)
     report['screenshots'].append(wait_visible_frame('android-restart.png'))
     (ROOT/'android-restart-logcat.log').write_text(text('logcat','-d',timeout=60))
@@ -93,6 +104,7 @@ try:
     restored=probe.save('after-restart',moved['generation'])
     report['save_snapshots']={'before':before,'after_move':moved,'after_restart':restored}
     report['save_files_present']=True;report['save_button_input_injected']=True
+    report['journal_touch_confirmed']=True;report['fresh_save_after_touch_verified']=True
     report['visible_frames_verified']=True;report['touch_input_injected']=True
     comparison=compare_saves(before,moved,restored);report.update(comparison)
     report['save_restore_equality_verified']=False # Only the specified player-state subset is compared.

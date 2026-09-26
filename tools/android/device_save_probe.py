@@ -6,6 +6,11 @@ from pathlib import Path
 from PIL import Image
 from save_state_probe import canonical_save
 PACKAGE='com.pocosurvival.game'
+def journal_title_matches(text):
+ # Match the actual title, not the ordinary HUD hint "details in backpack".
+ translated=text.upper().translate(str.maketrans({'P':'Р','K':'К','A':'А','E':'Е','H':'Н','O':'О','C':'С','T':'Т','M':'М','B':'В','X':'Х','3':'З'}))
+ compact=re.sub('[^А-ЯЁ]','',translated)
+ return bool(re.search('РЮКЗАКД[ЭЕ]НИЕЛРИД',compact))
 class DeviceSaveProbe:
  def __init__(self,adb,text,screenshot,root,width,height):
   self.adb=adb;self.text=text;self.screenshot=screenshot;self.root=root;self.width=width;self.height=height;self.log=[]
@@ -15,9 +20,9 @@ class DeviceSaveProbe:
    crop=im.crop((int(self.width*.09),int(self.height*.175),int(self.width*.64),int(self.height*.24)))
    crop.resize((crop.width*4,crop.height*4)).save(self.root/'journal-title.png')
   result=subprocess.run(['tesseract',str(self.root/'journal-title.png'),'stdout','-l','rus+eng','--psm','11'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=30,env={**os.environ,'OMP_THREAD_LIMIT':'1'})
-  result.check_returncode();plain=re.sub(r'\s+','',result.stdout.upper()).replace('3','З')
+  result.check_returncode()
   self.log.append({'image':filename,'ocr':result.stdout})
-  return 'РЮКЗАК' in plain
+  return journal_title_matches(result.stdout)
  def journal(self,opened):
   for attempt in range(5):
    if self.journal_visible('android-journal-state.png')==opened:return
@@ -26,13 +31,16 @@ class DeviceSaveProbe:
   raise RuntimeError('Journal touch/OCR confirmation failed; not claiming accepted touch input')
  def save(self,label,after_generation=-1):
   self.journal(True);self.screenshot('android-backpack-'+label+'.png')
+  prior=self.collect(label+'-pre-touch')
+  generation_floor=max([after_generation]+[r['state']['generation'] for r in prior])
+  self.log.append({'snapshot':label,'generation_before_save_touch':generation_floor})
   self.adb('shell','input','tap',str(round(self.width*.75)),str(round(self.height*.075)))
   deadline=time.monotonic()+90
   while time.monotonic()<deadline:
    records=self.collect(label)
    if records:
     best=max(records,key=lambda r:r['state']['generation'])
-    if best['state']['generation']>after_generation:
+    if best['state']['generation']>generation_floor:
      self.log.append({'snapshot':label,'save':best});self.journal(False);self.persist();return best['state']
    time.sleep(5)
   self.persist();raise RuntimeError('No newly written, decodable player save after touch Save')

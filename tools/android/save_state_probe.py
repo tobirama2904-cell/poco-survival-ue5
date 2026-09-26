@@ -36,5 +36,6 @@ def compare_saves(before,moved,restarted):
  distance=math.dist(before['position'][:2],moved['position'][:2])
  movement=(before['map']==moved['map'] and moved['generation']>before['generation'] and 50<distance<2000 and abs(before['position'][2]-moved['position'][2])<250)
  fields=['map','field_items','film_progress','film_decision','LootedCaches','OpenDoors','county','main_events']
- restored=(restarted['generation']>moved['generation'] and math.dist(moved['position'],restarted['position'])<10 and all(moved.get(k)==restarted.get(k) for k in fields))
- return {'touch_movement_verified':movement,'moved_cm':distance,'player_position_inventory_progress_restore_verified':restored,'full_world_restore_equality_verified':False,'physical_device_tested':False}
+ restore_distance=math.dist(moved['position'],restarted['position']);differences=[k for k in fields if moved.get(k)!=restarted.get(k)]
+ restored=(restarted['generation']>moved['generation'] and restore_distance<10 and not differences)
+ return {'restore_distance_cm':restore_distance,'restore_mismatched_fields':differences,'touch_movement_verified':movement,'moved_cm':distance,'player_position_inventory_progress_restore_verified':restored,'full_world_restore_equality_verified':False,'physical_device_tested':False}

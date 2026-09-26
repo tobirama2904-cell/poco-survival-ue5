@@ -28,7 +28,7 @@ def validate(digest,size,apk,install,source,review,certificate,images):
  need(source['cooked'].get('configuration_tree')==source['packaging'].get('configuration_tree') and bool(source['cooked'].get('configuration_tree')),'Cooked configuration mismatch')
  need(install.get('apk_sha256')==digest,'Install test belongs to a different/unbound APK')
  need(str(install.get('apk_package_run',''))==str(review.get('package_run','')) and bool(review.get('package_run')),'Package run mismatch')
- for key in ['installed','launch_survived','restart_survived','visible_frames_verified','touch_movement_verified','player_position_inventory_progress_restore_verified']:
+ for key in ['installed','launch_survived','restart_survived','visible_frames_verified','touch_movement_verified','player_position_inventory_progress_restore_verified','journal_touch_confirmed','fresh_save_after_touch_verified']:
   need(install.get(key) is True,'Missing real install/input/save proof: '+key)
  need(not install.get('failure'),'Install test reports failure')
  need(review.get('apk_sha256')==digest,'Visual review belongs to another APK')
