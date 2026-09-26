@@ -402,7 +402,7 @@
     "matching_native_run": 36239480748,
     "python_tests_passed": 94,
     "visual_review": "functional development graphics; not final photoreal acceptance",
-    "android_save_decoding_verified": false,
+    "android_save_decoding_verified": true,
     "python_tests_skipped": 6,
     "cook_run": 36241745942,
     "requested_full_game_complete": false,
@@ -533,6 +533,20 @@
     "python_tests_passed": 103,
     "python_tests_skipped": 6,
     "real_touch_and_save_pass": false,
-    "physical_device_tested": false
+    "physical_device_tested": false,
+    "run_result": "36257316731 failed only the final movement assertion",
+    "journal_touch_confirmed": true,
+    "fresh_save_generations": [
+      2,
+      3,
+      5
+    ],
+    "tested_restore_subset_verified": true,
+    "movement_cm": 0,
+    "full_world_restore_verified": false,
+    "parsed_native_motion_events": 462,
+    "next_run": 36273627140,
+    "next_gesture_ms": 8000,
+    "game_binary_changed": false
   }
 }

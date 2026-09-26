@@ -1,0 +1,190 @@
+{
+  "physical_device_tested": false,
+  "poco_f4_tested": false,
+  "fps_claimed": false,
+  "arm_translation_emulator_only": true,
+  "installed": true,
+  "launch_survived": true,
+  "visual_quality_review_required": true,
+  "emulator_only_commandline": "-AllowSoftwareRendering -LogCmds=LogAndroid Verbose",
+  "requested_emulator_portrait_resolution": "540x960",
+  "abis": "x86_64,arm64-v8a",
+  "native_bridge": "libndk_translation.so",
+  "android_version": "15",
+  "build_fingerprint": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+  "apk_sha256": "b8c1e4730f696cda32abf3a1ae7ac51290ed0e57d5cc381c6eae7d80c1a7ea8e",
+  "apk_package_run": "36246392986",
+  "activity": "com.pocosurvival.game/com.epicgames.unreal.SplashActivity",
+  "pid_after_start": "3322 3390",
+  "screenshots": [
+    {
+      "file": "android-start.png",
+      "width": 960,
+      "height": 540,
+      "pixel_regression_checks": {
+        "black_fraction": 0.0228,
+        "strong_magenta_fraction": 0.0,
+        "not_black": true,
+        "no_strong_magenta_regression": true
+      }
+    },
+    {
+      "file": "android-after-input.png",
+      "width": 960,
+      "height": 540,
+      "pixel_regression_checks": {
+        "black_fraction": 0.0848,
+        "strong_magenta_fraction": 0.0,
+        "not_black": true,
+        "no_strong_magenta_regression": true
+      }
+    },
+    {
+      "file": "android-restart.png",
+      "width": 960,
+      "height": 540,
+      "pixel_regression_checks": {
+        "black_fraction": 0.0004,
+        "strong_magenta_fraction": 0.0,
+        "not_black": true,
+        "no_strong_magenta_regression": true
+      }
+    }
+  ],
+  "video_capture": {
+    "kind": "actual Android emulator screen recording",
+    "audio_recorded": false,
+    "physical_device_fps_claimed": false,
+    "contains_keyboard_diagnostic": false,
+    "file": "android-actual-recording.mp4",
+    "bytes": 255069,
+    "sha256": "b6855b289456ff06dd08bf9cf4304533fa00f5dafe2f52680d7dc229ddc216c0"
+  },
+  "journal_close_touch_diagnostic": true,
+  "pid_after_restart": "5164 5200",
+  "restart_survived": true,
+  "save_snapshots": {
+    "before": {
+      "generation": 2,
+      "map": "CanalDistrict",
+      "position": [
+        0.0,
+        1700.0,
+        98.15000486373901
+      ],
+      "field_items": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "film_progress": 1,
+      "film_decision": 0,
+      "format": 8,
+      "LootedCaches": 0,
+      "OpenDoors": 0,
+      "county": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "main_events": 0
+    },
+    "after_move": {
+      "generation": 3,
+      "map": "CanalDistrict",
+      "position": [
+        0.0,
+        1700.0,
+        98.15000486373901
+      ],
+      "field_items": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "film_progress": 1,
+      "film_decision": 0,
+      "format": 8,
+      "LootedCaches": 0,
+      "OpenDoors": 0,
+      "county": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "main_events": 0
+    },
+    "after_restart": {
+      "generation": 5,
+      "map": "CanalDistrict",
+      "position": [
+        0.0,
+        1700.0,
+        98.15000486373901
+      ],
+      "field_items": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "film_progress": 1,
+      "film_decision": 0,
+      "format": 8,
+      "LootedCaches": 0,
+      "OpenDoors": 0,
+      "county": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "main_events": 0
+    }
+  },
+  "save_files_present": true,
+  "save_button_input_injected": true,
+  "menu_press_duration_ms": 2000,
+  "short_tap_responsiveness_verified": false,
+  "journal_touch_confirmed": true,
+  "fresh_save_after_touch_verified": true,
+  "visible_frames_verified": true,
+  "touch_input_injected": true,
+  "restore_distance_cm": 0.0,
+  "restore_mismatched_fields": [],
+  "touch_movement_verified": false,
+  "moved_cm": 0.0,
+  "player_position_inventory_progress_restore_verified": true,
+  "full_world_restore_equality_verified": false,
+  "save_restore_equality_verified": false,
+  "failure": "AssertionError: Actual saved player positions did not establish touch movement",
+  "keyboard_only_journal_diagnostic": false,
+  "keyboard_diagnostic_is_touch_proof": false,
+  "run": 36257316731,
+  "scope_note": "Fresh real Android saves and tested restore subset passed; displacement is zero, so movement and overall delivery gate remain failed."
+}
