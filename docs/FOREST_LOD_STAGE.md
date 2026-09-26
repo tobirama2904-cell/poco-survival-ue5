@@ -26,3 +26,5 @@ Source art: county-art-004, 18 files, 24,965,739 bytes; archive SHA256 3a03c9e70
 The renderer keeps its 35-minute limit and four required screenshots plus walking/collision/companion/support checks. A timeout is not reclassified as success. No C++/Config changes require another ARM64 compilation; successful native 36209095776 can be considered only after source compatibility checks and a successful matching visual/cook gate.
 
 API references used: Epic's LOD scripting and StaticMeshEditorSubsystem documentation. Using lower-detail meshes at distance is an engine-supported technique, not a measured FPS promise. https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-levels-of-detail-in-blueprints-and-python-in-unreal-engine
+
+New source 4d5fdf90cc0d61a9e691162352606c3752f52ea8; actual UE scene/LOD/four-frame verification dispatched as **36231686378** on gameplay/forest-lods. Source/Config/project-file diff against successful native bcfe15af / 36209095776 is empty; no redundant native rebuild was dispatched. New rendering and Android cook/package are not yet verified.

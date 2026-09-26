@@ -434,6 +434,8 @@
     "python_tests_skipped": 1,
     "new_unreal_render_verified": false,
     "physical_device_tested": false,
-    "full_game_complete": false
+    "full_game_complete": false,
+    "source_commit": "4d5fdf90cc0d61a9e691162352606c3752f52ea8",
+    "ue_scene_run": 36231686378
   }
 }
