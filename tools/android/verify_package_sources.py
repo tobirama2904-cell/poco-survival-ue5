@@ -27,5 +27,5 @@ if __name__=='__main__':
     manifest=json.loads(Path('.cache/native-restore/android-cache-manifest.json').read_text())
     if manifest['source_commit']!=native['commit']:raise ValueError('Private native cache does not match its source workflow')
     require_matching(current,native,cooked)
-    report={'native_run':n['id'],'cook_run':c['id'],'native':native,'cooked':cooked,'packaging':current,'matching_game_source_verified':True}
+    report={'package_run':os.environ.get('GITHUB_RUN_ID',''),'native_run':n['id'],'cook_run':c['id'],'native':native,'cooked':cooked,'packaging':current,'matching_game_source_verified':True}
     Path('artifacts/android-build/package-source-provenance.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

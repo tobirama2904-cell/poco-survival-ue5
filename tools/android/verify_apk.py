@@ -23,6 +23,6 @@ assert "package: name='com.pocosurvival.game'" in badging
 h=hashlib.sha256()
 with p.open('rb') as f:
     for b in iter(lambda:f.read(1024*1024),b''):h.update(b)
-r={'phase':'signed internal APK verification','file':p.name,'bytes':p.stat().st_size,'sha256':h.hexdigest(),'signature_verified':True,'certificate_sha256':expected,'arm64_library_verified':True,'embedded_game_archives':data,'installation_tested':False,'physical_device_tested':False,'final_game':False}
+r={'package_run':os.environ.get('APK_RUN',os.environ.get('GITHUB_RUN_ID','')),'phase':'signed internal APK verification','file':p.name,'bytes':p.stat().st_size,'sha256':h.hexdigest(),'signature_verified':True,'certificate_sha256':expected,'arm64_library_verified':True,'embedded_game_archives':data,'installation_tested':False,'physical_device_tested':False,'final_game':False}
 Path('artifacts/android-build/apk-verification.json').write_text(json.dumps(r,indent=2)+'\n');Path('artifacts/apk/SHA256SUMS').write_text(h.hexdigest()+'  '+p.name+'\n');print(json.dumps(r),flush=True)
 Path('artifacts/android-build/apk-badging.log').write_text(badging)

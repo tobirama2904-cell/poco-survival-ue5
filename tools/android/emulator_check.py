@@ -54,6 +54,12 @@ try:
     install=text('install','-r','artifacts/apk/NulevayaOtmetka-internal-arm64.apk',timeout=180)
     (ROOT/'install.log').write_text(install)
     if 'Success' not in install:raise RuntimeError('APK installation failed')
+    verified=json.loads(Path('artifacts/android-build/apk-verification.json').read_text())
+    digest=hashlib.sha256()
+    with Path('artifacts/apk/NulevayaOtmetka-internal-arm64.apk').open('rb') as stream:
+        for chunk in iter(lambda:stream.read(1024*1024),b''):digest.update(chunk)
+    assert digest.hexdigest()==verified['sha256'],'APK changed after signature/structure verification'
+    report['apk_sha256']=digest.hexdigest();report['apk_package_run']=os.environ.get('APK_RUN','')
     report['installed']=True;report['activity']=launch()
     # Wait for an actual map, not merely a surviving error-dialog process.
     deadline=time.monotonic()+600;time.sleep(15)

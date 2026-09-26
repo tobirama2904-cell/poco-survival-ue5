@@ -17,3 +17,8 @@ Cook the retained successful scene with current source, rerender its five-frame/
 All five actual images from 36239195212 have now been opened, including courtyard, grove, two-person camera, companion panel and strike. They establish visible development content, not final art acceptance. Local checks: 87 Python tests total, 85 passed and 2 unavailable-cache checks skipped.
 
 Current cook/render job **36241745942** was dispatched on gameplay/delivery-review / 00e6070 with retained scene 36239195212 and required native 36239480748. Successful cooking continues to internal packaging and the stricter emulator test; source matching remains mandatory. The observer uses observe-only mode and does not dispatch a duplicate cook. Current-source game tree is unchanged from the verified save-producer fix f53e298.
+
+## Delivery evidence binding
+The install report now records the exact installed APK SHA256 and package-run ID after rechecking the signed/structurally verified file. Signature verification and source-provenance reports also retain that package-run ID. check_delivery.py joins actual reports and reviewed image hashes; it rejects stale files/reports, unconfirmed movement/restore, mismatched source/signing identity and final-game labels. It is an evidence consistency checker, not a substitute for apksigner, actual device execution or human image review. No approval file is fabricated in advance.
+
+These are tooling-only changes; Source, Config and PocoSurvival.uproject still match f53e298 exactly. 94 Python tests: 88 passed and 6 absent-cache checks skipped. The new delivery-binding tests use explicit synthetic records, not a real APK. Current cook/native jobs remain the same, without restarting or changing their game code.

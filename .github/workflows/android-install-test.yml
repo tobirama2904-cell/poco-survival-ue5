@@ -17,6 +17,7 @@ jobs:
     timeout-minutes: 45
     env:
       ALLOW_HISTORIC_APK_SIGNER: "1"
+      APK_RUN: ${{ inputs.apk_run }}
       ANDROID_AVD_HOME: ${{ github.workspace }}/.cache/android-avd
       ANDROID_USER_HOME: ${{ github.workspace }}/.cache/android-user
     steps:
