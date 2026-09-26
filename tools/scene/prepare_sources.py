@@ -29,3 +29,5 @@ subprocess.run(['python3',str(root/'tools/story/fetch_county_voices.py')],check=
 subprocess.run(['python3',str(root/'tools/story/fetch_main_voices.py')],check=True)
 
 subprocess.run(['python3',str(root/'tools/story/fetch_journey_voices.py')],check=True)
+
+subprocess.run(['python3',str(root/'tools/scene/fetch_interior_pack.py')],check=True)

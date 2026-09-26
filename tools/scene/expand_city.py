@@ -47,7 +47,6 @@ for cx in range(-270,271,60):
   if min(abs(cx-x) for x in [-180,0,180])<20 or min(abs(cy-y) for y in [-160,40,100,210])<19:continue
   w=rng.choice([14,18,22]);depth=rng.choice([12,16,20]);h=rng.choice([8,12,16]);buildings+=1
   # Walkable ground-floor shell, not a solid inaccessible tower.
-  box((cx,cy,.15),(w,depth,.3),4)
   for dx in [-w/2,w/2]:box((cx+dx,cy,1.5),(.35,depth,3),1)
   box((cx,cy+depth/2,1.5),(w,.35,3),1)
   for side in [-1,1]:box((cx+side*(w/4+.45),cy-depth/2,1.5),(w/2-.9,.35,3),1)
@@ -55,17 +54,9 @@ for cx in range(-270,271,60):
   box((cx,cy,3.15),(w,depth,.3),4)
   if h>3.3:box((cx,cy,(h+3.3)/2),(w,depth,h-3.3),1)
   interiors.append([cx,cy,w,depth])
-  # Room-specific fittings, solid collision and clear aisle from doorway.
-  box((cx-w/2+1.1,cy+depth/2-1.4,.6),(1.8,2.2,1.1),4)
-  for dy in [-.7,.7]:box((cx+2,cy+dy,.45),(.12,.12,.9),5)
-  box((cx+2,cy,.95),(1.5,2,.12),4)
-  if buildings%3==0:
-   for dz in [.5,1.1,1.7]:box((cx+w/2-1,cy+depth/2-1,dz),(1.4,.6,.1),4)
-  elif buildings%3==1:
-   box((cx-w/2+1.2,cy+depth/2-1.5,.9),(1.9,2.3,.2),0)
-  else:box((cx+w/2-1,cy+depth/2-1,1),(1.2,.6,2),5)
+  # Detailed furnishings are placed by populate_interiors.py; do not overlap them with placeholder cubes.
   box((cx,cy,h+.25),(w+.8,depth+.8,.5),2)
-  box((cx,cy,.3),(w+1,depth+1,.6),4)
+  box((cx,cy,.1),(w+1,depth+1,.4),4)
   for z in range(2,h,3):
    for dx in range(-int(w/2)+2,int(w/2)-1,4):
     for side in [-1,1]:box((cx+dx,cy+side*(depth/2+.035),z),(1.6,.06,1.8),3)
