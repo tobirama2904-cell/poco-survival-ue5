@@ -35,6 +35,15 @@ class DeviceSaveProbe:
    self.press(.89,.075)
    time.sleep(12)
   raise RuntimeError('Journal touch/OCR confirmation failed; not claiming accepted touch input')
+ def journal_close_by_touch(self):
+  # Diagnostic only: it never satisfies the save/movement gate.
+  self.journal(True)
+  for attempt in range(3):
+   self.press(.89,.075)
+   time.sleep(12)
+   if not self.journal_visible('android-journal-close-'+str(attempt)+'.png'):
+    self.log.append({'journal_closed_by_same_touch_control':True,'attempts':attempt+1});return True
+  self.log.append({'journal_closed_by_same_touch_control':False,'attempts':3});return False
  def save(self,label,after_generation=-1):
   self.journal(True);self.screenshot('android-backpack-'+label+'.png')
   prior=self.collect(label+'-pre-touch')

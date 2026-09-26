@@ -103,6 +103,7 @@ try:
     time.sleep(35)
     start_video(width,height)
     probe=DeviceSaveProbe(adb,text,screenshot,ROOT,width,height)
+    report['journal_close_touch_diagnostic']=probe.journal_close_by_touch() # diagnostic only; not gate evidence
     before=probe.save('before')
     # Actual touchscreen gesture; no diagnostic teleport or game-state injection.
     adb('shell','input','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'1500')
