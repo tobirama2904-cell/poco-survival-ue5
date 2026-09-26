@@ -1,0 +1,225 @@
+{
+  "schema": 1,
+  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/interior-art-001/interior-art-001.zip",
+  "sha256": "fa4db2fa8aa29c4f329887d13b2661bc4b42264e383de4f1e7a3003525be78ee",
+  "bytes": 15813137,
+  "files": [
+    {
+      "name": "BedFrame.glb",
+      "bytes": 4363324,
+      "sha256": "19719cec75c2eb27b83b5dda3dd4316499754ce84678f485f05ecf6214797a85"
+    },
+    {
+      "name": "Bookshelf.glb",
+      "bytes": 2776112,
+      "sha256": "6cda3ec083069566753d95a8b113adea6cce3d7bd99d3074b35793852c33a573"
+    },
+    {
+      "name": "CREDITS.md",
+      "bytes": 747,
+      "sha256": "69bdbfb2c9cb3cc7a107ae87d3d521fb548cdcd64052262e1384cf793bced0cd"
+    },
+    {
+      "name": "CassettePlayer.glb",
+      "bytes": 3955744,
+      "sha256": "c50e7cf125bc2a0a19e23a108b992e5692482a8d27ff4ae05873161f2f756080"
+    },
+    {
+      "name": "MedicalBox.glb",
+      "bytes": 1971752,
+      "sha256": "537d55552559e2b09cd0bfe872d6c8060ad603703694f418a46502fa1189d127"
+    },
+    {
+      "name": "MedicalTape.glb",
+      "bytes": 1597608,
+      "sha256": "90d7882f02706f969919a58afd5b4357811bea7dff5b5323c767dfe9b2c85764"
+    },
+    {
+      "name": "OfficeDesk.glb",
+      "bytes": 1604124,
+      "sha256": "eed6c2915dc4435c46a14d75ab3021927e3f4b48a86889fd58db7b729de434fd"
+    },
+    {
+      "name": "SchoolChair.glb",
+      "bytes": 483772,
+      "sha256": "fdebe6ccb60edccdfd176ca5cb86a0856295119b2dda3b7d6a4842ba606f48aa"
+    },
+    {
+      "name": "SchoolDesk.glb",
+      "bytes": 424320,
+      "sha256": "612c479d9734c624db5504be0553126e400bcdf0ca4ccff86e2e036539863640"
+    },
+    {
+      "name": "Wheelchair.glb",
+      "bytes": 1766540,
+      "sha256": "31313bbe7e059e305d69f77280f0cbc0c1245d5c1479f866e9be3d017c1e9cbf"
+    },
+    {
+      "name": "conditioning.json",
+      "bytes": 4786,
+      "sha256": "6bc768e5018f0c72fadcf0c15980c113e4c85c2efbf02ab0fb2310256e3b3b7f"
+    },
+    {
+      "name": "source-lock.json",
+      "bytes": 15575,
+      "sha256": "01b32615d000b1c1517e207a2d28d97ed0484b0ee147b68dbbda48c688ad097d"
+    }
+  ],
+  "models": [
+    {
+      "name": "MedicalBox",
+      "source": "medical_box",
+      "file": "MedicalBox.glb",
+      "bytes": 1971752,
+      "sha256": "537d55552559e2b09cd0bfe872d6c8060ad603703694f418a46502fa1189d127",
+      "triangles": 3718,
+      "dimensions_m": [
+        0.5254814624786377,
+        0.35016927123069763,
+        0.0975121483206749
+      ],
+      "mesh_parts_joined": 5,
+      "origin": "XY centre, bottom Z; source metre scale retained",
+      "geometry_decimated": false,
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "MedicalTape",
+      "source": "medical_tape",
+      "file": "MedicalTape.glb",
+      "bytes": 1597608,
+      "sha256": "90d7882f02706f969919a58afd5b4357811bea7dff5b5323c767dfe9b2c85764",
+      "triangles": 1408,
+      "dimensions_m": [
+        0.04529958218336105,
+        0.04517091065645218,
+        0.0250389501452446
+      ],
+      "mesh_parts_joined": 1,
+      "origin": "XY centre, bottom Z; source metre scale retained",
+      "geometry_decimated": false,
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "Wheelchair",
+      "source": "wheelchair_01",
+      "file": "Wheelchair.glb",
+      "bytes": 1766540,
+      "sha256": "31313bbe7e059e305d69f77280f0cbc0c1245d5c1479f866e9be3d017c1e9cbf",
+      "triangles": 40252,
+      "dimensions_m": [
+        0.8240909576416016,
+        1.0908669233322144,
+        1.103501558303833
+      ],
+      "mesh_parts_joined": 1,
+      "origin": "XY centre, bottom Z; source metre scale retained",
+      "geometry_decimated": false,
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "BedFrame",
+      "source": "old_bed_frame",
+      "file": "BedFrame.glb",
+      "bytes": 4363324,
+      "sha256": "19719cec75c2eb27b83b5dda3dd4316499754ce84678f485f05ecf6214797a85",
+      "triangles": 49990,
+      "dimensions_m": [
+        0.9046578407287598,
+        2.0017261505126953,
+        1.2014838457107544
+      ],
+      "mesh_parts_joined": 1,
+      "origin": "XY centre, bottom Z; source metre scale retained",
+      "geometry_decimated": false,
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "Bookshelf",
+      "source": "wooden_bookshelf_worn",
+      "file": "Bookshelf.glb",
+      "bytes": 2776112,
+      "sha256": "6cda3ec083069566753d95a8b113adea6cce3d7bd99d3074b35793852c33a573",
+      "triangles": 10106,
+      "dimensions_m": [
+        1.37395179271698,
+        0.5813020467758179,
+        2.0634419918060303
+      ],
+      "mesh_parts_joined": 1,
+      "origin": "XY centre, bottom Z; source metre scale retained",
+      "geometry_decimated": false,
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "OfficeDesk",
+      "source": "metal_office_desk",
+      "file": "OfficeDesk.glb",
+      "bytes": 1604124,
+      "sha256": "eed6c2915dc4435c46a14d75ab3021927e3f4b48a86889fd58db7b729de434fd",
+      "triangles": 6898,
+      "dimensions_m": [
+        2.000000476837158,
+        0.9472135305404663,
+        0.7875000238418579
+      ],
+      "mesh_parts_joined": 9,
+      "origin": "XY centre, bottom Z; source metre scale retained",
+      "geometry_decimated": false,
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "SchoolChair",
+      "source": "SchoolChair_01",
+      "file": "SchoolChair.glb",
+      "bytes": 483772,
+      "sha256": "fdebe6ccb60edccdfd176ca5cb86a0856295119b2dda3b7d6a4842ba606f48aa",
+      "triangles": 5072,
+      "dimensions_m": [
+        0.5658532977104187,
+        0.6752548813819885,
+        1.006035566329956
+      ],
+      "mesh_parts_joined": 1,
+      "origin": "XY centre, bottom Z; source metre scale retained",
+      "geometry_decimated": false,
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "SchoolDesk",
+      "source": "SchoolDesk_01",
+      "file": "SchoolDesk.glb",
+      "bytes": 424320,
+      "sha256": "612c479d9734c624db5504be0553126e400bcdf0ca4ccff86e2e036539863640",
+      "triangles": 4162,
+      "dimensions_m": [
+        0.7117760181427002,
+        0.5459675788879395,
+        0.8826298713684082
+      ],
+      "mesh_parts_joined": 1,
+      "origin": "XY centre, bottom Z; source metre scale retained",
+      "geometry_decimated": false,
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "CassettePlayer",
+      "source": "portable_cassette_player",
+      "file": "CassettePlayer.glb",
+      "bytes": 3955744,
+      "sha256": "c50e7cf125bc2a0a19e23a108b992e5692482a8d27ff4ae05873161f2f756080",
+      "triangles": 13307,
+      "dimensions_m": [
+        0.17225530743598938,
+        0.039671555161476135,
+        0.13030561804771423
+      ],
+      "mesh_parts_joined": 3,
+      "origin": "XY centre, bottom Z; source metre scale retained",
+      "geometry_decimated": false,
+      "license": "CC0-1.0"
+    }
+  ],
+  "license": "CC0-1.0",
+  "epic_assets": false
+}
