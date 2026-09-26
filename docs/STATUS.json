@@ -488,5 +488,23 @@
     "native_fixture_decoder_corrected_locally": true,
     "save_version_explicit_write": 8,
     "save_version_class_sentinel": 0
+  },
+  "delivery_review_stage": {
+    "branch": "gameplay/delivery-review",
+    "inherited_code": "f53e2984e78078e0fc8cc311b4f83d52548d3b03",
+    "scene_run": 36239195212,
+    "five_game_images_opened": true,
+    "visual_review": "functional development graphics; not final photoreal acceptance",
+    "save_reader_probe": 36239479663,
+    "actual_native_save_decoding_verified": true,
+    "android_save_decoding_verified": false,
+    "matching_native_run": 36239480748,
+    "cook_run": 36241745942,
+    "automatic_internal_packaging_after_success": true,
+    "python_tests_total": 87,
+    "python_tests_passed": 85,
+    "python_tests_skipped": 2,
+    "physical_poco_verified": false,
+    "requested_full_game_complete": false
   }
 }

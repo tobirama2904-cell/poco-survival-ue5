@@ -13,3 +13,7 @@ A separate branch-atlas/minimal-material experiment was authored locally: 2,672-
 
 ## Remaining delivery gates
 Cook the retained successful scene with current source, rerender its five-frame/forest/companion/melee checks, require a compatible successful ARM64 build, sign an internal APK, then run the stricter actual touch / newly generated save / restart comparison test. Open the actual Android images before treating the candidate as reviewed. Full-world save equality, physical POCO performance, finished art and the requested 12–24 hour game remain unproven.
+
+All five actual images from 36239195212 have now been opened, including courtyard, grove, two-person camera, companion panel and strike. They establish visible development content, not final art acceptance. Local checks: 87 Python tests total, 85 passed and 2 unavailable-cache checks skipped.
+
+Current cook/render job **36241745942** was dispatched on gameplay/delivery-review / 00e6070 with retained scene 36239195212 and required native 36239480748. Successful cooking continues to internal packaging and the stricter emulator test; source matching remains mandatory. The observer uses observe-only mode and does not dispatch a duplicate cook. Current-source game tree is unchanged from the verified save-producer fix f53e298.
