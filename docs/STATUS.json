@@ -471,15 +471,22 @@
     "base_ue_gate": "failed melee pose flag; five actual frames, forest/traversal/companion/aid passed",
     "save_reader_run": 36238611053,
     "new_pose_capture": "event-linked, awaiting new UE verification",
-    "portable_suites_passed": 13,
-    "python_tests_passed": 86,
+    "portable_suites_passed": 14,
+    "python_tests_passed": 87,
     "python_tests_skipped": 1,
     "android_touch_restore_verified": false,
     "final_game": false,
-    "source_commit": "024581537dbdf1b64682c2fc34b78b4fd1cc8f22",
+    "source_commit": "f53e298",
     "corrected_ue_scene_run": 36239195212,
     "corrected_native_run": 36239196341,
     "save_reader_state": "completed",
-    "save_reader_result": "failure"
+    "save_reader_result": "failure",
+    "pose_scene_run": 36239195212,
+    "save_migration_probe_run": 36239479663,
+    "matching_native_run": 36239480748,
+    "superseded_pending_native": 36239196341,
+    "native_fixture_decoder_corrected_locally": true,
+    "save_version_explicit_write": 8,
+    "save_version_class_sentinel": 0
   }
 }
