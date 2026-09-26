@@ -28,6 +28,6 @@ class MeleeMotionTests(unittest.TestCase):
  def test_root_vertical_motion_is_retained(self):
   s=(ROOT/'tools/characters/import_unreal.py').read_text();self.assertIn("clip not in ('Punch','PunchCrouch','Crouch')",s);self.assertIn('other!=clip and len(other)>len(clip)',s)
  def test_actual_pose_and_damage_gate_not_just_clip_presence(self):
-  s=(ROOT/'tools/scene/verify_render.py').read_text();self.assertIn("melee.get('passed') is True",s);self.assertIn('len(images)>=5',s)
+  s=(ROOT/'tools/scene/verify_render.py').read_text();self.assertIn("melee.get('passed') is True",s);self.assertIn('len(images)>=6',s)
   s=(ROOT/'Source/PocoSurvival/Private/SurvivalGameMode.cpp').read_text();self.assertIn('Player->Attack();Player->Attack()',s);self.assertIn('MeleeDummy->GetHealth(),75.f',s);self.assertIn('!Player->IsMeleePosePlaying()',s)
 if __name__=='__main__':unittest.main()

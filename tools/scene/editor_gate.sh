@@ -3,7 +3,7 @@ set -euo pipefail
 cd /project
 ENGINE=/home/ue4/UnrealEngine/Engine
 mkdir -p artifacts/gameplay-scene artifacts/engine-probe artifacts/android-build
-rm -f artifacts/gameplay-scene/{scene-construction,city-construction,field-content,county-content,county-runtime,companion-runtime,companion-support,melee-runtime,melee-pose-detail,forest-runtime,scene-ready,render-verification}.json
+rm -f artifacts/gameplay-scene/{scene-construction,city-construction,field-content,county-content,county-runtime,companion-runtime,companion-support,melee-runtime,melee-pose-detail,forest-runtime,interior-runtime,scene-ready,render-verification}.json
 "$ENGINE/Build/BatchFiles/Linux/Build.sh" PocoSurvivalEditor Linux Development \
   -Project=/project/PocoSurvival.uproject -NoHotReloadFromIDE -MaxParallelActions=2 -NoUBA \
   2>&1 | tee artifacts/gameplay-scene/ubt.log
@@ -46,5 +46,6 @@ import json,subprocess
 from pathlib import Path
 root=Path('artifacts/gameplay-scene');field=json.loads((root/'field-content.json').read_text());assert field['loot_caches']==24 and field['openable_doors']==24
 county=json.loads((root/'county-content.json').read_text());assert county['terrain_tiles']==16 and county['rural_shelters']==6
-(root/'scene-ready.json').write_text(json.dumps({'source':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'all_construction_steps_succeeded':True,'field':field,'county':county},indent=2)+'\n')
+interior=json.loads((root/'interior-detail.json').read_text());assert interior['rooms_dressed']>=6 and interior['unique_source_models']==9 and interior['retained_loot_ids_moved']==list(range(18,24))
+(root/'scene-ready.json').write_text(json.dumps({'source':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'all_construction_steps_succeeded':True,'field':field,'county':county,'interior':interior},indent=2)+'\n')
 READY

@@ -13,7 +13,7 @@ for item in manifest['models']:
  settings=m.get_editor_property('nanite_settings');settings.set_editor_property('enabled',False);m.set_editor_property('nanite_settings',settings)
  body=m.get_editor_property('body_setup');assert body;body.set_editor_property('collision_trace_flag',unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE);body.set_editor_property('double_sided_geometry',True);lib.save_loaded_asset(m);meshes[item['name']]=m
 for actor in actors.get_all_level_actors():
- if actor.get_actor_label().startswith('interior_detail_'):actors.destroy_actor(actor)
+ if actor.get_actor_label().startswith(('interior_detail_','interior_probe_')):actors.destroy_actor(actor)
 rooms=json.loads((ROOT/'artifacts/gameplay-scene/interiors.json').read_text());records=dress(rooms)
 for i,r in enumerate(records):
  actor=actors.spawn_actor_from_class(unreal.StaticMeshActor,unreal.Vector(r['x']*100,r['y']*100,r['z']*100),unreal.Rotator(pitch=0,yaw=r['yaw'],roll=0));actor.set_actor_label('interior_detail_'+str(i)+'_'+r['model']);component=actor.static_mesh_component;component.set_static_mesh(meshes[r['model']]);component.set_mobility(unreal.ComponentMobility.STATIC);component.set_collision_profile_name('NoCollision' if r['small'] else 'BlockAll');component.set_cull_distance(5000);component.set_editor_property('cast_shadow',not r['small'])
@@ -27,6 +27,9 @@ for actor in actors.get_all_level_actors():
   if action=='__cache_'+str(index) and index-18<len(rooms):
    x,y,z=cache_position(rooms[index-18]);actor.set_actor_location(unreal.Vector(x*100,y*100,z*100),False,True);moved.append(index)
 assert len(moved)==min(6,len(rooms)),moved
+# Explicit test anchors retain room bounds; they do not move the player in normal play.
+for i,(cx,cy,w,d) in enumerate(rooms[:6]):
+ marker=actors.spawn_actor_from_class(unreal.TargetPoint,unreal.Vector(cx*100,cy*100,160));marker.set_actor_label('interior_probe_'+str(i));marker.set_actor_scale3d(unreal.Vector(w,d,1));marker.set_editor_property('tags',[unreal.Name('interior_floor_probe'),unreal.Name('interior_room_'+str(i))])
 assert level.save_current_level();lib.save_directory('/Game/Interiors',False,True)
 report={'rooms_dressed':len(rooms),'props':len(records),'unique_source_models':len(meshes),'retained_loot_ids_moved':moved,'floor_top_m':.30,'cull_distance_m':50,'new_gameplay_duration_claimed':False,'in_game_walkthrough_verified':False}
 (ROOT/'artifacts/gameplay-scene/interior-detail.json').write_text(json.dumps(report,indent=2)+'\n');print('INTERIOR_DETAIL_READY',json.dumps(report),flush=True)

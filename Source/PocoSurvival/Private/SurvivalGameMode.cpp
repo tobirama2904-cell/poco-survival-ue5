@@ -5,6 +5,8 @@
 #include "SurvivalCharacter.h"
 #include "SurvivalCompanion.h"
 #include "SurvivalInfected.h"
+#include "SurvivalInteraction.h"
+#include "Components/CapsuleComponent.h"
 #include "SurvivalPlayerController.h"
 #include "SurvivalHUD.h"
 #include "GameFramework/PlayerController.h"
@@ -216,5 +218,53 @@ void ASurvivalGameMode::FinishMeleeProof()
  FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/melee-runtime.json")));
  if(Player){const FString Detail=FString::Printf(TEXT("{\"clips_loaded\":%s,\"pose_at_impact\":%s,\"hand_at_impact\":%s,\"image_requested_at_impact\":%s,\"arbitrary_timer_sample\":false}\n"),Player->bMeleeProofClips?TEXT("true"):TEXT("false"),Player->bMeleeProofPose?TEXT("true"):TEXT("false"),Player->bMeleeProofHand?TEXT("true"):TEXT("false"),Player->bMeleeProofCaptured?TEXT("true"):TEXT("false"));FFileHelper::SaveStringToFile(Detail,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/melee-pose-detail.json")));}
 
- FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,3.f,false);
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::BeginInteriorProof,3.f,false);
+}
+
+void ASurvivalGameMode::BeginInteriorProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
+ if(MeleeDummy){MeleeDummy->Destroy();MeleeDummy=nullptr;}
+ for(TActorIterator<AActor> It(GetWorld());It;++It)if(It->ActorHasTag(TEXT("interior_floor_probe"))){
+  ++InteriorProbes;FHitResult Hit;FCollisionQueryParams Params(SCENE_QUERY_STAT(InteriorFloor),false,*It);if(Player)Params.AddIgnoredActor(Player);
+  const FVector P=It->GetActorLocation();
+  if(GetWorld()->LineTraceSingleByChannel(Hit,P,P-FVector(0,0,240),ECC_WorldStatic,Params)&&FMath::Abs(Hit.ImpactPoint.Z-30.f)<3&&Hit.ImpactNormal.Z>.9f)++InteriorFloors;
+  if(It->ActorHasTag(TEXT("interior_room_0"))){InteriorCentre=P;const FVector Scale=It->GetActorScale3D();InteriorBounds=FVector2D(Scale.X*100,Scale.Y*100);}
+ }
+ for(TActorIterator<ASurvivalInteraction> It(GetWorld());It;++It)if(It->ActionId==TEXT("__door_0")){InteriorDoor=*It;break;}
+ if(Player&&InteriorDoor&&InteriorBounds.X>0&&InteriorBounds.Y>0){
+  Player->EndStory();if(Player->bJournalOpen)Player->ToggleJournal();Player->UnCrouch();Player->GetCharacterMovement()->StopMovementImmediately();
+  const FVector Outside(InteriorCentre.X,InteriorCentre.Y-InteriorBounds.Y*.5-160,105);
+  bInteriorPositioned=Player->TeleportTo(Outside,FRotator(0,90,0),false,false);InteriorStart=Player->GetActorLocation();PC->SetControlRotation(FRotator(-8,90,0));PC->SetViewTarget(Player);Player->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+ }
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::OpenInteriorProofDoor,.4f,false);
+}
+void ASurvivalGameMode::OpenInteriorProofDoor()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;auto* Game=Cast<USurvivalGameInstance>(GetGameInstance());
+ if(bInteriorPositioned&&Player&&InteriorDoor&&Game&&!(Game->FieldInventory.doors&1u)){
+  FString Failure;bInteriorDoorOpened=InteriorDoor->Interact(Player,Failure)&&(Game->FieldInventory.doors&1u)!=0;
+ }
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::WalkIntoInterior,.85f,false);
+}
+void ASurvivalGameMode::WalkIntoInterior()
+{
+ bInteriorDoorRotated=InteriorDoor&&FMath::Abs(FRotator::NormalizeAxis(InteriorDoor->GetActorRotation().Yaw)-90)<2;
+ if(bInteriorDoorOpened&&bInteriorDoorRotated)if(auto* PC=GetWorld()->GetFirstPlayerController())PC->InputKey(FInputKeyEventArgs(nullptr,FInputDeviceId::CreateFromInternalId(0),EKeys::W,IE_Pressed));
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::CaptureInteriorProof,1.8f,false);
+}
+void ASurvivalGameMode::CaptureInteriorProof()
+{
+ auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
+ if(PC)PC->InputKey(FInputKeyEventArgs(nullptr,FInputDeviceId::CreateFromInternalId(0),EKeys::W,IE_Released));
+ bool Inside=false,Grounded=false;float Walked=0,Feet=0;
+ if(Player){
+  Player->GetCharacterMovement()->StopMovementImmediately();const FVector P=Player->GetActorLocation();Walked=FVector::Dist2D(InteriorStart,P);Feet=P.Z-Player->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();Grounded=Player->GetCharacterMovement()->IsMovingOnGround();
+  Inside=FMath::Abs(P.X-InteriorCentre.X)<InteriorBounds.X*.5-50&&FMath::Abs(P.Y-InteriorCentre.Y)<InteriorBounds.Y*.5-50;
+ }
+ const bool Passed=bInteriorPositioned&&bInteriorDoorOpened&&bInteriorDoorRotated&&InteriorProbes==6&&InteriorFloors==6&&Inside&&Grounded&&Walked>250&&Walked<1200&&FMath::Abs(Feet-30)<5;
+ const FString Report=FString::Printf(TEXT("{\"passed\":%s,\"diagnostic_setup_outside_only\":true,\"teleported_inside\":false,\"floor_probes\":%d,\"valid_floors\":%d,\"door_interaction_succeeded\":%s,\"door_rotation_verified\":%s,\"walked_cm\":%.2f,\"inside_room\":%s,\"grounded\":%s,\"feet_height_cm\":%.2f,\"touch_tested\":false,\"all_rooms_playtested\":false}\n"),Passed?TEXT("true"):TEXT("false"),InteriorProbes,InteriorFloors,bInteriorDoorOpened?TEXT("true"):TEXT("false"),bInteriorDoorRotated?TEXT("true"):TEXT("false"),Walked,Inside?TEXT("true"):TEXT("false"),Grounded?TEXT("true"):TEXT("false"),Feet);
+ FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/interior-runtime.json")));
+ if(PC)PC->ConsoleCommand(TEXT("HighResShot 1"));
+ FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,4.f,false);
 }

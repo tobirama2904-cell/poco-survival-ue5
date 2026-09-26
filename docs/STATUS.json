@@ -510,5 +510,24 @@
   "scene_second_attempt": "UHT/UBT and native save tests passed; glTF asset import wrote real UE assets, then AssetTools Content Browser sync crashed without Slate in commandlet",
   "android_mobile_correction_cook_status": "in_progress",
   "android_cooked_bytes": 309367697,
-  "native_integration_rerun": 36008146202
+  "native_integration_rerun": 36008146202,
+  "interior_playtest_stage": {
+    "branch": "gameplay/interior-playtest",
+    "inherited_art_commit": "c5131556fc38afa3be3061a5fee59eb257f35504",
+    "source_models": 9,
+    "planned_rooms": 57,
+    "planned_prop_placements": 513,
+    "new_floor_probes": 6,
+    "new_walkthrough_rooms": 1,
+    "new_required_images": 6,
+    "teleport_into_room": false,
+    "source_tests_total": 110,
+    "source_tests_passed": 104,
+    "source_tests_skipped": 6,
+    "portable_suites_passed": 14,
+    "offline_prop_review_opened": true,
+    "native_room_entry_verified": false,
+    "all_rooms_playtested": false,
+    "active_android_candidate_changed": false
+  }
 }

@@ -17,6 +17,12 @@ private:
     void CaptureCompanionFilmProof();
     void BeginSupportProof();void BeginAidProof();void CaptureSupportProof();
     void BeginMeleeProof();void FinishMeleeProof();
+    void BeginInteriorProof();void OpenInteriorProofDoor();void WalkIntoInterior();void CaptureInteriorProof();
+    UPROPERTY() TObjectPtr<class ASurvivalInteraction> InteriorDoor;
+    FVector InteriorCentre=FVector::ZeroVector,InteriorStart=FVector::ZeroVector;
+    FVector2D InteriorBounds=FVector2D::ZeroVector;
+    int32 InteriorProbes=0,InteriorFloors=0;
+    bool bInteriorPositioned=false,bInteriorDoorOpened=false,bInteriorDoorRotated=false;
     UPROPERTY() TObjectPtr<class ASurvivalInfected> MeleeDummy;
     uint32 MeleeBefore=0;
     bool bMeleeInputDebounced=false;
