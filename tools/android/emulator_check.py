@@ -29,11 +29,11 @@ def wait_visible_frame(name,timeout=300):
 def launch():
     activity=text('shell','cmd','package','resolve-activity','--brief',PACKAGE).splitlines()[-1]
     if '/' not in activity:raise RuntimeError('No launcher activity')
-    result=text('shell','am','start','-W','-n',activity,'--es','cmdline',shlex.quote('-project="../../../PocoSurvival/PocoSurvival.uproject" -AllowSoftwareRendering'),timeout=90);(ROOT/'launch.log').write_text(result)
+    result=text('shell','am','start','-W','-n',activity,'--es','cmdline',shlex.quote('-project="../../../PocoSurvival/PocoSurvival.uproject" -AllowSoftwareRendering -LogCmds="LogAndroid Verbose"'),timeout=90);(ROOT/'launch.log').write_text(result)
     if 'Error:' in result:raise RuntimeError('Activity launch failed')
     return activity
 emulator_log=(ROOT/'emulator.log').open('wb');process=None;probe=None;video_process=None;video_log=None
-report={'physical_device_tested':False,'poco_f4_tested':False,'fps_claimed':False,'arm_translation_emulator_only':True,'installed':False,'launch_survived':False,'visual_quality_review_required':True,'emulator_only_commandline':'-AllowSoftwareRendering','requested_emulator_portrait_resolution':'540x960'}
+report={'physical_device_tested':False,'poco_f4_tested':False,'fps_claimed':False,'arm_translation_emulator_only':True,'installed':False,'launch_survived':False,'visual_quality_review_required':True,'emulator_only_commandline':'-AllowSoftwareRendering -LogCmds=LogAndroid Verbose','requested_emulator_portrait_resolution':'540x960'}
 def start_video(width,height):
     global video_process,video_log
     video_log=(ROOT/'screenrecord.log').open('wb')
@@ -155,6 +155,12 @@ except Exception as e:
 finally:
     stop_video()
     if probe is not None:probe.persist()
+    try:
+        routing_logs=text('logcat','-d',timeout=30,check=False)
+        (ROOT/'final-logcat.log').write_text(routing_logs)
+        from touch_route_report import analyze_touch_route
+        (ROOT/'touch-routing.json').write_text(json.dumps(analyze_touch_route(routing_logs),indent=2))
+    except Exception as routing_error:report['touch_routing_capture_error']=str(routing_error)
     (ROOT/'install-verification.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)
     if process is not None:
         process.terminate()

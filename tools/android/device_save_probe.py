@@ -30,10 +30,14 @@ class DeviceSaveProbe:
   self.log.append({'touchscreen_press':{'x':int(px),'y':int(py),'duration_ms':self.press_ms}})
   self.adb('shell','input','touchscreen','swipe',px,py,px,py,str(self.press_ms))
  def journal(self,opened):
-  for attempt in range(5):
-   if self.journal_visible('android-journal-'+('open' if opened else 'closed')+'-'+str(len(self.log))+'.png')==opened:return
+  if self.journal_visible('android-journal-initial-'+str(len(self.log))+'.png')==opened:return
+  # A queued toggle must get time to become visible before another toggle is
+  # injected. Otherwise slow presentation can turn a successful open into close.
+  for attempt in range(3):
    self.press(.89,.075)
-   time.sleep(12)
+   for observation in range(6):
+    time.sleep(4)
+    if self.journal_visible('android-journal-'+('open' if opened else 'closed')+'-'+str(len(self.log))+'.png')==opened:return
   raise RuntimeError('Journal touch/OCR confirmation failed; not claiming accepted touch input')
  def journal_close_by_touch(self):
   # Diagnostic only: it never satisfies the save/movement gate.

@@ -11,7 +11,8 @@ class TouchDwellTests(unittest.TestCase):
  def test_close_diagnostic_never_satisfies_the_gate(self):
   emulator=(ROOT/'tools/android/emulator_check.py').read_text();probe=(ROOT/'tools/android/device_save_probe.py').read_text()
   self.assertIn('diagnostic only; not gate evidence',emulator);self.assertIn('journal_closed_by_same_touch_control',probe)
-  required=emulator[emulator.index("for key in ['installed'"):]
+  checker=(ROOT/'tools/android/check_delivery.py').read_text()
+  required=checker[checker.index("for key in ['installed'"): ]
   required=required[:required.index(']')]
   self.assertNotIn('journal_close',required)
  def test_screen_recording_stops_before_keyboard_diagnosis(self):
