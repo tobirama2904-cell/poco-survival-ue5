@@ -1,12 +1,15 @@
 """Repair measured shader-usage failures on retained assets before render/cook.
 No native-code changes or regeneration of the already constructed county.
 """
-import json,subprocess
+import json,subprocess,sys
 from pathlib import Path
 import unreal
 root=Path('/project');out=root/'artifacts/gameplay-scene';out.mkdir(parents=True,exist_ok=True)
 lib=unreal.EditorAssetLibrary;level=unreal.get_editor_subsystem(unreal.LevelEditorSubsystem);actors=unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 assert level.load_level('/Game/Worlds/CanalDistrict')
+sys.path.insert(0,str(root/'tools/scene'))
+from mobile_foliage_material import apply_mobile_foliage
+foliage=apply_mobile_foliage()
 changed=[];visited=set()
 def repair_parent(asset):
  if asset is None or asset.get_path_name() in visited:return
@@ -36,7 +39,7 @@ expected=json.loads((root/'BuildData/county-pack.lock.json').read_text()).get('l
 assert county=={'terrain_tiles':16,'rural_shelters':6,'nature_instances':expected['nature_instances']},county
 assert len(changed)>=6,changed
 assert level.save_current_level()
-report={'source':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'all_construction_steps_succeeded':True,'retained_scene_recounted':True,'field':field,'county':county,'instance_materials_repaired':changed}
+report={'source':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'all_construction_steps_succeeded':True,'retained_scene_recounted':True,'field':field,'county':county,'instance_materials_repaired':changed,'mobile_foliage':foliage}
 (out/'scene-ready.json').write_text(json.dumps(report,indent=2)+'\n')
 (out/'material-repair.json').write_text(json.dumps({'materials':changed,'actual_saved_world_counts':{'field':field,'county':county}},indent=2)+'\n')
 print('RETAINED_SCENE_MATERIALS_REPAIRED',len(changed),json.dumps(county),flush=True)

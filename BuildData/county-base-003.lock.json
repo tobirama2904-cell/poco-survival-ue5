@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/canopy-bough-source-001/canopy-bough-source-001.zip",
-  "bytes": 23254771,
-  "sha256": "007180d20b7ed1dcebc563bb30ba5278a971c903336b03c6fb5781bc906ff157",
+  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/county-art-003/county-art-003.zip",
+  "bytes": 22435401,
+  "sha256": "e33bbb573a97d3a7649f29fd7254f573540285e1b19aceb8ee91991a2732f436",
   "license": "CC0 textures/models and original project geometry",
   "epic_assets": false,
   "layout": {
@@ -39,8 +39,8 @@
     },
     {
       "name": "Pine.glb",
-      "bytes": 3044368,
-      "sha256": "f017dc2afae73524cf9850ef2d90f0ccc5b0382682370a4b5b828b1dc0cc3f42"
+      "bytes": 2516420,
+      "sha256": "8c3fcd29c59664f1c4bb33b01b071c32015c7bc005a9b2f7b32b87a0f3d43962"
     },
     {
       "name": "River.glb",
@@ -63,14 +63,9 @@
       "sha256": "f8f7dc4c535e7eb6cb9eb775328922b878999cccf379707b959f01e2c8588bb6"
     },
     {
-      "name": "bough-bake.json",
-      "bytes": 360,
-      "sha256": "744b64255073d28e0a05c39f8298e66b2936da86209af46b9f6890214a2375a0"
-    },
-    {
       "name": "conditioning.json",
-      "bytes": 2907,
-      "sha256": "f37381c303d49d2820855d8ce29c48033698b280f51c513d71a5a20523eabe81"
+      "bytes": 2813,
+      "sha256": "6a25cf5ebf4763bf535d8261e981c75740af06295e17fa94c38bfd887813ee4d"
     },
     {
       "name": "conifer-source.json",

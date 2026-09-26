@@ -6,6 +6,7 @@ mkdir -p artifacts/android-build artifacts/gameplay-scene
 python3 tools/engine_inventory.py
 "$JAVA_HOME/bin/java" tools/android/TrustStoreProbe.java | tee artifacts/android-build/java-trust-store.log
 python3 tools/scene/restore_private_content.py
+python3 tools/scene/fetch_county.py
 # Recursive inventory proved these host backends ALREADY SHIP in Linux/Android.
 # Do not overlay 70k unnecessary source files/plugins or rebuild engine modules.
 python3 - <<'PYHOST'
@@ -38,6 +39,11 @@ timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
  '-ini:Engine:[/Script/Engine.AudioSettings]:DefaultAudioCompressionType=PCM' \
  -unattended -nop4 -NullRHI -AllowCommandletAudio -stdout -FullStdOutLogOutput \
  > artifacts/android-build/mobile-scene-prepare.log 2>&1
+# Geometry/material-only repair on the retained world, using the new art lock.
+timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \
+ /project/PocoSurvival.uproject -run=pythonscript -script=/project/tools/scene/patch_retained_foliage.py \
+ -unattended -nop4 -NullRHI -nosound -stdout -FullStdOutLogOutput \
+ > artifacts/gameplay-scene/foliage-reimport.log 2>&1
 # Reuse the retained map, correct its material flags, and verify the exact
 # corrected content before cooking it. Failed shader fallbacks block the cook.
 timeout --foreground 10m "$ENGINE/Engine/Binaries/Linux/UnrealEditor-Cmd" \

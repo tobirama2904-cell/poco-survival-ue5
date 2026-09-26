@@ -24,7 +24,7 @@ class WoodlandArtTests(unittest.TestCase):
   folder=ROOT/'.cache/county-pack'
   if not (folder/'conifer-source.json').exists():self.skipTest('Refined art not fetched locally')
   d,_=glb((folder/'Pine.glb').read_bytes());leaves=next(m for m in d['materials'] if m['name']=='PhotographedNeedles');self.assertEqual(leaves['alphaMode'],'MASK');self.assertTrue(leaves['doubleSided']);self.assertEqual(leaves['alphaCutoff'],.28)
-  r=next(m for m in json.loads((folder/'conditioning.json').read_text())['models'] if m['file']=='Pine.glb');self.assertLessEqual(r['triangles'],10000);self.assertGreater(r['photographed_sprigs'],2000);self.assertFalse(r['mature_tree_scan'])
+  r=next(m for m in json.loads((folder/'conditioning.json').read_text())['models'] if m['file']=='Pine.glb');self.assertLessEqual(r['triangles'],3000);self.assertEqual(r['foliage_cards'],588);self.assertEqual(r['baked_sprigs_per_bough'],13);self.assertFalse(r['mature_tree_scan'])
  def test_terrain_geometry_matches_immutable_base_if_available(self):
   folder=ROOT/'.cache/county-pack';archive=ROOT/'.cache/county-base-002.zip'
   if not archive.exists() or not (folder/'conifer-source.json').exists():self.skipTest('Original source archive unavailable')

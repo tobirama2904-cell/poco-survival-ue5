@@ -33,7 +33,7 @@ def export(name,**metadata):
  print('ART_REFINED',name,item,flush=True)
 
 clear();bark=material('PhotographedBark',diffuse=SRC/'pine_tree_01_bark_diff_1k.jpg',normal=SRC/'pine_tree_01_bark_nor_gl_1k.jpg')
-needle=material('PhotographedNeedles');p=needle.node_tree.nodes.get('Principled BSDF');t=needle.node_tree.nodes.new('ShaderNodeTexImage');t.image=bpy.data.images.load(str(SRC/'pine_needles_rgba.png'));needle.node_tree.links.new(t.outputs['Color'],p.inputs['Base Color']);needle.node_tree.links.new(t.outputs['Alpha'],p.inputs['Alpha']);needle.use_backface_culling=False
+needle=material('PhotographedNeedles');p=needle.node_tree.nodes.get('Principled BSDF');t=needle.node_tree.nodes.new('ShaderNodeTexImage');t.image=bpy.data.images.load(str(SRC/'pine_needles_bough_rgba.png'));needle.node_tree.links.new(t.outputs['Color'],p.inputs['Base Color']);needle.node_tree.links.new(t.outputs['Alpha'],p.inputs['Alpha']);needle.use_backface_culling=False
 if hasattr(needle,'surface_render_method'):needle.surface_render_method='DITHERED'
 verts=[];faces=[];uvs=[];mats=[]
 def face(points,uv,mat):
@@ -53,19 +53,19 @@ for tier in range(17):
  for j in range(count):
   angle=j*math.tau/count+tier*2.399+R.uniform(-.18,.18);out=Vector((math.cos(angle),math.sin(angle),0));side=Vector((-out.y,out.x,0));length=radius*R.uniform(.8,1.17);base=Vector((0,0,z));end=base+out*length+Vector((0,0,R.uniform(-.5,.3)))
   tube(base,end,.055*(1-tier/22),.008,6)
-  for k in range(1,8):
-   t=k/8;centre=base.lerp(end,t)
-   for sign in [-1,0,1]:
-    direction=(out*.5+side*sign*.9+Vector((0,0,.4+R.uniform(-.2,.45)))).normalized();twig_len=R.uniform(.48,.88)*(1-tier*.018);across=direction.cross(Vector((0,0,1))).normalized();normal=direction.cross(across).normalized()
-    for cross in [across,normal]:
-     w=twig_len*.52;face([centre+cross*(-.58*w),centre+cross*(.42*w),centre+direction*twig_len+cross*(.42*w),centre+direction*twig_len+cross*(-.58*w)],[(0,0),(1,0),(1,1),(0,1)],1)
-    sprigs+=1
+  for fraction in [.28,.60,.87]:
+   centre=base.lerp(end,fraction)
+   direction=(out+side*R.uniform(-.25,.25)+Vector((0,0,R.uniform(.12,.4)))).normalized()
+   twig_len=R.uniform(.9,1.3)*(1-tier*.018);across=direction.cross(Vector((0,0,1))).normalized();normal=direction.cross(across).normalized()
+   for cross in [across,normal]:
+    width=twig_len;face([centre-cross*(width*.5),centre+cross*(width*.5),centre+direction*twig_len+cross*(width*.5),centre+direction*twig_len-cross*(width*.5)],[(0,0),(1,0),(1,1),(0,1)],1)
+   sprigs+=1
 mesh=bpy.data.meshes.new('Pine');mesh.from_pydata(verts,[],faces);mesh.materials.append(bark);mesh.materials.append(needle);uv=mesh.uv_layers.new()
 for f,mi in zip(mesh.polygons,mats):
  f.material_index=mi
  for li in f.loop_indices:uv.data[li].uv=uvs[mesh.loops[li].vertex_index]
 o=bpy.data.objects.new('Pine',mesh);bpy.context.collection.objects.link(o);o.select_set(True)
-export('Pine',source='Original procedural conifer; Poly Haven pine_tree_01 textures only',triangles=sum(len(f.vertices)-2 for f in mesh.polygons),height_m=12.6,photographed_sprigs=sprigs,license='Original geometry / CC0 textures',mature_tree_scan=False)
+export('Pine',source='Original procedural conifer; Poly Haven pine_tree_01 textures only',triangles=sum(len(f.vertices)-2 for f in mesh.polygons),height_m=12.6,bough_groups=sprigs,foliage_cards=sprigs*2,baked_sprigs_per_bough=13,previous_foliage_cards=4116,license='Original geometry / CC0 textures',mature_tree_scan=False)
 
 # Keep terrain geometry and import-basis compensation unchanged; refine UV scale/PBR.
 clear();bpy.ops.import_scene.gltf(filepath=str(PACK/'Terrain.glb'))
@@ -117,6 +117,7 @@ for x in [-5,5]:
 bpy.ops.object.select_all(action='SELECT');bpy.context.view_layer.objects.active=bpy.context.selected_objects[0];bpy.ops.object.join();o=bpy.context.object;o.name='Shelter';bpy.ops.object.transform_apply(location=True,rotation=True,scale=True);o.data.transform(Matrix.Diagonal((1,-1,1,1)));o.data.flip_normals()
 export('Shelter',source='Original windowed shelter / porch / furniture / fence',triangles=sum(len(p.vertices)-2 for p in o.data.polygons),windows=2,story_tabletop_preserved=True)
 (PACK/'conditioning.json').write_text(json.dumps(report,indent=2)+'\n')
+(PACK/'bough-bake.json').write_bytes((SRC/'bough-bake.json').read_bytes())
 (PACK/'conifer-source.json').write_bytes((SRC/'license-lock.json').read_bytes());(PACK/'ground-source.json').write_bytes((GROUND/'license-lock.json').read_bytes())
 (PACK/'county.json').write_text(json.dumps({'schema':1,'extent_m':2400,'terrain_tiles':16,'pois':[{**p,'z':height(p['x'],p['y'])} for p in POIS],'instances':placements()},indent=2))
 with (PACK/'CREDITS.md').open('a') as f:f.write('\nConifer revision: original procedural geometry with CC0 pine_tree_01 twig/bark photographs (https://polyhaven.com/a/pine_tree_01); not a scanned mature-tree mesh. Ground PBR and windowed shelter revised.\n')
