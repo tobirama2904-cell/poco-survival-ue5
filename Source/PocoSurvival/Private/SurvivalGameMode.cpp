@@ -1,4 +1,5 @@
 #include "SurvivalGameMode.h"
+#include "SurvivalSceneryCluster.h"
 #include "SurvivalWorldDirector.h"
 #include "SurvivalGameInstance.h"
 #include "SurvivalCharacter.h"
@@ -122,6 +123,12 @@ void ASurvivalGameMode::EndCountyMovement()
 }
 void ASurvivalGameMode::CaptureCountyProof()
 {
+ int32 Levels[4]={0,0,0,0};
+ for(TActorIterator<ASurvivalSceneryCluster> It(GetWorld());It;++It){const int32 L=It->GetVisualLOD();if(L>=0&&L<4)++Levels[L];}
+ const bool ForestPass=Levels[0]>0&&Levels[1]>0&&Levels[2]>0&&Levels[3]>0;
+ const FString Forest=FString::Printf(TEXT("{\"passed\":%s,\"near_cells\":%d,\"middle_cells\":%d,\"far_cells\":%d,\"hidden_cells\":%d,\"per_instance_continuous_lod\":false,\"physical_device_fps_measured\":false}\n"),ForestPass?TEXT("true"):TEXT("false"),Levels[0],Levels[1],Levels[2],Levels[3]);
+ FFileHelper::SaveStringToFile(Forest,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/forest-runtime.json")));
+
  if(auto* PC=GetWorld()->GetFirstPlayerController())PC->ConsoleCommand(TEXT("HighResShot 1"));
  FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::BeginCompanionFilmProof,2.f,false);
 }

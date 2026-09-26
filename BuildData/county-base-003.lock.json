@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/forest-cell-art-001/forest-cell-art-001.zip",
-  "bytes": 36190716,
-  "sha256": "ee45bd01d656c300dc41f46c33ca10053df9a938fc556667cadfdd7c8c2f3b68",
+  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/county-art-003/county-art-003.zip",
+  "bytes": 22435401,
+  "sha256": "e33bbb573a97d3a7649f29fd7254f573540285e1b19aceb8ee91991a2732f436",
   "license": "CC0 textures/models and original project geometry",
   "epic_assets": false,
   "layout": {
@@ -19,8 +19,8 @@
     },
     {
       "name": "CREDITS.md",
-      "bytes": 990,
-      "sha256": "cbd4cd435e7c9410acc863b5ce5bb7b8d3599814889088424f535171a05a9ec7"
+      "bytes": 817,
+      "sha256": "040d4263ba93a2efee0e36ec7a39bedd517391f91024aca4077ba5d729f09d85"
     },
     {
       "name": "Deadwood.glb",
@@ -39,18 +39,8 @@
     },
     {
       "name": "Pine.glb",
-      "bytes": 6466244,
-      "sha256": "c93ca321976700708b7cc627d62b493f4b41da7139fb2f1a2d37b2a887b82f4f"
-    },
-    {
-      "name": "PineFar.glb",
-      "bytes": 4017232,
-      "sha256": "5121c9d2360dbfd6c5997e0b0782783767d7ddb8af34eb0a36396aaa594e1cea"
-    },
-    {
-      "name": "PineMid.glb",
-      "bytes": 5953880,
-      "sha256": "a5470d8828f84f7d8291d1c513ca7e313e7f73891f065b23fcc7be6ba3a4673a"
+      "bytes": 2516420,
+      "sha256": "8c3fcd29c59664f1c4bb33b01b071c32015c7bc005a9b2f7b32b87a0f3d43962"
     },
     {
       "name": "River.glb",
@@ -74,8 +64,8 @@
     },
     {
       "name": "conditioning.json",
-      "bytes": 3357,
-      "sha256": "d17db38354eb62073ea569ab936ef1f3a9dc63196c283acc883de2a22c0c7bc3"
+      "bytes": 2813,
+      "sha256": "6a25cf5ebf4763bf535d8261e981c75740af06295e17fa94c38bfd887813ee4d"
     },
     {
       "name": "conifer-source.json",
@@ -93,19 +83,9 @@
       "sha256": "dd202e2c6ef23b0e594dc1c46a7939c0736f7575df7eaa2e3205b217757ee961"
     },
     {
-      "name": "pine-lods.json",
-      "bytes": 405,
-      "sha256": "1ea96344e09c388da09189d0988fafa174a9ddd428e379d19d6add71c37f1196"
-    },
-    {
       "name": "sources.json",
       "bytes": 12630,
       "sha256": "dfb7a2b65177d86fef3357b603bdd284795266ca5c350e52a7be4049acbc6657"
     }
-  ],
-  "distance_meshes": {
-    "Pine": 9728,
-    "PineMid": 2084,
-    "PineFar": 8
-  }
+  ]
 }

@@ -10,7 +10,7 @@ assert level.load_level('/Game/Worlds/CanalDistrict')
 basis=json.loads((root/'artifacts/gameplay-scene/scene-construction.json').read_text())['measured_import_basis_cm'];assert basis==[[100.,0.,0.],[0.,-100.,0.],[0.,0.,100.]],basis
 manager=unreal.InterchangeManager.get_interchange_manager_scripted();params=unreal.ImportAssetParameters();params.set_editor_property('is_automated',True);params.set_editor_property('replace_existing',True)
 models={}
-for name in ['Pine','Broadleaf','Fern','MossRock','Stump','Deadwood','Shelter','Terrain','River']:
+for name in ['Pine','PineMid','PineFar','Broadleaf','Fern','MossRock','Stump','Deadwood','Shelter','Terrain','River']:
  dest='/Game/County/'+name
  assert manager.import_asset(dest,unreal.InterchangeManager.create_source_data(str(source/(name+'.glb'))),params)
  meshes=[lib.load_asset(p) for p in lib.list_assets(dest,True,False)];meshes=[m for m in meshes if isinstance(m,unreal.StaticMesh)]
@@ -23,21 +23,52 @@ for name in ['Pine','Broadleaf','Fern','MossRock','Stump','Deadwood','Shelter','
    body.set_editor_property('collision_trace_flag',unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE);body.set_editor_property('double_sided_geometry',True);lib.save_loaded_asset(mesh)
  for path in lib.list_assets(dest,True,False):
   texture=lib.load_asset(path)
-  if isinstance(texture,unreal.Texture2D) and 'pine_needles' in texture.get_name().lower():
+  if isinstance(texture,unreal.Texture2D) and any(n in texture.get_name().lower() for n in ['pine_needles','pine_lod_atlas']):
    texture.set_editor_property('do_scale_mips_for_alpha_coverage',True)
    thresholds=texture.get_editor_property('alpha_coverage_thresholds')
    for channel in ['x','y','z']:thresholds.set_editor_property(channel,0)
    thresholds.set_editor_property('w',.28);texture.set_editor_property('alpha_coverage_thresholds',thresholds);lib.save_loaded_asset(texture)
  lib.save_directory(dest,False,True)
+# A compact masked foliage graph avoids carrying the generic glTF material's
+# extension machinery into every leaf/shadow pass. Reuse one atlas/material.
+foliage_path='/Game/County/Materials/M_PineMobileLOD1'
+if lib.does_asset_exist(foliage_path):foliage=lib.load_asset(foliage_path)
+else:
+ lib.make_directory('/Game/County/Materials')
+ foliage=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_PineMobileLOD1','/Game/County/Materials',unreal.Material,unreal.MaterialFactoryNew());assert foliage
+ foliage.set_editor_property('shading_model',unreal.MaterialShadingModel.MSM_DEFAULT_LIT);foliage.set_editor_property('blend_mode',unreal.BlendMode.BLEND_MASKED);foliage.set_editor_property('two_sided',True);foliage.set_editor_property('opacity_mask_clip_value',.28);foliage.set_editor_property('used_with_instanced_static_meshes',True)
+ textures=[lib.load_asset(path) for path in lib.list_assets('/Game/County/Pine',True,False)]
+ atlas=next(t for t in textures if isinstance(t,unreal.Texture2D) and 'pine_lod_atlas' in t.get_name().lower())
+ sample=unreal.MaterialEditingLibrary.create_material_expression(foliage,unreal.MaterialExpressionTextureSampleParameter2D);sample.set_editor_property('texture',atlas);sample.set_editor_property('parameter_name','FoliageAtlas');sample.set_editor_property('sampler_type',unreal.MaterialSamplerType.SAMPLERTYPE_COLOR)
+ assert unreal.MaterialEditingLibrary.connect_material_property(sample,'RGB',unreal.MaterialProperty.MP_BASE_COLOR)
+ assert unreal.MaterialEditingLibrary.connect_material_property(sample,'A',unreal.MaterialProperty.MP_OPACITY_MASK)
+ for value,prop in [(.9,unreal.MaterialProperty.MP_ROUGHNESS),(.1,unreal.MaterialProperty.MP_SPECULAR)]:
+  scalar=unreal.MaterialEditingLibrary.create_material_expression(foliage,unreal.MaterialExpressionConstant);scalar.set_editor_property('r',value);assert unreal.MaterialEditingLibrary.connect_material_property(scalar,'',prop)
+ unreal.MaterialEditingLibrary.recompile_material(foliage);lib.save_loaded_asset(foliage)
+for name in ['Pine','PineMid','PineFar']:
+ for mesh in models[name]:
+  changed=0
+  for i,slot in enumerate(mesh.get_editor_property('static_materials')):
+   material=slot.get_editor_property('material_interface')
+   if material and ('PhotographedNeedles' in material.get_name() or material==foliage):mesh.set_material(i,foliage);changed+=1
+  assert changed,('Needle material slot missing',name)
+  lib.save_loaded_asset(mesh)
+
 # Repeatable rebuilding must not double the population.
 for actor in actors.get_all_level_actors():
  if actor.get_actor_label().startswith('county_'):actors.destroy_actor(actor)
 data=json.loads((source/'county.json').read_text());cluster_class=unreal.load_class(None,'/Script/PocoSurvival.SurvivalSceneryCluster');assert cluster_class
 clusters={}
-for name,distance in [('Pine',47000),('Broadleaf',47000),('Fern',9000),('MossRock',24000),('Stump',19000),('Deadwood',23000)]:
+for name,distance in [('Broadleaf',47000),('Fern',9000),('MossRock',24000),('Stump',19000),('Deadwood',23000)]:
  actor=actors.spawn_actor_from_class(cluster_class,unreal.Vector());actor.set_actor_label('county_'+name);actor.configure(models[name][0],distance,name in ('Pine','Broadleaf'),name in ('MossRock','Stump','Deadwood'));clusters[name]=actor
+pine_cells={}
 for point in data['instances']:
- clusters[point['mesh']].add_scenery(unreal.Vector(point['x']*100,point['y']*100,point['z']*100),point['yaw'],point['scale'])
+ if point['mesh']=='Pine':
+  cell=(math.floor(point['x']/64),math.floor(point['y']/64));centre=((cell[0]+.5)*64,(cell[1]+.5)*64)
+  if cell not in pine_cells:
+   actor=actors.spawn_actor_from_class(cluster_class,unreal.Vector(centre[0]*100,centre[1]*100,0));actor.set_actor_label('county_PineCell_'+str(cell[0])+'_'+str(cell[1]));actor.configure(models['Pine'][0],47000,True,False);actor.configure_distance_levels(models['Pine'][0],models['PineMid'][0],models['PineFar'][0]);pine_cells[cell]=actor
+  pine_cells[cell].add_scenery(unreal.Vector((point['x']-centre[0])*100,(point['y']-centre[1])*100,point['z']*100),point['yaw'],point['scale'])
+ else:clusters[point['mesh']].add_scenery(unreal.Vector(point['x']*100,point['y']*100,point['z']*100),point['yaw'],point['scale'])
 def mesh_actor(name,mesh,pos=(0,0,0),collision=True):
  actor=actors.spawn_actor_from_class(unreal.StaticMeshActor,unreal.Vector(*[v*100 for v in pos]));actor.set_actor_label('county_'+name)
  c=actor.static_mesh_component;c.set_static_mesh(mesh);c.set_mobility(unreal.ComponentMobility.STATIC);c.set_collision_profile_name('BlockAll' if collision else 'NoCollision');return actor
@@ -63,7 +94,7 @@ cube=lib.load_asset('/Engine/BasicShapes/Cube')
 for side in [-1,1]:
  outer=height(x+side*147.5,40)+.1;rise=deck-outer;length=math.hypot(70,rise)
  ramp=mesh_actor('bridge_ramp_'+str(side),cube,(x+side*112.5,40,(deck+outer)/2));ramp.set_actor_scale3d(unreal.Vector(length,7,.30));ramp.set_actor_rotation(unreal.Rotator(pitch=-side*math.degrees(math.atan2(rise,70)),yaw=0,roll=0),False)
-report={'connected_extent_m':data['extent_m'],'terrain_tiles':len(models['Terrain']),'rural_shelters':len(data['pois']),'nature_instances':len(data['instances']),'instanced_clusters':len(clusters),'simple_trunk_collision':True,'river_crossing':True,'native_runtime_traversal_verified':False,'final_art':False}
+report={'connected_extent_m':data['extent_m'],'terrain_tiles':len(models['Terrain']),'rural_shelters':len(data['pois']),'nature_instances':len(data['instances']),'instanced_clusters':len(clusters)+len(pine_cells),'pine_lod_cells':len(pine_cells),'pine_lod_triangles':[9728,2084,8],'mobile_foliage_material':foliage_path,'simple_trunk_collision':True,'river_crossing':True,'native_runtime_traversal_verified':False,'final_art':False}
 assert report['terrain_tiles']==16 and report['rural_shelters']==6
 assert level.save_current_level();lib.save_directory('/Game/County',False,True)
 (root/'artifacts/gameplay-scene/county-content.json').write_text(json.dumps(report,indent=2)+'\n');print('COUNTY_CONTENT_PASS',json.dumps(report),flush=True)
