@@ -4,5 +4,7 @@
   "bytes": 1936544,
   "sha256": "d97c5f74d3f12a21e861979ebe4ec6015a1ec593efdbd18cbfb131692b01af0f",
   "source": "https://github.com/trumank/uesave",
-  "purpose": "CI-only actual Unreal save-file decoder; not shipped in game"
+  "purpose": "CI-only actual Unreal save-file decoder; not shipped in game",
+  "license": "MIT",
+  "notice_url": "https://github.com/trumank/uesave/blob/v0.7.1/LICENSE"
 }

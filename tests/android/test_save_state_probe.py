@@ -19,6 +19,10 @@ class SaveProbeTests(unittest.TestCase):
   for key,value in [('PlayerLocation',[0]*24),('FieldItems',[0]*36),('SaveGeneration',True),('bHasPlayerState',False),('MapName',''),('FormatVersion',999)]:
    d=fixture();d['root']['properties'][key+'_0']=value
    with self.assertRaises((AssertionError,TypeError,KeyError)):m.canonical_save(d)
+ def test_native_observed_omitted_defaults(self):
+  d=fixture()
+  for key in ['FormatVersion','FilmProgress','FilmDecision','LootedCaches','OpenDoors','CountyStages','MainStoryEvents']:d['root']['properties'].pop(key+'_0')
+  s=m.canonical_save(d);self.assertEqual(s['format'],8);self.assertEqual(s['county'],[0]*6);self.assertEqual(s['film_progress'],0)
  def test_no_teleport_in_android_probe(self):
   s=(ROOT/'tools/android/device_save_probe.py').read_text();self.assertIn("'РЮКЗАК' in plain",s);self.assertNotIn('set_actor_location',s);self.assertIn("'GVAS'",s)
 if __name__=='__main__':unittest.main()

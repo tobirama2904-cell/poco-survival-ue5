@@ -224,7 +224,16 @@ for prop,value in [('mara_hold_map',''),('mara_hold_location',unreal.Vector(1000
  assert unreal.GameplayStatics.save_game_to_slot(broken,'Survival_A',0)
  fallback=instance();assert fallback.load_progress();assert fallback.save_progress()
  recovered=unreal.GameplayStatics.load_game_from_slot('Survival_A',0);assert recovered.get_editor_property('mara_hold_map')=='CanalDistrict'
-report={'phase' :'unreal-headless-native-integration','companion_hold_serialization_and_fallback_tested':True,'journey_history_serialization_and_fallback_tested':True,'native_classes_loaded':4,
+# Older real saves may omit a default-valued version tag. The new sentinel
+# identifies absence, preserves compatible legacy data, and writes explicit 8.
+for slot in ['Survival_A','Survival_B']:unreal.GameplayStatics.delete_game_in_slot(slot,0)
+unversioned=unreal.GameplayStatics.create_save_game_object(save_cls)
+unversioned.set_editor_property('format_version',0);unversioned.set_editor_property('save_generation',5)
+unversioned.set_editor_property('field_items',[0]*9);unversioned.set_editor_property('county_stages',[1,0,0,0,0,0])
+assert unreal.GameplayStatics.save_game_to_slot(unversioned,'Survival_A',0)
+upgraded=instance();assert upgraded.load_progress();assert upgraded.get_county_stage(0)==1;assert upgraded.save_progress()
+assert unreal.GameplayStatics.load_game_from_slot('Survival_B',0).get_editor_property('format_version')==8
+report={'phase' :'unreal-headless-native-integration','companion_hold_serialization_and_fallback_tested':True,'omitted_legacy_version_migration_tested':True,'journey_history_serialization_and_fallback_tested':True,'native_classes_loaded':4,
  'version8_main_rescue_and_legacy_migration_tested':True,'version7_county_choices_and_legacy_migration_tested':True,'version6_field_and_film_serialization_fallback_tested':True,'version5_world_clock_serialization_and_fallback_tested':True,'version4_clock_migration_tested':True,'same_revision_save_generation_tested':True,'damaged_and_dead_encounters_restored':True,'invalid_and_duplicate_encounter_fallback_tested':True,'view_rotation_serialization_tested':True,
  'objective_count':61,'native_inventory_and_choices_tested':True,
  'save_write_and_load_tested':True,'truncated_newest_slot_recovery_tested':True,
@@ -238,7 +247,7 @@ for key,value in [('format_version',7),('save_generation',37),('has_player_state
 assert unreal.GameplayStatics.save_game_to_slot(decoder,'DecoderFixture',0)
 shutil.copyfile(Path(unreal.Paths.project_saved_dir())/'SaveGames/DecoderFixture.sav',output/'decoder-native-fixture.sav')
 defaults=unreal.GameplayStatics.create_save_game_object(save_cls)
-for key,value in [('save_generation',38),('has_player_state',True),('map_name','CanalDistrict'),('player_location',unreal.Vector(10,20,96)),('field_items',[0]*9)]:defaults.set_editor_property(key,value)
+for key,value in [('format_version',8),('save_generation',38),('has_player_state',True),('map_name','CanalDistrict'),('player_location',unreal.Vector(10,20,96)),('field_items',[0]*9)]:defaults.set_editor_property(key,value)
 assert unreal.GameplayStatics.save_game_to_slot(defaults,'DecoderDefaults',0)
 shutil.copyfile(Path(unreal.Paths.project_saved_dir())/'SaveGames/DecoderDefaults.sav',output/'decoder-defaults-fixture.sav')
 # Small native-generated fixtures allow independent reader validation; no engine assets.

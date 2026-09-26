@@ -475,6 +475,11 @@
     "python_tests_passed": 86,
     "python_tests_skipped": 1,
     "android_touch_restore_verified": false,
-    "final_game": false
+    "final_game": false,
+    "source_commit": "024581537dbdf1b64682c2fc34b78b4fd1cc8f22",
+    "corrected_ue_scene_run": 36239195212,
+    "corrected_native_run": 36239196341,
+    "save_reader_state": "completed",
+    "save_reader_result": "failure"
   }
 }

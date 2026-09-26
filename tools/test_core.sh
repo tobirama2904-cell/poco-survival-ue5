@@ -43,3 +43,6 @@ c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISo
 
 c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public tests/core/test_rig_names.cpp -o .cache/core/test_rig_names
 .cache/core/test_rig_names
+
+c++ -std=c++20 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -ISource/PocoSurvival/Public tests/core/test_save_compatibility.cpp -o .cache/core/test_save_compatibility
+.cache/core/test_save_compatibility

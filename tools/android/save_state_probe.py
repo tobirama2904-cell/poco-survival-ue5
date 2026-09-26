@@ -7,7 +7,13 @@ import math
 def canonical_save(document):
  root=document['root'];assert root['save_game_type'].split('.')[-1]=='SurvivalSaveGame'
  p=root['properties']
- def get(key):return p[key+'_0']
+ defaults={'FormatVersion':8,'FilmProgress':0,'FilmDecision':0,'LootedCaches':0,'OpenDoors':0,'CountyStages':[0]*6,'MainStoryEvents':0}
+ def get(key):
+  if key+'_0' in p:return p[key+'_0']
+  if key in defaults:return defaults[key]
+  raise KeyError(key)
+ # These are pinned producer-schema defaults, verified with a real UE fixture.
+ # Unknown required player/map/generation/inventory fields are never guessed.
  def integer(v,low,high):
   assert type(v) is int and low<=v<=high;return v
  version=integer(get('FormatVersion'),6,8)

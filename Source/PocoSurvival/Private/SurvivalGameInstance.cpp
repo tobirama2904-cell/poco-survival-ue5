@@ -1,6 +1,7 @@
 #include "SurvivalGameInstance.h"
 #include "Sound/SoundAttenuation.h"
 #include "SurvivalSaveGame.h"
+#include "Core/SaveCompatibility.h"
 #include "Core/AmericanStory.h"
 #include "SurvivalInteraction.h"
 #include "SurvivalCharacter.h"
@@ -58,6 +59,7 @@ bool USurvivalGameInstance::SaveProgress()
     if (SaveGeneration == MAX_int64) return false;
     auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::CreateSaveGameObject(USurvivalSaveGame::StaticClass()));
     if (!Save) return false;
+    Save->FormatVersion=8;
     Save->SaveGeneration = SaveGeneration + 1;Save->WorldElapsedSeconds=Clock.seconds;Save->WeatherSeed=Clock.seed;
     Save->MainRepairKitRecovered=MainStory.spareRecovered;Save->MainStoryEvents=MainStory.events;Save->FilmProgress=FilmProgress;Save->FilmDecision=FilmDecision;Save->LootedCaches=FieldInventory.looted;Save->OpenDoors=FieldInventory.doors;for(int32 N:FieldInventory.items)Save->FieldItems.Add(N);
     Save->CountyStages.Reset();for(int32 Stage:County.stages)Save->CountyStages.Add(Stage);
@@ -105,7 +107,9 @@ bool USurvivalGameInstance::LoadProgress()
     {
         if (!UGameplayStatics::DoesSaveGameExist(SlotName(Index), 0)) continue;
         auto* Save = Cast<USurvivalSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName(Index), 0));
-        if (!Save || (Save->FormatVersion < 1 || Save->FormatVersion > 8) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
+        if(!Save)continue;
+        Save->FormatVersion=survival::ResolveSaveFormat(Save->FormatVersion,Save->FieldItems.Num(),Save->SaveGeneration);
+        if ((Save->FormatVersion < 1 || Save->FormatVersion > 8) || (Save->CampaignVersion != TEXT("foundation-1") && Save->CampaignVersion != TEXT("city-1")) ||
             Save->StateRevision < 0 || Save->StateRevision != Save->ActionJournal.Num() || Save->SaveGeneration<0) continue;
         if (Save->bHasPlayerState && (Save->MapName.IsEmpty() || Save->PlayerLocation.ContainsNaN() ||
             Save->PlayerLocation.GetAbsMax()>1000000 || Save->PlayerRotation.ContainsNaN() ||

@@ -1,0 +1,8 @@
+{
+  "actual_native_gvas_decoded": true,
+  "known_fields_match": true,
+  "actual_android_save_verified": false,
+  "synthetic_uobject_fixture": true,
+  "origin_run": 36238611053,
+  "check": "Original native-produced .sav fixtures re-decoded locally; optional-default handling corrected"
+}
