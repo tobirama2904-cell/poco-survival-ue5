@@ -37,6 +37,9 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m pip install Pillow==11.3.0
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq tesseract-ocr tesseract-ocr-rus
+          python3 tools/android/fetch_save_reader.py
           test -e /dev/kvm
           sudo chmod 666 /dev/kvm
           export JAVA_HOME="$JAVA_HOME_21_X64"

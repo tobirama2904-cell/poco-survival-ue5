@@ -1,5 +1,5 @@
 """Run inside UnrealEditor-Cmd. Headless native integration, NOT visual gameplay."""
-import json
+import json,shutil
 from pathlib import Path
 import unreal
 
@@ -231,5 +231,19 @@ report={'phase' :'unreal-headless-native-integration','companion_hold_serializat
  'unreal_editor_version':unreal.SystemLibrary.get_engine_version(),
  'visual_render_tested':False,'android_package_tested':False,'physical_device_tested':False}
 output.mkdir(parents=True,exist_ok=True)
+# A synthetic known-value UObject fixture tests the external binary decoder.
+# It is NOT claimed to be a player-created Android save or touch evidence.
+decoder=unreal.GameplayStatics.create_save_game_object(save_cls)
+for key,value in [('format_version',7),('save_generation',37),('has_player_state',True),('map_name','CanalDistrict'),('player_location',unreal.Vector(123.25,-450.5,98)),('field_items',[2,1,3,2,6,1,1,1,0]),('film_progress',18),('film_decision',2),('looted_caches',3),('open_doors',5),('county_stages',[1,0,0,0,0,0])]:decoder.set_editor_property(key,value)
+assert unreal.GameplayStatics.save_game_to_slot(decoder,'DecoderFixture',0)
+shutil.copyfile(Path(unreal.Paths.project_saved_dir())/'SaveGames/DecoderFixture.sav',output/'decoder-native-fixture.sav')
+defaults=unreal.GameplayStatics.create_save_game_object(save_cls)
+for key,value in [('save_generation',38),('has_player_state',True),('map_name','CanalDistrict'),('player_location',unreal.Vector(10,20,96)),('field_items',[0]*9)]:defaults.set_editor_property(key,value)
+assert unreal.GameplayStatics.save_game_to_slot(defaults,'DecoderDefaults',0)
+shutil.copyfile(Path(unreal.Paths.project_saved_dir())/'SaveGames/DecoderDefaults.sav',output/'decoder-defaults-fixture.sav')
+# Small native-generated fixtures allow independent reader validation; no engine assets.
+for slot in ['Survival_A','Survival_B']:
+    source=Path(unreal.Paths.project_saved_dir())/'SaveGames'/(slot+'.sav')
+    if source.exists():shutil.copyfile(source,output/('native-fixture-'+slot+'.sav'))
 (output/'unreal-integration.json').write_text(json.dumps(report,indent=2)+'\n')
 print('UNREAL_INTEGRATION_PASS',json.dumps(report))

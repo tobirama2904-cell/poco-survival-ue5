@@ -63,6 +63,14 @@ jobs:
                 2>&1 | tee artifacts/engine-probe/editor.log
               test -s artifacts/engine-probe/unreal-integration.json
             '
+      - name: Validate the pinned save reader against actual native serialization
+        run: |
+          set -euo pipefail
+          sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE"
+          python3 tools/android/fetch_save_reader.py
+          .cache/save-reader/uesave to-json -i artifacts/engine-probe/decoder-native-fixture.sav -o artifacts/engine-probe/decoder-native-fixture.json
+          .cache/save-reader/uesave to-json -i artifacts/engine-probe/decoder-defaults-fixture.sav -o artifacts/engine-probe/decoder-defaults-fixture.json
+          python3 tools/android/verify_save_reader_fixture.py
       - name: Upload diagnostic metadata and project compiler logs only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -152,4 +152,5 @@ jobs:
             artifacts/gameplay-scene/*.log
             artifacts/gameplay-scene/*.png
             artifacts/engine-probe/unreal-integration.json
+            artifacts/engine-probe/*.sav
           retention-days: 7

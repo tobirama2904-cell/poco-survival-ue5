@@ -5,6 +5,8 @@ Records its ABI/native bridge and images. Never substitutes this for POCO testin
 import json,os,subprocess,time,shlex,hashlib
 from pathlib import Path
 from frame_quality import metrics
+from device_save_probe import DeviceSaveProbe
+from save_state_probe import compare_saves
 ROOT=Path('artifacts/android-emulator');ROOT.mkdir(parents=True,exist_ok=True)
 SDK=Path(os.environ['ANDROID_HOME']);ADB=str(SDK/'platform-tools/adb');PACKAGE='com.pocosurvival.game'
 def adb(*args,timeout=45,check=True):
@@ -30,7 +32,7 @@ def launch():
     result=text('shell','am','start','-W','-n',activity,'--es','cmdline',shlex.quote('-project="../../../PocoSurvival/PocoSurvival.uproject" -AllowSoftwareRendering'),timeout=90);(ROOT/'launch.log').write_text(result)
     if 'Error:' in result:raise RuntimeError('Activity launch failed')
     return activity
-emulator_log=(ROOT/'emulator.log').open('wb');process=None
+emulator_log=(ROOT/'emulator.log').open('wb');process=None;probe=None
 report={'physical_device_tested':False,'poco_f4_tested':False,'fps_claimed':False,'arm_translation_emulator_only':True,'installed':False,'launch_survived':False,'visual_quality_review_required':True,'emulator_only_commandline':'-AllowSoftwareRendering','requested_emulator_portrait_resolution':'540x960'}
 try:
     process=subprocess.Popen([str(SDK/'emulator/emulator'),'-avd','GameInstallCheck','-no-window','-no-audio','-no-boot-anim','-no-snapshot','-gpu','swiftshader_indirect','-memory','4096','-cores','2','-camera-back','none','-camera-front','none','-no-metrics'],stdout=emulator_log,stderr=subprocess.STDOUT)
@@ -69,45 +71,34 @@ try:
     if 'CanalDistrict' not in logs or 'Bringing World' not in logs:raise RuntimeError('No real district-load evidence in Android logs')
     report['launch_survived']=True
     width,height=report['screenshots'][0]['width'],report['screenshots'][0]['height']
-    adb('shell','input','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'1500')
-    time.sleep(5);report['screenshots'].append(wait_visible_frame('android-after-input.png'))
-    # Current compact HUD keeps Save inside the backpack, not on the normal HUD.
-    # Do not count injecting these taps as proof that an action was accepted.
     time.sleep(35)
-    adb('shell','input','tap',str(round(width*.89)),str(round(height*.075)))
-    time.sleep(5);report['screenshots'].append(screenshot('android-backpack.png'))
-    adb('shell','input','tap',str(round(width*.75)),str(round(height*.075)))
-    time.sleep(5)
-    report['save_files']=[]
-    for directory in ['files','/sdcard/Android/data/'+PACKAGE+'/files']:
-        found=text('shell','run-as',PACKAGE,'find',directory,'-type','f','-name','Survival_*.sav',check=False)
-        for path in found.splitlines():
-            if not path.startswith(directory+'/') or not path.endswith(('/Survival_A.sav','/Survival_B.sav')):continue
-            data=adb('exec-out','run-as',PACKAGE,'cat',path,check=False).stdout
-            if not data.startswith(b'GVAS') or len(data)>2*1024**2:continue
-            name=('internal-' if directory=='files' else 'external-')+Path(path).name
-            (ROOT/name).write_bytes(data)
-            report['save_files'].append({'file':name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'gvas_header_verified':True})
-    report['save_files_present']=bool(report['save_files'])
-    report['save_button_input_injected']=True
-    report['save_restore_equality_verified']=False
-
+    probe=DeviceSaveProbe(adb,text,screenshot,ROOT,width,height)
+    before=probe.save('before')
+    # Actual touchscreen gesture; no diagnostic teleport or game-state injection.
+    adb('shell','input','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'1500')
+    time.sleep(8);report['screenshots'].append(wait_visible_frame('android-after-input.png'))
+    moved=probe.save('after-move',before['generation'])
     adb('shell','am','force-stop',PACKAGE);adb('logcat','-c');launch();time.sleep(90)
     report['pid_after_restart']=text('shell','pidof',PACKAGE,check=False)
     report['screenshots'].append(wait_visible_frame('android-restart.png'))
     (ROOT/'android-restart-logcat.log').write_text(text('logcat','-d',timeout=60))
     if not report['pid_after_restart']:raise RuntimeError('Game failed to survive relaunch')
     report['restart_survived']=True
-    report['visible_frames_verified']=True
-    report['touch_input_injected']=True
-    report['touch_movement_verified']=False
-    report['save_restore_equality_verified']=False
+    restored=probe.save('after-restart',moved['generation'])
+    report['save_snapshots']={'before':before,'after_move':moved,'after_restart':restored}
+    report['save_files_present']=True;report['save_button_input_injected']=True
+    report['visible_frames_verified']=True;report['touch_input_injected']=True
+    comparison=compare_saves(before,moved,restored);report.update(comparison)
+    report['save_restore_equality_verified']=False # Only the specified player-state subset is compared.
+    assert comparison['touch_movement_verified'],'Actual saved player positions did not establish touch movement'
+    assert comparison['player_position_inventory_progress_restore_verified'],'Restored player-state subset differs or no fresh save was captured'
 except Exception as e:
     report['failure']=type(e).__name__+': '+str(e)
     try:(ROOT/'failure-logcat.log').write_text(text('logcat','-d',timeout=15,check=False))
     except Exception:pass
     raise
 finally:
+    if probe is not None:probe.persist()
     (ROOT/'install-verification.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)
     if process is not None:
         process.terminate()
