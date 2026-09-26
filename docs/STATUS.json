@@ -404,5 +404,24 @@
     "source_commit": "bcfe15a",
     "ue_scene_run": 36209094563,
     "android_native_run": 36209095776
+  },
+  "melee_stage": {
+    "branch": "gameplay/melee-motion",
+    "character_source_release": "character-source-003",
+    "standing_and_crouched_strikes_for": [
+      "Arsen (Daniel)",
+      "Infected"
+    ],
+    "grounded_crouch_roles": 5,
+    "action_span_seconds": 0.8,
+    "impact_seconds": 0.3,
+    "bind_matrices_and_old_clip_spans_verified": true,
+    "blender_roundtrip_verified": true,
+    "unreal_melee_verified": false,
+    "portable_suites_passed": 11,
+    "python_tests_passed": 74,
+    "new_animation_frame_requested": true,
+    "physical_device_tested": false,
+    "final_game": false
   }
 }

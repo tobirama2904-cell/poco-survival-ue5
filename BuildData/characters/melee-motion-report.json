@@ -1,0 +1,117 @@
+[
+  {
+    "role": "Arsen",
+    "file": "Arsen.glb",
+    "sha256": "563658d19e1e6b317c76c3bb8baf016da69810fbb79a6d9b66896f24c40b9ff0",
+    "bytes": 9241076,
+    "source_motion": "CMU 13_17",
+    "source_frames": [
+      201,
+      297
+    ],
+    "source_fps": 120,
+    "duration_seconds": 0.8,
+    "impact_seconds": 0.3,
+    "clips": [
+      "Idle",
+      "Walk",
+      "Run",
+      "Crouch",
+      "Talk",
+      "Punch",
+      "PunchCrouch"
+    ],
+    "retargeted": true,
+    "grounded_crouch": true,
+    "in_game_verified": false
+  },
+  {
+    "role": "Infected",
+    "file": "Infected.glb",
+    "sha256": "f046a2cda716dfa50c99d2bfbb3017bdc4559386c290a2a6fcbc08c2dff0e889",
+    "bytes": 12504392,
+    "source_motion": "CMU 13_17",
+    "source_frames": [
+      201,
+      297
+    ],
+    "source_fps": 120,
+    "duration_seconds": 0.8,
+    "impact_seconds": 0.3,
+    "clips": [
+      "Idle",
+      "Walk",
+      "Run",
+      "Crouch",
+      "Talk",
+      "Punch",
+      "PunchCrouch"
+    ],
+    "retargeted": true,
+    "grounded_crouch": true,
+    "in_game_verified": false
+  },
+  {
+    "role": "Leyla",
+    "file": "Leyla.glb",
+    "sha256": "437007f1e6f77a70160996fae087dbc87daa0d12c4b1ff5781dbf98916fd9a57",
+    "bytes": 8626804,
+    "source_motion": "Rocketbox crouch (ground-height correction only)",
+    "source_frames": null,
+    "source_fps": 120,
+    "duration_seconds": null,
+    "impact_seconds": null,
+    "clips": [
+      "Idle",
+      "Walk",
+      "Run",
+      "Crouch",
+      "Talk"
+    ],
+    "retargeted": false,
+    "grounded_crouch": true,
+    "in_game_verified": false
+  },
+  {
+    "role": "Nargis",
+    "file": "Nargis.glb",
+    "sha256": "ae6d3f58d52698807768cad8b6f79ef1ab7c783693eb4fbbdf93a93d5eeb05fe",
+    "bytes": 7389168,
+    "source_motion": "Rocketbox crouch (ground-height correction only)",
+    "source_frames": null,
+    "source_fps": 120,
+    "duration_seconds": null,
+    "impact_seconds": null,
+    "clips": [
+      "Idle",
+      "Walk",
+      "Run",
+      "Crouch",
+      "Talk"
+    ],
+    "retargeted": false,
+    "grounded_crouch": true,
+    "in_game_verified": false
+  },
+  {
+    "role": "Ilyas",
+    "file": "Ilyas.glb",
+    "sha256": "318da1f08281717a1c70cc3dd281758b61a14ad7c08afabfb629ed07485a1fe8",
+    "bytes": 6534596,
+    "source_motion": "Rocketbox crouch (ground-height correction only)",
+    "source_frames": null,
+    "source_fps": 120,
+    "duration_seconds": null,
+    "impact_seconds": null,
+    "clips": [
+      "Idle",
+      "Walk",
+      "Run",
+      "Crouch",
+      "Talk"
+    ],
+    "retargeted": false,
+    "grounded_crouch": true,
+    "in_game_verified": false
+  }
+]

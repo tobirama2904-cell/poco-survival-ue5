@@ -1,0 +1,51 @@
+[
+  {
+    "role": "Arsen",
+    "clips_checked": [
+      "Crouch",
+      "Punch",
+      "PunchCrouch"
+    ],
+    "max_abs_floor_error_m": 1.3160170055925846e-06,
+    "blender_roundtrip_verified": true,
+    "unreal_verified": false
+  },
+  {
+    "role": "Infected",
+    "clips_checked": [
+      "Crouch",
+      "Punch",
+      "PunchCrouch"
+    ],
+    "max_abs_floor_error_m": 1.8924474716186523e-06,
+    "blender_roundtrip_verified": true,
+    "unreal_verified": false
+  },
+  {
+    "role": "Leyla",
+    "clips_checked": [
+      "Crouch"
+    ],
+    "max_abs_floor_error_m": 6.074551492929459e-07,
+    "blender_roundtrip_verified": true,
+    "unreal_verified": false
+  },
+  {
+    "role": "Nargis",
+    "clips_checked": [
+      "Crouch"
+    ],
+    "max_abs_floor_error_m": 1.2842938303947449e-06,
+    "blender_roundtrip_verified": true,
+    "unreal_verified": false
+  },
+  {
+    "role": "Ilyas",
+    "clips_checked": [
+      "Crouch"
+    ],
+    "max_abs_floor_error_m": 1.1855736374855042e-06,
+    "blender_roundtrip_verified": true,
+    "unreal_verified": false
+  }
+]

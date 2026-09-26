@@ -21,6 +21,7 @@
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
+#include "Animation/AnimSingleNodeInstance.h"
 #include "Animation/AnimSequence.h"
 #include "Engine/SkeletalMesh.h"
 #include "Engine/World.h"
@@ -45,7 +46,7 @@ ASurvivalCharacter::ASurvivalCharacter()
     Move->bOrientRotationToMovement=true; Move->RotationRate=FRotator(0,540,0);
     Move->MaxWalkSpeed=340; Move->JumpZVelocity=470; Move->AirControl=0.2f;
     Move->GetNavAgentPropertiesRef().bCanCrouch=true;
-    Move->MaxWalkSpeedCrouched=170;
+    Move->MaxWalkSpeedCrouched=170;Move->CrouchedHalfHeight=60;
     CameraArm=CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraArm"));
     CameraArm->SetupAttachment(GetRootComponent()); CameraArm->TargetArmLength=330;
     CameraArm->SocketOffset=FVector(0,48,65); CameraArm->bUsePawnControlRotation=true;
@@ -80,7 +81,10 @@ void ASurvivalCharacter::Tick(float Delta)
     if(!bEditingControls&&!IsCinematicLocked()&&IsAlive()){Bow.Step(Delta);const float Bleed=Trauma.Step(Delta);if(Bleed>0)Stats.Damage(Bleed);}
     AttackCooldown=FMath::Max(0.0f,AttackCooldown-Delta);
     if (IsPlayerControlled()) Equipment.Step(Delta,EarnedRounds());
+    if(Melee.active&&(!IsAlive()||IsCinematicLocked()||bEditingControls||bJournalOpen||GetCharacterMovement()->IsFalling()||bIsCrouched!=bMeleeCrouched))Melee.Cancel();
+    bMeleeImpactFrame=Melee.Step(Delta);
     if (bHumanAvatar) UpdateHuman();
+    if(bMeleeImpactFrame){if(bHumanAvatar){GetMesh()->TickAnimation(0.f,false);GetMesh()->RefreshBoneTransforms();}++MeleeImpactEvents;DeliverMelee();}
     FootstepDelay-=Delta;
     if (IsAlive() && !IsCinematicLocked() && (IsPlayerControlled() || FVector::DistSquared(GetActorLocation(),UGameplayStatics::GetPlayerPawn(this,0)?UGameplayStatics::GetPlayerPawn(this,0)->GetActorLocation():GetActorLocation())<FMath::Square(900.f)) && GetCharacterMovement()->IsMovingOnGround() && GetVelocity().SizeSquared2D()>10000 && FootstepDelay<=0) {
         FootstepDelay=bIsCrouched?.65f:GetVelocity().Size2D()>400?.28f:.44f;
@@ -90,16 +94,17 @@ void ASurvivalCharacter::Tick(float Delta)
     Stats.Step(Delta,Sprint);
     GetCharacterMovement()->MaxWalkSpeed=(bSprintRequested && Stats.CanSprint() && Trauma.CanSprint() && !bIsCrouched ? 580 : 340)*Trauma.WalkScale();
     if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))if(G->FilmDecision==1){const FVector P=GetActorLocation();if(P.X>-22000&&P.X<-8000&&P.Y>5000&&P.Y<17000)GetCharacterMovement()->MaxWalkSpeed*=.6f;}
+    if(Melee.active)GetCharacterMovement()->MaxWalkSpeed=GetCharacterMovement()->MaxWalkSpeedCrouched=0;else GetCharacterMovement()->MaxWalkSpeedCrouched=170;
     Camera->FieldOfView=FMath::FInterpTo(Camera->FieldOfView,bAiming||Bow.drawing ? 62.0f:Sprint && Stats.CanSprint() ? 86.0f:80.0f,Delta,5);
     if (!Stats.Alive()) GetCharacterMovement()->DisableMovement();
 }
 void ASurvivalCharacter::Forward(float Value)
 {
-    if (Controller && Stats.Alive() && !IsCinematicLocked() && !bJournalOpen && !bEditingControls) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::X),Value);
+    if (Controller && Stats.Alive() && !IsCinematicLocked() && !bJournalOpen && !bEditingControls && !Melee.active) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::X),Value);
 }
 void ASurvivalCharacter::Right(float Value)
 {
-    if (Controller && Stats.Alive() && !IsCinematicLocked() && !bJournalOpen && !bEditingControls) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::Y),Value);
+    if (Controller && Stats.Alive() && !IsCinematicLocked() && !bJournalOpen && !bEditingControls && !Melee.active) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::Y),Value);
 }
 void ASurvivalCharacter::Turn(float Value) { if(!bEditingControls)AddControllerYawInput(Value); }
 void ASurvivalCharacter::Look(float Value) { if(!bEditingControls)AddControllerPitchInput(Value); }
@@ -166,19 +171,20 @@ void ASurvivalCharacter::Attack()
     if(bEditingControls||bJournalOpen){MouseSettingsPressed();return;}
     if(bBowEquipped){if(IsAlive()&&!IsCinematicLocked()&&Trauma.CanShoot())if(auto* G=Cast<USurvivalGameInstance>(GetGameInstance()))Bow.Begin(G->FieldInventory.Get(survival::Supply::Arrows)>0);return;}
     if (IsPlayerControlled() && Equipment.state.pistol) { Shoot();return; }
-    if (IsCinematicLocked() || bEditingControls || bJournalOpen || AttackCooldown>0 || !Stats.Spend(18)) return;
-    AttackCooldown=0.75f;
+    if (!IsAlive()||IsCinematicLocked()||bEditingControls||bJournalOpen||AttackCooldown>0||Melee.active||!GetCharacterMovement()->IsMovingOnGround()||Trauma.arm>=.95f||!Stats.Spend(18))return;
+    AttackCooldown=.88f;Melee.Begin();bMeleeCrouched=bIsCrouched;GetCharacterMovement()->StopMovementImmediately();
     if (IsPlayerControlled() && Controller) SetActorRotation(FRotator(0,Controller->GetControlRotation().Yaw,0));
     if (!bHumanAvatar) if (auto* Anim=GetMesh()->GetAnimInstance()) if (AttackAnimation) Anim->PlaySlotAnimationAsDynamicMontage(AttackAnimation,TEXT("DefaultSlot"),0.06f,0.12f);
-    FTimerHandle HitTimer;GetWorldTimerManager().SetTimer(HitTimer,this,&ASurvivalCharacter::DeliverMelee,0.18f,false);
+    // The same clock positions the clip and emits one impact, not a detached timer.
 }
 void ASurvivalCharacter::DeliverMelee()
 {
     if (!Stats.Alive() || IsCinematicLocked() || bEditingControls) return;
     const FVector Start=GetActorLocation()+FVector(0,0,30);
-    const FVector End=Start+GetActorForwardVector()*170;
+    auto* Game=Cast<USurvivalGameInstance>(GetGameInstance());const bool Pipe=IsPlayerControlled()&&Game&&Game->HasWorldFlag(TEXT("has_pipe"));
+    const FName Hand=RightHandBone();const FVector End=(Hand.IsNone()?Start+GetActorForwardVector()*90:GetMesh()->GetSocketLocation(Hand))+GetActorForwardVector()*(Pipe?60:18);
     TArray<FHitResult> Hits;FCollisionQueryParams Params(SCENE_QUERY_STAT(Melee),false,this);
-    GetWorld()->SweepMultiByChannel(Hits,Start,End,FQuat::Identity,ECC_Pawn,FCollisionShape::MakeSphere(45),Params);
+    GetWorld()->SweepMultiByChannel(Hits,Start,End,FQuat::Identity,ECC_Pawn,FCollisionShape::MakeSphere(25),Params);
     TSet<AActor*> Damaged;
     for (const FHitResult& Hit:Hits)
     {
@@ -200,7 +206,7 @@ float ASurvivalCharacter::TakeDamage(float Amount,const FDamageEvent& Event,ACon
         const FString Bone=Hit.BoneName.ToString().ToLower();Zone=Bone.Contains(TEXT("head"))||Local.Z>55?survival::WoundZone::Head:Local.Z<-30?survival::WoundZone::Leg:FMath::Abs(Local.Y)>27?survival::WoundZone::Arm:survival::WoundZone::Torso;
     }
     const float Applied=Stats.Damage(Trauma.Hit(Amount,Zone));
-    if (Applied>0){LastImpactTime=GetWorld()->GetTimeSeconds();Super::TakeDamage(Applied,Event,Instigator,Causer);}
+    if (Applied>0){Melee.Cancel();LastImpactTime=GetWorld()->GetTimeSeconds();Super::TakeDamage(Applied,Event,Instigator,Causer);}
     if (Applied>0 && !Stats.Alive()) { EndStory();GetCharacterMovement()->DisableMovement();
         if (!bHumanAvatar) if (auto* Death=LoadObject<UAnimSequence>(nullptr,TEXT("/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01.MM_Death_Front_01"))) GetMesh()->PlayAnimation(Death,false);
         StatusMessage=TEXT("Вы погибли. F9 / Загрузить — вернуться к сохранению."); }
@@ -219,7 +225,7 @@ bool ASurvivalCharacter::RestoreVitals(float Health,float Stamina)
     return true;
 }
 void ASurvivalCharacter::Save() { if (auto* Game=Cast<USurvivalGameInstance>(GetGameInstance())) if (!Game->SaveProgress()) StatusMessage=TEXT("Не удалось сохранить прогресс."); }
-void ASurvivalCharacter::Load() { Bow.Cancel();bAiming=false;EndStory();bJournalOpen=false; if (auto* Game=Cast<USurvivalGameInstance>(GetGameInstance())) if (Game->LoadProgress()) { Game->ApplyLoadedPlayerState(this);StatusMessage=TEXT("Прогресс восстановлен."); } }
+void ASurvivalCharacter::Load() { Melee.Cancel();Bow.Cancel();bAiming=false;EndStory();bJournalOpen=false; if (auto* Game=Cast<USurvivalGameInstance>(GetGameInstance())) if (Game->LoadProgress()) { Game->ApplyLoadedPlayerState(this);StatusMessage=TEXT("Прогресс восстановлен."); } }
 void ASurvivalCharacter::TouchPressed(ETouchIndex::Type Finger,FVector Position)
 {
     auto* PC=Cast<APlayerController>(Controller);if (!PC) return;
@@ -344,12 +350,25 @@ void ASurvivalCharacter::ConfigureHuman()
         const FString Clip=Base+Name+TEXT(".")+Name;
         if (auto* Anim=LoadObject<UAnimSequence>(nullptr,*Clip)) HumanAnimations.Add(FName(Name),Anim);
     }
+    for(const TCHAR* Name:{TEXT("Punch"),TEXT("PunchCrouch")}){
+        const FString Package=Base+Name;
+        if(FPackageName::DoesPackageExist(Package))if(auto* Anim=LoadObject<UAnimSequence>(nullptr,*(Package+TEXT(".")+Name)))HumanAnimations.Add(FName(Name),Anim);
+    }
     UpdateHuman();RefreshWeapon();
 }
 void ASurvivalCharacter::UpdateHuman()
 {
     if (!IsAlive()) { GetMesh()->bPauseAnims=true;GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-75),FRotator(0,-90,85));if (!IsPlayerControlled()) GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);return; }GetMesh()->bPauseAnims=false;
     if(IsPlayerControlled())bConversing=bStoryActive&&!bBanterPaused&&(StorySpeaker==TEXT("Дэниел")||StorySpeaker==TEXT("Daniel"));
+    if(Melee.active||bMeleeImpactFrame){
+        const FName Action=bMeleeCrouched?TEXT("PunchCrouch"):TEXT("Punch");
+        if(auto* Anim=HumanAnimations.Find(Action)){
+            if(PlayingHumanAnimation!=*Anim){PlayingHumanAnimation=*Anim;GetMesh()->PlayAnimation(*Anim,false);}
+            GetMesh()->SetPlayRate(0);
+            if(auto* Single=GetMesh()->GetSingleNodeInstance())Single->SetPosition(FMath::Max(0.f,(*Anim)->GetPlayLength()-survival::MeleeAction::Duration)+(bMeleeImpactFrame?survival::MeleeAction::Impact:Melee.time),false);
+            return;
+        }
+    }
     const float Speed=GetVelocity().Size2D();const FName Key=bIsCrouched?TEXT("Crouch"):Speed>390?TEXT("Run"):Speed>15?TEXT("Walk"):(bConversing&&!bAiming&&!Bow.drawing)?TEXT("Talk"):TEXT("Idle");
     if (auto* Anim=HumanAnimations.Find(Key)) if (PlayingHumanAnimation!=*Anim) { PlayingHumanAnimation=*Anim;GetMesh()->PlayAnimation(*Anim,true); }
     GetMesh()->SetPlayRate(Key==TEXT("Walk")?FMath::Clamp(Speed/140,.6f,2.4f):Key==TEXT("Run")?FMath::Clamp(Speed/390,.8f,1.5f):1.0f);
@@ -366,11 +385,13 @@ void ASurvivalCharacter::RefreshWeapon()
     const TCHAR* Path=bBowEquipped?TEXT("/Game/Story/Props/Bow.Bow"):Equipment.state.pistol?TEXT("/Game/Story/Props/Pistol.Pistol"):TEXT("/Game/Story/Props/Pipe.Pipe");
     WeaponMesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,Path));
     auto* G=Cast<USurvivalGameInstance>(GetGameInstance());WeaponMesh->SetVisibility(IsPlayerControlled() && (bBowEquipped || Equipment.state.pistol || (G && G->HasWorldFlag(TEXT("has_pipe")))));
-    WeaponMesh->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetNotIncludingScale,GetMesh()->DoesSocketExist(TEXT("Bip01_R_Hand"))?TEXT("Bip01_R_Hand"):TEXT("hand_r"));
+    const FName Hand=RightHandBone();if(Hand.IsNone()){WeaponMesh->SetVisibility(false);return;}
+    WeaponMesh->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetNotIncludingScale,Hand);
     WeaponMesh->SetRelativeRotation(bBowEquipped?FRotator(0,0,0):FRotator(0,90,0));
 }
 void ASurvivalCharacter::SwitchWeapon()
 {
+    if(Melee.active)return;
     if (!IsAlive() || IsCinematicLocked() || bEditingControls || bJournalOpen) return;
     auto* G=Cast<USurvivalGameInstance>(GetGameInstance());if(!G)return;Bow.Cancel();
     const bool OwnsBow=G->FieldInventory.Get(survival::Supply::Bow)>0,OwnsPistol=G->HasWorldFlag(TEXT("has_pistol"));
@@ -379,6 +400,7 @@ void ASurvivalCharacter::SwitchWeapon()
 }
 void ASurvivalCharacter::ReloadWeapon()
 {
+    if(Melee.active)return;
     if (!IsAlive() || IsCinematicLocked() || bEditingControls || bJournalOpen) return;
     if (Equipment.Reload(EarnedRounds())) StatusMessage=TEXT("Перезарядка...");else StatusMessage=TEXT("Нет запасных патронов или магазин полный.");
 }
@@ -439,7 +461,7 @@ void ASurvivalCharacter::ToggleFlashlight() { if(IsAlive()&&!bEditingControls)Fl
 void ASurvivalCharacter::MouseSettingsPressed() { if(!bEditingControls&&!bJournalOpen)return;if(auto* PC=Cast<APlayerController>(Controller)){float X,Y;if(PC->GetMousePosition(X,Y)){bMouseSettingsDrag=true;TouchPressed(ETouchIndex::Touch10,FVector(X,Y,0));}} }
 void ASurvivalCharacter::MouseSettingsReleased() { if(bMouseSettingsDrag){bMouseSettingsDrag=false;TouchReleased(ETouchIndex::Touch10,FVector::ZeroVector);} }
 
-void ASurvivalCharacter::ToggleAim(){if(!bEditingControls&&!IsCinematicLocked())bAiming=!bAiming;}
+void ASurvivalCharacter::ToggleAim(){if(!bEditingControls&&!IsCinematicLocked()&&!Melee.active)bAiming=!bAiming;}
 void ASurvivalCharacter::ReleaseAttack(){
  MouseSettingsReleased();const float Power=Bow.Release();if(Power<=0||!bBowEquipped||!IsAlive()||bEditingControls||IsCinematicLocked()||!Trauma.CanShoot())return;
  auto* G=Cast<USurvivalGameInstance>(GetGameInstance());if(!G||G->FieldInventory.Get(survival::Supply::Arrows)<=0)return;
@@ -454,7 +476,7 @@ void ASurvivalCharacter::ReleaseAttack(){
 }
 void ASurvivalCharacter::UseBandage(){FieldAction(3);}
 void ASurvivalCharacter::FieldAction(int32 Action){
- if(!IsAlive()||IsCinematicLocked()||bEditingControls)return;auto* G=Cast<USurvivalGameInstance>(GetGameInstance());if(!G)return;bool OK=false;
+ if(!IsAlive()||IsCinematicLocked()||bEditingControls||Melee.active)return;auto* G=Cast<USurvivalGameInstance>(GetGameInstance());if(!G)return;bool OK=false;
  if(Action<3&&Action>=0)OK=G->FieldInventory.Craft(Action);
  if(Action==3&&(Trauma.bleeding>0||Stats.health<100)&&G->FieldInventory.Spend(survival::Supply::Bandage)){Trauma.Bandage();Stats.health=FMath::Min(100.f,Stats.health+22);OK=true;}
  if(Action==4&&(Trauma.leg>0||Trauma.arm>0)&&G->FieldInventory.Spend(survival::Supply::Splint)){Trauma.Splint();OK=true;}
@@ -523,3 +545,11 @@ void ASurvivalCharacter::CompanionCommand(int32 Action)
  }
  StatusMessage=TEXT("Мара ещё не сопровождает тебя.");
 }
+
+FName ASurvivalCharacter::RightHandBone() const
+{
+ for(const TCHAR* Name:{TEXT("Bip01_R_Hand"),TEXT("Bip01 R Hand"),TEXT("hand_r")})if(GetMesh()->DoesSocketExist(Name))return FName(Name);
+ return NAME_None;
+}
+bool ASurvivalCharacter::HasMeleeMotion() const { return HumanAnimations.Contains(TEXT("Punch"))&&HumanAnimations.Contains(TEXT("PunchCrouch")); }
+bool ASurvivalCharacter::IsMeleePosePlaying() const { return PlayingHumanAnimation&&PlayingHumanAnimation->GetName().Contains(TEXT("Punch")); }

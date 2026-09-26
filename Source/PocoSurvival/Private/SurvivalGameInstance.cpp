@@ -178,6 +178,7 @@ bool USurvivalGameInstance::ApplyLoadedPlayerState(ASurvivalCharacter* Player)
 {
     if (!Player || !PendingPlayerSave || !PendingPlayerSave->bHasPlayerState || !GetWorld()) return false;
     if (PendingPlayerSave->MapName != UGameplayStatics::GetCurrentLevelName(GetWorld(),true)) return false;
+    Player->CancelMelee();
     // TeleportTo checks collision; an obstructed saved position must not force a
     // capsule into geometry. Vitals still recover at the current safe spawn.
     Player->TeleportTo(PendingPlayerSave->PlayerLocation,PendingPlayerSave->PlayerRotation,false,false);

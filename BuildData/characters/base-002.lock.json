@@ -1,0 +1,48 @@
+{
+  "source": "Rocketbox / Microsoft 2020 / MIT",
+  "derivation": "unit root transforms baked before world-space animation rebaking; 1k relinked textures; Blender 4.3.2",
+  "files": [
+    {
+      "name": "Arsen.glb",
+      "bytes": 9083224,
+      "sha256": "22b1075320dbcdb95c40c04fde17698b5bad6a9552c2d9691b3074dea0cb3e92",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/character-source-002/Arsen.glb"
+    },
+    {
+      "name": "Leyla.glb",
+      "bytes": 8580556,
+      "sha256": "64bf88f978dc1fdd576ff9d448853c403e91117271dbd1e9c7552a6ba628dce4",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/character-source-002/Leyla.glb"
+    },
+    {
+      "name": "Nargis.glb",
+      "bytes": 7336120,
+      "sha256": "ccd9330eeda1b5efeab63b28e01d0c516190203de6813cbc5a45455b55a6511f",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/character-source-002/Nargis.glb"
+    },
+    {
+      "name": "Ilyas.glb",
+      "bytes": 6531876,
+      "sha256": "3cbc7895423198c32f8a4eb489093e104ae6a2c65311ca612d4254b4d3d2a4cc",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/character-source-002/Ilyas.glb"
+    },
+    {
+      "name": "Infected.glb",
+      "bytes": 12283276,
+      "sha256": "c2d2e33ef54a44d613d8f6b36ed253083f1597b99c705937df34725124a608a1",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/character-source-002/Infected.glb"
+    },
+    {
+      "name": "LICENSE-Rocketbox.txt",
+      "bytes": 1066,
+      "sha256": "17474e386e0b9e1a700cc3d06b2b0882a2c376d9c6b49c7f8274409b8f8d2352",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/character-source-002/LICENSE-Rocketbox.txt"
+    },
+    {
+      "name": "conditioning-report.json",
+      "bytes": 1776,
+      "sha256": "61d938bd067c4fd5d3fc5f74959ea9406b355d936d962eaed2ed70062a2cb2cb",
+      "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/character-source-002/conditioning-report.json"
+    }
+  ]
+}
