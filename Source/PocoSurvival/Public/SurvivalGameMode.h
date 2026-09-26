@@ -16,10 +16,10 @@ private:
     void BeginCompanionFilmProof();
     void CaptureCompanionFilmProof();
     void BeginSupportProof();void BeginAidProof();void CaptureSupportProof();
-    void BeginMeleeProof();void CaptureMeleePose();void FinishMeleeProof();
+    void BeginMeleeProof();void FinishMeleeProof();
     UPROPERTY() TObjectPtr<class ASurvivalInfected> MeleeDummy;
     uint32 MeleeBefore=0;
-    bool bMeleePoseVerified=false,bMeleeInputDebounced=false;
+    bool bMeleeInputDebounced=false;
     FVector SupportMaraStart=FVector::ZeroVector,SupportPlayerStart=FVector::ZeroVector;
     bool bSupportHeld=false,bSupportRequested=false;
     bool bCompanionAvailable=false,bCompanionHuman=false,bCompanionGrounded=false;

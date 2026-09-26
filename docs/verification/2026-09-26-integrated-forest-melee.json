@@ -1,0 +1,167 @@
+{
+  "melee_runtime": {
+    "passed": false,
+    "diagnostic_setup": true,
+    "human_action_pose": false,
+    "duplicate_input_rejected": true,
+    "single_impact": true,
+    "target_damage_once": true,
+    "returned_to_locomotion": true,
+    "touch_tested": false,
+    "final_animation_quality": false
+  },
+  "forest_runtime": {
+    "passed": true,
+    "near_cells": 7,
+    "middle_cells": 8,
+    "far_cells": 100,
+    "hidden_cells": 702,
+    "per_instance_continuous_lod": false,
+    "physical_device_fps_measured": false
+  },
+  "companion_support": {
+    "passed": true,
+    "diagnostic_setup": true,
+    "hold_during_player_movement": true,
+    "aid_requested": true,
+    "healed_and_bleeding_stopped": true,
+    "exactly_one_bandage_spent": true,
+    "touch_controls_verified": false,
+    "healing_animation_verified": false,
+    "physical_device_tested": false
+  },
+  "companion_runtime": {
+    "passed": true,
+    "diagnostic_story_state_injected": true,
+    "available": true,
+    "human_mesh": true,
+    "grounded": true,
+    "walked_cm": 660.87,
+    "distance_to_player_cm": 154.41,
+    "cinematic_camera_active": true,
+    "full_campaign_playthrough": false
+  },
+  "material_failures": [],
+  "county_runtime": {
+    "passed": true,
+    "rural_anchors": 6,
+    "valid_collision_floors": 6,
+    "walk_distance_cm": 545.86,
+    "grounded": true,
+    "physical_device_tested": false
+  },
+  "construction": {
+    "source": "495ba22fa9c073d77fa39bd62e19d47a0d532853",
+    "all_construction_steps_succeeded": true,
+    "field": {
+      "loot_caches": 24,
+      "openable_doors": 24,
+      "main_cast_body_proxies": 4,
+      "final_art": false
+    },
+    "county": {
+      "connected_extent_m": 2400,
+      "terrain_tiles": 16,
+      "rural_shelters": 6,
+      "nature_instances": 7190,
+      "instanced_clusters": 822,
+      "pine_lod_cells": 817,
+      "pine_lod_triangles": [
+        9728,
+        2084,
+        8
+      ],
+      "mobile_foliage_material": "/Game/County/Materials/M_PineMobileLOD1",
+      "simple_trunk_collision": true,
+      "river_crossing": true,
+      "native_runtime_traversal_verified": false,
+      "final_art": false
+    }
+  },
+  "renderer": "software Vulkan / llvmpipe; NOT hardware or POCO performance",
+  "renderer_exit_code": 0,
+  "screenshots": [
+    {
+      "name": "HighresScreenshot00004.png",
+      "bytes": 387644,
+      "width": 640,
+      "height": 360,
+      "character_presence": {
+        "test": "fixed first-spawn tan-clothing regression alarm; not general character recognition",
+        "candidate_pixels": 3171,
+        "region_pixels": 10350,
+        "fraction": 0.30638,
+        "passed": true
+      }
+    },
+    {
+      "name": "HighresScreenshot00003.png",
+      "bytes": 218586,
+      "width": 640,
+      "height": 360,
+      "character_presence": {
+        "test": "fixed first-spawn tan-clothing regression alarm; not general character recognition",
+        "candidate_pixels": 0,
+        "region_pixels": 10350,
+        "fraction": 0.0,
+        "passed": false
+      }
+    },
+    {
+      "name": "HighresScreenshot00000.png",
+      "bytes": 277941,
+      "width": 640,
+      "height": 360,
+      "character_presence": {
+        "test": "fixed first-spawn tan-clothing regression alarm; not general character recognition",
+        "candidate_pixels": 780,
+        "region_pixels": 10350,
+        "fraction": 0.07536,
+        "passed": true
+      }
+    },
+    {
+      "name": "HighresScreenshot00002.png",
+      "bytes": 304284,
+      "width": 640,
+      "height": 360,
+      "character_presence": {
+        "test": "fixed first-spawn tan-clothing regression alarm; not general character recognition",
+        "candidate_pixels": 868,
+        "region_pixels": 10350,
+        "fraction": 0.08386,
+        "passed": true
+      }
+    },
+    {
+      "name": "HighresScreenshot00001.png",
+      "bytes": 368590,
+      "width": 640,
+      "height": 360,
+      "character_presence": {
+        "test": "fixed first-spawn tan-clothing regression alarm; not general character recognition",
+        "candidate_pixels": 2400,
+        "region_pixels": 10350,
+        "fraction": 0.23188,
+        "passed": true
+      }
+    }
+  ],
+  "runtime_movement": {
+    "phase": "actual-game-mode-input-and-floor-test",
+    "passed": true,
+    "walk_distance_cm": 523.72,
+    "grounded": true,
+    "camera_pitch_degrees": -10.0,
+    "player_view_target": true,
+    "camera_framed": true,
+    "human_avatar_loaded": true,
+    "touch_device_tested": false,
+    "android_tested": false
+  },
+  "gate_passed": false,
+  "visual_quality_review": "requires human/image inspection separately",
+  "physical_device_tested": false,
+  "run": 36236371819,
+  "manual_image_review": "Rural and melee images opened. Forest and actors visible; provisional art. Gate failed on compound melee pose flag; single damage/impact/recovery passed."
+}

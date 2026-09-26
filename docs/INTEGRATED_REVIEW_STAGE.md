@@ -17,3 +17,12 @@ The newer remote gameplay/forest-lod branch already combines near/mid/far forest
 - Full-world save equality and physical-device performance remain explicitly false. Missing files, unsupported schema, failed menu confirmation, unchanged/stale saves or differing restored state fail the new interaction gate; injected input alone is not success.
 
 83 local Python tests pass (one unavailable authoring-cache test skipped). They include schematic JSON tests, NOT an actual Android or native-binary decoder result. Native fixture, Android UI, real save accessibility/decoding and touch/restore proofs still require their respective jobs. Actual parser results may reveal schema/default differences that must be fixed rather than assumed away.
+
+## New actual five-frame result and measured melee failure
+Integrated run 36236371819 finished rendering all five images with exit 0. Opened the rural image and the melee image. Forest tier counts were 7 near / 8 middle / 100 far / 702 hidden; movement, six floor probes, companion following/camera and bandage assistance passed. The grove is visibly present. This is not photoreal-final approval or a physical FPS result.
+
+The overall gate correctly FAILED: the combined human-action-pose flag was false, despite a visible extended-arm pose and passing duplicate-input, single-impact, single-damage and recovery checks. The old compound flag did not identify which condition failed.
+
+Correction now samples loaded clips, actual animation reference and resolved hand at the gameplay impact event, and requests its screenshot there, rather than using a separate 0.38-second timer. Reports retain separate component flags; all remain required. Right-hand resolution additionally handles sanitized/namespaced bone names without accepting left hands or finger bones. The original Unreal API was inspected under authorized access: DoesSocketExist already includes bones, so that was NOT asserted as the root cause.
+
+13 portable sanitizer suites and 86 Python tests passed (one unavailable authoring-input check skipped). New UE pose evidence, decoder-fixture result and current Android touch/save results remain unverified until the jobs complete.

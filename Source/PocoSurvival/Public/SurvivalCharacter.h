@@ -40,6 +40,9 @@ public:
     bool HasMeleeMotion() const;
     bool IsMeleePosePlaying() const;
     uint32 MeleeImpactEvents=0;
+    void ArmMeleeProofCapture();
+    bool bMeleeProofClips=false,bMeleeProofPose=false,bMeleeProofHand=false,bMeleeProofCaptured=false;
+    bool bMeleeProofRequested=false;
     FName RightHandBone() const;
     UFUNCTION(BlueprintCallable,Category="Actions") void ToggleSprint();
     UFUNCTION(BlueprintCallable,Category="Actions") void Save();

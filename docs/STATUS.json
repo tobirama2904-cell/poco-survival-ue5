@@ -463,5 +463,18 @@
     "source_commit": "495ba22fa9c073d77fa39bd62e19d47a0d532853",
     "ue_scene_run": 36236371819,
     "android_native_run": 36236372900
+  },
+  "integrated_review": {
+    "branch": "gameplay/integrated-review",
+    "base_candidate": "495ba22fa9c073d77fa39bd62e19d47a0d532853",
+    "base_ue_run": 36236371819,
+    "base_ue_gate": "failed melee pose flag; five actual frames, forest/traversal/companion/aid passed",
+    "save_reader_run": 36238611053,
+    "new_pose_capture": "event-linked, awaiting new UE verification",
+    "portable_suites_passed": 13,
+    "python_tests_passed": 86,
+    "python_tests_skipped": 1,
+    "android_touch_restore_verified": false,
+    "final_game": false
   }
 }

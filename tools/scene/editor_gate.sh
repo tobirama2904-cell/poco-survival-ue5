@@ -3,7 +3,7 @@ set -euo pipefail
 cd /project
 ENGINE=/home/ue4/UnrealEngine/Engine
 mkdir -p artifacts/gameplay-scene artifacts/engine-probe artifacts/android-build
-rm -f artifacts/gameplay-scene/{scene-construction,city-construction,field-content,county-content,county-runtime,companion-runtime,companion-support,melee-runtime,forest-runtime,scene-ready,render-verification}.json
+rm -f artifacts/gameplay-scene/{scene-construction,city-construction,field-content,county-content,county-runtime,companion-runtime,companion-support,melee-runtime,melee-pose-detail,forest-runtime,scene-ready,render-verification}.json
 "$ENGINE/Build/BatchFiles/Linux/Build.sh" PocoSurvivalEditor Linux Development \
   -Project=/project/PocoSurvival.uproject -NoHotReloadFromIDE -MaxParallelActions=2 -NoUBA \
   2>&1 | tee artifacts/gameplay-scene/ubt.log

@@ -1,6 +1,7 @@
 #include "SurvivalCharacter.h"
 #include "SurvivalArrow.h"
 #include "Core/AmericanStory.h"
+#include "Core/RigNames.h"
 #include "Engine/DamageEvents.h"
 #include "Misc/PackageName.h"
 #include "SurvivalControlSettings.h"
@@ -84,7 +85,16 @@ void ASurvivalCharacter::Tick(float Delta)
     if(Melee.active&&(!IsAlive()||IsCinematicLocked()||bEditingControls||bJournalOpen||GetCharacterMovement()->IsFalling()||bIsCrouched!=bMeleeCrouched))Melee.Cancel();
     bMeleeImpactFrame=Melee.Step(Delta);
     if (bHumanAvatar) UpdateHuman();
-    if(bMeleeImpactFrame){if(bHumanAvatar){GetMesh()->TickAnimation(0.f,false);GetMesh()->RefreshBoneTransforms();}++MeleeImpactEvents;DeliverMelee();}
+    if(bMeleeImpactFrame){
+        if(bHumanAvatar){GetMesh()->TickAnimation(0.f,false);GetMesh()->RefreshBoneTransforms();}
+        ++MeleeImpactEvents;DeliverMelee();
+        if(bMeleeProofRequested){
+            bMeleeProofRequested=false;bMeleeProofClips=HasMeleeMotion();bMeleeProofPose=IsMeleePosePlaying();const FName Hand=RightHandBone();bMeleeProofHand=!Hand.IsNone();
+            TArray<FName> Names;GetMesh()->GetBoneNames(Names);TArray<FString> Text;for(FName Name:Names){if(Name.ToString().Contains(TEXT("Hand")))Text.Add(Name.ToString());}
+            UE_LOG(LogTemp,Display,TEXT("MELEE_IMPACT_PROOF clips=%d pose=%d hand=%s animation=%s hand_candidates=%s"),bMeleeProofClips,bMeleeProofPose,*Hand.ToString(),PlayingHumanAnimation?*PlayingHumanAnimation->GetName():TEXT("none"),*FString::Join(Text,TEXT(" | ")));
+            if(auto* PC=Cast<APlayerController>(Controller)){PC->ConsoleCommand(TEXT("HighResShot 1"));bMeleeProofCaptured=true;}
+        }
+    }
     FootstepDelay-=Delta;
     if (IsAlive() && !IsCinematicLocked() && (IsPlayerControlled() || FVector::DistSquared(GetActorLocation(),UGameplayStatics::GetPlayerPawn(this,0)?UGameplayStatics::GetPlayerPawn(this,0)->GetActorLocation():GetActorLocation())<FMath::Square(900.f)) && GetCharacterMovement()->IsMovingOnGround() && GetVelocity().SizeSquared2D()>10000 && FootstepDelay<=0) {
         FootstepDelay=bIsCrouched?.65f:GetVelocity().Size2D()>400?.28f:.44f;
@@ -549,7 +559,18 @@ void ASurvivalCharacter::CompanionCommand(int32 Action)
 FName ASurvivalCharacter::RightHandBone() const
 {
  for(const TCHAR* Name:{TEXT("Bip01_R_Hand"),TEXT("Bip01 R Hand"),TEXT("hand_r")})if(GetMesh()->DoesSocketExist(Name))return FName(Name);
+ TArray<FName> Names;GetMesh()->GetBoneNames(Names);
+ for(FName Name:Names)if(survival::IsRightHandBone(TCHAR_TO_UTF8(*Name.ToString())))return Name;
  return NAME_None;
 }
+void ASurvivalCharacter::ArmMeleeProofCapture()
+{
+ bMeleeProofRequested=true;bMeleeProofClips=bMeleeProofPose=bMeleeProofHand=bMeleeProofCaptured=false;
+}
 bool ASurvivalCharacter::HasMeleeMotion() const { return HumanAnimations.Contains(TEXT("Punch"))&&HumanAnimations.Contains(TEXT("PunchCrouch")); }
-bool ASurvivalCharacter::IsMeleePosePlaying() const { return PlayingHumanAnimation&&PlayingHumanAnimation->GetName().Contains(TEXT("Punch")); }
+bool ASurvivalCharacter::IsMeleePosePlaying() const
+{
+ if(!PlayingHumanAnimation)return false;
+ const auto* Standing=HumanAnimations.Find(TEXT("Punch"));const auto* Crouched=HumanAnimations.Find(TEXT("PunchCrouch"));
+ return (Standing&&PlayingHumanAnimation==*Standing)||(Crouched&&PlayingHumanAnimation==*Crouched);
+}

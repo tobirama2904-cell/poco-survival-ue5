@@ -28,7 +28,7 @@ class LowWaterContent(unittest.TestCase):
   alignment=json.loads((ROOT/'BuildData/filmvoices/voice-alignment.json').read_text());self.assertEqual(alignment['issues'],[])
 
  def test_complete_scene_marker_cannot_be_reused_after_failed_build(self):
-  gate=(ROOT/'tools/scene/editor_gate.sh').read_text();self.assertIn('field-content,county-content,county-runtime,companion-runtime,companion-support,melee-runtime,forest-runtime,scene-ready,render-verification',gate)
+  gate=(ROOT/'tools/scene/editor_gate.sh').read_text();self.assertIn('field-content,county-content,county-runtime,companion-runtime,companion-support,melee-runtime,melee-pose-detail,forest-runtime,scene-ready,render-verification',gate)
   self.assertIn("all_construction_steps_succeeded",(ROOT/'tools/scene/verify_render.py').read_text())
  def test_unreal_focus_transforms_supply_required_arguments(self):
   import ast

@@ -202,22 +202,19 @@ void ASurvivalGameMode::BeginMeleeProof()
   if(MeleeDummy){MeleeDummy->SetActorTickEnabled(false);MeleeDummy->GetCharacterMovement()->StopMovementImmediately();}
   const FVector Focus=Player->GetActorLocation()+Player->GetActorForwardVector()*60+FVector(0,0,30),View=Player->GetActorLocation()+Player->GetActorRightVector()*370+Player->GetActorForwardVector()*45+FVector(0,0,105);
   if(auto* Camera=GetWorld()->SpawnActor<ACameraActor>(View,(Focus-View).Rotation()))PC->SetViewTarget(Camera);
-  MeleeBefore=Player->MeleeImpactEvents;const float Stamina=Player->GetStamina();Player->Attack();Player->Attack();bMeleeInputDebounced=FMath::IsNearlyEqual(Stamina-Player->GetStamina(),18.f,.01f);
+  MeleeBefore=Player->MeleeImpactEvents;Player->ArmMeleeProofCapture();const float Stamina=Player->GetStamina();Player->Attack();Player->Attack();bMeleeInputDebounced=FMath::IsNearlyEqual(Stamina-Player->GetStamina(),18.f,.01f);
  }
- FTimerHandle Pose,Finish;GetWorldTimerManager().SetTimer(Pose,this,&ASurvivalGameMode::CaptureMeleePose,.38f,false);GetWorldTimerManager().SetTimer(Finish,this,&ASurvivalGameMode::FinishMeleeProof,1.25f,false);
-}
-void ASurvivalGameMode::CaptureMeleePose()
-{
- auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
- bMeleePoseVerified=Player&&Player->HasMeleeMotion()&&Player->IsMeleePosePlaying()&&!Player->RightHandBone().IsNone();
- if(PC)PC->ConsoleCommand(TEXT("HighResShot 1"));
+ FTimerHandle Finish;GetWorldTimerManager().SetTimer(Finish,this,&ASurvivalGameMode::FinishMeleeProof,1.25f,false);
 }
 void ASurvivalGameMode::FinishMeleeProof()
 {
  auto* PC=GetWorld()->GetFirstPlayerController();auto* Player=PC?Cast<ASurvivalCharacter>(PC->GetPawn()):nullptr;
  const bool Once=Player&&Player->MeleeImpactEvents-MeleeBefore==1;const bool Damage=MeleeDummy&&FMath::IsNearlyEqual(MeleeDummy->GetHealth(),75.f,.01f);const bool Recovered=Player&&!Player->IsMeleeActive()&&!Player->IsMeleePosePlaying();
- const bool Passed=bMeleePoseVerified&&bMeleeInputDebounced&&Once&&Damage&&Recovered;
- const FString Report=FString::Printf(TEXT("{\"passed\":%s,\"diagnostic_setup\":true,\"human_action_pose\":%s,\"duplicate_input_rejected\":%s,\"single_impact\":%s,\"target_damage_once\":%s,\"returned_to_locomotion\":%s,\"touch_tested\":false,\"final_animation_quality\":false}\n"),Passed?TEXT("true"):TEXT("false"),bMeleePoseVerified?TEXT("true"):TEXT("false"),bMeleeInputDebounced?TEXT("true"):TEXT("false"),Once?TEXT("true"):TEXT("false"),Damage?TEXT("true"):TEXT("false"),Recovered?TEXT("true"):TEXT("false"));
+ const bool Pose=Player&&Player->bMeleeProofClips&&Player->bMeleeProofPose&&Player->bMeleeProofHand&&Player->bMeleeProofCaptured;
+ const bool Passed=Pose&&bMeleeInputDebounced&&Once&&Damage&&Recovered;
+ const FString Report=FString::Printf(TEXT("{\"passed\":%s,\"diagnostic_setup\":true,\"human_action_pose\":%s,\"duplicate_input_rejected\":%s,\"single_impact\":%s,\"target_damage_once\":%s,\"returned_to_locomotion\":%s,\"touch_tested\":false,\"final_animation_quality\":false}\n"),Passed?TEXT("true"):TEXT("false"),Pose?TEXT("true"):TEXT("false"),bMeleeInputDebounced?TEXT("true"):TEXT("false"),Once?TEXT("true"):TEXT("false"),Damage?TEXT("true"):TEXT("false"),Recovered?TEXT("true"):TEXT("false"));
  FFileHelper::SaveStringToFile(Report,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/melee-runtime.json")));
+ if(Player){const FString Detail=FString::Printf(TEXT("{\"clips_loaded\":%s,\"pose_at_impact\":%s,\"hand_at_impact\":%s,\"image_requested_at_impact\":%s,\"arbitrary_timer_sample\":false}\n"),Player->bMeleeProofClips?TEXT("true"):TEXT("false"),Player->bMeleeProofPose?TEXT("true"):TEXT("false"),Player->bMeleeProofHand?TEXT("true"):TEXT("false"),Player->bMeleeProofCaptured?TEXT("true"):TEXT("false"));FFileHelper::SaveStringToFile(Detail,*FPaths::Combine(FPaths::ProjectDir(),TEXT("artifacts/gameplay-scene/melee-pose-detail.json")));}
+
  FTimerHandle Timer;GetWorldTimerManager().SetTimer(Timer,this,&ASurvivalGameMode::ExitProof,3.f,false);
 }

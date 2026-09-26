@@ -5,7 +5,7 @@ cd /project
 export XDG_RUNTIME_DIR=/tmp/ue-runtime
 mkdir -p "$XDG_RUNTIME_DIR"; chmod 700 "$XDG_RUNTIME_DIR"
 export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
-rm -f artifacts/gameplay-scene/*.png artifacts/gameplay-scene/runtime-movement.json artifacts/gameplay-scene/county-runtime.json artifacts/gameplay-scene/companion-runtime.json artifacts/gameplay-scene/companion-support.json artifacts/gameplay-scene/render-verification.json artifacts/gameplay-scene/forest-runtime.json artifacts/gameplay-scene/melee-runtime.json
+rm -f artifacts/gameplay-scene/*.png artifacts/gameplay-scene/runtime-movement.json artifacts/gameplay-scene/county-runtime.json artifacts/gameplay-scene/companion-runtime.json artifacts/gameplay-scene/companion-support.json artifacts/gameplay-scene/render-verification.json artifacts/gameplay-scene/forest-runtime.json artifacts/gameplay-scene/melee-runtime.json artifacts/gameplay-scene/melee-pose-detail.json
 find Saved/Screenshots -type f -name '*.png' -delete 2>/dev/null || true
 xvfb-run -a vulkaninfo --summary > artifacts/gameplay-scene/software-vulkan.log 2>&1 || exit $?
 timeout --foreground 35m xvfb-run -a -s '-screen 0 640x360x24' \
