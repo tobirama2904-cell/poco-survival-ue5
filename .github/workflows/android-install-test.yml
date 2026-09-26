@@ -66,6 +66,7 @@ jobs:
             artifacts/android-emulator/*.json
             artifacts/android-emulator/*.log
             artifacts/android-emulator/*.png
+            artifacts/android-emulator/*.mp4
             artifacts/android-emulator/*.sav
             artifacts/android-build/*.json
             artifacts/android-build/*.log

@@ -12,7 +12,7 @@ def journal_title_matches(text):
  return bool(re.search('РЮКЗАКД[ЭЕ]НИЕЛРИД',compact))
 class DeviceSaveProbe:
  def __init__(self,adb,text,screenshot,root,width,height):
-  self.adb=adb;self.text=text;self.screenshot=screenshot;self.root=root;self.width=width;self.height=height;self.log=[]
+  self.adb=adb;self.text=text;self.screenshot=screenshot;self.root=root;self.width=width;self.height=height;self.log=[];self.press_ms=2000
  def journal_visible(self,filename):
   from PIL import Image # Installed by the actual emulator workflow; not needed by pure probe tests.
   p=self.root/filename;self.screenshot(filename)
@@ -23,10 +23,16 @@ class DeviceSaveProbe:
   result.check_returncode()
   self.log.append({'image':filename,'ocr':result.stdout})
   return journal_title_matches(result.stdout)
+ def press(self,x,y):
+  # adb's zero-dwell tap can begin/end between frames on the translated,
+  # software-rendered emulator. Record a real held touch, not a game command.
+  px,py=str(round(self.width*x)),str(round(self.height*y))
+  self.log.append({'touchscreen_press':{'x':int(px),'y':int(py),'duration_ms':self.press_ms}})
+  self.adb('shell','input','touchscreen','swipe',px,py,px,py,str(self.press_ms))
  def journal(self,opened):
   for attempt in range(5):
-   if self.journal_visible('android-journal-state.png')==opened:return
-   self.adb('shell','input','tap',str(round(self.width*.89)),str(round(self.height*.075)))
+   if self.journal_visible('android-journal-'+('open' if opened else 'closed')+'-'+str(len(self.log))+'.png')==opened:return
+   self.press(.89,.075)
    time.sleep(12)
   raise RuntimeError('Journal touch/OCR confirmation failed; not claiming accepted touch input')
  def save(self,label,after_generation=-1):
@@ -34,7 +40,7 @@ class DeviceSaveProbe:
   prior=self.collect(label+'-pre-touch')
   generation_floor=max([after_generation]+[r['state']['generation'] for r in prior])
   self.log.append({'snapshot':label,'generation_before_save_touch':generation_floor})
-  self.adb('shell','input','tap',str(round(self.width*.75)),str(round(self.height*.075)))
+  self.press(.75,.075)
   deadline=time.monotonic()+90
   while time.monotonic()<deadline:
    records=self.collect(label)
