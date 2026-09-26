@@ -19,3 +19,5 @@ Rebuild completed locally, twice. Pine checksum reproduced exactly. Public sourc
 
 ## Previously completed gameplay verification
 Both prior runs 36160687330 (journey dialogue) and 36163624736 (companion support) completed successfully. The support report confirms holding during player movement, accepted aid, stopped bleeding/healed health and exactly one bandage consumed. Its actual fourth image was opened and shows the companion panel. The fixture explicitly injects state; this is not a full campaign playthrough, a touchscreen test or completed healing animation.
+
+Source bcfe15a: actual UE scene/render verification **36209094563** and matching Android ARM64 native build **36209095776** dispatched. This is the first new ARM64 source build since the earlier 2c09ef3 candidate; it includes the accumulated main journey, dialogue and companion-support code. Neither the new rendered view nor Android/device performance is yet a verified result.

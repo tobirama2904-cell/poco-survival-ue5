@@ -400,6 +400,9 @@
     "new_unreal_render_verified": false,
     "physical_device_performance_tested": false,
     "world_extent_m": 2400,
-    "full_game_complete": false
+    "full_game_complete": false,
+    "source_commit": "bcfe15a",
+    "ue_scene_run": 36209094563,
+    "android_native_run": 36209095776
   }
 }
