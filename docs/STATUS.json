@@ -528,6 +528,8 @@
     "offline_prop_review_opened": true,
     "native_room_entry_verified": false,
     "all_rooms_playtested": false,
-    "active_android_candidate_changed": false
+    "active_android_candidate_changed": false,
+    "source_commit": "559df2f33d42cda3ea7e5c7bc8e1d3642fc53b60",
+    "ue_run": 36246314267
   }
 }

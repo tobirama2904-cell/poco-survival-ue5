@@ -17,3 +17,5 @@ The generator currently describes 57 rooms / 513 prop placements. The new test i
 The prepared foundation change is 40 cm above the street rather than the old 70 cm ledge. Its ability to be walked over is specifically tested rather than assumed. The cot/desk props are scanned assets; no final art approval is implied.
 
 Local checks: all fourteen portable ASan/UBSan suites passed. 110 Python checks: 104 passed and 6 absent-cache checks skipped. These do not compile the new Unreal game-mode probe.
+
+UE room-entry/six-frame run **36246314267** dispatched at source 559df2f. The packaging-tool lazy-Pillow-import correction was cherry-picked independently; it does not change the room geometry or C++ probe in that run. No room traversal result is claimed before its native execution.
