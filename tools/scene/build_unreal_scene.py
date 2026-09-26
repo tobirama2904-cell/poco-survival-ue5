@@ -81,7 +81,7 @@ try:
  world.get_world_settings().set_editor_property('default_game_mode',native('SurvivalGameMode'))
  sun=actors.spawn_actor_from_class(unreal.DirectionalLight,unreal.Vector(0,0,1800),unreal.Rotator(pitch=-35.0,yaw=-42.0,roll=0.0));sun.set_actor_label('late_afternoon_sun')
  light=sun.get_component_by_class(unreal.DirectionalLightComponent);light.set_mobility(unreal.ComponentMobility.MOVABLE);light.set_editor_property('intensity',3.0);light.set_editor_property('light_color',unreal.Color(255,221,178,255))
- light.set_editor_property('atmosphere_sun_light',True);light.set_editor_property('dynamic_shadow_distance_movable_light',6000)
+ light.set_editor_property('atmosphere_sun_light',True);light.set_editor_property('dynamic_shadow_distance_movable_light',4000)
  actors.spawn_actor_from_class(unreal.SkyAtmosphere,unreal.Vector())
  sky=actors.spawn_actor_from_class(unreal.SkyLight,unreal.Vector(0,0,2000));sl=sky.get_component_by_class(unreal.SkyLightComponent);sl.set_mobility(unreal.ComponentMobility.MOVABLE)
  cubes=[unreal.load_asset(p) for p in unreal.EditorAssetLibrary.list_assets('/Game/Environment/Sky',True,False)]

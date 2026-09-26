@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/county-art-004/county-art-004.zip",
-  "bytes": 24965739,
-  "sha256": "3a03c9e707dad1a0577b5d7331d0f8e3294d1e2a32d394fd0d598f47b4eab6b8",
+  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/county-art-003/county-art-003.zip",
+  "bytes": 22435401,
+  "sha256": "e33bbb573a97d3a7649f29fd7254f573540285e1b19aceb8ee91991a2732f436",
   "license": "CC0 textures/models and original project geometry",
   "epic_assets": false,
   "layout": {
@@ -19,8 +19,8 @@
     },
     {
       "name": "CREDITS.md",
-      "bytes": 1035,
-      "sha256": "a96b156c2967f4f87174c4864a61496dedc30021de2fd66510621ce1b20ee4ef"
+      "bytes": 817,
+      "sha256": "040d4263ba93a2efee0e36ec7a39bedd517391f91024aca4077ba5d729f09d85"
     },
     {
       "name": "Deadwood.glb",
@@ -39,18 +39,8 @@
     },
     {
       "name": "Pine.glb",
-      "bytes": 2618564,
-      "sha256": "1a3dc7ef56f03fee2a23acd730f500637f9ea47829a57560635b89493ca1b558"
-    },
-    {
-      "name": "PineFar.glb",
-      "bytes": 429740,
-      "sha256": "84d7ad8070c1e757986078fac284decbb9dc08ceae46fdd4cdc3ebe038f768c5"
-    },
-    {
-      "name": "PineMid.glb",
-      "bytes": 2181468,
-      "sha256": "75c9e1a3b7d22af19c4f5842a33f07d94a7f404ab49f44d9413614ef14fdee05"
+      "bytes": 2516420,
+      "sha256": "8c3fcd29c59664f1c4bb33b01b071c32015c7bc005a9b2f7b32b87a0f3d43962"
     },
     {
       "name": "River.glb",
@@ -74,8 +64,8 @@
     },
     {
       "name": "conditioning.json",
-      "bytes": 3769,
-      "sha256": "7047ed781a76a91a6a2e4cc5190899a2a7aad358d58068954d9ecb3803c1f0e0"
+      "bytes": 2813,
+      "sha256": "6a25cf5ebf4763bf535d8261e981c75740af06295e17fa94c38bfd887813ee4d"
     },
     {
       "name": "conifer-source.json",
@@ -88,11 +78,6 @@
       "sha256": "3ab2bd39f37954bec08183ca82a312d9d77189989da68817fa6645039b5a2ea5"
     },
     {
-      "name": "forest-lods.json",
-      "bytes": 362,
-      "sha256": "7832fb3c967f485798dbd2be1ab368eb6f2c460001019bb5ba03522806422639"
-    },
-    {
       "name": "ground-source.json",
       "bytes": 956,
       "sha256": "dd202e2c6ef23b0e594dc1c46a7939c0736f7575df7eaa2e3205b217757ee961"
@@ -102,17 +87,5 @@
       "bytes": 12630,
       "sha256": "dfb7a2b65177d86fef3357b603bdd284795266ca5c350e52a7be4049acbc6657"
     }
-  ],
-  "forest_lods": {
-    "pine_triangles": [
-      9728,
-      3556,
-      4
-    ],
-    "screen_sizes": [
-      1,
-      0.65,
-      0.24
-    ]
-  }
+  ]
 }

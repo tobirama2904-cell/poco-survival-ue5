@@ -403,6 +403,37 @@
     "full_game_complete": false,
     "source_commit": "bcfe15a",
     "ue_scene_run": 36209094563,
-    "android_native_run": 36209095776
+    "android_native_run": 36209095776,
+    "android_native_status": "completed success",
+    "ue_scene_status": "failed: software renderer timeout 124, only first screenshot; companion/support gates absent"
+  },
+  "forest_lod_stage": {
+    "branch": "gameplay/forest-lods",
+    "art_pack": "county-art-004",
+    "pine_lod_triangles": [
+      9728,
+      3556,
+      4
+    ],
+    "needle_texture": [
+      256,
+      512
+    ],
+    "far_atlas": [
+      512,
+      512
+    ],
+    "near_geometry_retained": true,
+    "scene_population": 7190,
+    "shadow_distance_m": 40,
+    "fern_cull_m": 65,
+    "native_cpp_changed": false,
+    "compatible_native_run": 36209095776,
+    "python_tests_total": 74,
+    "python_tests_passed": 73,
+    "python_tests_skipped": 1,
+    "new_unreal_render_verified": false,
+    "physical_device_tested": false,
+    "full_game_complete": false
   }
 }

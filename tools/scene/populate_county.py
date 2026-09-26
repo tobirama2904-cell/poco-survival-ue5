@@ -10,7 +10,7 @@ assert level.load_level('/Game/Worlds/CanalDistrict')
 basis=json.loads((root/'artifacts/gameplay-scene/scene-construction.json').read_text())['measured_import_basis_cm'];assert basis==[[100.,0.,0.],[0.,-100.,0.],[0.,0.,100.]],basis
 manager=unreal.InterchangeManager.get_interchange_manager_scripted();params=unreal.ImportAssetParameters();params.set_editor_property('is_automated',True);params.set_editor_property('replace_existing',True)
 models={}
-for name in ['Pine','Broadleaf','Fern','MossRock','Stump','Deadwood','Shelter','Terrain','River']:
+for name in ['Pine','Broadleaf','Fern','MossRock','Stump','Deadwood','Shelter','Terrain','River','PineMid','PineFar']:
  dest='/Game/County/'+name
  assert manager.import_asset(dest,unreal.InterchangeManager.create_source_data(str(source/(name+'.glb'))),params)
  meshes=[lib.load_asset(p) for p in lib.list_assets(dest,True,False)];meshes=[m for m in meshes if isinstance(m,unreal.StaticMesh)]
@@ -23,18 +23,43 @@ for name in ['Pine','Broadleaf','Fern','MossRock','Stump','Deadwood','Shelter','
    body.set_editor_property('collision_trace_flag',unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE);body.set_editor_property('double_sided_geometry',True);lib.save_loaded_asset(mesh)
  for path in lib.list_assets(dest,True,False):
   texture=lib.load_asset(path)
-  if isinstance(texture,unreal.Texture2D) and 'pine_needles' in texture.get_name().lower():
+  if isinstance(texture,unreal.Texture2D) and any(key in texture.get_name().lower() for key in ['pine_needles','pine_canopy']):
    texture.set_editor_property('do_scale_mips_for_alpha_coverage',True)
    thresholds=texture.get_editor_property('alpha_coverage_thresholds')
    for channel in ['x','y','z']:thresholds.set_editor_property(channel,0)
    thresholds.set_editor_property('w',.28);texture.set_editor_property('alpha_coverage_thresholds',thresholds);lib.save_loaded_asset(texture)
  lib.save_directory(dest,False,True)
+# Real authored LODs: keep full close geometry, copy medium crown and distant
+# albedo silhouette into the same StaticMesh. No extra tree actors are spawned.
+mesh_editor=unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem)
+pine,mid,far=models['Pine'][0],models['PineMid'][0],models['PineFar'][0]
+for index in range(2):mid.set_material(index,pine.get_material(index))
+assert mesh_editor.set_lod_from_static_mesh(pine,1,mid,0,True)>=0
+assert mesh_editor.set_lod_from_static_mesh(pine,2,far,0,False)>=0
+assert mesh_editor.set_lod_screen_sizes(pine,[1.0,.65,.24])
+mesh_editor.enable_section_cast_shadow(pine,False,2,0)
+assert mesh_editor.get_lod_count(pine)==3
+assert all(abs(a-b)<.001 for a,b in zip(mesh_editor.get_lod_screen_sizes(pine),[1,.65,.24]))
+vertices=[mesh_editor.get_number_verts(pine,i) for i in range(3)]
+assert vertices[0]>vertices[1]>vertices[2]>0 and vertices[2]<=16,vertices
+assert lib.save_loaded_asset(pine)
+lod_report={'Pine':{'vertices':vertices,'screens':list(mesh_editor.get_lod_screen_sizes(pine)),'far_shadow_casting':False,'authored':True}}
+for name in ['Broadleaf','Fern','MossRock','Stump','Deadwood']:
+ for mesh in models[name]:
+  opts=unreal.StaticMeshReductionOptions();opts.auto_compute_lod_screen_size=False
+  ratios,screens=([1,.65,.40],[1,.22,.08]) if name=='Broadleaf' else ([1,.5,.2],[1,.35,.12])
+  opts.reduction_settings=[unreal.StaticMeshReductionSettings(ratio,screen) for ratio,screen in zip(ratios,screens)]
+  assert mesh_editor.set_lods(mesh,opts)>=0 and mesh_editor.get_lod_count(mesh)==3
+  assert lib.save_loaded_asset(mesh)
+  lod_report[name]={'vertices':[mesh_editor.get_number_verts(mesh,i) for i in range(3)],'screens':list(mesh_editor.get_lod_screen_sizes(mesh)),'authored':False}
+(root/'artifacts/gameplay-scene/forest-lods.json').write_text(json.dumps(lod_report,indent=2)+'\n')
+print('FOREST_LOD_CHAIN_BUILT',json.dumps(lod_report),flush=True)
 # Repeatable rebuilding must not double the population.
 for actor in actors.get_all_level_actors():
  if actor.get_actor_label().startswith('county_'):actors.destroy_actor(actor)
 data=json.loads((source/'county.json').read_text());cluster_class=unreal.load_class(None,'/Script/PocoSurvival.SurvivalSceneryCluster');assert cluster_class
 clusters={}
-for name,distance in [('Pine',47000),('Broadleaf',47000),('Fern',9000),('MossRock',24000),('Stump',19000),('Deadwood',23000)]:
+for name,distance in [('Pine',47000),('Broadleaf',47000),('Fern',6500),('MossRock',24000),('Stump',19000),('Deadwood',23000)]:
  actor=actors.spawn_actor_from_class(cluster_class,unreal.Vector());actor.set_actor_label('county_'+name);actor.configure(models[name][0],distance,name in ('Pine','Broadleaf'),name in ('MossRock','Stump','Deadwood'));clusters[name]=actor
 for point in data['instances']:
  clusters[point['mesh']].add_scenery(unreal.Vector(point['x']*100,point['y']*100,point['z']*100),point['yaw'],point['scale'])
