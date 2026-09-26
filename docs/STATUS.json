@@ -403,7 +403,17 @@
     "full_game_complete": false,
     "source_commit": "bcfe15a",
     "ue_scene_run": 36209094563,
-    "android_native_run": 36209095776
+    "android_native_run": 36209095776,
+    "render_failure": {
+      "run": 36209094563,
+      "reason": "35 minute software-Vulkan timeout, one image; movement/county floor passed; no material compile failures"
+    },
+    "android_native_result": {
+      "run": 36209095776,
+      "status": "success",
+      "source": "bcfe15af",
+      "apk": false
+    }
   },
   "melee_stage": {
     "branch": "gameplay/melee-motion",
@@ -422,6 +432,33 @@
     "python_tests_passed": 74,
     "new_animation_frame_requested": true,
     "physical_device_tested": false,
+    "final_game": false
+  },
+  "forest_distance_stage": {
+    "branch": "gameplay/forest-lod",
+    "mode": "cell-level distance meshes and simple foliage shader",
+    "pine_cells": 817,
+    "cell_width_m": 64,
+    "triangles": [
+      9728,
+      2084,
+      8
+    ],
+    "ranges_m": [
+      90,
+      180,
+      470
+    ],
+    "hysteresis_m": 6,
+    "native_render_verified": false,
+    "melee_branch_integrated": "gameplay/melee-motion",
+    "melee_export_roundtrip_rechecked": true,
+    "portable_suites_passed": 12,
+    "python_passed": 76,
+    "python_skipped": 2,
+    "source_art_release": "forest-cell-art-001",
+    "required_runtime_images": 5,
+    "measured_phone_fps": null,
     "final_game": false
   }
 }
