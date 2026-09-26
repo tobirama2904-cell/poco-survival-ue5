@@ -5,6 +5,10 @@ from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[2];sys.path.insert(0,str(ROOT/'tools/android'))
 from device_save_probe import DeviceSaveProbe,journal_title_matches
 class DeviceSaveTouchTests(unittest.TestCase):
+ def test_pure_probe_imports_without_site_packages(self):
+  import subprocess
+  code="import sys; sys.path.insert(0, %r); import device_save_probe; assert device_save_probe.journal_title_matches('РЮКЗАК ДЭНИЕЛ РИД')" % str(ROOT/'tools/android')
+  subprocess.run([sys.executable,'-S','-c',code],check=True,capture_output=True,text=True)
  def test_title_with_spaces_and_homoglyphs(self):
   for s in ['РЮКЗАК • ДЭНИЕЛ РИД','Рюкзак\nДэниел Рид','PЮKЗAK • ДЭНИЕЛ РИД','РЮКЗАКДЭНИЕЛРИД']:
    self.assertTrue(journal_title_matches(s),s)

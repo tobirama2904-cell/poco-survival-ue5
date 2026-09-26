@@ -3,7 +3,6 @@ No teleport, injected save state, or guessed byte offsets are used.
 """
 import hashlib,json,os,re,subprocess,time
 from pathlib import Path
-from PIL import Image
 from save_state_probe import canonical_save
 PACKAGE='com.pocosurvival.game'
 def journal_title_matches(text):
@@ -15,6 +14,7 @@ class DeviceSaveProbe:
  def __init__(self,adb,text,screenshot,root,width,height):
   self.adb=adb;self.text=text;self.screenshot=screenshot;self.root=root;self.width=width;self.height=height;self.log=[]
  def journal_visible(self,filename):
+  from PIL import Image # Installed by the actual emulator workflow; not needed by pure probe tests.
   p=self.root/filename;self.screenshot(filename)
   with Image.open(p) as im:
    crop=im.crop((int(self.width*.09),int(self.height*.175),int(self.width*.64),int(self.height*.24)))
