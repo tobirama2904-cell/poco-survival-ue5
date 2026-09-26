@@ -505,6 +505,9 @@
     "python_tests_passed": 85,
     "python_tests_skipped": 2,
     "physical_poco_verified": false,
-    "requested_full_game_complete": false
+    "requested_full_game_complete": false,
+    "matching_native_status": "completed success; native-result.json checked",
+    "parallel_art_branch": "gameplay/interior-art",
+    "parallel_art_source": "c513155"
   }
 }
