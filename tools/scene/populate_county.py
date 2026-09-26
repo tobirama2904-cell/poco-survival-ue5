@@ -21,6 +21,13 @@ for name in ['Pine','Broadleaf','Fern','MossRock','Stump','Deadwood','Shelter','
   for mesh in meshes:
    body=mesh.get_editor_property('body_setup');assert body
    body.set_editor_property('collision_trace_flag',unreal.CollisionTraceFlag.CTF_USE_COMPLEX_AS_SIMPLE);body.set_editor_property('double_sided_geometry',True);lib.save_loaded_asset(mesh)
+ for path in lib.list_assets(dest,True,False):
+  texture=lib.load_asset(path)
+  if isinstance(texture,unreal.Texture2D) and 'pine_needles' in texture.get_name().lower():
+   texture.set_editor_property('do_scale_mips_for_alpha_coverage',True)
+   thresholds=texture.get_editor_property('alpha_coverage_thresholds')
+   for channel in ['x','y','z']:thresholds.set_editor_property(channel,0)
+   thresholds.set_editor_property('w',.28);texture.set_editor_property('alpha_coverage_thresholds',thresholds);lib.save_loaded_asset(texture)
  lib.save_directory(dest,False,True)
 # Repeatable rebuilding must not double the population.
 for actor in actors.get_all_level_actors():

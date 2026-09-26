@@ -322,7 +322,7 @@
     "new_contextual_lines_per_language": 72,
     "new_recorded_russian_seconds": 217.18795833333334,
     "audio_alignment_flags": 0,
-    "native_unreal_verified": false,
+    "native_unreal_verified": true,
     "in_game_voice_verified": false,
     "treatment_chapters": 12,
     "treatment_future_chapters_not_implemented": [
@@ -347,7 +347,7 @@
     "source_commit": "d9cc508d0bc98384ebdd0d15d725bb14dbebd245",
     "ue_scene_run": 36160687330,
     "corrected_base_scene_run": 36160065706,
-    "ue_scene_status": "in progress; preserved rather than cancelled"
+    "ue_scene_status": "completed success"
   },
   "companion_support_stage": {
     "branch": "gameplay/companion-support",
@@ -366,13 +366,13 @@
     "portable_suites_passed": 10,
     "python_tests_passed": 64,
     "python_tests_skipped": 1,
-    "unreal_actor_verification": false,
+    "unreal_actor_verification": true,
     "new_healing_animation": false,
     "physical_device_tested": false,
     "final_game": false,
     "source_commit": "8ca515380fda519e941e7018229821e8c2966001",
     "ue_scene_run": 36163624736,
-    "ue_scene_status": "queued",
+    "ue_scene_status": "completed success",
     "prior_main_following_verified": {
       "run": 36160065706,
       "walked_cm": 681.05,
@@ -381,6 +381,25 @@
       "cinematic_camera_active": true,
       "diagnostic_setup": true,
       "full_playthrough": false
-    }
+    },
+    "fourth_image_reviewed": true
+  },
+  "woodland_stage": {
+    "branch": "gameplay/woodland-art",
+    "art_release": "county-art-003",
+    "nature_instances": 7190,
+    "added_close_understory": 1002,
+    "pine_triangles": 9728,
+    "photographed_sprigs_per_pine": 2058,
+    "procedural_tree_not_mature_scan": true,
+    "ground_pbr": true,
+    "terrain_positions_unchanged_tested": true,
+    "window_openings": 2,
+    "python_tests_passed": 69,
+    "offline_asset_image_reviewed": true,
+    "new_unreal_render_verified": false,
+    "physical_device_performance_tested": false,
+    "world_extent_m": 2400,
+    "full_game_complete": false
   }
 }

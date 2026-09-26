@@ -1,16 +1,10 @@
 {
   "schema": 1,
-  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/county-art-003/county-art-003.zip",
-  "bytes": 22435401,
-  "sha256": "e33bbb573a97d3a7649f29fd7254f573540285e1b19aceb8ee91991a2732f436",
-  "license": "CC0 textures/models and original project geometry",
+  "url": "https://github.com/tobirama2904-cell/poco-survival-ue5/releases/download/county-art-002/county-art-002.zip",
+  "bytes": 22767435,
+  "sha256": "2fa70bce5fc7c5375095617c5bc74d4b05445171873c5d46550d376200cbae5e",
+  "license": "CC0 source derivatives and original project geometry",
   "epic_assets": false,
-  "layout": {
-    "nature_instances": 7190,
-    "terrain_tiles": 16,
-    "rural_shelters": 6,
-    "extent_m": 2400
-  },
   "files": [
     {
       "name": "Broadleaf.glb",
@@ -19,8 +13,8 @@
     },
     {
       "name": "CREDITS.md",
-      "bytes": 817,
-      "sha256": "040d4263ba93a2efee0e36ec7a39bedd517391f91024aca4077ba5d729f09d85"
+      "bytes": 612,
+      "sha256": "792d08a55f6409ed6489f0c4d62eafbe91d79fa15f7d59a38d9db452e5561ec3"
     },
     {
       "name": "Deadwood.glb",
@@ -39,8 +33,8 @@
     },
     {
       "name": "Pine.glb",
-      "bytes": 2516420,
-      "sha256": "8c3fcd29c59664f1c4bb33b01b071c32015c7bc005a9b2f7b32b87a0f3d43962"
+      "bytes": 5321532,
+      "sha256": "c069682bb529c45c5c4639ad967751a5bcecfcec134ec862fc7be74ccd3dce2b"
     },
     {
       "name": "River.glb",
@@ -49,8 +43,8 @@
     },
     {
       "name": "Shelter.glb",
-      "bytes": 1224660,
-      "sha256": "036d584ec58235b6c595241d539b5298f317b94a8743596318c2655cd7d27f6d"
+      "bytes": 1190112,
+      "sha256": "686842be597057376155be8a9da316b89c4cc6d9b85af17103b1fa660b7291c2"
     },
     {
       "name": "Stump.glb",
@@ -59,28 +53,23 @@
     },
     {
       "name": "Terrain.glb",
-      "bytes": 5480936,
-      "sha256": "f8f7dc4c535e7eb6cb9eb775328922b878999cccf379707b959f01e2c8588bb6"
+      "bytes": 2381660,
+      "sha256": "fe3bc9480babc4b25bec9c3f9271065f1e604718685db19fcef68701c48e5a63"
     },
     {
       "name": "conditioning.json",
-      "bytes": 2813,
-      "sha256": "6a25cf5ebf4763bf535d8261e981c75740af06295e17fa94c38bfd887813ee4d"
-    },
-    {
-      "name": "conifer-source.json",
-      "bytes": 1291,
-      "sha256": "0fae0b3cdba1694dd3e09f2833356d7974ec2a796f6b82097048f02a83677a0d"
+      "bytes": 2463,
+      "sha256": "45a91b6c441297424cf64df688c784383ca1f2031bf6a6bb681464a5f19d4486"
     },
     {
       "name": "county.json",
-      "bytes": 1315251,
-      "sha256": "3ab2bd39f37954bec08183ca82a312d9d77189989da68817fa6645039b5a2ea5"
+      "bytes": 1077902,
+      "sha256": "197bf70014610fcfdf9d7f1bbd3ffa3070be14857c2a8b1459b57ae481b65a17"
     },
     {
       "name": "ground-source.json",
-      "bytes": 956,
-      "sha256": "dd202e2c6ef23b0e594dc1c46a7939c0736f7575df7eaa2e3205b217757ee961"
+      "bytes": 315,
+      "sha256": "0ecf51785e45ec8cf89fb47d366b57a348d3ad7cce2d32503fca4d27f99131bb"
     },
     {
       "name": "sources.json",

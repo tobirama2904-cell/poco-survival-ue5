@@ -21,7 +21,8 @@ for i in range(32):
  place('Fern',(x,y,.01),1.1,i)
 bpy.ops.mesh.primitive_plane_add(size=90);ground=bpy.context.object
 m=bpy.data.materials.new('Real forest floor');m.use_nodes=True;nodes=m.node_tree.nodes;tex=nodes.new('ShaderNodeTexImage');tex.image=bpy.data.images.load(str(ROOT/'.cache/nature-sources/ground/forest_ground_04_diff_1k.jpg'));m.node_tree.links.new(tex.outputs['Color'],nodes.get('Principled BSDF').inputs['Base Color']);nodes.get('Principled BSDF').inputs['Roughness'].default_value=.95;ground.data.materials.append(m)
-for loop in ground.data.uv_layers.active.data:loop.uv*=12
+for loop in ground.data.uv_layers.active.data:loop.uv*=30
+normal=nodes.new('ShaderNodeTexImage');normal.image=bpy.data.images.load(str(ROOT/'.cache/nature-sources/ground/forest_ground_04_nor_gl_1k.jpg'));normal.image.colorspace_settings.name='Non-Color';bump=nodes.new('ShaderNodeNormalMap');bump.inputs['Strength'].default_value=.65;m.node_tree.links.new(normal.outputs['Color'],bump.inputs['Color']);m.node_tree.links.new(bump.outputs['Normal'],nodes.get('Principled BSDF').inputs['Normal'])
 scene=bpy.context.scene;scene.world=bpy.data.worlds.new('Asset preview daylight');scene.world.use_nodes=True;scene.world.node_tree.nodes.get('Background').inputs[0].default_value=(.47,.57,.69,1);scene.world.node_tree.nodes.get('Background').inputs[1].default_value=.65
 bpy.ops.object.light_add(type='SUN',rotation=(math.radians(30),math.radians(-25),math.radians(-30)));bpy.context.object.data.energy=2.1;bpy.context.object.data.angle=.12
 bpy.ops.object.camera_add(location=(13,-18,9));camera=bpy.context.object;camera.rotation_euler=(Vector((0,2,2.5))-camera.location).to_track_quat('-Z','Y').to_euler();camera.data.lens=34;scene.camera=camera

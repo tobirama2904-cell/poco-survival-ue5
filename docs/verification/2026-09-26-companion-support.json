@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "diagnostic_setup": true,
+  "hold_during_player_movement": true,
+  "aid_requested": true,
+  "healed_and_bleeding_stopped": true,
+  "exactly_one_bandage_spent": true,
+  "touch_controls_verified": false,
+  "healing_animation_verified": false,
+  "physical_device_tested": false,
+  "run": 36163624736,
+  "image_review": "Fourth actual gameplay image opened: companion panel visible; report confirms hold, approach, bleeding stopped and exactly one ordinary bandage consumed. Provisional art; no touchscreen or healing-animation claim."
+}

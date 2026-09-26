@@ -32,7 +32,8 @@ for actor in actors.get_all_level_actors():
   for comp in actor.get_components_by_class(unreal.HierarchicalInstancedStaticMeshComponent):
    if comp.get_name()=='Vegetation':county['nature_instances']+=comp.get_instance_count()
 assert field=={'loot_caches':24,'openable_doors':24},field
-assert county=={'terrain_tiles':16,'rural_shelters':6,'nature_instances':6188},county
+expected=json.loads((root/'BuildData/county-pack.lock.json').read_text()).get('layout',{'nature_instances':6188})
+assert county=={'terrain_tiles':16,'rural_shelters':6,'nature_instances':expected['nature_instances']},county
 assert len(changed)>=6,changed
 assert level.save_current_level()
 report={'source':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'all_construction_steps_succeeded':True,'retained_scene_recounted':True,'field':field,'county':county,'instance_materials_repaired':changed}

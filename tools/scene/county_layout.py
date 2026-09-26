@@ -57,6 +57,19 @@ def placements(seed=28031):
    for j in range(3):
     px,py=x+r.uniform(-3,3),y+r.uniform(-3,3)
     records.append({'mesh':'Fern','x':px,'y':py,'z':height(px,py),'yaw':r.uniform(0,360),'scale':r.uniform(.9,1.7)})
+ # Close understory and crown silhouettes around authored destinations.
+ # Keep interiors, front approach, story interactables and diagnostic path clear.
+ for poi in POIS:
+  for kind,count,low,high in [('Pine',28,18,31),('Broadleaf',9,12,25),('Fern',130,5.8,28)]:
+   placed=0;attempts=0
+   while placed<count and attempts<2000:
+    attempts+=1;angle=r.uniform(0,math.tau);radius=r.uniform(low,high);dx=math.cos(angle)*radius;dy=math.sin(angle)*radius
+    if (abs(dx)<3.8 and dy<5) or (dx<0 and dy<0 and radius<20):continue
+    x,y=poi['x']+dx,poi['y']+dy
+    if abs(y-40)<9 or abs(x-river_x(y))<25:continue
+    scale=r.uniform(.7,1.05) if kind=='Pine' else r.uniform(.7,1.35)
+    records.append({'mesh':kind,'x':x,'y':y,'z':height(x,y),'yaw':r.uniform(0,360),'scale':scale,'placement_zone':'close_understory'})
+    placed+=1
  # Close, inspectable nature at the edge of the urban quarter; no quest path blockage.
  for x,y in [(-36,25),(32,29),(-45,-22),(44,-24),(-83,47),(78,49),(-48,89),(42,87)]:
   records.append({'mesh':'Pine','x':x,'y':y,'z':-.1,'yaw':r.uniform(0,360),'scale':r.uniform(.65,.85)})

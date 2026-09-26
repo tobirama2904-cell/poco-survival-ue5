@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Restore only the public, hash-pinned, CC0/original county art pack."""
-import hashlib,json,zipfile,shutil
+import hashlib,json,zipfile,shutil,argparse
 from pathlib import Path
 from urllib.request import urlopen
 ROOT=Path(__file__).resolve().parents[2]
 def main():
- lock=json.loads((ROOT/'BuildData/county-pack.lock.json').read_text());dst=ROOT/'.cache/county-pack';dst.mkdir(parents=True,exist_ok=True);archive=ROOT/'.cache/county-pack.zip'
+ parser=argparse.ArgumentParser();parser.add_argument('--lock',type=Path,default=ROOT/'BuildData/county-pack.lock.json');args=parser.parse_args();lock=json.loads(args.lock.read_text());dst=ROOT/'.cache/county-pack';dst.mkdir(parents=True,exist_ok=True);archive=ROOT/'.cache/county-pack.zip'
  with urlopen(lock['url'],timeout=120) as response,archive.open('wb') as f:shutil.copyfileobj(response,f)
  assert archive.stat().st_size==lock['bytes'];assert hashlib.sha256(archive.read_bytes()).hexdigest()==lock['sha256']
  with zipfile.ZipFile(archive) as z:

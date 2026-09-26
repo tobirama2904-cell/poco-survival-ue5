@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "inputs": [
+    {
+      "directory": "conifer-sources",
+      "provenance": {
+        "asset": "pine_tree_01",
+        "source": "https://polyhaven.com/a/pine_tree_01",
+        "license": "CC0-1.0",
+        "license_url": "https://polyhaven.com/license",
+        "files": [
+          {
+            "name": "pine_tree_01_twig_diff_1k.jpg",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_tree_01/pine_tree_01_twig_diff_1k.jpg",
+            "bytes": 510932,
+            "sha256": "e649f0f9bc74d1af5f1a45eaf2fe7a29adaaddfab251f746b983da301e4b80e1"
+          },
+          {
+            "name": "pine_tree_01_bark_diff_1k.jpg",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_tree_01/pine_tree_01_bark_diff_1k.jpg",
+            "bytes": 725265,
+            "sha256": "5c76836b01c3536fa0e24207b67bf4f3315b53ebe2b4ecc6f08dfcf3f8d74929"
+          },
+          {
+            "name": "pine_tree_01_bark_nor_gl_1k.jpg",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_tree_01/pine_tree_01_bark_nor_gl_1k.jpg",
+            "bytes": 1016849,
+            "sha256": "05c46455531781b6cf18cae0648cf627f60ee942adaa8bcbfd1592fc2506a9e0"
+          },
+          {
+            "name": "pine_tree_01_bark_arm_1k.jpg",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_tree_01/pine_tree_01_bark_arm_1k.jpg",
+            "bytes": 801278,
+            "sha256": "336a4680cd571b6076b67afee2310b290b8900d9d126eb39ec1ae92e95be2ea9"
+          }
+        ]
+      }
+    },
+    {
+      "directory": "nature-sources/ground",
+      "provenance": {
+        "license": "CC0-1.0",
+        "source": "https://polyhaven.com/a/forest_ground_04",
+        "files": [
+          {
+            "name": "forest_ground_04_diff_1k.jpg",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forest_ground_04/forest_ground_04_diff_1k.jpg",
+            "bytes": 1113899,
+            "sha256": "50a4dda30875020c64385261aa7e00e2155b592302fa6794165f58fae73cbd2c"
+          },
+          {
+            "name": "forest_ground_04_nor_gl_1k.jpg",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forest_ground_04/forest_ground_04_nor_gl_1k.jpg",
+            "bytes": 1326812,
+            "sha256": "9c3a0200e02ce40edffbbf9f5f623ef08ea9b1b7812b556182ec978f88887151"
+          },
+          {
+            "name": "forest_ground_04_rough_1k.jpg",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forest_ground_04/forest_ground_04_rough_1k.jpg",
+            "bytes": 627507,
+            "sha256": "89d4d50395eb92824a64132c4bc8a5a09009071e0b325ab66dc3104c7a3090ed"
+          }
+        ]
+      }
+    }
+  ]
+}
