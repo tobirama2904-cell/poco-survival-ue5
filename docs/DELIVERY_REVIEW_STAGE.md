@@ -1,0 +1,15 @@
+# Consolidated delivery review
+
+The source branch gameplay/delivery-review adopts existing gameplay/integrated-review at f8b9cb4, whose game code is f53e298. Previously authored LOD/mocap/save-reader work is inherited, not claimed as new authorship in this stage.
+
+## What was actually inspected
+- Original woodland run 36209094563: exit 124 at 35 minutes, one courtyard PNG; no successful full render gate. No material compiler errors; PSO creation hitches and long frame intervals in the log. Original cutout 205×412 was uncompressed BGRA8. These observations do not prove a single root cause or POCO FPS.
+- Integrated scene 36239195212 / 0245815: success with five images. Opened rural and impact images. Actual forest-tier report: 7 near, 8 middle, 100 far, 702 hidden. Actual melee report: action pose, duplicate-input rejection, single impact/damage and locomotion recovery all passed. This is explicitly diagnostic setup, not full campaign or final animation/art approval.
+- Native serialization probe 36239479663 / f53e298: actual GVAS fixtures decoded and known fields matched. This verifies the corrected producer/reader and migrations, not Android touchscreen/save behavior.
+- Current source/Config/project descriptor compared with f53e298: identical game inputs. ARM64 run 36239480748 is the matching build; the older bcfe15af native is not a substitute.
+
+## Preserved alternate experiment
+A separate branch-atlas/minimal-material experiment was authored locally: 2,672-triangle tree, 588 cutout quads, 512×1024 atlas and dedicated small material graphs. Its offline review was opened but no new UE/FPS result was obtained. Publishing as county-art-004 was correctly refused because that immutable release already existed; it was not overwritten. All experiment source was preserved in a named local git stash (hash also in /home/user/woodland-experiment-stash.txt). It is not mixed into this candidate or represented as runtime-verified work.
+
+## Remaining delivery gates
+Cook the retained successful scene with current source, rerender its five-frame/forest/companion/melee checks, require a compatible successful ARM64 build, sign an internal APK, then run the stricter actual touch / newly generated save / restart comparison test. Open the actual Android images before treating the candidate as reviewed. Full-world save equality, physical POCO performance, finished art and the requested 12–24 hour game remain unproven.
