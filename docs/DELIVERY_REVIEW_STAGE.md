@@ -31,3 +31,10 @@ Ran the actual OCR command against the real courtyard and backpack images from 3
 100 Python checks: 94 passed, 6 absent-cache cases skipped. New probe tests are explicitly synthetic; native source/config/project trees remain identical to f53e298, so the active compilation/cook inputs are not invalidated.
 
 ARM64 run 36239480748 completed successfully; its actual native-result.json was retrieved and confirms native compilation and AArch64 ELF verification. Cook 36241745942 is still running. Separate interior preparation c513155 on gameplay/interior-art is NOT included in this candidate. Its nine props/room recipes can be reviewed in a later independent scene without altering this package chain.
+
+## Actual current-source cook and package retry
+Cook 36241745942 succeeded: 3,513 cooked files, 491,386,826 bytes, Android ASTC map present. The repeated five-frame renderer passed with no material compilation failures; all five actual images were opened. Functional development-art review only, not final visual acceptance.
+
+Package 36245953384 failed before engine packaging because the new pure probe unit test eagerly imported PIL, absent on the packaging host. Fixed by making the image import local to the actual OCR operation (the emulator job installs Pillow), not by removing tests. A `python -S` test now verifies the pure helper imports without third-party packages. 101 tests total: 95 pass, 6 cache-dependent tests skipped. No game-source/config/descriptor changes. Corrected packaging **36246392986** reuses successful native 36239480748 and cook 36241745942; neither expensive job was restarted.
+
+Future interior work is isolated in gameplay/interior-playtest and is not silently included in this APK candidate.

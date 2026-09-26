@@ -412,7 +412,15 @@
     "parallel_art_source": "c513155",
     "branch": "gameplay/delivery-review",
     "matching_native_status": "completed success",
-    "automatic_internal_packaging_after_success": true
+    "automatic_internal_packaging_after_success": true,
+    "cook_status": "completed success",
+    "cooked_files": 3513,
+    "cooked_bytes": 491386826,
+    "current_source_five_frames_reviewed": true,
+    "failed_package_run": 36245953384,
+    "package_failure": "Pure test imported Pillow before emulator dependency setup; no APK was produced",
+    "package_retry_run": 36246392986,
+    "package_retry_source": "4d7f12a57455dd0dc9a0e277132059eacd1a4652"
   },
   "scene_build_last_observed_conclusion": "success: actual third-person frame and input/floor/camera gates",
   "scene_build_source_commit": "767e79cc1b32aa505bd7645a47bc8c0787400a1e",
