@@ -19,3 +19,5 @@ Inspected the exact authorized UE5.7.4 source revision from engine.lock.json in 
 - Preserve original strict menu, fresh save, displacement and restore-subset requirements. Keyboard remains failure-only diagnosis, never touch-success evidence.
 
 The new run must discriminate mapping/routing/presentation delays before any engine/game input correction is justified. Changes are test tooling only; binary/scene recompilation is intentionally avoided. General test success would still not guarantee POCO driver, thermal or memory behavior.
+
+Source 5c615fdaa6eade0ebfe4769f67e011c620f9bba6. Actual repeated installation/input test **36257316731** dispatched for the same signed APK 36246392986. 109 local Python tests: 103 passed, 6 absent-cache cases skipped. One inherited source-inspection test pointed at the wrong file; it now checks the actual delivery gate rather than weakening its requirements. At the latest observation the job had entered install/launch/input testing; no passing touch/save result is claimed.

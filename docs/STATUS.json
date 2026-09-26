@@ -518,5 +518,21 @@
   "scene_second_attempt": "UHT/UBT and native save tests passed; glTF asset import wrote real UE assets, then AssetTools Content Browser sync crashed without Slate in commandlet",
   "android_mobile_correction_cook_status": "in_progress",
   "android_cooked_bytes": 309367697,
-  "native_integration_rerun": 36008146202
+  "native_integration_rerun": 36008146202,
+  "android_touch_routing_stage": {
+    "branch": "gameplay/android-touch-timing",
+    "source": "5c615fdaa6eade0ebfe4769f67e011c620f9bba6",
+    "run": 36257316731,
+    "apk_package_run": 36246392986,
+    "apk_changed": false,
+    "engine_source_inspected_privately": true,
+    "same_frame_drop_hypothesis_proven": false,
+    "android_event_coordinates_logging": true,
+    "menu_presentation_wait_added": true,
+    "python_tests_total": 109,
+    "python_tests_passed": 103,
+    "python_tests_skipped": 6,
+    "real_touch_and_save_pass": false,
+    "physical_device_tested": false
+  }
 }
