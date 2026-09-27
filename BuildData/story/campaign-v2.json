@@ -1,0 +1,527 @@
+{
+ "schema": "lowwater.campaign.v2",
+ "title": {
+  "ru": "НИЗКАЯ ВОДА",
+  "en": "LOW WATER"
+ },
+ "setting": "Bellwether County, Oregon, USA; 2027 prologue, 2041-2042 main",
+ "target_main_minutes": 1065,
+ "measured_minutes": null,
+ "cast": {
+  "daniel": "Daniel Reed/Arsen",
+  "mara": "Mara Ellis/Leyla",
+  "ruth": "Ruth Bennett/Nargis",
+  "owen": "Owen Hart/Ilyas",
+  "evelyn": "Evelyn Grant/new",
+  "cade": "Cade Mercer/new",
+  "jonah": "Jonah Pike/new",
+  "luis": "Luis Ortega/new",
+  "hannah": "Hannah Price/new",
+  "eli": "Eli Price/new",
+  "juno": "Juno (dog)/new"
+ },
+ "chapters": [
+  {
+   "id": "P",
+   "ru": "Ночь шлюза",
+   "en": "Night of the Lock",
+   "regions": [
+    "lower_bellwether",
+    "dispatch",
+    "harlan_dam"
+   ],
+   "time": "2027-09 storm night",
+   "target_minutes": 40,
+   "cutscenes": [
+    "P-01",
+    "P-02",
+    "P-03",
+    "P-04"
+   ],
+   "sets_flags": [
+    "prologue_calls_saved"
+   ],
+   "events": [],
+   "source": "existing:none",
+   "implemented": false
+  },
+  {
+   "id": "1",
+   "ru": "Возвращение",
+   "en": "The Return",
+   "regions": [
+    "old_bellwether"
+   ],
+   "time": "2041-08 drought day",
+   "target_minutes": 80,
+   "cutscenes": [
+    "C1-01",
+    "C1-02"
+   ],
+   "sets_flags": [
+    "lock_choice"
+   ],
+   "events": [
+    "mudback_intro"
+   ],
+   "source": "existing:low-water.json scenes 1-18",
+   "implemented": true
+  },
+  {
+   "id": "2",
+   "ru": "Обратная дорога",
+   "en": "The Way Back",
+   "regions": [
+    "old_bellwether",
+    "ellis_orchard"
+   ],
+   "time": "2041-08 night-dawn",
+   "target_minutes": 80,
+   "cutscenes": [
+    "C2-01"
+   ],
+   "sets_flags": [
+    "ch2_patrol"
+   ],
+   "events": [],
+   "source": "existing:low-water.json scenes 19-30",
+   "implemented": true
+  },
+  {
+   "id": "3",
+   "ru": "Люди без списка",
+   "en": "People Off the List",
+   "regions": [
+    "harts_crossing",
+    "highway_19",
+    "mile19_roadhouse"
+   ],
+   "time": "2041-08 hot day-night",
+   "target_minutes": 90,
+   "cutscenes": [
+    "C3-01",
+    "C3-02"
+   ],
+   "sets_flags": [
+    "book"
+   ],
+   "events": [],
+   "source": "new",
+   "implemented": false
+  },
+  {
+   "id": "4",
+   "ru": "Ночной переход",
+   "en": "Night Crossing",
+   "regions": [
+    "cedar_creek",
+    "red_cedar_camp",
+    "north_ridge"
+   ],
+   "time": "2041-09 fog night",
+   "target_minutes": 85,
+   "cutscenes": [
+    "C4-01"
+   ],
+   "sets_flags": [
+    "route_ch4",
+    "refugees_lost"
+   ],
+   "events": [
+    "keener_intro",
+    "juno_join"
+   ],
+   "source": "new",
+   "implemented": false
+  },
+  {
+   "id": "5",
+   "ru": "Самый тихий дом",
+   "en": "The Quietest House",
+   "regions": [
+    "ellis_orchard"
+   ],
+   "time": "2041-10 first rain",
+   "target_minutes": 70,
+   "cutscenes": [
+    "C5-01"
+   ],
+   "sets_flags": [],
+   "events": [
+    "base_siege"
+   ],
+   "source": "new; unlocks open world",
+   "implemented": false
+  },
+  {
+   "id": "6",
+   "ru": "Сухая линия",
+   "en": "The Dry Line",
+   "regions": [
+    "highway_19",
+    "cade_reservoir"
+   ],
+   "time": "2041-11 first snow",
+   "target_minutes": 95,
+   "cutscenes": [
+    "C6-01"
+   ],
+   "sets_flags": [
+    "cade",
+    "water_gift"
+   ],
+   "events": [
+    "boss_cade"
+   ],
+   "source": "new",
+   "implemented": false
+  },
+  {
+   "id": "7",
+   "ru": "Ремонтная зима",
+   "en": "Repair Winter",
+   "regions": [
+    "cascade_junction"
+   ],
+   "time": "2041-12 sleet",
+   "target_minutes": 90,
+   "cutscenes": [
+    "C7-01",
+    "C7-02",
+    "C7-03"
+   ],
+   "sets_flags": [
+    "winter_power",
+    "mara_stay"
+   ],
+   "events": [
+    "rootmass_depot"
+   ],
+   "source": "new",
+   "implemented": false
+  },
+  {
+   "id": "8",
+   "ru": "Позывной Мара",
+   "en": "Call Sign Mara",
+   "regions": [
+    "relay04_pass"
+   ],
+   "time": "2042-01 blizzard",
+   "target_minutes": 85,
+   "cutscenes": [
+    "C8-01",
+    "C8-02"
+   ],
+   "sets_flags": [
+    "truth_ch8"
+   ],
+   "events": [],
+   "source": "new",
+   "implemented": false
+  },
+  {
+   "id": "9",
+   "ru": "Чужой берег",
+   "en": "Stranger Shore",
+   "regions": [
+    "grayhaven"
+   ],
+   "time": "2042-02 sea storm",
+   "target_minutes": 85,
+   "cutscenes": [
+    "C9-01"
+   ],
+   "sets_flags": [
+    "lie_coast"
+   ],
+   "events": [],
+   "source": "new",
+   "implemented": false
+  },
+  {
+   "id": "10",
+   "ru": "Невыполненный приказ",
+   "en": "The Unfinished Order",
+   "regions": [
+    "dispatch",
+    "lower_bellwether"
+   ],
+   "time": "2042-03 thaw night",
+   "target_minutes": 70,
+   "cutscenes": [
+    "C10-01",
+    "C10-02",
+    "C10-03",
+    "C10-04"
+   ],
+   "sets_flags": [
+    "toby"
+   ],
+   "events": [
+    "drowned_wake"
+   ],
+   "source": "new",
+   "implemented": false
+  },
+  {
+   "id": "11",
+   "ru": "Высокая вода",
+   "en": "High Water",
+   "regions": [
+    "county_wide"
+   ],
+   "time": "2042-04 spring rains",
+   "target_minutes": 95,
+   "cutscenes": [
+    "C11-01",
+    "C11-02"
+   ],
+   "sets_flags": [
+    "ruth",
+    "owen"
+   ],
+   "events": [
+    "flood_operation"
+   ],
+   "source": "new",
+   "implemented": false
+  },
+  {
+   "id": "12",
+   "ru": "Без посредников",
+   "en": "No Go-Betweens",
+   "regions": [
+    "harlan_dam"
+   ],
+   "time": "2042-04 flood",
+   "target_minutes": 80,
+   "cutscenes": [
+    "C12-01",
+    "C12-02"
+   ],
+   "sets_flags": [
+    "ending"
+   ],
+   "events": [
+    "boss_harlan_bloom"
+   ],
+   "source": "new",
+   "implemented": false
+  },
+  {
+   "id": "E",
+   "ru": "Дверь остаётся открытой",
+   "en": "The Door Stays Open",
+   "regions": [
+    "ellis_orchard"
+   ],
+   "time": "2042-07 summer",
+   "target_minutes": 20,
+   "cutscenes": [],
+   "sets_flags": [],
+   "events": [],
+   "source": "new; post-game free roam",
+   "implemented": false
+  }
+ ],
+ "flags": {
+  "prologue_calls_saved": {
+   "type": "int",
+   "range": [
+    0,
+    6
+   ]
+  },
+  "lock_choice": {
+   "values": [
+    "homes",
+    "channel"
+   ]
+  },
+  "ch2_patrol": {
+   "values": [
+    "sneak",
+    "pay",
+    "fight"
+   ]
+  },
+  "book": {
+   "values": [
+    "broadcast",
+    "burn",
+    "owen"
+   ]
+  },
+  "route_ch4": {
+   "values": [
+    "mara",
+    "daniel"
+   ]
+  },
+  "refugees_lost": {
+   "type": "int",
+   "range": [
+    0,
+    6
+   ]
+  },
+  "cade": {
+   "values": [
+    "killed",
+    "judged",
+    "spared"
+   ]
+  },
+  "water_gift": {
+   "values": [
+    "orchard",
+    "crossing",
+    "compact"
+   ]
+  },
+  "winter_power": {
+   "values": [
+    "compact",
+    "shared",
+    "camp"
+   ]
+  },
+  "mara_stay": {
+   "values": [
+    "forced",
+    "respected"
+   ]
+  },
+  "truth_ch8": {
+   "values": [
+    "tell",
+    "lie",
+    "silent"
+   ]
+  },
+  "lie_coast": {
+   "values": [
+    "yes",
+    "no"
+   ]
+  },
+  "toby": {
+   "values": [
+    "daniel",
+    "mara"
+   ]
+  },
+  "ruth": {
+   "values": [
+    "alive",
+    "stayed"
+   ]
+  },
+  "owen": {
+   "values": [
+    "alive",
+    "dead"
+   ]
+  },
+  "ending": {
+   "values": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ]
+  }
+ },
+ "hidden_stats": {
+  "mara_trust": {
+   "start": 15,
+   "range": [
+    0,
+    100
+   ]
+  },
+  "hardening": {
+   "start": 0,
+   "range": [
+    0,
+    100
+   ]
+  },
+  "owen_trust": {
+   "start": 20,
+   "range": [
+    0,
+    100
+   ]
+  },
+  "ruth_trust": {
+   "start": 30,
+   "range": [
+    0,
+    100
+   ]
+  }
+ },
+ "endings": {
+  "A": {
+   "name_ru": "Список",
+   "name_en": "The List",
+   "action": "give_key_to_evelyn",
+   "requires": {}
+  },
+  "B": {
+   "name_ru": "Открытая вода",
+   "name_en": "Open Water",
+   "action": "open_lower_gates_self",
+   "requires": {}
+  },
+  "C": {
+   "name_ru": "Диспетчер",
+   "name_en": "The Dispatcher",
+   "action": "raise_weapon_on_evelyn",
+   "requires": {
+    "hardening_gte": 60
+   }
+  },
+  "D": {
+   "name_ru": "Без посредников",
+   "name_en": "No Go-Betweens",
+   "action": "hand_key_to_mara",
+   "requires": {
+    "mara_trust_gte": 70,
+    "toby": "mara",
+    "hardening_lt": 80
+   }
+  }
+ },
+ "rules": {
+  "ruth_alive_if": {
+   "ruth_trust_gte": 60,
+   "ruth_healed_in_ch11": true
+  },
+  "owen_alive_if": {
+   "owen_trust_gte": 55,
+   "book_in": [
+    "broadcast",
+    "owen"
+   ]
+  },
+  "infected": [
+   "fever",
+   "hollow",
+   "mudback",
+   "keener",
+   "drowned",
+   "rootmass",
+   "harlan_bloom"
+  ],
+  "world_rules": [
+   "infected_never_cross_deep_running_water",
+   "heat_speed_plus_15pct",
+   "rain_speed_minus_20pct_hearing_up",
+   "dust_zones_grey_cough_wet_mask"
+  ]
+ },
+ "docs": "docs/story/v2/"
+}
