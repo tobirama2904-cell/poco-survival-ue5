@@ -103,25 +103,28 @@ try:
     time.sleep(35)
     start_video(width,height)
     probe=DeviceSaveProbe(adb,text,screenshot,ROOT,width,height)
-    report['journal_close_touch_diagnostic']=probe.journal_close_by_touch() # diagnostic only; not gate evidence
-    before=probe.save('before')
-    # Actual touchscreen gesture; no diagnostic teleport or game-state injection.
-    # Unlike discrete press events, virtual-stick analog values are emitted on
-    # Slate ticks. A 1.5 s sweep may finish before a frame on this slow emulator.
-    # Keep the real contact across several presentation opportunities and retain
-    # a picture while it is held. Do not weaken the saved-displacement gate.
-    time.sleep(8)
-    report['joystick_gesture_ms']=8000
-    gesture=subprocess.Popen([ADB,'shell','input','touchscreen','swipe',str(round(width*.13)),str(round(height*.8)),str(round(width*.13)),str(round(height*.62)),'8000'],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    # Movement-first route: the startup autosave (written by EndIntro, no UI
+    # touch) is the baseline, so a flaky menu cannot stop the joystick test.
+    baseline=probe.collect('baseline')
+    if not baseline:raise RuntimeError('No decodable startup autosave to use as movement baseline')
+    before=max(baseline,key=lambda r:r['state']['generation'])['state']
+    report['movement_baseline']={'source':'startup autosave, no UI touch','position':before['position'],'generation':before['generation']}
+    report['screenshots'].append(screenshot('android-stick-before.png'))
+    # One real pointer held for 24 s via separate DOWN/MOVE/UP events, so the
+    # contact spans several frames of the ~0.3 FPS software emulator.
+    cx,cy=round(width*.12),round(height*.79);reach=round(height*.12)
+    report['joystick_gesture']={'kind':'held motionevent DOWN/MOVE/UP','center':[cx,cy],'reach_px':reach,'hold_s':24}
+    adb('shell','input','touchscreen','motionevent','DOWN',str(cx),str(cy))
     try:
-        time.sleep(4);report['screenshots'].append(screenshot('android-stick-held.png'))
-        result=gesture.communicate(timeout=30)
-        if gesture.returncode:raise RuntimeError('Android joystick gesture command failed')
+        for i in range(12):
+            time.sleep(2)
+            adb('shell','input','touchscreen','motionevent','MOVE',str(cx),str(cy-round(reach*min(1,(i+1)/3))))
+            if i==6:report['screenshots'].append(screenshot('android-stick-held.png'))
     finally:
-        if gesture.poll() is None:gesture.kill();gesture.communicate()
-
+        adb('shell','input','touchscreen','motionevent','UP',str(cx),str(cy-reach),check=False)
     time.sleep(8);report['screenshots'].append(wait_visible_frame('android-after-input.png'))
     moved=probe.save('after-move',before['generation'])
+    report['moved_position']=moved['position']
     (ROOT/'android-touch-before-restart.log').write_text(text('logcat','-d',timeout=60))
     stop_video()
     adb('shell','am','force-stop',PACKAGE);adb('logcat','-c');launch()
